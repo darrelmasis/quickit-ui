@@ -1,0 +1,66 @@
+{
+  "name": "quickit-ui",
+  "private": false,
+  "version": "0.1.0",
+  "description": "Reusable React UI component library with a local documentation playground.",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "ui",
+    "components",
+    "tailwindcss",
+    "floating-ui",
+    "design-system"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/quickit-ui.js",
+  "module": "./dist/quickit-ui.js",
+  "style": "./dist/quickit-ui.css",
+  "exports": {
+    ".": {
+      "import": "./dist/quickit-ui.js"
+    },
+    "./styles.css": "./dist/quickit-ui.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:docs": "vite build --mode docs",
+    "lint": "eslint .",
+    "pack:check": "npm pack --dry-run",
+    "prepublishOnly": "npm run lint && npm run build",
+    "preview": "vite preview",
+    "preview:docs": "vite preview --mode docs"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.27.19",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@tailwindcss/vite": "^4.2.2",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.2.2",
+    "vite": "^8.0.1"
+  }
+}
