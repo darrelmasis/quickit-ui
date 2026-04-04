@@ -11,9 +11,13 @@ const libEntry = path.resolve(srcDir, "lib", "index.js");
 export default defineConfig(({ command, mode }) => {
   const isDevServer = command === "serve";
   const isDocsBuild = mode === "docs";
+  const isLibraryBuild = !isDevServer && !isDocsBuild;
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [isLibraryBuild ? null : react(), tailwindcss()].filter(Boolean),
+    define: {
+      "process.env.NODE_ENV": JSON.stringify("production"),
+    },
     resolve: {
       alias: {
         "@": srcDir,
