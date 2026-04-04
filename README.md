@@ -1,19 +1,94 @@
 # Quickit UI
 
-Quickit UI es una libreria de componentes React reutilizables construida con Vite, JavaScript y Tailwind CSS v4. El proyecto arranca con dos objetivos separados desde el inicio:
+Quickit UI es una libreria de componentes React reutilizables construida con React, Vite, JavaScript, Tailwind CSS y Floating UI. El repositorio incluye dos partes:
 
-- una libreria publicable de componentes
-- una app local de documentacion y playground para desarrollo
+- la libreria publicable en `src/lib`
+- la aplicacion de documentacion en `src/docs`
 
-## Stack
+## Empezar
 
-- React 19
-- Vite 8
-- Tailwind CSS 4
-- Floating UI
-- ESLint 9
+### Requisitos
 
-## Estructura inicial
+- Node.js 18 o superior
+- npm 9 o superior
+
+### Instalacion local
+
+```bash
+npm install
+```
+
+### Ejecutar la documentacion en desarrollo
+
+```bash
+npm run dev
+```
+
+Esto levanta la app de documentacion local para desarrollar, revisar y probar los componentes.
+
+### Build de la libreria
+
+```bash
+npm run build
+```
+
+La salida se genera en `dist/`.
+
+### Build de la documentacion
+
+```bash
+npm run build:docs
+```
+
+La salida se genera en `dist-docs/`.
+
+## Uso rapido
+
+Quickit UI expone los componentes desde el entry principal y los estilos desde `quickit-ui/styles.css`.
+
+```jsx
+import { Button, QuickitProvider } from "quickit-ui";
+import "quickit-ui/styles.css";
+
+export function App() {
+  return (
+    <QuickitProvider theme="dark">
+      <Button color="neutral">Continuar</Button>
+    </QuickitProvider>
+  );
+}
+```
+
+## Tema
+
+La libreria soporta `light` y `dark` mediante `QuickitProvider`.
+
+```jsx
+import { QuickitProvider, Button } from "quickit-ui";
+
+export function Example() {
+  return (
+    <QuickitProvider theme="light">
+      <Button color="neutral">Claro</Button>
+    </QuickitProvider>
+  );
+}
+```
+
+Valores soportados:
+
+- `light`
+- `dark`
+
+## Scripts
+
+- `npm run dev`: abre la documentacion/playground local
+- `npm run build`: genera la libreria en `dist/`
+- `npm run build:docs`: genera la app de documentacion en `dist-docs/`
+- `npm run lint`: ejecuta ESLint
+- `npm run pack:check`: valida el contenido que se publicaria en npm
+
+## Estructura
 
 ```text
 quickit-ui/
@@ -22,54 +97,29 @@ quickit-ui/
 |  \- getting-started.md
 |- src/
 |  |- docs/
-|  |  \- DocsApp.jsx
 |  |- lib/
 |  |  |- components/
-|  |  |  \- button/
 |  |  |- hooks/
 |  |  |- theme/
-|  |  |- utils/
-|  |  \- index.js
+|  |  \- utils/
 |  |- styles/
-|  |  \- index.css
 |  \- main.jsx
-|- jsconfig.json
 |- package.json
+|- vercel.json
 \- vite.config.js
 ```
 
-## Scripts
-
-- `npm run dev`: abre la documentacion/playground local
-- `npm run build`: genera la libreria en `dist/`
-- `npm run build:docs`: genera la app de documentacion
-- `npm run lint`: ejecuta ESLint
-- `npm run pack:check`: valida el contenido que se publicaria en npm
-
-## Convenciones base
+## Convenciones
 
 - `src/lib` contiene solo codigo publicable
-- `src/docs` contiene la app interna para mostrar componentes, estados y ejemplos
-- `src/styles/index.css` solo carga Tailwind para la build de la libreria
-- cada componente nuevo vive en su propia carpeta y se estiliza con utilities de Tailwind
-- React y React DOM quedan como `peerDependencies`
-- la libreria soporta tema claro y oscuro con `QuickitProvider`
-
-## Temas
-
-Quickit UI usa Tailwind como unica capa de estilos. Para forzar el tema en un arbol de componentes:
-
-```jsx
-import { QuickitProvider, Button } from "quickit-ui";
-
-<QuickitProvider theme="dark">
-  <Button>Dark button</Button>
-</QuickitProvider>
-```
+- `src/docs` contiene la aplicacion interna de documentacion
+- la libreria usa Tailwind utilities, sin CSS custom por componente
+- React y React DOM son `peerDependencies`
+- `QuickitProvider` resuelve tema claro y oscuro
 
 ## Publicacion en npm
 
-Antes de publicar, verifica que el nombre del paquete siga disponible en npm. El flujo recomendado para esta base es:
+Antes de publicar, verifica que el nombre del paquete siga disponible en npm.
 
 ```bash
 npm install
@@ -87,7 +137,7 @@ Notas:
 
 ## Despliegue de la documentacion en Vercel
 
-El proyecto ya incluye [vercel.json](./vercel.json) para desplegar la documentacion con:
+El proyecto ya incluye [vercel.json](./vercel.json) con esta configuracion:
 
 - `buildCommand`: `npm run build:docs`
 - `outputDirectory`: `dist-docs`
@@ -100,10 +150,3 @@ npm run build:docs
 ```
 
 Luego importa el repositorio en Vercel y usa la configuracion incluida.
-
-## Siguiente fase sugerida
-
-1. consolidar tokens de color, tipografia, spacing y radios
-2. definir el contrato base de `Button`, `Link` y `IconButton`
-3. crear primitivas overlay sobre Floating UI para `Popover`, `Tooltip` y `Dropdown`
-4. documentar API, variantes, accesibilidad y ejemplos por componente
