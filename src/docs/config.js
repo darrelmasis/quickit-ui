@@ -41,6 +41,7 @@ export const docsConventions = [
 
 export const docsTheme = {
   light: {
+    mode: "light",
     page: "bg-slate-50 text-slate-950",
     surface: "border-slate-200 bg-white",
     sidebar: "border-slate-200 bg-white",
@@ -58,6 +59,7 @@ export const docsTheme = {
     introCard: "border-slate-200 bg-slate-50/70",
   },
   dark: {
+    mode: "dark",
     page: "bg-stone-950 text-stone-100",
     surface: "border-zinc-800 bg-zinc-950",
     sidebar: "border-zinc-800 bg-zinc-950",

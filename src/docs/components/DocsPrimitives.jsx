@@ -1,4 +1,10 @@
 import { cn } from "@/lib";
+import { Highlight, themes } from "prism-react-renderer";
+
+const CODE_THEMES = {
+  light: themes.oneLight,
+  dark: themes.oneDark,
+};
 
 export function SectionCard({
   children,
@@ -45,6 +51,7 @@ export function PreviewPanel({
   children,
   className = "",
   code,
+  codeLanguage = "jsx",
   codeTitle = "Código del ejemplo",
   title,
   ui,
@@ -57,20 +64,72 @@ export function PreviewPanel({
       <div className={cn("rounded-[1.25rem] border p-4", ui.preview, className)}>
         {children}
       </div>
-      {code ? <CodeExample code={code} title={codeTitle} ui={ui} /> : null}
+      {code ? (
+        <CodeExample
+          code={code}
+          language={codeLanguage}
+          title={codeTitle}
+          ui={ui}
+        />
+      ) : null}
     </div>
   );
 }
 
-export function CodeExample({ code, title = "Uso base", ui }) {
+export function CodeExample({
+  code,
+  language = "jsx",
+  title = "Uso base",
+  ui,
+}) {
+  const prismTheme = CODE_THEMES[ui.mode] ?? themes.oneDark;
+
   return (
     <div className={`rounded-2xl border p-4 ${ui.code}`}>
       <p className={`text-xs uppercase tracking-[0.18em] ${ui.codeMuted}`}>
         {title}
       </p>
-      <pre className="mt-3 overflow-x-auto text-sm leading-6">
-        <code>{code}</code>
-      </pre>
+      <Highlight
+        theme={prismTheme}
+        code={code.trim()}
+        language={language}
+      >
+        {({ className, getLineProps, getTokenProps, style, tokens }) => (
+          <pre
+            className={cn(
+              className,
+              "mt-3 overflow-x-auto rounded-xl bg-transparent p-0 text-sm leading-6",
+            )}
+            style={{ ...style, background: "transparent" }}
+          >
+            <code className="block min-w-full font-mono">
+              {tokens.map((line, lineIndex) => {
+                const { key: lineKey, ...lineProps } = getLineProps({
+                  line,
+                  key: lineIndex,
+                });
+
+                return (
+                  <div
+                    key={lineKey}
+                    {...lineProps}
+                    className={cn(lineProps.className, "min-h-6")}
+                  >
+                    {line.map((token, tokenIndex) => {
+                      const { key: tokenKey, ...tokenProps } = getTokenProps({
+                        token,
+                        key: tokenIndex,
+                      });
+
+                      return <span key={tokenKey} {...tokenProps} />;
+                    })}
+                  </div>
+                );
+              })}
+            </code>
+          </pre>
+        )}
+      </Highlight>
     </div>
   );
 }

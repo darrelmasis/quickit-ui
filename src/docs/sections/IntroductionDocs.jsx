@@ -62,6 +62,7 @@ export function IntroductionDocs({ ui }) {
         <CodeExample
           ui={ui}
           title="Instalación"
+          language="bash"
           code={`npm install quickit-ui react react-dom`}
         />
 
