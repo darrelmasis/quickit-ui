@@ -1,152 +1,218 @@
 # Quickit UI
 
-Quickit UI es una libreria de componentes React reutilizables construida con React, Vite, JavaScript, Tailwind CSS y Floating UI. El repositorio incluye dos partes:
+Quickit UI es una libreria de componentes para React pensada para construir interfaces consistentes, limpias y rapidas de integrar.
 
-- la libreria publicable en `src/lib`
-- la aplicacion de documentacion en `src/docs`
+Incluye componentes base como `Button`, `Input`, `Modal`, `Dropdown`, `Tabs`, `Tooltip`, `Avatar`, `Badge`, `Skeleton` y mas.
 
-## Empezar
+## Instalacion
 
-### Requisitos
-
-- Node.js 18 o superior
-- npm 9 o superior
-
-### Instalacion local
+Instala el paquete junto con sus dependencias peer:
 
 ```bash
-npm install
+npm install quickit-ui react react-dom
 ```
-
-### Ejecutar la documentacion en desarrollo
-
-```bash
-npm run dev
-```
-
-Esto levanta la app de documentacion local para desarrollar, revisar y probar los componentes.
-
-### Build de la libreria
-
-```bash
-npm run build
-```
-
-La salida se genera en `dist/`.
-
-### Build de la documentacion
-
-```bash
-npm run build:docs
-```
-
-La salida se genera en `dist-docs/`.
 
 ## Uso rapido
 
-Quickit UI expone los componentes desde el entry principal y los estilos desde `quickit-ui/styles.css`.
+Importa los estilos del paquete una sola vez y empieza a usar los componentes:
 
 ```jsx
-import { Button, QuickitProvider } from "quickit-ui";
-import "quickit-ui/styles.css";
+import 'quickit-ui/styles.css'
+import { Button, Input, QuickitProvider } from 'quickit-ui'
 
-export function App() {
+export default function App() {
   return (
-    <QuickitProvider theme="dark">
-      <Button color="neutral">Continuar</Button>
+    <QuickitProvider theme="light">
+      <main className="space-y-4 p-6">
+        <Input placeholder="Correo electronico" />
+        <Button color="neutral">Continuar</Button>
+      </main>
     </QuickitProvider>
-  );
+  )
 }
 ```
 
 ## Tema
 
-La libreria soporta `light` y `dark` mediante `QuickitProvider`.
+Quickit UI soporta `light` y `dark` desde `QuickitProvider`.
 
 ```jsx
-import { QuickitProvider, Button } from "quickit-ui";
+import 'quickit-ui/styles.css'
+import { Button, QuickitProvider } from 'quickit-ui'
 
-export function Example() {
+export default function App() {
   return (
-    <QuickitProvider theme="light">
-      <Button color="neutral">Claro</Button>
+    <QuickitProvider theme="dark">
+      <Button>Guardar cambios</Button>
     </QuickitProvider>
-  );
+  )
 }
 ```
 
-Valores soportados:
+## Ejemplos rapidos
 
-- `light`
-- `dark`
+### Button
 
-## Scripts
+```jsx
+import { Button } from 'quickit-ui'
 
-- `npm run dev`: abre la documentacion/playground local
-- `npm run build`: genera la libreria en `dist/`
-- `npm run build:docs`: genera la app de documentacion en `dist-docs/`
-- `npm run lint`: ejecuta ESLint
-- `npm run pack:check`: valida el contenido que se publicaria en npm
-
-## Estructura
-
-```text
-quickit-ui/
-|- docs/
-|  |- architecture.md
-|  \- getting-started.md
-|- src/
-|  |- docs/
-|  |- lib/
-|  |  |- components/
-|  |  |- hooks/
-|  |  |- theme/
-|  |  \- utils/
-|  |- styles/
-|  \- main.jsx
-|- package.json
-|- vercel.json
-\- vite.config.js
+export function Actions() {
+  return (
+    <div className="flex gap-3">
+      <Button color="neutral">Neutral</Button>
+      <Button variant="outline" color="primary">
+        Outline
+      </Button>
+      <Button loading loadingText="Guardando">
+        Guardar
+      </Button>
+    </div>
+  )
+}
 ```
 
-## Convenciones
+### Formularios
 
-- `src/lib` contiene solo codigo publicable
-- `src/docs` contiene la aplicacion interna de documentacion
-- la libreria usa Tailwind utilities, sin CSS custom por componente
-- React y React DOM son `peerDependencies`
-- `QuickitProvider` resuelve tema claro y oscuro
+```jsx
+import {
+  FormControl,
+  FormDescription,
+  FormMessage,
+  Input,
+  Label,
+  Select,
+  Textarea,
+} from 'quickit-ui'
 
-## Publicacion en npm
+export function ContactForm() {
+  return (
+    <div className="space-y-4">
+      <FormControl>
+        <Label htmlFor="name">Nombre</Label>
+        <Input id="name" placeholder="Tu nombre" />
+      </FormControl>
 
-Antes de publicar, verifica que el nombre del paquete siga disponible en npm.
+      <FormControl>
+        <Label htmlFor="topic">Tema</Label>
+        <Select id="topic" defaultValue="support">
+          <option value="support">Soporte</option>
+          <option value="sales">Ventas</option>
+        </Select>
+        <FormDescription>Selecciona el motivo de tu consulta.</FormDescription>
+      </FormControl>
 
-```bash
-npm install
-npm run lint
-npm run build
-npm run pack:check
-npm publish
+      <FormControl invalid>
+        <Label htmlFor="message">Mensaje</Label>
+        <Textarea id="message" placeholder="Escribe tu mensaje" />
+        <FormMessage>Este campo es obligatorio.</FormMessage>
+      </FormControl>
+    </div>
+  )
+}
 ```
 
-Notas:
+### Overlay
 
-- `prepublishOnly` ya ejecuta `lint` y `build`
-- el paquete publica solo `dist/`
-- los estilos se consumen desde `quickit-ui/styles.css`
+```jsx
+import {
+  Button,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  Modal,
+  ModalAction,
+  ModalActions,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+} from 'quickit-ui'
 
-## Despliegue de la documentacion en Vercel
+export function OverlayExamples() {
+  return (
+    <div className="flex gap-4">
+      <Dropdown>
+        <DropdownTrigger>
+          <Button color="neutral" variant="outline">
+            Opciones
+          </Button>
+        </DropdownTrigger>
 
-El proyecto ya incluye [vercel.json](./vercel.json) con esta configuracion:
+        <DropdownContent>
+          <DropdownItem>Editar</DropdownItem>
+          <DropdownItem>Duplicar</DropdownItem>
+          <DropdownItem variant="danger">Eliminar</DropdownItem>
+        </DropdownContent>
+      </Dropdown>
 
-- `buildCommand`: `npm run build:docs`
-- `outputDirectory`: `dist-docs`
+      <Modal>
+        <Button color="neutral">Abrir modal</Button>
 
-Flujo sugerido:
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Confirmar accion</ModalTitle>
+          </ModalHeader>
 
-```bash
-npm install
-npm run build:docs
+          <ModalBody>Este cambio no se puede deshacer.</ModalBody>
+
+          <ModalActions placement="end">
+            <ModalAction color="neutral" variant="outline">
+              Cancelar
+            </ModalAction>
+            <ModalAction color="danger">Eliminar</ModalAction>
+          </ModalActions>
+        </ModalContent>
+      </Modal>
+    </div>
+  )
+}
 ```
 
-Luego importa el repositorio en Vercel y usa la configuracion incluida.
+## Componentes disponibles
+
+- `Accordion`
+- `Avatar`
+- `Badge`
+- `Breadcrumb`
+- `Button`
+- `Checkbox`
+- `Dropdown`
+- `EmptyState`
+- `FormControl`
+- `Input`
+- `Label`
+- `Link`
+- `Modal`
+- `Pagination`
+- `Popover`
+- `Radio`
+- `Select`
+- `Skeleton`
+- `Switch`
+- `Tabs`
+- `Textarea`
+- `Tooltip`
+
+## Requisitos
+
+- `react` `^19.0.0`
+- `react-dom` `^19.0.0`
+- Node.js `18` o superior
+
+## Exportaciones utiles
+
+El paquete exporta componentes, hooks y utilidades desde:
+
+```jsx
+import {
+  Button,
+  Input,
+  QuickitProvider,
+  useQuickitTheme,
+} from 'quickit-ui'
+```
+
+## Licencia
+
+MIT
