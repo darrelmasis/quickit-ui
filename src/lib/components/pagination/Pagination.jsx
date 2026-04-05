@@ -103,6 +103,11 @@ export function Pagination({
               size="sm"
               variant={item === currentPage ? "solid" : "outline"}
               color={color}
+              aria-label={
+                item === currentPage
+                  ? `Página actual, ${item}`
+                  : `Ir a la página ${item}`
+              }
               aria-current={item === currentPage ? "page" : undefined}
               onClick={() => setPage(item)}
             >

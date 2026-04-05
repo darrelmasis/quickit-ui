@@ -52,7 +52,7 @@ export function UtilityDocs({ ui, visibleIds }) {
     <>
       {isVisible(visibleIds, "avatar") ? (
         <SectionCard id="avatar" className={ui.divider}>
-          <SectionHeading category="Utilitarios" title="Avatar" description="Representación compacta de usuarios, equipos o entidades con imagen, fallback y agrupación." ui={ui} />
+          <SectionHeading category="Identidad" title="Avatar" description="Representación compacta de usuarios, equipos o entidades con imagen, fallback y agrupación." ui={ui} />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
@@ -121,7 +121,7 @@ export function UtilityDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "link") ? (
         <SectionCard id="link" className={ui.divider}>
-          <SectionHeading category="Utilitarios" title="Link" description="Enlace de texto con variantes suaves y control de subrayado." ui={ui} />
+          <SectionHeading category="Acciones" title="Link" description="Enlace de texto para acciones secundarias y navegación ligera, con variantes suaves y control de subrayado." ui={ui} />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
@@ -164,7 +164,7 @@ export function UtilityDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "badge") ? (
         <SectionCard id="badge" className={ui.divider}>
-          <SectionHeading category="Utilitarios" title="Badge" description="Etiqueta compacta para estados, categorías y pequeños metadatos." ui={ui} />
+          <SectionHeading category="Feedback" title="Badge" description="Etiqueta compacta para estados, categorías y pequeños metadatos." ui={ui} />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
@@ -241,7 +241,7 @@ export function UtilityDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "skeleton") ? (
         <SectionCard id="skeleton" className={ui.divider}>
-          <SectionHeading category="Utilitarios" title="Skeleton" description="Placeholder visual para cargas iniciales de listas, cards o detalle." ui={ui} />
+          <SectionHeading category="Feedback" title="Skeleton" description="Placeholder visual para cargas iniciales de listas, cards o detalle." ui={ui} />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel

@@ -25,112 +25,17 @@ import {
 } from "@floating-ui/react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import {
+  FLOATING_LIST_ITEM_PRIMITIVES,
+  FLOATING_LIST_ITEM_THEME_CLASSES,
+  FLOATING_LIST_SURFACE_PRIMITIVES,
+  FLOATING_LIST_SURFACE_THEME_CLASSES,
+  getFloatingArrowColors,
+  getFloatingClosedTransform,
+  getFloatingPlacementOrigin,
+  resolveFloatingListTheme,
+} from "@/lib/components/_shared/floating-list";
 import { DropdownContext, useDropdownContext } from "./dropdown-context";
-
-const DROPDOWN_CONTENT_PRIMITIVES = {
-  layout:
-    "z-50 min-w-[12rem] list-none rounded-[1rem] border p-1 outline-none",
-};
-
-const DROPDOWN_ITEM_PRIMITIVES = {
-  base: [
-    "flex w-full items-center gap-2 rounded-[0.75rem] px-3 py-2 text-left cursor-pointer ",
-    "text-sm font-medium transition-colors outline-none",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px]",
-  ].join(" "),
-};
-
-const DROPDOWN_CONTENT_THEME_CLASSES = {
-  light: "border-slate-200 bg-white text-slate-950",
-  dark: "border-zinc-800 bg-zinc-950 text-stone-100",
-};
-
-const DROPDOWN_ITEM_THEME_CLASSES = {
-  light: {
-    default: [
-      "text-slate-700",
-      "hover:bg-slate-100 hover:text-slate-950",
-      "focus-visible:bg-slate-100 focus-visible:text-slate-950",
-      "focus-visible:outline-slate-300",
-    ].join(" "),
-    danger: [
-      "text-red-700",
-      "hover:bg-red-50 hover:text-red-800",
-      "focus-visible:bg-red-50 focus-visible:text-red-800",
-      "focus-visible:outline-red-300",
-    ].join(" "),
-    disabled:
-      "cursor-not-allowed text-slate-400 opacity-60 hover:bg-transparent",
-    separator: "border-slate-200",
-  },
-  dark: {
-    default: [
-      "text-stone-300",
-      "hover:bg-zinc-900 hover:text-stone-50",
-      "focus-visible:bg-zinc-900 focus-visible:text-stone-50",
-      "focus-visible:outline-zinc-700",
-    ].join(" "),
-    danger: [
-      "text-red-300",
-      "hover:bg-red-500/10 hover:text-red-200",
-      "focus-visible:bg-red-500/10 focus-visible:text-red-200",
-      "focus-visible:outline-red-500/40",
-    ].join(" "),
-    disabled:
-      "cursor-not-allowed text-stone-500 opacity-60 hover:bg-transparent",
-    separator: "border-zinc-800",
-  },
-};
-
-function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
-}
-
-function getPlacementOrigin(placement) {
-  switch (placement) {
-    case "top-start":
-      return "bottom left";
-    case "top-end":
-      return "bottom right";
-    case "top":
-      return "bottom center";
-    case "bottom-start":
-      return "top left";
-    case "bottom-end":
-      return "top right";
-    case "bottom":
-      return "top center";
-    case "left-start":
-      return "top right";
-    case "left-end":
-      return "bottom right";
-    case "left":
-      return "right center";
-    case "right-start":
-      return "top left";
-    case "right-end":
-      return "bottom left";
-    case "right":
-      return "left center";
-    default:
-      return "top center";
-  }
-}
-
-function getClosedTransform(side) {
-  switch (side) {
-    case "top":
-      return "translateY(4px) scale(0.98)";
-    case "bottom":
-      return "translateY(-4px) scale(0.98)";
-    case "left":
-      return "translateX(4px) scale(0.98)";
-    case "right":
-      return "translateX(-4px) scale(0.98)";
-    default:
-      return "scale(0.98)";
-  }
-}
 
 function isTriggerDisabled(element) {
   return Boolean(
@@ -336,7 +241,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
     open,
     usePortal,
   } = useDropdownContext("DropdownContent");
-  const theme = resolveTheme(useQuickitTheme());
+  const theme = resolveFloatingListTheme(useQuickitTheme());
   const floatingRef = useCallback(
     (node) => {
       refs.setFloating(node);
@@ -344,13 +249,12 @@ export const DropdownContent = forwardRef(function DropdownContent(
     },
     [ref, refs],
   );
-  const arrowFill = theme === "dark" ? "#09090b" : "#ffffff";
-  const arrowStroke = theme === "dark" ? "#27272a" : "#e2e8f0";
+  const { fill: arrowFill, stroke: arrowStroke } = getFloatingArrowColors(theme);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
     duration: animated ? { open: 140, close: 100 } : 0,
     initial: ({ side }) => ({
       opacity: 0,
-      transform: getClosedTransform(side),
+      transform: getFloatingClosedTransform(side),
     }),
     open: {
       opacity: 1,
@@ -358,10 +262,10 @@ export const DropdownContent = forwardRef(function DropdownContent(
     },
     close: ({ side }) => ({
       opacity: 0,
-      transform: getClosedTransform(side),
+      transform: getFloatingClosedTransform(side),
     }),
     common: {
-      transformOrigin: getPlacementOrigin(placement),
+      transformOrigin: getFloatingPlacementOrigin(placement),
     },
   });
 
@@ -373,8 +277,8 @@ export const DropdownContent = forwardRef(function DropdownContent(
     <ul
       ref={floatingRef}
       className={cn(
-        DROPDOWN_CONTENT_PRIMITIVES.layout,
-        DROPDOWN_CONTENT_THEME_CLASSES[theme],
+        FLOATING_LIST_SURFACE_PRIMITIVES.layout,
+        FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
         className,
       )}
       style={{
@@ -425,7 +329,7 @@ export const DropdownItem = forwardRef(function DropdownItem(
   ref,
 ) {
   const { close } = useDropdownContext("DropdownItem");
-  const theme = resolveTheme(useQuickitTheme());
+  const theme = resolveFloatingListTheme(useQuickitTheme());
   const resolvedVariant = variant === "danger" ? "danger" : "default";
 
   const handleClick = (event) => {
@@ -453,9 +357,9 @@ export const DropdownItem = forwardRef(function DropdownItem(
         tabIndex={Component !== "button" && disabled ? -1 : undefined}
         type={Component === "button" ? "button" : undefined}
         className={cn(
-          DROPDOWN_ITEM_PRIMITIVES.base,
-          DROPDOWN_ITEM_THEME_CLASSES[theme][resolvedVariant],
-          disabled && DROPDOWN_ITEM_THEME_CLASSES[theme].disabled,
+          FLOATING_LIST_ITEM_PRIMITIVES.base,
+          FLOATING_LIST_ITEM_THEME_CLASSES[theme][resolvedVariant],
+          disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
           className,
         )}
         {...props}
@@ -467,14 +371,14 @@ export const DropdownItem = forwardRef(function DropdownItem(
 });
 
 export function DropdownSeparator({ className }) {
-  const theme = resolveTheme(useQuickitTheme());
+  const theme = resolveFloatingListTheme(useQuickitTheme());
 
   return (
     <li
       role="separator"
       className={cn(
         "my-1 border-t",
-        DROPDOWN_ITEM_THEME_CLASSES[theme].separator,
+        FLOATING_LIST_ITEM_THEME_CLASSES[theme].separator,
         className,
       )}
     />

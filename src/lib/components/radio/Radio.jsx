@@ -34,6 +34,19 @@ const RADIO_THEME_CLASSES = {
   },
 };
 
+const RADIO_SIZE_CLASSES = {
+  sm: {
+    root: "size-3.5",
+    control: "size-3.5",
+    dot: "size-1.5",
+  },
+  md: {
+    root: "size-4",
+    control: "size-4",
+    dot: "size-2",
+  },
+};
+
 function resolveTheme(theme) {
   return theme === "dark" ? "dark" : "light";
 }
@@ -46,6 +59,7 @@ const Radio = forwardRef(function Radio(
     id,
     invalid = false,
     required = false,
+    size = "md",
     ...props
   },
   ref,
@@ -57,6 +71,8 @@ const Radio = forwardRef(function Radio(
   const resolvedDisabled = disabled || field?.disabled;
   const resolvedRequired = required || field?.required;
   const resolvedColor = ui.colors[color] ? color : "neutral";
+  const resolvedSize = RADIO_SIZE_CLASSES[size] ? size : "md";
+  const sizeUi = RADIO_SIZE_CLASSES[resolvedSize];
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -66,7 +82,7 @@ const Radio = forwardRef(function Radio(
     .join(" ") || undefined;
 
   return (
-    <span className={cn("relative inline-flex size-4 shrink-0", className)}>
+    <span className={cn("relative inline-flex shrink-0 cursor-pointer", sizeUi.root, className)}>
       <input
         ref={ref}
         type="radio"
@@ -81,7 +97,8 @@ const Radio = forwardRef(function Radio(
       <span
         aria-hidden="true"
         className={cn(
-          "inline-flex size-4 items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
+          "inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
+          sizeUi.control,
           ui.ring,
           ui.focus,
           resolvedInvalid ? ui.invalid : ui.colors[resolvedColor].ring,
@@ -89,7 +106,8 @@ const Radio = forwardRef(function Radio(
       >
         <span
           className={cn(
-            "size-2 scale-0 rounded-full transition-transform duration-150",
+            "scale-0 rounded-full transition-transform duration-150",
+            sizeUi.dot,
             resolvedInvalid ? ui.invalidDot : ui.colors[resolvedColor].dot,
           )}
         />

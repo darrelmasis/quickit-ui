@@ -1,19 +1,55 @@
-import { forwardRef } from "react";
+import {
+  Children,
+  forwardRef,
+  isValidElement,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  FloatingPortal,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  size,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useListNavigation,
+  useRole,
+  useTransitionStyles,
+} from "@floating-ui/react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
+import {
+  FLOATING_LIST_ITEM_PRIMITIVES,
+  FLOATING_LIST_ITEM_THEME_CLASSES,
+  FLOATING_LIST_SURFACE_PRIMITIVES,
+  FLOATING_LIST_SURFACE_THEME_CLASSES,
+  getFloatingClosedTransform,
+  getFloatingPlacementOrigin,
+  resolveFloatingListTheme,
+} from "@/lib/components/_shared/floating-list";
 
 const SELECT_PRIMITIVES = {
   wrapper: "relative w-full",
-  field: [
-    "w-full appearance-none border bg-transparent px-3.5 pr-10 text-sm outline-none",
+  trigger: [
+    "flex w-full items-center justify-between gap-3 border bg-transparent px-3.5 text-sm outline-none",
     "transition-[background-color,border-color,color] duration-200",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-60",
   ].join(" "),
-  icon:
-    "pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-current/55",
+  value: "min-w-0 truncate text-left",
+  icon: "shrink-0 text-current/55 transition-transform duration-200",
+  content: "max-h-72 overflow-y-auto",
 };
+
+const SELECT_PLACEMENT = "bottom-start";
+const SELECT_OPEN_DURATION = 140;
+const SELECT_CLOSE_DURATION = 100;
 
 const SELECT_SIZE_CLASSES = {
   sm: "h-9",
@@ -26,28 +62,152 @@ const SELECT_THEME_CLASSES = {
     base: "border-slate-200 bg-white text-slate-950 focus-visible:outline-slate-300",
     hover: "hover:border-slate-300",
     invalid: "border-red-300 text-red-700 focus-visible:outline-red-300",
+    placeholder: "text-slate-500",
+    selectedIndicator: "text-slate-950",
   },
   dark: {
     base: "border-zinc-800 bg-zinc-950 text-stone-50 focus-visible:outline-zinc-700",
     hover: "hover:border-zinc-700",
     invalid: "border-red-500/60 text-stone-50 focus-visible:outline-red-400",
+    placeholder: "text-stone-400",
+    selectedIndicator: "text-stone-50",
   },
 };
 
-function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+function normalizeOptionValue(value) {
+  if (value == null) {
+    return "";
+  }
+
+  return String(value);
+}
+
+function extractOptionLabel(children) {
+  if (typeof children === "string" || typeof children === "number") {
+    return String(children);
+  }
+
+  return children;
+}
+
+function parseOptions(children) {
+  return Children.toArray(children)
+    .filter((child) => isValidElement(child) && child.type === "option")
+    .map((child, index) => {
+      const label = extractOptionLabel(child.props.children);
+      const textLabel =
+        typeof child.props.children === "string" ||
+        typeof child.props.children === "number"
+          ? String(child.props.children)
+          : "";
+      const optionValue =
+        child.props.value !== undefined
+          ? normalizeOptionValue(child.props.value)
+          : textLabel || String(index);
+
+      return {
+        disabled: Boolean(child.props.disabled),
+        key: child.key ?? `${optionValue}-${index}`,
+        label,
+        value: optionValue,
+      };
+    });
+}
+
+function getInitialSelectValue({ controlledValue, defaultValue, options, placeholder }) {
+  if (controlledValue !== undefined) {
+    return normalizeOptionValue(controlledValue);
+  }
+
+  if (defaultValue !== undefined) {
+    return normalizeOptionValue(defaultValue);
+  }
+
+  if (placeholder) {
+    return "";
+  }
+
+  return options[0]?.value ?? "";
+}
+
+function getInitialActiveIndex({ nextOpen, selectedIndex, firstEnabledIndex }) {
+  if (!nextOpen) {
+    return null;
+  }
+
+  return selectedIndex >= 0 ? selectedIndex : firstEnabledIndex;
+}
+
+function assignRef(ref, value) {
+  if (typeof ref === "function") {
+    ref(value);
+  } else if (ref && typeof ref === "object") {
+    ref.current = value;
+  }
+}
+
+function createChangeEvent({ id, name, nativeEvent, value }) {
+  return {
+    type: "change",
+    nativeEvent,
+    target: { id, name, value },
+    currentTarget: { id, name, value },
+    preventDefault() {
+      nativeEvent?.preventDefault?.();
+    },
+    stopPropagation() {
+      nativeEvent?.stopPropagation?.();
+    },
+  };
 }
 
 const Select = forwardRef(function Select(
-  { children, className, disabled = false, id, invalid = false, required = false, size = "md", ...props },
+  {
+    children,
+    className,
+    defaultValue,
+    disabled = false,
+    id,
+    invalid = false,
+    name,
+    onChange,
+    onValueChange,
+    placeholder,
+    required = false,
+    size: controlSize = "md",
+    usePortal = true,
+    value: controlledValue,
+    ...props
+  },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
+  const theme = resolveFloatingListTheme(useQuickitTheme());
   const ui = SELECT_THEME_CLASSES[theme];
   const field = useFormControl();
+  const options = useMemo(() => parseOptions(children), [children]);
+  const initialValue = getInitialSelectValue({
+    controlledValue,
+    defaultValue,
+    options,
+    placeholder,
+  });
+  const [uncontrolledValue, setUncontrolledValue] = useState(initialValue);
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const listRef = useRef([]);
+
+  const resolvedValue =
+    controlledValue !== undefined
+      ? normalizeOptionValue(controlledValue)
+      : uncontrolledValue;
+  const selectedIndex = options.findIndex(
+    (option) => option.value === resolvedValue,
+  );
+  const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : null;
   const resolvedInvalid = invalid || field?.invalid;
   const resolvedDisabled = disabled || field?.disabled;
   const resolvedRequired = required || field?.required;
+  const resolvedId = id ?? field?.controlId;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -55,33 +215,254 @@ const Select = forwardRef(function Select(
   ]
     .filter(Boolean)
     .join(" ") || undefined;
+  const firstEnabledIndex = options.findIndex((option) => !option.disabled);
+  const handleOpenChange = useCallback((nextOpen) => {
+    setOpen(nextOpen);
+    setActiveIndex(getInitialActiveIndex({
+      nextOpen,
+      selectedIndex,
+      firstEnabledIndex,
+    }));
+  }, [firstEnabledIndex, selectedIndex]);
+
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: handleOpenChange,
+    placement: SELECT_PLACEMENT,
+    transform: false,
+    middleware: [
+      offset(8),
+      flip({ padding: 8 }),
+      shift({ padding: 8 }),
+      size({
+        apply({ rects, elements }) {
+          Object.assign(elements.floating.style, {
+            width: `${rects.reference.width}px`,
+          });
+        },
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const dismiss = useDismiss(context);
+  const role = useRole(context, { role: "listbox" });
+  const listNavigation = useListNavigation(context, {
+    activeIndex,
+    listRef,
+    loop: true,
+    onNavigate: setActiveIndex,
+    selectedIndex,
+  });
+  const interactions = useInteractions([dismiss, role, listNavigation]);
+  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
+    duration: { open: SELECT_OPEN_DURATION, close: SELECT_CLOSE_DURATION },
+    initial: ({ side }) => ({
+      opacity: 0,
+      transform: getFloatingClosedTransform(side),
+    }),
+    open: {
+      opacity: 1,
+      transform: "translate(0px, 0px) scale(1)",
+    },
+    close: ({ side }) => ({
+      opacity: 0,
+      transform: getFloatingClosedTransform(side),
+    }),
+    common: {
+      transformOrigin: getFloatingPlacementOrigin(SELECT_PLACEMENT),
+    },
+  });
+  const floatingRef = useCallback(
+    (node) => {
+      refs.setFloating(node);
+    },
+    [refs],
+  );
+  const referenceRef = useCallback(
+    (node) => {
+      refs.setReference(node);
+      assignRef(ref, node);
+    },
+    [ref, refs],
+  );
+
+  const handleValueChange = useCallback((nextValue, nativeEvent) => {
+    if (controlledValue === undefined) {
+      setUncontrolledValue(nextValue);
+    }
+
+    onValueChange?.(nextValue);
+    onChange?.(
+      createChangeEvent({
+        id: resolvedId,
+        name,
+        nativeEvent,
+        value: nextValue,
+      }),
+    );
+    handleOpenChange(false);
+    refs.reference.current?.focus?.();
+  }, [controlledValue, handleOpenChange, name, onChange, onValueChange, refs.reference, resolvedId]);
+  const handleTriggerClick = useCallback(() => {
+    if (resolvedDisabled) {
+      return;
+    }
+
+    handleOpenChange(!open);
+  }, [handleOpenChange, open, resolvedDisabled]);
+  const handleTriggerKeyDown = useCallback((event) => {
+    if (resolvedDisabled) {
+      return;
+    }
+
+    if (
+      event.key === "ArrowDown" ||
+      event.key === "ArrowUp" ||
+      event.key === "Enter" ||
+      event.key === " "
+    ) {
+      event.preventDefault();
+      handleOpenChange(true);
+    }
+  }, [handleOpenChange, resolvedDisabled]);
+  const handleOptionMouseEnter = useCallback((index) => {
+    setActiveIndex(index);
+  }, []);
+  const handleOptionKeyDown = useCallback((event, nextValue) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleValueChange(nextValue, event);
+    }
+  }, [handleValueChange]);
+  const getOptionProps = useCallback((option, index) => interactions.getItemProps({
+    onClick(event) {
+      handleValueChange(option.value, event);
+    },
+    onMouseEnter() {
+      handleOptionMouseEnter(index);
+    },
+    onKeyDown(event) {
+      handleOptionKeyDown(event, option.value);
+    },
+  }), [handleOptionKeyDown, handleOptionMouseEnter, handleValueChange, interactions]);
+
+  const triggerLabel = selectedOption?.label ?? placeholder ?? "Selecciona una opción";
+
+  const content = isMounted ? (
+    <ul
+      ref={floatingRef}
+      className={cn(
+        FLOATING_LIST_SURFACE_PRIMITIVES.layout,
+        FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
+        SELECT_PRIMITIVES.content,
+      )}
+      style={{
+        ...floatingStyles,
+        ...transitionStyles,
+      }}
+      {...interactions.getFloatingProps({
+        "aria-labelledby": resolvedId,
+      })}
+    >
+      {options.map((option, index) => {
+        const selected = option.value === resolvedValue;
+
+        return (
+          <li key={option.key} role="presentation">
+            <button
+              ref={(node) => {
+                listRef.current[index] = node;
+              }}
+              type="button"
+              role="option"
+              aria-selected={selected}
+              disabled={option.disabled}
+              className={cn(
+                FLOATING_LIST_ITEM_PRIMITIVES.base,
+                FLOATING_LIST_ITEM_THEME_CLASSES[theme].default,
+                selected && FLOATING_LIST_ITEM_THEME_CLASSES[theme].selected,
+                option.disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
+              )}
+              {...getOptionProps(option, index)}
+            >
+              <span className="min-w-0 flex-1 truncate">{option.label}</span>
+              {selected ? (
+                <svg
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  className={cn("size-4 shrink-0 fill-current", ui.selectedIndicator)}
+                >
+                  <path d="m7.75 13.1-3.4-3.4 1.06-1.06 2.34 2.34 6.84-6.84 1.06 1.06-7.9 7.9Z" />
+                </svg>
+              ) : null}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  ) : null;
 
   return (
     <span className={SELECT_PRIMITIVES.wrapper}>
-      <select
-        ref={ref}
-        id={id ?? field?.controlId}
-        required={resolvedRequired}
+      {name ? (
+        <input type="hidden" name={name} value={resolvedValue} />
+      ) : null}
+      <button
+        ref={referenceRef}
+        id={resolvedId}
+        type="button"
         disabled={resolvedDisabled}
-        aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        aria-invalid={resolvedInvalid || undefined}
+        aria-required={resolvedRequired || undefined}
         className={cn(
-          SELECT_PRIMITIVES.field,
-          getControlRadius(size),
-          SELECT_SIZE_CLASSES[size] ?? SELECT_SIZE_CLASSES.md,
+          SELECT_PRIMITIVES.trigger,
+          getControlRadius(controlSize),
+          SELECT_SIZE_CLASSES[controlSize] ?? SELECT_SIZE_CLASSES.md,
           resolvedInvalid ? ui.invalid : ui.base,
           !resolvedDisabled && ui.hover,
           className,
         )}
-        {...props}
+        {...interactions.getReferenceProps({
+          ...props,
+          onClick(event) {
+            props.onClick?.(event);
+            handleTriggerClick(event);
+          },
+          onKeyDown(event) {
+            props.onKeyDown?.(event);
+
+            if (!event.defaultPrevented) {
+              handleTriggerKeyDown(event);
+            }
+          },
+        })}
       >
-        {children}
-      </select>
-      <span className={SELECT_PRIMITIVES.icon} aria-hidden="true">
-        <svg viewBox="0 0 20 20" className="size-4 fill-current">
-          <path d="M5.75 7.75 10 12l4.25-4.25 1.06 1.06-5.31 5.31-5.31-5.31 1.06-1.06Z" />
-        </svg>
-      </span>
+        <span
+          className={cn(
+            SELECT_PRIMITIVES.value,
+            !selectedOption && ui.placeholder,
+          )}
+        >
+          {triggerLabel}
+        </span>
+        <span
+          className={cn(
+            SELECT_PRIMITIVES.icon,
+            open && "rotate-180",
+          )}
+          aria-hidden="true"
+        >
+          <svg viewBox="0 0 20 20" className="size-4 fill-current">
+            <path d="M5.75 7.75 10 12l4.25-4.25 1.06 1.06-5.31 5.31-5.31-5.31 1.06-1.06Z" />
+          </svg>
+        </span>
+      </button>
+
+      {usePortal ? <FloatingPortal>{content}</FloatingPortal> : content}
     </span>
   );
 });

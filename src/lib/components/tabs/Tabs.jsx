@@ -216,11 +216,6 @@ export function TabsTrigger({
       tabIndex={isSelected ? 0 : -1}
       disabled={disabled}
       onClick={() => setValue(value)}
-      onFocus={() => {
-        if (activationMode === "automatic" && !disabled) {
-          setValue(value);
-        }
-      }}
       onKeyDown={handleKeyDown}
       className={cn(
         TABS_TRIGGER_PRIMITIVES.base,

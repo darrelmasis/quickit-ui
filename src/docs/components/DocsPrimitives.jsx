@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "@/lib";
 import { Highlight, themes } from "prism-react-renderer";
 
@@ -5,6 +6,89 @@ const CODE_THEMES = {
   light: themes.oneLight,
   dark: themes.oneDark,
 };
+
+const CODE_PREVIEW_LINES = 4;
+const CODE_ACTION_CLASSES = {
+  light:
+    "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950",
+  dark:
+    "border-zinc-700 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-50",
+};
+const CODE_FADE_CLASSES = {
+  light: "from-zinc-950 via-zinc-950/80 to-transparent",
+  dark: "from-zinc-950 via-zinc-950/80 to-transparent",
+};
+
+const QUICKIT_EXPORTS = [
+  "Accordion",
+  "AccordionContent",
+  "AccordionItem",
+  "AccordionTrigger",
+  "Avatar",
+  "AvatarFallback",
+  "AvatarGroup",
+  "AvatarImage",
+  "Badge",
+  "Breadcrumb",
+  "BreadcrumbCurrent",
+  "BreadcrumbItem",
+  "BreadcrumbLink",
+  "BreadcrumbList",
+  "BreadcrumbSeparator",
+  "Button",
+  "Checkbox",
+  "Dropdown",
+  "DropdownContent",
+  "DropdownItem",
+  "DropdownSeparator",
+  "DropdownTrigger",
+  "EmptyState",
+  "EmptyStateDescription",
+  "EmptyStateTitle",
+  "FormControl",
+  "FormDescription",
+  "FormMessage",
+  "Input",
+  "Label",
+  "Link",
+  "Modal",
+  "ModalAction",
+  "ModalActions",
+  "ModalBody",
+  "ModalContent",
+  "ModalHeader",
+  "ModalTitle",
+  "Pagination",
+  "Popover",
+  "QuickitProvider",
+  "Radio",
+  "Select",
+  "Skeleton",
+  "Switch",
+  "Tabs",
+  "TabsContent",
+  "TabsList",
+  "TabsTrigger",
+  "Textarea",
+  "Tooltip",
+  "useQuickitTheme",
+];
+
+function getQuickitImports(code) {
+  if (/^\s*import\s/m.test(code)) {
+    return code.trim();
+  }
+
+  const usedExports = QUICKIT_EXPORTS.filter((exportName) =>
+    new RegExp(`\\b${exportName}\\b`).test(code),
+  );
+
+  if (!usedExports.length) {
+    return code.trim();
+  }
+
+  return `import { ${usedExports.join(", ")} } from "quickit-ui";\n\n${code.trim()}`;
+}
 
 export function SectionCard({
   children,
@@ -17,7 +101,7 @@ export function SectionCard({
       id={id}
       ref={sectionRef}
       className={cn(
-        "scroll-mt-6 border-b py-8 last:border-b-0 lg:scroll-mt-8",
+        "scroll-mt-6 border-b py-6 last:border-b-0 sm:py-8 lg:scroll-mt-8",
         className,
       )}
     >
@@ -37,11 +121,11 @@ export function SectionHeading({
       <p className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}>
         {category}
       </p>
-      <h2 className={`mt-3 text-2xl font-semibold tracking-[-0.03em] ${ui.title}`}>
+      <h2 className={`mt-3 text-xl font-semibold tracking-[-0.03em] sm:text-2xl ${ui.title}`}>
         {title}
       </h2>
       {description ? (
-        <p className={`mt-4 text-sm leading-7 ${ui.body}`}>{description}</p>
+        <p className={`mt-4 text-sm leading-6 sm:leading-7 ${ui.body}`}>{description}</p>
       ) : null}
     </>
   );
@@ -61,7 +145,13 @@ export function PreviewPanel({
       {title ? (
         <p className={`text-sm font-semibold ${ui.title}`}>{title}</p>
       ) : null}
-      <div className={cn("rounded-[1.25rem] border p-4", ui.preview, className)}>
+      <div
+        className={cn(
+          "rounded-[1rem] border p-3 sm:rounded-[1.25rem] sm:p-4",
+          ui.preview,
+          className,
+        )}
+      >
         {children}
       </div>
       {code ? (
@@ -82,53 +172,104 @@ export function CodeExample({
   title = "Uso base",
   ui,
 }) {
+  const [expanded, setExpanded] = useState(false);
   const prismTheme = CODE_THEMES[ui.mode] ?? themes.oneDark;
+  const displayCode =
+    language === "jsx" || language === "tsx" || language === "js" || language === "javascript"
+      ? getQuickitImports(code)
+      : code.trim();
 
   return (
-    <div className={`rounded-2xl border p-4 ${ui.code}`}>
+    <div className={`rounded-[1rem] border p-3 sm:rounded-2xl sm:p-4 ${ui.code}`}>
       <p className={`text-xs uppercase tracking-[0.18em] ${ui.codeMuted}`}>
         {title}
       </p>
       <Highlight
         theme={prismTheme}
-        code={code.trim()}
+        code={displayCode}
         language={language}
       >
-        {({ className, getLineProps, getTokenProps, style, tokens }) => (
-          <pre
-            className={cn(
-              className,
-              "mt-3 overflow-x-auto rounded-xl bg-transparent p-0 text-sm leading-6",
-            )}
-            style={{ ...style, background: "transparent" }}
-          >
-            <code className="block min-w-full font-mono">
-              {tokens.map((line, lineIndex) => {
-                const { key: lineKey, ...lineProps } = getLineProps({
-                  line,
-                  key: lineIndex,
-                });
+        {({ className, getLineProps, getTokenProps, style, tokens }) => {
+          const {
+            background: _background,
+            backgroundColor: _backgroundColor,
+            ...codeBlockStyle
+          } = style ?? {};
+          const hasHiddenLines = tokens.length > CODE_PREVIEW_LINES;
+          const visibleTokens =
+            expanded || !hasHiddenLines
+              ? tokens
+              : tokens.slice(0, CODE_PREVIEW_LINES);
 
-                return (
-                  <div
-                    key={lineKey}
-                    {...lineProps}
-                    className={cn(lineProps.className, "min-h-6")}
-                  >
-                    {line.map((token, tokenIndex) => {
-                      const { key: tokenKey, ...tokenProps } = getTokenProps({
-                        token,
-                        key: tokenIndex,
+          return (
+            <div className="mt-3">
+              <div className="relative">
+                <pre
+                  className={cn(
+                    className,
+                    "overflow-x-auto rounded-xl bg-transparent p-0 text-xs leading-5 sm:text-sm sm:leading-6",
+                  )}
+                  style={{ ...codeBlockStyle, backgroundColor: "transparent" }}
+                >
+                  <code className="block min-w-full font-mono">
+                    {visibleTokens.map((line, lineIndex) => {
+                      const { key: lineKey, ...lineProps } = getLineProps({
+                        line,
+                        key: lineIndex,
                       });
 
-                      return <span key={tokenKey} {...tokenProps} />;
+                      return (
+                        <div
+                          key={lineKey}
+                          {...lineProps}
+                          className={cn(lineProps.className, "min-h-6")}
+                        >
+                          {line.map((token, tokenIndex) => {
+                            const { key: tokenKey, ...tokenProps } = getTokenProps({
+                              token,
+                              key: tokenIndex,
+                            });
+
+                            return <span key={tokenKey} {...tokenProps} />;
+                          })}
+                        </div>
+                      );
                     })}
-                  </div>
-                );
-              })}
-            </code>
-          </pre>
-        )}
+                  </code>
+                </pre>
+
+                {hasHiddenLines && !expanded ? (
+                  <div
+                    className={cn(
+                      "pointer-events-none absolute inset-x-0 bottom-0 h-16 rounded-b-xl bg-gradient-to-t",
+                      CODE_FADE_CLASSES[ui.mode] ?? CODE_FADE_CLASSES.dark,
+                    )}
+                  />
+                ) : null}
+              </div>
+
+              {hasHiddenLines ? (
+                <div className="mt-3 flex items-center justify-between gap-3">
+                  <p className={`text-xs ${ui.codeMuted}`}>
+                    {expanded
+                      ? `Mostrando ${tokens.length} líneas`
+                      : `Mostrando ${CODE_PREVIEW_LINES} de ${tokens.length} líneas`}
+                  </p>
+                  <button
+                    type="button"
+                    className={cn(
+                      "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                      CODE_ACTION_CLASSES[ui.mode] ?? CODE_ACTION_CLASSES.dark,
+                    )}
+                    onClick={() => setExpanded((current) => !current)}
+                  >
+                    {expanded ? "Ver menos" : "Ver completo"}
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          );
+        }}
       </Highlight>
     </div>
   );
@@ -137,19 +278,19 @@ export function CodeExample({
 export function PropsTable({ rows, ui }) {
   return (
     <div className="mt-4 overflow-x-auto">
-      <table className="min-w-full border-separate border-spacing-0">
+      <table className="min-w-[640px] border-separate border-spacing-0">
         <thead>
           <tr>
-            <th className={`border-b px-0 py-3 pr-4 text-left text-sm font-semibold ${ui.title}`}>
+            <th className={`border-b px-0 py-3 pr-4 text-left text-xs font-semibold sm:text-sm ${ui.title}`}>
               Prop
             </th>
-            <th className={`border-b px-0 py-3 pr-4 text-left text-sm font-semibold ${ui.title}`}>
+            <th className={`border-b px-0 py-3 pr-4 text-left text-xs font-semibold sm:text-sm ${ui.title}`}>
               Tipo
             </th>
-            <th className={`border-b px-0 py-3 pr-4 text-left text-sm font-semibold ${ui.title}`}>
+            <th className={`border-b px-0 py-3 pr-4 text-left text-xs font-semibold sm:text-sm ${ui.title}`}>
               Default
             </th>
-            <th className={`border-b px-0 py-3 text-left text-sm font-semibold ${ui.title}`}>
+            <th className={`border-b px-0 py-3 text-left text-xs font-semibold sm:text-sm ${ui.title}`}>
               Descripción
             </th>
           </tr>
@@ -157,16 +298,16 @@ export function PropsTable({ rows, ui }) {
         <tbody>
           {rows.map((row) => (
             <tr key={row.prop}>
-              <td className={`border-b px-0 py-3 pr-4 text-sm font-semibold ${ui.title}`}>
+              <td className={`border-b px-0 py-3 pr-4 text-xs font-semibold sm:text-sm ${ui.title}`}>
                 <code>{row.prop}</code>
               </td>
-              <td className={`border-b px-0 py-3 pr-4 text-sm ${ui.body}`}>
+              <td className={`border-b px-0 py-3 pr-4 text-xs sm:text-sm ${ui.body}`}>
                 {row.type}
               </td>
-              <td className={`border-b px-0 py-3 pr-4 text-sm ${ui.body}`}>
+              <td className={`border-b px-0 py-3 pr-4 text-xs sm:text-sm ${ui.body}`}>
                 {row.defaultValue}
               </td>
-              <td className={`border-b px-0 py-3 text-sm leading-6 ${ui.body}`}>
+              <td className={`border-b px-0 py-3 text-xs leading-5 sm:text-sm sm:leading-6 ${ui.body}`}>
                 {row.description}
               </td>
             </tr>

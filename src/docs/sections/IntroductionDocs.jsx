@@ -8,9 +8,12 @@ import {
 } from "@/docs/components/DocsPrimitives";
 import { docsConventions } from "@/docs/config";
 
-export function IntroductionDocs({ ui }) {
+const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
+
+export function IntroductionDocs({ ui, visibleIds }) {
   return (
     <div className="space-y-8">
+      {isVisible(visibleIds, "getting-started") ? (
       <SectionCard id="getting-started" className={ui.divider}>
         <SectionHeading
           category="Getting started"
@@ -50,7 +53,9 @@ export function IntroductionDocs({ ui }) {
           <NotesList items={docsConventions} ui={ui} />
         </div>
       </SectionCard>
+      ) : null}
 
+      {isVisible(visibleIds, "instalacion") ? (
       <SectionCard id="instalacion" className={ui.divider}>
         <SectionHeading
           category="Instalación"
@@ -83,7 +88,9 @@ export function Example() {
           />
         </div>
       </SectionCard>
+      ) : null}
 
+      {isVisible(visibleIds, "compatibilidad") ? (
       <SectionCard id="compatibilidad" className={ui.divider}>
         <SectionHeading
           category="Compatibilidad"
@@ -147,6 +154,7 @@ export function Example() {
           </div>
         </PreviewPanel>
       </SectionCard>
+      ) : null}
     </div>
   );
 }

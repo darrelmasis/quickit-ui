@@ -55,7 +55,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
   return (
     <SectionCard id="button" className={ui.divider}>
       <SectionHeading
-        category="Fundamentos"
+        category="Acciones"
         title="Button"
         description="Botón base de la librería. Soporta variantes visuales, colores, estados, tamaños y shape cuadrado sin depender de CSS custom."
         ui={ui}
@@ -135,7 +135,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
           </div>
         </PreviewPanel>
 
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
+        <div className="space-y-4">
           <PreviewPanel
             ui={ui}
             title="Tamaños y shape"
@@ -180,15 +180,17 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+      <div className="mt-8 space-y-6">
         <div>
           <p className={`text-sm font-semibold ${ui.title}`}>API</p>
           <PropsTable rows={buttonApi} ui={ui} />
         </div>
-        <CodeExample
-          ui={ui}
-          title="Uso base"
-          code={`<Button
+        <div>
+          <p className={`text-sm font-semibold ${ui.title}`}>Uso base</p>
+          <CodeExample
+            ui={ui}
+            title="Uso base"
+            code={`<Button
   variant="outline"
   color="neutral"
   size="lg"
@@ -196,7 +198,8 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
 >
   Continuar
 </Button>`}
-        />
+          />
+        </div>
       </div>
 
       <div className="mt-8">

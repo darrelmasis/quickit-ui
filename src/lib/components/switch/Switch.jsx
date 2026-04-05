@@ -5,7 +5,7 @@ import { useFormControl } from "@/lib/components/form-control";
 
 const SWITCH_PRIMITIVES = {
   root: [
-    "relative inline-flex shrink-0 items-center rounded-full border outline-none",
+    "relative inline-flex shrink-0 cursor-pointer items-center rounded-full border outline-none",
     "transition-[background-color,border-color] duration-200",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-60",

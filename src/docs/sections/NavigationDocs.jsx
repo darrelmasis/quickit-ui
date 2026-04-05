@@ -27,7 +27,7 @@ const apis = {
     { prop: "defaultValue", type: "string", defaultValue: "undefined", description: "Tab inicial en modo no controlado." },
     { prop: "value / onValueChange", type: "string / (value) => void", defaultValue: "no controlado", description: "Modo controlado opcional." },
     { prop: "orientation", type: "horizontal | vertical", defaultValue: "horizontal", description: "Dirección del tabs list y de la navegación por teclado." },
-    { prop: "activationMode", type: "automatic | manual", defaultValue: "automatic", description: "Controla si el foco activa el tab o requiere Enter/Espacio." },
+    { prop: "activationMode", type: "automatic | manual", defaultValue: "automatic", description: "Controla si el foco activa el tab automáticamente o si solo cambia con click / Enter / Espacio." },
   ],
   accordion: [
     { prop: "type", type: "single | multiple", defaultValue: "single", description: "Permite uno o varios items abiertos." },
@@ -56,7 +56,7 @@ export function NavigationDocs({ ui, visibleIds }) {
           <SectionHeading
             category="Navegación"
             title="Tabs"
-            description="Navegación por paneles con orientación horizontal o vertical y soporte de teclado integrado."
+            description="Navegación por paneles con orientación horizontal o vertical. La activación principal es por click y mantiene soporte de teclado integrado."
             ui={ui}
           />
 
@@ -101,6 +101,9 @@ export function NavigationDocs({ ui, visibleIds }) {
     <TabsTrigger value="motion">Motion</TabsTrigger>
     <TabsTrigger value="usage">Usage</TabsTrigger>
   </TabsList>
+  <TabsContent value="tokens">Puedes usar orientación vertical para side settings o docs internas.</TabsContent>
+  <TabsContent value="motion">La navegación por teclado se mantiene activa.</TabsContent>
+  <TabsContent value="usage">También soporta \`activationMode="manual"\`.</TabsContent>
 </Tabs>`}
             >
               <Tabs
@@ -128,6 +131,9 @@ export function NavigationDocs({ ui, visibleIds }) {
     <TabsTrigger value="accessibility">Accesibilidad</TabsTrigger>
     <TabsTrigger value="patterns">Patrones</TabsTrigger>
   </TabsList>
+  <TabsContent value="usage">El panel cambia con click o confirmando con Enter o Espacio.</TabsContent>
+  <TabsContent value="accessibility">Útil cuando el contenido es pesado.</TabsContent>
+  <TabsContent value="patterns">Ideal para settings y documentación.</TabsContent>
 </Tabs>`}
             >
               <Tabs defaultValue="usage" activationMode="manual">
@@ -136,7 +142,7 @@ export function NavigationDocs({ ui, visibleIds }) {
                   <TabsTrigger value="accessibility">Accesibilidad</TabsTrigger>
                   <TabsTrigger value="patterns">Patrones</TabsTrigger>
                 </TabsList>
-                <TabsContent value="usage">En modo manual, el foco no activa el panel hasta confirmar con Enter o Espacio.</TabsContent>
+                <TabsContent value="usage">En modo manual, el foco no activa el panel; el cambio ocurre con click o confirmando con Enter o Espacio.</TabsContent>
                 <TabsContent value="accessibility">Útil cuando el contenido es pesado o disparas analíticas al cambiar de tab.</TabsContent>
                 <TabsContent value="patterns">Funciona bien para documentación, settings y paneles de configuración.</TabsContent>
               </Tabs>

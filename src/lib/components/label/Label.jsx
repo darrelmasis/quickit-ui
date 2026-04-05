@@ -40,8 +40,8 @@ const Label = forwardRef(function Label(
       ref={ref}
       htmlFor={htmlFor ?? field?.controlId}
       className={cn(
-        "inline-flex items-center gap-1.5 text-sm font-medium leading-6",
-        field?.disabled && "opacity-60",
+        "inline-flex cursor-pointer items-center gap-1.5 text-sm font-medium leading-6",
+        field?.disabled && "cursor-not-allowed opacity-60",
         ui.base,
         className,
       )}
