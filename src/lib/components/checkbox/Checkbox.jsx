@@ -22,7 +22,7 @@ const CHECKBOX_THEME_CLASSES = {
     focus: "peer-focus-visible:outline-slate-300",
     colors: {
       neutral: {
-        box: "peer-checked:border-slate-950 peer-checked:bg-slate-950",
+        box: "peer-checked:border-neutral-950 peer-checked:bg-neutral-950",
         icon: "text-white",
       },
       primary: {
@@ -54,8 +54,8 @@ const CHECKBOX_THEME_CLASSES = {
     focus: "peer-focus-visible:outline-zinc-700",
     colors: {
       neutral: {
-        box: "peer-checked:border-stone-100 peer-checked:bg-stone-100",
-        icon: "text-zinc-950",
+        box: "peer-checked:border-neutral-100 peer-checked:bg-neutral-100",
+        icon: "text-neutral-950",
       },
       primary: {
         box: "peer-checked:border-blue-300 peer-checked:bg-blue-300",
@@ -79,7 +79,7 @@ const CHECKBOX_THEME_CLASSES = {
       },
     },
     invalid: "border-red-500/60 peer-checked:border-red-300 peer-checked:bg-red-300",
-    invalidIcon: "text-zinc-950",
+    invalidIcon: "text-neutral-950",
   },
 };
 

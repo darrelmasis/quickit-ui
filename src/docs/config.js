@@ -14,6 +14,7 @@ export const COMPONENT_GROUPS = [
     items: [
       { href: "#provider", label: "QuickitProvider" },
       { href: "#theme", label: "Tema" },
+      { href: "#colors", label: "Colores" },
       { href: "#states", label: "Estados" },
     ],
   },
@@ -90,8 +91,8 @@ export const docsTheme = {
     body: "text-zinc-600",
     muted: "text-zinc-500",
     accent: "text-zinc-700",
-    code: "border-zinc-200 bg-zinc-950 text-zinc-100",
-    codeMuted: "text-zinc-400",
+    code: "border-zinc-200 bg-white text-zinc-900 shadow-sm",
+    codeMuted: "text-zinc-500",
     preview: "border-zinc-200 bg-zinc-50/80",
     badge: "border-zinc-200 bg-zinc-100 text-zinc-700",
     introCard: "border-zinc-200 bg-zinc-50/70",

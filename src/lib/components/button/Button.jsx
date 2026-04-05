@@ -5,7 +5,7 @@ import { cn, getControlRadius } from "@/lib/utils";
 const BUTTON_PRIMITIVES = {
   layout: "relative inline-flex items-center justify-center border font-medium",
   interaction:
-    "cursor-pointer transition-[background-color,border-color,color,transform] duration-200",
+    "cursor-pointer transition-[background-color,border-color,color,transform,filter] duration-200 active:translate-y-px active:scale-[0.99] active:brightness-[0.97] active:saturate-125",
   spacing: "gap-2",
   focus:
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -46,13 +46,20 @@ const sizeClasses = {
     xl: "size-14 text-lg",
     "2xl": "size-16 text-lg",
   },
+  pill: {
+    sm: "h-9 min-w-[5.5rem] px-3.5 text-sm",
+    md: "h-11 min-w-[6.5rem] px-[1.125rem] text-sm",
+    lg: "h-12 min-w-[7.5rem] px-5 text-base",
+    xl: "h-14 min-w-[8.5rem] px-6 text-lg",
+    "2xl": "h-16 min-w-[9.5rem] px-7 text-lg",
+  },
 };
 
 const colorClasses = {
   light: {
     solid: {
       neutral:
-        "border-slate-700 bg-slate-700 text-white hover:border-slate-800 hover:bg-slate-800 focus-visible:outline-slate-700",
+        "border-neutral-700 bg-neutral-700 text-white hover:border-neutral-800 hover:bg-neutral-800 focus-visible:outline-neutral-700",
       primary:
         "border-blue-700 bg-blue-700 text-white hover:border-blue-800 hover:bg-blue-800 focus-visible:outline-blue-700",
       success:
@@ -70,7 +77,7 @@ const colorClasses = {
     },
     outline: {
       neutral:
-        "border-slate-300 bg-slate-50 text-slate-700 hover:border-slate-400 hover:bg-slate-100 focus-visible:outline-slate-500",
+        "border-neutral-300 bg-neutral-50 text-neutral-700 hover:border-neutral-400 hover:bg-neutral-100 focus-visible:outline-neutral-500",
       primary:
         "border-blue-300 bg-blue-50 text-blue-700 hover:border-blue-400 hover:bg-blue-100 focus-visible:outline-blue-700",
       success:
@@ -88,7 +95,7 @@ const colorClasses = {
     },
     ghost: {
       neutral:
-        "border-transparent bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-slate-500",
+        "border-transparent bg-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950 focus-visible:outline-neutral-500",
       primary:
         "border-transparent bg-transparent text-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-blue-700",
       success:
@@ -108,7 +115,7 @@ const colorClasses = {
   dark: {
     solid: {
       neutral:
-        "border-zinc-200 bg-zinc-200 text-zinc-950 hover:border-stone-50 hover:bg-stone-50 focus-visible:outline-stone-200",
+        "border-neutral-200 bg-neutral-200 text-neutral-950 hover:border-neutral-50 hover:bg-neutral-50 focus-visible:outline-neutral-200",
       primary:
         "border-blue-400 bg-blue-400 text-slate-950 hover:border-blue-300 hover:bg-blue-300 focus-visible:outline-blue-300",
       success:
@@ -126,7 +133,7 @@ const colorClasses = {
     },
     outline: {
       neutral:
-        "border-zinc-700 bg-zinc-900 text-stone-200 hover:border-zinc-600 hover:bg-zinc-800 focus-visible:outline-zinc-500",
+        "border-neutral-700 bg-neutral-900 text-neutral-200 hover:border-neutral-600 hover:bg-neutral-800 focus-visible:outline-neutral-500",
       primary:
         "border-blue-500/40 bg-blue-500/10 text-blue-300 hover:border-blue-400/60 hover:bg-blue-500/15 focus-visible:outline-blue-300",
       success:
@@ -144,7 +151,7 @@ const colorClasses = {
     },
     ghost: {
       neutral:
-        "border-transparent bg-transparent text-stone-300 hover:bg-zinc-800 hover:text-stone-50 focus-visible:outline-zinc-500",
+        "border-transparent bg-transparent text-neutral-300 hover:bg-neutral-800 hover:text-neutral-50 focus-visible:outline-neutral-500",
       primary:
         "border-transparent bg-transparent text-blue-300 hover:bg-blue-500/10 hover:text-blue-200 focus-visible:outline-blue-300",
       success:
@@ -217,13 +224,15 @@ const Button = forwardRef(function Button(
   const resolvedTheme = theme === "dark" ? "dark" : "light";
   const isDisabled = disabled || loading;
   const isActive = active || pressed;
+  const resolvedVariant = colorClasses[resolvedTheme][variant] ? variant : "solid";
   const stateClass = loading
     ? BUTTON_STATE_CLASSES.loading
     : BUTTON_STATE_CLASSES.idle;
-  const resolvedColor = colorClasses[resolvedTheme][variant]?.[color]
+  const resolvedColor = colorClasses[resolvedTheme][resolvedVariant]?.[color]
     ? color
     : "primary";
-  const resolvedShape = shape === "square" ? "square" : "default";
+  const resolvedShape =
+    shape === "square" || shape === "pill" ? shape : "default";
   const isSmall = size === "sm";
   const showLoadingText = !isSmall && resolvedShape !== "square";
   const baseContent = children ?? loadingText;
@@ -232,6 +241,8 @@ const Button = forwardRef(function Button(
     sizeClasses[resolvedShape][size] ??
     sizeClasses[resolvedShape].md ??
     sizeClasses.default.md;
+  const resolvedRadiusClass =
+    resolvedShape === "pill" ? "rounded-full" : getControlRadius(size);
 
   useEffect(() => {
     if (import.meta.env.PROD) {
@@ -268,10 +279,10 @@ const Button = forwardRef(function Button(
         fullWidth && "w-full",
         isActive && BUTTON_VISUAL_STATE_CLASSES.active,
         pressed && BUTTON_VISUAL_STATE_CLASSES.pressed,
-        getControlRadius(size),
+        resolvedRadiusClass,
         resolvedSizeClasses,
         stateClass,
-        colorClasses[resolvedTheme][variant]?.[resolvedColor] ??
+        colorClasses[resolvedTheme][resolvedVariant]?.[resolvedColor] ??
           colorClasses[resolvedTheme].solid.primary,
         className,
       )}

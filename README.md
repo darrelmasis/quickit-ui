@@ -64,6 +64,53 @@ export default function App() {
 }
 ```
 
+## Personalizar colores
+
+La API de color es semántica: `neutral`, `primary`, `success`, `danger`, `warning`, `info`, `light` y `dark`.
+
+La lógica recomendada es esta:
+- si quieres cambiar un color existente en toda la librería, sobrescribe sus variables CSS
+- si quieres usar tu color de marca con la API actual, remapea uno de esos slots semánticos
+- si quieres un color nuevo solo en un caso puntual, usa `className`
+- si quieres soportar un nuevo valor como `color="brand"` en toda la librería, eso requiere ampliar la API
+
+Ejemplo para cambiar colores existentes:
+
+```css
+@import "quickit-ui/styles.css";
+
+:root {
+  /* color="neutral" */
+  --color-neutral-700: oklch(46% 0 0);
+  --color-neutral-800: oklch(39% 0 0);
+
+  /* color="primary" */
+  --color-blue-700: oklch(58% 0.18 275);
+  --color-blue-800: oklch(51% 0.17 275);
+}
+```
+
+Si quieres reutilizar un slot semántico como color de marca:
+
+```css
+:root {
+  /* color="info" */
+  --color-sky-600: oklch(62% 0.19 330);
+  --color-sky-700: oklch(55% 0.18 330);
+}
+```
+
+Si quieres un color nuevo puntual, puedes sobreescribir estilos con `className`:
+
+```jsx
+<Button
+  color="neutral"
+  className="border-fuchsia-600 bg-fuchsia-600 text-white hover:border-fuchsia-700 hover:bg-fuchsia-700"
+>
+  Magenta
+</Button>
+```
+
 ## Ejemplos rapidos
 
 ### Button

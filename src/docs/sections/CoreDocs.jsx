@@ -24,7 +24,7 @@ const buttonApi = [
   { prop: "variant", type: "solid | outline | ghost", defaultValue: "solid", description: "Define el tratamiento visual base del botón." },
   { prop: "color", type: "neutral | primary | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Aplica el color semántico dentro de la variante elegida. En la documentación se usa `neutral` por defecto para mantener la UI base más sobria." },
   { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Controla altura, padding y tamaño tipográfico." },
-  { prop: "shape", type: "default | square", defaultValue: "default", description: "Cambia entre botón horizontal e icon button cuadrado." },
+  { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Cambia entre botón horizontal, icon button cuadrado o botón cápsula." },
   { prop: "loading", type: "boolean", defaultValue: "false", description: "Deshabilita interacción y muestra estado de carga." },
   { prop: "loadingText", type: "string", defaultValue: "children", description: "Texto alterno que se muestra únicamente durante loading." },
   { prop: "spinner", type: "boolean", defaultValue: "true", description: "Permite ocultar el spinner aunque el botón esté en loading." },
@@ -39,7 +39,9 @@ const buttonNotes = [
   "Cuando `loading` es `true`, el botón se deshabilita automáticamente.",
   "En `size=\"sm\"` o `shape=\"square\"`, el estado loading muestra solo el spinner.",
   "Si `spinner={false}`, puedes mantener loading sin icono girando.",
+  "El botón tiene feedback visual nativo en `:active` al presionar con puntero, además de los estados controlados `active` y `pressed`.",
   "Los botones horizontales tienen un `min-width` por tamaño para mantener consistencia visual entre acciones.",
+  "`shape=\"pill\"` usa radio completo y funciona bien para acciones más promocionales o filtros tipo cápsula.",
   "Los botones `square` deben incluir `aria-label`, `aria-labelledby` o `title`.",
 ];
 
@@ -149,6 +151,11 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
     <Button size="2xl" color="neutral">2XL</Button>
   </div>
   <div className="flex flex-wrap items-center gap-3">
+    <Button shape="pill" size="sm" color="neutral">Filtro</Button>
+    <Button shape="pill" size="md" color="neutral">Explorar</Button>
+    <Button shape="pill" size="lg" color="neutral">Publicar</Button>
+  </div>
+  <div className="flex flex-wrap items-center gap-3">
     <Button shape="square" size="sm" color="neutral" aria-label="Agregar">+</Button>
     <Button shape="square" size="md" color="neutral" aria-label="Más">+</Button>
     <Button shape="square" size="lg" color="neutral" aria-label="Cerrar">×</Button>
@@ -162,6 +169,11 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
                 <Button size="lg" color="neutral">Large</Button>
                 <Button size="xl" color="neutral">XL</Button>
                 <Button size="2xl" color="neutral">2XL</Button>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button shape="pill" size="sm" color="neutral">Filtro</Button>
+                <Button shape="pill" size="md" color="neutral">Explorar</Button>
+                <Button shape="pill" size="lg" color="neutral">Publicar</Button>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <Button shape="square" size="sm" color="neutral" aria-label="Agregar">+</Button>

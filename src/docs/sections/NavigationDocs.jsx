@@ -4,11 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
   Breadcrumb,
-  BreadcrumbCurrent,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator,
   Pagination,
   Tabs,
   TabsContent,
@@ -26,6 +23,7 @@ const apis = {
   tabs: [
     { prop: "defaultValue", type: "string", defaultValue: "undefined", description: "Tab inicial en modo no controlado." },
     { prop: "value / onValueChange", type: "string / (value) => void", defaultValue: "no controlado", description: "Modo controlado opcional." },
+    { prop: "size", type: "xs | sm | md | lg", defaultValue: "md", description: "Escala el alto del list, el padding y el min-width de cada trigger." },
     { prop: "orientation", type: "horizontal | vertical", defaultValue: "horizontal", description: "Dirección del tabs list y de la navegación por teclado." },
     { prop: "activationMode", type: "automatic | manual", defaultValue: "automatic", description: "Controla si el foco activa el tab automáticamente o si solo cambia con click / Enter / Espacio." },
   ],
@@ -35,8 +33,11 @@ const apis = {
     { prop: "defaultValue", type: "string | string[]", defaultValue: "undefined", description: "Valor inicial de los items abiertos." },
   ],
   breadcrumb: [
-    { prop: "BreadcrumbLink", type: "subcomponente", defaultValue: "-", description: "Enlace navegable dentro de la ruta." },
-    { prop: "BreadcrumbCurrent", type: "subcomponente", defaultValue: "-", description: "Representa el nodo actual no interactivo." },
+    { prop: "separator", type: "ReactNode", defaultValue: "\"/\"", description: "Define el separador automático entre items desde `BreadcrumbList`." },
+    { prop: "allowLink", type: "boolean", defaultValue: "false", description: "Hace que `BreadcrumbItem` renderice un enlace interno usando `href`." },
+    { prop: "href", type: "string", defaultValue: "undefined", description: "Destino del item cuando se usa como enlace." },
+    { prop: "current", type: "boolean", defaultValue: "false", description: "Marca el item actual y lo renderiza como texto no interactivo." },
+    { prop: "linkVariant / underline", type: "string", defaultValue: "muted / hover", description: "Ajusta el tono y el subrayado del item cuando se renderiza como link." },
   ],
   pagination: [
     { prop: "count", type: "number", defaultValue: "required", description: "Total de páginas disponibles." },
@@ -85,6 +86,78 @@ export function NavigationDocs({ ui, visibleIds }) {
                 <TabsContent value="api">Panel con props y notas de integración.</TabsContent>
                 <TabsContent value="states">Panel con variantes y estados visibles.</TabsContent>
               </Tabs>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Tamaños"
+              code={`<div className="space-y-4">
+  <Tabs defaultValue="overview" size="xs">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+      <TabsTrigger value="states">States</TabsTrigger>
+    </TabsList>
+  </Tabs>
+
+  <Tabs defaultValue="overview" size="sm">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+      <TabsTrigger value="states">States</TabsTrigger>
+    </TabsList>
+  </Tabs>
+
+  <Tabs defaultValue="overview" size="md">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+      <TabsTrigger value="states">States</TabsTrigger>
+    </TabsList>
+  </Tabs>
+
+  <Tabs defaultValue="overview" size="lg">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+      <TabsTrigger value="states">States</TabsTrigger>
+    </TabsList>
+  </Tabs>
+</div>`}
+            >
+              <div className="space-y-4">
+                <Tabs defaultValue="overview" size="xs">
+                  <TabsList>
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
+                    <TabsTrigger value="states">States</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+
+                <Tabs defaultValue="overview" size="sm">
+                  <TabsList>
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
+                    <TabsTrigger value="states">States</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+
+                <Tabs defaultValue="overview" size="md">
+                  <TabsList>
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
+                    <TabsTrigger value="states">States</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+
+                <Tabs defaultValue="overview" size="lg">
+                  <TabsList>
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
+                    <TabsTrigger value="states">States</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
             </PreviewPanel>
 
             <PreviewPanel
@@ -250,7 +323,7 @@ export function NavigationDocs({ ui, visibleIds }) {
           <SectionHeading
             category="Navegación"
             title="Breadcrumb"
-            description="Ruta jerárquica para ubicar al usuario dentro de estructuras profundas."
+            description="Ruta jerárquica con separadores automáticos y una API más simple para enlaces y el nodo actual."
             ui={ui}
           />
 
@@ -260,28 +333,28 @@ export function NavigationDocs({ ui, visibleIds }) {
               title="Ruta corta"
               code={`<Breadcrumb>
   <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink href="#getting-started">Docs</BreadcrumbLink>
+    <BreadcrumbItem allowLink href="#getting-started">
+      Docs
     </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbCurrent>Input</BreadcrumbCurrent>
+    <BreadcrumbItem allowLink href="#input">
+      Forms
+    </BreadcrumbItem>
+    <BreadcrumbItem current>
+      Input
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>`}
             >
               <Breadcrumb>
                 <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#getting-started">Docs</BreadcrumbLink>
+                  <BreadcrumbItem allowLink href="#getting-started">
+                    Docs
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#input">Forms</BreadcrumbLink>
+                  <BreadcrumbItem allowLink href="#input">
+                    Forms
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbCurrent>Input</BreadcrumbCurrent>
+                  <BreadcrumbItem current>
+                    Input
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
@@ -291,33 +364,35 @@ export function NavigationDocs({ ui, visibleIds }) {
               ui={ui}
               title="Ruta profunda"
               code={`<Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink href="#getting-started">Quickit UI</BreadcrumbLink>
+  <BreadcrumbList separator="›">
+    <BreadcrumbItem allowLink href="#getting-started">
+      Quickit UI
     </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbCurrent>Tooltip</BreadcrumbCurrent>
+    <BreadcrumbItem allowLink href="#modal">
+      Overlays
+    </BreadcrumbItem>
+    <BreadcrumbItem allowLink href="#popover">
+      Popover
+    </BreadcrumbItem>
+    <BreadcrumbItem current>
+      Tooltip
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>`}
             >
               <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#getting-started">Quickit UI</BreadcrumbLink>
+                <BreadcrumbList separator="›">
+                  <BreadcrumbItem allowLink href="#getting-started">
+                    Quickit UI
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#modal">Overlays</BreadcrumbLink>
+                  <BreadcrumbItem allowLink href="#modal">
+                    Overlays
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#popover">Popover</BreadcrumbLink>
+                  <BreadcrumbItem allowLink href="#popover">
+                    Popover
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbCurrent>Tooltip</BreadcrumbCurrent>
+                  <BreadcrumbItem current>
+                    Tooltip
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>

@@ -81,7 +81,7 @@ import "quickit-ui/styles.css";
 export function Example() {
   return (
     <QuickitProvider theme="dark">
-      <Button color="success">Guardar</Button>
+      <Button color="neutral">Guardar</Button>
     </QuickitProvider>
   );
 }`}

@@ -35,7 +35,7 @@ const SWITCH_THEME_CLASSES = {
   light: {
     idle: "border-slate-300 bg-slate-200 focus-visible:outline-slate-300",
     checked: {
-      neutral: "border-slate-950 bg-slate-950",
+      neutral: "border-neutral-950 bg-neutral-950",
       primary: "border-blue-700 bg-blue-700",
       success: "border-emerald-600 bg-emerald-600",
       danger: "border-red-600 bg-red-600",
@@ -47,7 +47,7 @@ const SWITCH_THEME_CLASSES = {
   dark: {
     idle: "border-zinc-700 bg-zinc-800 focus-visible:outline-zinc-700",
     checked: {
-      neutral: "border-stone-100 bg-stone-100 text-zinc-950",
+      neutral: "border-neutral-100 bg-neutral-100 text-neutral-950",
       primary: "border-blue-300 bg-blue-300 text-zinc-950",
       success: "border-emerald-300 bg-emerald-300 text-zinc-950",
       danger: "border-red-300 bg-red-300 text-zinc-950",

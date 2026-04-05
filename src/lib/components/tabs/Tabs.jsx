@@ -9,7 +9,7 @@ const TABS_ROOT_PRIMITIVES = {
 
 const TABS_LIST_PRIMITIVES = {
   base: [
-    "inline-flex min-h-11 items-center gap-1 rounded-[1rem] border p-1",
+    "inline-flex items-center gap-1 border",
     "w-fit",
   ].join(" "),
   horizontal: "flex-row",
@@ -18,12 +18,31 @@ const TABS_LIST_PRIMITIVES = {
 
 const TABS_TRIGGER_PRIMITIVES = {
   base: [
-    "inline-flex items-center justify-center rounded-[0.8rem] border border-transparent px-3 py-2 text-sm font-medium",
+    "inline-flex items-center justify-center border border-transparent font-medium",
     "transition-colors outline-none cursor-pointer",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-50",
   ].join(" "),
   vertical: "justify-start text-left",
+};
+
+const TABS_SIZE_CLASSES = {
+  xs: {
+    list: "min-h-9 rounded-[0.9rem] p-1",
+    trigger: "min-w-[4.75rem] rounded-[0.7rem] px-2.5 py-1 text-xs",
+  },
+  sm: {
+    list: "min-h-10 rounded-xl p-1",
+    trigger: "min-w-[5.5rem] rounded-lg px-3 py-1.5 text-sm",
+  },
+  md: {
+    list: "min-h-11 rounded-[1rem] p-1",
+    trigger: "min-w-[6.5rem] rounded-[0.8rem] px-3.5 py-2 text-sm",
+  },
+  lg: {
+    list: "min-h-12 rounded-[1.1rem] p-1.5",
+    trigger: "min-w-[7.5rem] rounded-[0.95rem] px-4 py-2.5 text-base",
+  },
 };
 
 const TABS_CONTENT_PRIMITIVES = {
@@ -66,6 +85,7 @@ export function Tabs({
   defaultValue,
   onValueChange,
   orientation = "horizontal",
+  size = "md",
   value: controlledValue,
 }) {
   const generatedId = useId();
@@ -90,6 +110,7 @@ export function Tabs({
     orientation === "vertical" ? "vertical" : "horizontal";
   const resolvedActivationMode =
     activationMode === "manual" ? "manual" : "automatic";
+  const resolvedSize = Object.hasOwn(TABS_SIZE_CLASSES, size) ? size : "md";
 
   const contextValue = useMemo(
     () => ({
@@ -97,15 +118,24 @@ export function Tabs({
       baseId: generatedId,
       orientation: resolvedOrientation,
       setValue,
+      size: resolvedSize,
       value,
     }),
-    [generatedId, resolvedActivationMode, resolvedOrientation, setValue, value],
+    [
+      generatedId,
+      resolvedActivationMode,
+      resolvedOrientation,
+      resolvedSize,
+      setValue,
+      value,
+    ],
   );
 
   return (
     <TabsContext.Provider value={contextValue}>
       <div
         data-orientation={resolvedOrientation}
+        data-size={resolvedSize}
         className={cn(TABS_ROOT_PRIMITIVES.base, className)}
       >
         {children}
@@ -115,7 +145,7 @@ export function Tabs({
 }
 
 export function TabsList({ children, className }) {
-  const { orientation } = useTabsContext("TabsList");
+  const { orientation, size } = useTabsContext("TabsList");
   const theme = resolveTheme(useQuickitTheme());
   const ui = TABS_THEME_CLASSES[theme];
 
@@ -123,9 +153,11 @@ export function TabsList({ children, className }) {
     <div
       role="tablist"
       aria-orientation={orientation}
+      data-size={size}
       className={cn(
         TABS_LIST_PRIMITIVES.base,
         TABS_LIST_PRIMITIVES[orientation],
+        TABS_SIZE_CLASSES[size].list,
         ui.list,
         className,
       )}
@@ -146,6 +178,7 @@ export function TabsTrigger({
     baseId,
     orientation,
     setValue,
+    size,
     value: selectedValue,
   } = useTabsContext("TabsTrigger");
   const theme = resolveTheme(useQuickitTheme());
@@ -212,6 +245,7 @@ export function TabsTrigger({
       aria-selected={isSelected}
       aria-disabled={disabled || undefined}
       data-state={isSelected ? "active" : "inactive"}
+      data-size={size}
       data-value={value}
       tabIndex={isSelected ? 0 : -1}
       disabled={disabled}
@@ -219,6 +253,7 @@ export function TabsTrigger({
       onKeyDown={handleKeyDown}
       className={cn(
         TABS_TRIGGER_PRIMITIVES.base,
+        TABS_SIZE_CLASSES[size].trigger,
         orientation === "vertical" && TABS_TRIGGER_PRIMITIVES.vertical,
         isSelected ? ui.triggerActive : ui.triggerIdle,
         className,

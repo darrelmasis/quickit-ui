@@ -26,7 +26,11 @@ const apis = {
     { prop: "AvatarImage / AvatarFallback / AvatarGroup", type: "subcomponentes", defaultValue: "-", description: "Partes disponibles para construir el avatar." },
   ],
   link: [
-    { prop: "variant", type: "default | muted | subtle", defaultValue: "default", description: "Variante visual del enlace." },
+    { prop: "appearance", type: "text | button", defaultValue: "text", description: "Cambia entre enlace de texto y enlace con apariencia de botón." },
+    { prop: "variant", type: "default | muted | subtle | solid | outline | ghost", defaultValue: "default", description: "En `text` controla el tono del enlace. En `button` define la variante visual del botón." },
+    { prop: "color", type: "neutral | primary | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`." },
+    { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Tamaño del enlace cuando `appearance=\"button\"`." },
+    { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el enlace a `w-full` cuando usa apariencia de botón." },
     { prop: "underline", type: "always | hover | none", defaultValue: "hover", description: "Controla el subrayado." },
     { prop: "disabled", type: "boolean", defaultValue: "false", description: "Deshabilita interacción." },
   ],
@@ -121,7 +125,7 @@ export function UtilityDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "link") ? (
         <SectionCard id="link" className={ui.divider}>
-          <SectionHeading category="Acciones" title="Link" description="Enlace de texto para acciones secundarias y navegación ligera, con variantes suaves y control de subrayado." ui={ui} />
+          <SectionHeading category="Acciones" title="Link" description="Enlace base para navegación. Puede usarse como texto o con apariencia completa de botón cuando la acción debe seguir siendo un enlace." ui={ui} />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
@@ -138,6 +142,34 @@ export function UtilityDocs({ ui, visibleIds }) {
                 <Link href="#input" variant="muted">Muted link</Link>
                 <Link href="#accordion" variant="subtle" underline="always">Always underline</Link>
                 <Link href="#badge" variant="default" underline="none">No underline</Link>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Como botón"
+              code={`<div className="flex flex-wrap items-center gap-3">
+  <Link href="/docs/getting-started" appearance="button" color="neutral">
+    Abrir guía
+  </Link>
+  <Link href="/pricing" appearance="button" variant="outline" color="neutral">
+    Ver planes
+  </Link>
+  <Link href="/contact" appearance="button" variant="ghost" color="neutral">
+    Contactar ventas
+  </Link>
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-3">
+                <Link href="/docs/getting-started" appearance="button" color="neutral">
+                  Abrir guía
+                </Link>
+                <Link href="/pricing" appearance="button" variant="outline" color="neutral">
+                  Ver planes
+                </Link>
+                <Link href="/contact" appearance="button" variant="ghost" color="neutral">
+                  Contactar ventas
+                </Link>
               </div>
             </PreviewPanel>
 

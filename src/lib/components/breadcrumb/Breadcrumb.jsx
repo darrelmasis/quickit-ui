@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { Children, Fragment, forwardRef } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/components/link";
@@ -27,27 +27,91 @@ const Breadcrumb = forwardRef(function Breadcrumb({ children, className, ...prop
 });
 
 const BreadcrumbList = forwardRef(function BreadcrumbList(
-  { children, className, ...props },
+  { children, className, separator = "/", separatorClassName, ...props },
   ref,
 ) {
+  const theme = resolveTheme(useQuickitTheme());
+  const ui = BREADCRUMB_THEME_CLASSES[theme];
+  const items = Children.toArray(children);
+  const hasManualSeparators = items.some(
+    (child) =>
+      typeof child === "object" &&
+      child?.type &&
+      (child.type.displayName === "BreadcrumbSeparator" ||
+        child.type.name === "BreadcrumbSeparator"),
+  );
+
   return (
     <ol
       ref={ref}
       className={cn("flex flex-wrap items-center gap-2 text-sm", className)}
       {...props}
     >
-      {children}
+      {hasManualSeparators
+        ? items
+        : items.map((child, index) => (
+        <Fragment key={child.key ?? `breadcrumb-item-${index}`}>
+          {child}
+          {index < items.length - 1 ? (
+            <BreadcrumbSeparator className={cn(ui.separator, separatorClassName)}>
+              {separator}
+            </BreadcrumbSeparator>
+          ) : null}
+        </Fragment>
+      ))}
     </ol>
   );
 });
 
 const BreadcrumbItem = forwardRef(function BreadcrumbItem(
-  { children, className, ...props },
+  {
+    allowLink = false,
+    children,
+    className,
+    contentClassName,
+    current = false,
+    href,
+    linkVariant = "muted",
+    rel,
+    target,
+    title,
+    underline = "hover",
+    ...props
+  },
   ref,
 ) {
+  const theme = resolveTheme(useQuickitTheme());
+  const ui = BREADCRUMB_THEME_CLASSES[theme];
+  const shouldRenderLink = !current && (allowLink || Boolean(href));
+  const hasCustomChildElement = Children.toArray(children).some(
+    (child) => typeof child === "object",
+  );
+
   return (
     <li ref={ref} className={cn("inline-flex items-center gap-2", className)} {...props}>
-      {children}
+      {shouldRenderLink ? (
+        <Link
+          href={href}
+          rel={rel}
+          target={target}
+          title={title}
+          variant={linkVariant}
+          underline={underline}
+          className={contentClassName}
+        >
+          {children}
+        </Link>
+      ) : !current && hasCustomChildElement ? (
+        children
+      ) : (
+        <span
+          aria-current={current ? "page" : undefined}
+          className={cn(current && ["font-medium", ui.current], contentClassName)}
+          title={title}
+        >
+          {children}
+        </span>
+      )}
     </li>
   );
 });
@@ -64,16 +128,17 @@ const BreadcrumbSeparator = forwardRef(function BreadcrumbSeparator(
   const ui = BREADCRUMB_THEME_CLASSES[theme];
 
   return (
-    <span
+    <li
       ref={ref}
       aria-hidden="true"
-      className={cn(ui.separator, className)}
+      className={cn("inline-flex items-center", ui.separator, className)}
       {...props}
     >
       {children ?? "/"}
-    </span>
+    </li>
   );
 });
+BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
 
 const BreadcrumbCurrent = forwardRef(function BreadcrumbCurrent(
   { children, className, ...props },

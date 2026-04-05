@@ -19,7 +19,7 @@ const BADGE_THEME_CLASSES = {
       danger: "border-red-600 bg-red-600 text-white",
       warning: "border-amber-400 bg-amber-400 text-slate-950",
       info: "border-sky-600 bg-sky-600 text-white",
-      neutral: "border-slate-950 bg-slate-950 text-white",
+      neutral: "border-neutral-950 bg-neutral-950 text-white",
     },
     soft: {
       primary: "border-blue-200 bg-blue-50 text-blue-700",
@@ -27,7 +27,7 @@ const BADGE_THEME_CLASSES = {
       danger: "border-red-200 bg-red-50 text-red-700",
       warning: "border-amber-200 bg-amber-50 text-amber-700",
       info: "border-sky-200 bg-sky-50 text-sky-700",
-      neutral: "border-slate-200 bg-slate-100 text-slate-700",
+      neutral: "border-neutral-200 bg-neutral-100 text-neutral-700",
     },
     outline: {
       primary: "border-blue-300 bg-transparent text-blue-700",
@@ -35,7 +35,7 @@ const BADGE_THEME_CLASSES = {
       danger: "border-red-300 bg-transparent text-red-700",
       warning: "border-amber-300 bg-transparent text-amber-700",
       info: "border-sky-300 bg-transparent text-sky-700",
-      neutral: "border-slate-300 bg-transparent text-slate-700",
+      neutral: "border-neutral-300 bg-transparent text-neutral-700",
     },
   },
   dark: {
@@ -45,7 +45,7 @@ const BADGE_THEME_CLASSES = {
       danger: "border-red-300 bg-red-300 text-slate-950",
       warning: "border-amber-300 bg-amber-300 text-slate-950",
       info: "border-sky-300 bg-sky-300 text-slate-950",
-      neutral: "border-stone-100 bg-stone-100 text-zinc-950",
+      neutral: "border-neutral-100 bg-neutral-100 text-neutral-950",
     },
     soft: {
       primary: "border-blue-500/30 bg-blue-500/10 text-blue-300",
@@ -53,7 +53,7 @@ const BADGE_THEME_CLASSES = {
       danger: "border-red-500/30 bg-red-500/10 text-red-300",
       warning: "border-amber-500/30 bg-amber-500/10 text-amber-300",
       info: "border-sky-500/30 bg-sky-500/10 text-sky-300",
-      neutral: "border-zinc-700 bg-zinc-900 text-stone-200",
+      neutral: "border-neutral-700 bg-neutral-900 text-neutral-200",
     },
     outline: {
       primary: "border-blue-500/50 bg-transparent text-blue-300",
@@ -61,7 +61,7 @@ const BADGE_THEME_CLASSES = {
       danger: "border-red-500/50 bg-transparent text-red-300",
       warning: "border-amber-500/50 bg-transparent text-amber-300",
       info: "border-sky-500/50 bg-transparent text-sky-300",
-      neutral: "border-zinc-700 bg-transparent text-stone-200",
+      neutral: "border-neutral-700 bg-transparent text-neutral-200",
     },
   },
 };

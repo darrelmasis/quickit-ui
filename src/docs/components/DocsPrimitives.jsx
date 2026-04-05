@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { cn } from "@/lib";
+import { useEffect, useState } from "react";
+import { Button, cn } from "@/lib";
 import { Highlight, themes } from "prism-react-renderer";
 
 const CODE_THEMES = {
@@ -8,14 +8,8 @@ const CODE_THEMES = {
 };
 
 const CODE_PREVIEW_LINES = 4;
-const CODE_ACTION_CLASSES = {
-  light:
-    "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950",
-  dark:
-    "border-zinc-700 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-50",
-};
 const CODE_FADE_CLASSES = {
-  light: "from-zinc-950 via-zinc-950/80 to-transparent",
+  light: "from-white via-stone-50/95 to-transparent",
   dark: "from-zinc-950 via-zinc-950/80 to-transparent",
 };
 
@@ -80,7 +74,9 @@ function getQuickitImports(code) {
   }
 
   const usedExports = QUICKIT_EXPORTS.filter((exportName) =>
-    new RegExp(`\\b${exportName}\\b`).test(code),
+    new RegExp(
+      `(<${exportName}\\b|</${exportName}\\b|\\b${exportName}\\s*[.(])`,
+    ).test(code),
   );
 
   if (!usedExports.length) {
@@ -173,17 +169,52 @@ export function CodeExample({
   ui,
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const prismTheme = CODE_THEMES[ui.mode] ?? themes.oneDark;
   const displayCode =
     language === "jsx" || language === "tsx" || language === "js" || language === "javascript"
       ? getQuickitImports(code)
       : code.trim();
 
+  useEffect(() => {
+    if (!copied) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setCopied(false);
+    }, 1800);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [copied]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(displayCode);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <div className={`rounded-[1rem] border p-3 sm:rounded-2xl sm:p-4 ${ui.code}`}>
-      <p className={`text-xs uppercase tracking-[0.18em] ${ui.codeMuted}`}>
-        {title}
-      </p>
+      <div className="flex items-center justify-between gap-3">
+        <p className={`text-xs uppercase tracking-[0.18em] ${ui.codeMuted}`}>
+          {title}
+        </p>
+        <Button
+          size="sm"
+          color="neutral"
+          variant="outline"
+          className="min-w-0 px-3"
+          onClick={handleCopy}
+        >
+          {copied ? "Copiado" : "Copiar"}
+        </Button>
+      </div>
       <Highlight
         theme={prismTheme}
         code={displayCode}
@@ -255,16 +286,15 @@ export function CodeExample({
                       ? `Mostrando ${tokens.length} líneas`
                       : `Mostrando ${CODE_PREVIEW_LINES} de ${tokens.length} líneas`}
                   </p>
-                  <button
-                    type="button"
-                    className={cn(
-                      "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                      CODE_ACTION_CLASSES[ui.mode] ?? CODE_ACTION_CLASSES.dark,
-                    )}
+                  <Button
+                    size="sm"
+                    color="neutral"
+                    variant="outline"
+                    className="min-w-0 px-3"
                     onClick={() => setExpanded((current) => !current)}
                   >
                     {expanded ? "Ver menos" : "Ver completo"}
-                  </button>
+                  </Button>
                 </div>
               ) : null}
             </div>

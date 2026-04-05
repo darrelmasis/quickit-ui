@@ -8,7 +8,7 @@ const RADIO_THEME_CLASSES = {
     ring: "border-slate-300 bg-white",
     focus: "peer-focus-visible:outline-slate-300",
     colors: {
-      neutral: { ring: "peer-checked:border-slate-950", dot: "bg-slate-950" },
+      neutral: { ring: "peer-checked:border-neutral-950", dot: "bg-neutral-950" },
       primary: { ring: "peer-checked:border-blue-700", dot: "bg-blue-700" },
       success: { ring: "peer-checked:border-emerald-600", dot: "bg-emerald-600" },
       danger: { ring: "peer-checked:border-red-600", dot: "bg-red-600" },
@@ -22,7 +22,7 @@ const RADIO_THEME_CLASSES = {
     ring: "border-zinc-700 bg-zinc-950",
     focus: "peer-focus-visible:outline-zinc-700",
     colors: {
-      neutral: { ring: "peer-checked:border-stone-100", dot: "bg-stone-100" },
+      neutral: { ring: "peer-checked:border-neutral-100", dot: "bg-neutral-100" },
       primary: { ring: "peer-checked:border-blue-300", dot: "bg-blue-300" },
       success: { ring: "peer-checked:border-emerald-300", dot: "bg-emerald-300" },
       danger: { ring: "peer-checked:border-red-300", dot: "bg-red-300" },

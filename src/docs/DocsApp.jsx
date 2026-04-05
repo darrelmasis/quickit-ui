@@ -177,19 +177,27 @@ export default function DocsApp() {
     }, 1800);
   };
 
-  const renderNavItem = (item) => (
-    <button
-      key={item.href}
-      type="button"
-      className={cn(
-        "w-full cursor-pointer rounded-xl border px-3 py-2 text-left text-sm font-medium transition-colors",
-        activeSection === item.href ? navUi.itemActive : navUi.itemIdle,
-      )}
-      onClick={() => navigateToSection(item.href)}
-    >
-      {item.label}
-    </button>
-  );
+  const renderNavItem = (item) => {
+    const isActive = activeSection === item.href;
+
+    return (
+      <Button
+        key={item.href}
+        size="sm"
+        color="neutral"
+        variant={isActive ? "solid" : "ghost"}
+        fullWidth
+        disabled={isActive}
+        className={cn(
+          "justify-start text-left disabled:cursor-default disabled:opacity-100",
+          isActive ? navUi.itemActive : navUi.itemIdle,
+        )}
+        onClick={() => navigateToSection(item.href)}
+      >
+        {item.label}
+      </Button>
+    );
+  };
 
   const renderActivePage = () => {
     if (activeIntroItem) {
@@ -199,6 +207,7 @@ export default function DocsApp() {
     switch (activeSection) {
       case "#provider":
       case "#theme":
+      case "#colors":
       case "#states":
         return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;
       case "#accordion":
