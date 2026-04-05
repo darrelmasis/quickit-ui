@@ -355,13 +355,16 @@ export default function DocsApp() {
       case "tabs":
         return <NavigationDocs ui={ui} visibleIds={activeVisibleSet} />;
       case "avatar":
+      case "avatar-presence":
       case "badge":
       case "empty-state":
       case "for":
+      case "initials":
       case "link":
       case "render-switch":
       case "show":
       case "skeleton":
+      case "user-chip":
         return <UtilityDocs ui={ui} visibleIds={activeVisibleSet} />;
       case "button":
         return (

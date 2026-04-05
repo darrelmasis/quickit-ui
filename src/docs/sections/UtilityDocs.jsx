@@ -3,6 +3,7 @@ import {
   AvatarFallback,
   AvatarGroup,
   AvatarImage,
+  AvatarPresence,
   Badge,
   Button,
   Default,
@@ -11,12 +12,14 @@ import {
   EmptyStateDescription,
   EmptyStateTitle,
   For,
+  Initials,
   Link,
   Match,
   QUICKIT_SEMANTIC_COLORS,
   RenderSwitch,
   Skeleton,
   Show,
+  UserChip,
 } from "@/lib";
 import {
   PreviewPanel,
@@ -31,6 +34,24 @@ const apis = {
     { prop: "shape", type: "circle | rounded | square", defaultValue: "circle", description: "Permite cambiar la geometría del avatar." },
     { prop: "stacked", type: "boolean", defaultValue: "true", description: "En `AvatarGroup` activa el overlap con mask adaptado por `shape` y `size`." },
     { prop: "AvatarImage / AvatarFallback / AvatarGroup", type: "subcomponentes", defaultValue: "-", description: "Partes disponibles para construir el avatar. `AvatarGroup` adapta el overlap y el mask al `shape` y `size` de cada item." },
+  ],
+  initials: [
+    { prop: "name", type: "string | number", defaultValue: "required", description: "Nombre o identificador desde el que se calculan las iniciales." },
+    { prop: "max", type: "number", defaultValue: "2", description: "Cantidad máxima de caracteres generados." },
+    { prop: "fallback", type: "string", defaultValue: "\"?\"", description: "Valor usado cuando no hay nombre válido." },
+  ],
+  avatarPresence: [
+    { prop: "status", type: "online | away | busy | offline", defaultValue: "online", description: "Estado visual del indicador de presencia." },
+    { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "avatar size", description: "Si se usa dentro de `Avatar`, hereda el tamaño automáticamente." },
+    { prop: "label", type: "string", defaultValue: "status label", description: "Texto accesible expuesto vía `aria-label`." },
+  ],
+  userChip: [
+    { prop: "name", type: "ReactNode", defaultValue: "required", description: "Nombre principal de la identidad." },
+    { prop: "description", type: "ReactNode", defaultValue: "undefined", description: "Texto secundario, cargo o contexto." },
+    { prop: "src / initials", type: "string / string", defaultValue: "undefined / generado", description: "Imagen opcional y fallback de iniciales." },
+    { prop: "presence", type: "online | away | busy | offline", defaultValue: "undefined", description: "Agrega `AvatarPresence` integrado sobre el avatar." },
+    { prop: "href", type: "string", defaultValue: "undefined", description: "Convierte el chip en un enlace compacto." },
+    { prop: "trailing", type: "ReactNode", defaultValue: "undefined", description: "Slot para badge, acción o metadato al lado derecho." },
   ],
   link: [
     { prop: "appearance", type: "text | button", defaultValue: "text", description: "Cambia entre enlace de texto y enlace con apariencia de botón." },
@@ -99,6 +120,8 @@ const releaseCandidates = [
   { id: 2, name: "Billing form", owner: "TK", status: "Ready" },
   { id: 3, name: "Invite flow", owner: "RS", status: "Blocked" },
 ];
+
+const presenceStates = ["online", "away", "busy", "offline"];
 
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
@@ -511,8 +534,139 @@ export function UtilityDocs({ ui, visibleIds }) {
           </div>
 
           <div className="mt-8">
-            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <p className={`text-sm font-semibold ${ui.title}`}>Avatar API</p>
             <PropsTable rows={apis.avatar} ui={ui} />
+          </div>
+
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "initials") ? (
+        <SectionCard id="initials" className={ui.divider}>
+          <SectionHeading category="Identidad" title="Initials" description="Generador mínimo de iniciales para fallbacks de avatar, chips de equipo o entidades sin imagen." ui={ui} />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Casos base"
+              code={`<div className="flex flex-wrap items-center gap-4">
+  <Initials name="Elena Ruiz" />
+  <Initials name="Quickit UI" />
+  <Initials name="Plataforma de diseño" max={3} />
+  <Initials name="" fallback="NA" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-4 text-sm font-semibold">
+                <Initials name="Elena Ruiz" />
+                <Initials name="Quickit UI" />
+                <Initials name="Plataforma de diseño" max={3} />
+                <Initials name="" fallback="NA" />
+              </div>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8">
+            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <PropsTable rows={apis.initials} ui={ui} />
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "avatar-presence") ? (
+        <SectionCard id="avatar-presence" className={ui.divider}>
+          <SectionHeading category="Identidad" title="AvatarPresence" description="Indicador compacto de presencia para online, away, busy u offline. Puede vivir dentro del `Avatar` y heredar su tamaño." ui={ui} />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Estados"
+              code={`<div className="flex flex-wrap items-center gap-4">
+  <Avatar size="lg">
+    <AvatarFallback>ER</AvatarFallback>
+    <AvatarPresence status="online" />
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>RS</AvatarFallback>
+    <AvatarPresence status="away" />
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>TK</AvatarFallback>
+    <AvatarPresence status="busy" />
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>QA</AvatarFallback>
+    <AvatarPresence status="offline" />
+  </Avatar>
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-4">
+                {presenceStates.map((status) => (
+                  <Avatar key={status} size="lg">
+                    <AvatarFallback>{status.slice(0, 2)}</AvatarFallback>
+                    <AvatarPresence status={status} />
+                  </Avatar>
+                ))}
+              </div>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8">
+            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <PropsTable rows={apis.avatarPresence} ui={ui} />
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "user-chip") ? (
+        <SectionCard id="user-chip" className={ui.divider}>
+          <SectionHeading category="Identidad" title="UserChip" description="Composición compacta de identidad con avatar, nombre, descripción, presencia y slot trailing para badges o acciones." ui={ui} />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Casos base"
+              className="flex flex-col items-start gap-3"
+              code={`<div className="flex flex-col items-start gap-3">
+  <UserChip
+    name="Elena Ruiz"
+    description="Design lead"
+    src="https://i.pravatar.cc/80?img=15"
+    presence="online"
+  />
+
+  <UserChip
+    href="#"
+    name="Quickit Team"
+    description="Sistema de diseño"
+    initials="QT"
+    shape="rounded"
+    trailing={<Badge color="brand">Core</Badge>}
+  />
+</div>`}
+            >
+              <div className="flex flex-col items-start gap-3">
+                <UserChip
+                  name="Elena Ruiz"
+                  description="Design lead"
+                  src="https://i.pravatar.cc/80?img=15"
+                  presence="online"
+                />
+
+                <UserChip
+                  href="#"
+                  name="Quickit Team"
+                  description="Sistema de diseño"
+                  initials="QT"
+                  shape="rounded"
+                  trailing={<Badge color="brand">Core</Badge>}
+                />
+              </div>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8">
+            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <PropsTable rows={apis.userChip} ui={ui} />
           </div>
         </SectionCard>
       ) : null}

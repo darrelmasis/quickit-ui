@@ -22,6 +22,7 @@ const QUICKIT_EXPORTS = [
   "AvatarFallback",
   "AvatarGroup",
   "AvatarImage",
+  "AvatarPresence",
   "Badge",
   "Breadcrumb",
   "BreadcrumbCurrent",
@@ -43,6 +44,7 @@ const QUICKIT_EXPORTS = [
   "FormDescription",
   "FormMessage",
   "Input",
+  "Initials",
   "QUICKIT_BUTTON_SHAPES",
   "QUICKIT_CONTROL_SIZES",
   "QUICKIT_SEMANTIC_COLORS",
@@ -73,6 +75,7 @@ const QUICKIT_EXPORTS = [
   "TabsTrigger",
   "Textarea",
   "Tooltip",
+  "UserChip",
   "useQuickitTheme",
 ];
 

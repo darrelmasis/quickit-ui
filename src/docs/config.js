@@ -79,7 +79,12 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Identidad",
-    items: [{ href: "/identidad/avatar", label: "Avatar", id: "avatar" }],
+    items: [
+      { href: "/identidad/avatar", label: "Avatar", id: "avatar" },
+      { href: "/identidad/initials", label: "Initials", id: "initials" },
+      { href: "/identidad/avatar-presence", label: "AvatarPresence", id: "avatar-presence" },
+      { href: "/identidad/user-chip", label: "UserChip", id: "user-chip" },
+    ],
   },
 ];
 

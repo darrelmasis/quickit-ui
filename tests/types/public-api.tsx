@@ -3,10 +3,13 @@ import "quickit-ui/styles.css";
 import {
   Avatar,
   AvatarFallback,
+  AvatarPresence,
   Badge,
   Button,
   Default,
   For,
+  getInitials,
+  Initials,
   Link,
   Match,
   Modal,
@@ -20,8 +23,10 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  UserChip,
   type ButtonProps,
   type LinkProps,
+  type QuickitPresenceStatus,
   type QuickitSemanticColor,
 } from "quickit-ui";
 
@@ -37,6 +42,8 @@ const linkProps: LinkProps = {
   color,
   shape: "pill",
 };
+const presence: QuickitPresenceStatus = "online";
+const initials = getInitials("Elena Ruiz");
 
 export function ConsumerPreview() {
   return (
@@ -46,7 +53,9 @@ export function ConsumerPreview() {
       <Badge color="success">Activo</Badge>
       <Avatar size="lg" shape="rounded">
         <AvatarFallback>ER</AvatarFallback>
+        <AvatarPresence status={presence} />
       </Avatar>
+      <Initials name="Quickit UI" />
       <Show when={{ name: "Elena" }}>
         {(user) => <span>{user.name}</span>}
       </Show>
@@ -61,6 +70,12 @@ export function ConsumerPreview() {
       <For each={[{ id: 1, name: "Landing" }]}>
         {(item) => <span key={item.id}>{item.name}</span>}
       </For>
+      <UserChip
+        name="Elena Ruiz"
+        description="Design lead"
+        initials={initials}
+        presence={presence}
+      />
       <Tabs defaultValue="overview" color="neutral">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>

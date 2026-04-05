@@ -71,6 +71,11 @@ export type QuickitButtonVariant = (typeof QUICKIT_BUTTON_VARIANTS)[number];
 export type QuickitButtonShape = (typeof QUICKIT_BUTTON_SHAPES)[number];
 export type QuickitAvatarShape = (typeof QUICKIT_AVATAR_SHAPES)[number];
 export type QuickitAvatarSize = (typeof QUICKIT_AVATAR_SIZES)[number];
+export type QuickitPresenceStatus =
+  | "online"
+  | "away"
+  | "busy"
+  | "offline";
 export type QuickitLinkTextVariant =
   (typeof QUICKIT_LINK_TEXT_VARIANTS)[number];
 export type QuickitLinkUnderline =
@@ -211,6 +216,34 @@ export interface AvatarFallbackProps extends AvatarBaseProps {}
 export interface AvatarGroupProps extends AvatarGroupBaseProps {
   stacked?: boolean;
 }
+export interface InitialsProps extends React.HTMLAttributes<HTMLSpanElement> {
+  fallback?: string;
+  max?: number;
+  name: string | number;
+}
+export interface AvatarPresenceProps
+  extends React.HTMLAttributes<HTMLSpanElement> {
+  label?: string;
+  size?: QuickitAvatarSize;
+  status?: QuickitPresenceStatus;
+}
+export interface UserChipProps extends React.HTMLAttributes<HTMLElement> {
+  description?: React.ReactNode;
+  href?: string;
+  initials?: string;
+  name: React.ReactNode;
+  presence?: QuickitPresenceStatus;
+  rel?: string;
+  shape?: QuickitAvatarShape;
+  size?: QuickitAvatarSize;
+  src?: string;
+  target?: string;
+  trailing?: React.ReactNode;
+}
+export declare function getInitials(
+  name: string | number,
+  options?: { fallback?: string; max?: number },
+): string;
 export declare const Avatar: React.ForwardRefExoticComponent<
   AvatarProps & React.RefAttributes<HTMLSpanElement>
 >;
@@ -222,6 +255,15 @@ export declare const AvatarFallback: React.ForwardRefExoticComponent<
 >;
 export declare const AvatarGroup: React.ForwardRefExoticComponent<
   AvatarGroupProps & React.RefAttributes<HTMLDivElement>
+>;
+export declare const Initials: React.ForwardRefExoticComponent<
+  InitialsProps & React.RefAttributes<HTMLSpanElement>
+>;
+export declare const AvatarPresence: React.ForwardRefExoticComponent<
+  AvatarPresenceProps & React.RefAttributes<HTMLSpanElement>
+>;
+export declare const UserChip: React.ForwardRefExoticComponent<
+  UserChipProps & React.RefAttributes<HTMLElement>
 >;
 
 export interface EmptyStateProps
