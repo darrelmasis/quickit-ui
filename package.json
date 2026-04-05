@@ -29,12 +29,17 @@
   ],
   "main": "./dist/quickit-ui.js",
   "module": "./dist/quickit-ui.js",
+  "types": "./dist/quickit-ui.d.ts",
   "style": "./dist/quickit-ui.css",
   "exports": {
     ".": {
+      "types": "./dist/quickit-ui.d.ts",
       "import": "./dist/quickit-ui.js"
     },
-    "./styles.css": "./dist/quickit-ui.css"
+    "./styles.css": {
+      "types": "./dist/styles.css.d.ts",
+      "default": "./dist/quickit-ui.css"
+    }
   },
   "sideEffects": [
     "**/*.css"
@@ -44,13 +49,16 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-types.mjs",
     "build:docs": "vite build --mode docs",
     "lint": "eslint .",
     "pack:check": "npm pack --dry-run",
-    "prepublishOnly": "npm run lint && npm run build",
+    "prepublishOnly": "npm run lint && npm run build && npm run test && npm run test:types",
     "preview": "vite preview",
-    "preview:docs": "vite preview --mode docs"
+    "preview:docs": "vite preview --mode docs",
+    "test": "vitest run",
+    "test:types": "tsc -p tsconfig.types.json --noEmit",
+    "test:watch": "vitest"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -64,15 +72,23 @@
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "@tailwindcss/vite": "^4.2.2",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.2",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "jsdom": "^29.0.1",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.2",
-    "vite": "^8.0.1"
+    "typescript": "^6.0.2",
+    "vite": "^8.0.1",
+    "vitest": "^4.1.2"
   }
 }

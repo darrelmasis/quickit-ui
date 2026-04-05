@@ -357,7 +357,10 @@ export default function DocsApp() {
       case "avatar":
       case "badge":
       case "empty-state":
+      case "for":
       case "link":
+      case "render-switch":
+      case "show":
       case "skeleton":
         return <UtilityDocs ui={ui} visibleIds={activeVisibleSet} />;
       case "button":

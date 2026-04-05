@@ -11,6 +11,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  QUICKIT_SEMANTIC_COLORS,
 } from "@/lib";
 import {
   PreviewPanel,
@@ -53,8 +54,8 @@ const apis = {
   ],
 };
 
-const tabsColors = ["neutral", "primary", "brand", "success", "danger", "warning", "info", "light", "dark"];
-const paginationColors = ["neutral", "primary", "brand", "success", "danger", "warning", "info", "light", "dark"];
+const tabsColors = QUICKIT_SEMANTIC_COLORS;
+const paginationColors = QUICKIT_SEMANTIC_COLORS;
 
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
@@ -239,6 +240,44 @@ export function NavigationDocs({ ui, visibleIds }) {
                   </Tabs>
                 ))}
               </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Edge case: manual, disabled y forceMount"
+              code={`<Tabs defaultValue="design" activationMode="manual">
+  <TabsList>
+    <TabsTrigger value="design">Design</TabsTrigger>
+    <TabsTrigger value="qa" disabled>QA bloqueado</TabsTrigger>
+    <TabsTrigger value="release">Release</TabsTrigger>
+  </TabsList>
+  <TabsContent value="design" forceMount>
+    El panel se mantiene montado aunque cambies de tab.
+  </TabsContent>
+  <TabsContent value="qa" forceMount>
+    Este tab está deshabilitado y no entra en la navegación por teclado.
+  </TabsContent>
+  <TabsContent value="release" forceMount>
+    Usa Enter o Espacio para activar cuando \`activationMode="manual"\`.
+  </TabsContent>
+</Tabs>`}
+            >
+              <Tabs defaultValue="design" activationMode="manual">
+                <TabsList>
+                  <TabsTrigger value="design">Design</TabsTrigger>
+                  <TabsTrigger value="qa" disabled>QA bloqueado</TabsTrigger>
+                  <TabsTrigger value="release">Release</TabsTrigger>
+                </TabsList>
+                <TabsContent value="design" forceMount>
+                  El panel se mantiene montado aunque cambies de tab.
+                </TabsContent>
+                <TabsContent value="qa" forceMount>
+                  Este tab está deshabilitado y no entra en la navegación por teclado.
+                </TabsContent>
+                <TabsContent value="release" forceMount>
+                  Usa Enter o Espacio para activar cuando <code>activationMode="manual"</code>.
+                </TabsContent>
+              </Tabs>
             </PreviewPanel>
 
             <PreviewPanel

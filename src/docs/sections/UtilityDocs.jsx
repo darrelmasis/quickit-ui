@@ -5,12 +5,18 @@ import {
   AvatarImage,
   Badge,
   Button,
+  Default,
   EmptyState,
   EmptyStateActions,
   EmptyStateDescription,
   EmptyStateTitle,
+  For,
   Link,
+  Match,
+  QUICKIT_SEMANTIC_COLORS,
+  RenderSwitch,
   Skeleton,
+  Show,
 } from "@/lib";
 import {
   PreviewPanel,
@@ -31,6 +37,7 @@ const apis = {
     { prop: "variant", type: "default | muted | subtle | solid | outline | ghost", defaultValue: "default", description: "En `text` controla el tono del enlace. En `button` define la variante visual del botón." },
     { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`. `brand` está pensado para la paleta de marca del producto." },
     { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Tamaño del enlace cuando `appearance=\"button\"`." },
+    { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Comparte la misma geometría de `Button` cuando `appearance=\"button\"`." },
     { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el enlace a `w-full` cuando usa apariencia de botón." },
     { prop: "activeMotion", type: "boolean", defaultValue: "true", description: "Desactiva la animación nativa de presión cuando `appearance=\"button\"`." },
     { prop: "underline", type: "always | hover | none", defaultValue: "hover", description: "Controla el subrayado." },
@@ -49,19 +56,26 @@ const apis = {
     { prop: "align", type: "center | start", defaultValue: "center", description: "Alinea el contenido principal del estado vacío." },
     { prop: "EmptyStateActions", type: "subcomponente", defaultValue: "-", description: "Agrupa botones o links de acción." },
   ],
+  show: [
+    { prop: "when", type: "any", defaultValue: "-", description: "Condición o valor a evaluar. Si es truthy renderiza el contenido principal." },
+    { prop: "fallback", type: "ReactNode | (value) => ReactNode", defaultValue: "null", description: "Contenido alterno cuando `when` es falsy." },
+    { prop: "children", type: "ReactNode | (value) => ReactNode", defaultValue: "-", description: "Acepta JSX directo o una render function que recibe el valor de `when`." },
+  ],
+  renderSwitch: [
+    { prop: "value", type: "any", defaultValue: "-", description: "Valor de entrada sobre el que se resuelven los `Match`." },
+    { prop: "fallback", type: "ReactNode | (value) => ReactNode", defaultValue: "null", description: "Fallback opcional cuando no hay `Match` ni `Default`." },
+    { prop: "Match.when", type: "any | any[] | (value) => boolean", defaultValue: "-", description: "Acepta comparación exacta, varios valores o un predicado." },
+    { prop: "Match.children", type: "ReactNode | (value) => ReactNode", defaultValue: "-", description: "Bloque renderizado cuando el caso coincide." },
+    { prop: "Default", type: "subcomponente", defaultValue: "-", description: "Caso final cuando ningún `Match` coincide." },
+  ],
+  for: [
+    { prop: "each", type: "Iterable", defaultValue: "[]", description: "Colección a iterar. Acepta arrays y cualquier iterable." },
+    { prop: "children", type: "(item, index) => ReactNode", defaultValue: "-", description: "Render function para cada item de la colección." },
+    { prop: "fallback", type: "ReactNode | (items) => ReactNode", defaultValue: "null", description: "Contenido alterno cuando `each` está vacío o no existe." },
+  ],
 };
 
-const linkButtonColors = [
-  "neutral",
-  "primary",
-  "brand",
-  "success",
-  "danger",
-  "warning",
-  "info",
-  "light",
-  "dark",
-];
+const linkButtonColors = QUICKIT_SEMANTIC_COLORS;
 
 const badgeColors = [
   { color: "neutral", label: "Neutral" },
@@ -73,11 +87,307 @@ const badgeColors = [
   { color: "info", label: "Info" },
 ];
 
+const exampleUser = {
+  name: "Elena Ruiz",
+  role: "Design lead",
+  initials: "ER",
+  avatar: "https://i.pravatar.cc/80?img=15",
+};
+
+const releaseCandidates = [
+  { id: 1, name: "Landing page", owner: "ER", status: "Review" },
+  { id: 2, name: "Billing form", owner: "TK", status: "Ready" },
+  { id: 3, name: "Invite flow", owner: "RS", status: "Blocked" },
+];
+
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
 export function UtilityDocs({ ui, visibleIds }) {
   return (
     <>
+      {isVisible(visibleIds, "show") ? (
+        <SectionCard id="show" className={ui.divider}>
+          <SectionHeading category="Logica" title="Show" description="Utilidad para renderizado condicional simple. Sirve para reemplazar ternarios largos y permite usar children o fallback como render functions." ui={ui} />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Estado simple con fallback"
+              code={`<Show
+  when={true}
+  fallback={<Badge color="danger">Sin acceso</Badge>}
+>
+  <Badge color="success">Acceso concedido</Badge>
+</Show>`}
+            >
+              <Show
+                when
+                fallback={<Badge color="danger">Sin acceso</Badge>}
+              >
+                <Badge color="success">Acceso concedido</Badge>
+              </Show>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Render function con valor"
+              className="max-w-2xl"
+              code={`const currentUser = {
+  name: "Elena Ruiz",
+  role: "Design lead",
+  initials: "ER",
+  avatar: "https://i.pravatar.cc/80?img=15",
+};
+
+<Show
+  when={currentUser}
+  fallback={
+    <EmptyState align="start">
+      <EmptyStateTitle>No hay usuario activo</EmptyStateTitle>
+      <EmptyStateDescription>
+        Inicia sesión para ver el perfil actual.
+      </EmptyStateDescription>
+    </EmptyState>
+  }
+>
+  {(user) => (
+    <div className="flex items-center gap-3 rounded-[1.25rem] border p-4">
+      <Avatar size="lg">
+        <AvatarImage src={user.avatar} alt={user.name} />
+        <AvatarFallback>{user.initials}</AvatarFallback>
+      </Avatar>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold">{user.name}</p>
+        <p className="text-sm text-zinc-500">{user.role}</p>
+      </div>
+    </div>
+  )}
+</Show>`}
+            >
+              <Show
+                when={exampleUser}
+                fallback={
+                  <EmptyState align="start">
+                    <EmptyStateTitle>No hay usuario activo</EmptyStateTitle>
+                    <EmptyStateDescription>
+                      Inicia sesión para ver el perfil actual.
+                    </EmptyStateDescription>
+                  </EmptyState>
+                }
+              >
+                {(user) => (
+                  <div className={`flex items-center gap-3 rounded-[1.25rem] border p-4 ${ui.divider}`}>
+                    <Avatar size="lg">
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                      <AvatarFallback>{user.initials}</AvatarFallback>
+                    </Avatar>
+                    <div className="space-y-1">
+                      <p className={`text-sm font-semibold ${ui.title}`}>{user.name}</p>
+                      <p className={`text-sm ${ui.body}`}>{user.role}</p>
+                    </div>
+                  </div>
+                )}
+              </Show>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8">
+            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <PropsTable rows={apis.show} ui={ui} />
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "render-switch") ? (
+        <SectionCard id="render-switch" className={ui.divider}>
+          <SectionHeading category="Logica" title="RenderSwitch" description="Controla varios caminos de render a partir de un valor. Se llama `RenderSwitch` para no colisionar con el `Switch` de formularios de la libreria." ui={ui} />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Casos por valor"
+              code={`const status = "review";
+
+<RenderSwitch value={status}>
+  <Match when="draft">
+    <Badge color="neutral">Draft</Badge>
+  </Match>
+  <Match when="review">
+    <Badge color="warning">En revision</Badge>
+  </Match>
+  <Match when="published">
+    <Badge color="success">Publicado</Badge>
+  </Match>
+  <Default>
+    <Badge color="info">Archivado</Badge>
+  </Default>
+</RenderSwitch>`}
+            >
+              <RenderSwitch value="review">
+                <Match when="draft">
+                  <Badge color="neutral">Draft</Badge>
+                </Match>
+                <Match when="review">
+                  <Badge color="warning">En revision</Badge>
+                </Match>
+                <Match when="published">
+                  <Badge color="success">Publicado</Badge>
+                </Match>
+                <Default>
+                  <Badge color="info">Archivado</Badge>
+                </Default>
+              </RenderSwitch>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Arrays y predicados"
+              code={`const score = 17;
+
+<RenderSwitch value={score}>
+  <Match when={(value) => value < 0}>
+    <Badge color="danger">Invalido</Badge>
+  </Match>
+  <Match when={[0, 1, 2, 3]}>
+    <Badge color="neutral">Muy bajo</Badge>
+  </Match>
+  <Match when={(value) => value < 10}>
+    <Badge color="warning">Medio</Badge>
+  </Match>
+  <Default>
+    {(value) => <Badge color="success">Alto: {value}</Badge>}
+  </Default>
+</RenderSwitch>`}
+            >
+              <RenderSwitch value={17}>
+                <Match when={(value) => value < 0}>
+                  <Badge color="danger">Invalido</Badge>
+                </Match>
+                <Match when={[0, 1, 2, 3]}>
+                  <Badge color="neutral">Muy bajo</Badge>
+                </Match>
+                <Match when={(value) => value < 10}>
+                  <Badge color="warning">Medio</Badge>
+                </Match>
+                <Default>
+                  {(value) => <Badge color="success">Alto: {value}</Badge>}
+                </Default>
+              </RenderSwitch>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8">
+            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <PropsTable rows={apis.renderSwitch} ui={ui} />
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "for") ? (
+        <SectionCard id="for" className={ui.divider}>
+          <SectionHeading category="Logica" title="For" description="Itera colecciones con una API declarativa y un fallback integrado para estados vacios." ui={ui} />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Lista declarativa"
+              className="space-y-3"
+              code={`const releases = [
+  { id: 1, name: "Landing page", owner: "ER", status: "Review" },
+  { id: 2, name: "Billing form", owner: "TK", status: "Ready" },
+  { id: 3, name: "Invite flow", owner: "RS", status: "Blocked" },
+];
+
+<div className="space-y-3">
+  <For each={releases}>
+    {(release, index) => (
+      <div
+        key={release.id}
+        className="flex items-center justify-between rounded-[1.25rem] border p-4"
+      >
+        <div>
+          <p className="text-sm font-semibold">
+            {index + 1}. {release.name}
+          </p>
+          <p className="text-sm text-zinc-500">
+            Owner: {release.owner}
+          </p>
+        </div>
+        <Badge color="neutral">{release.status}</Badge>
+      </div>
+    )}
+  </For>
+</div>`}
+            >
+              <div className="space-y-3">
+                <For each={releaseCandidates}>
+                  {(release, index) => (
+                    <div
+                      key={release.id}
+                      className={`flex items-center justify-between rounded-[1.25rem] border p-4 ${ui.divider}`}
+                    >
+                      <div>
+                        <p className={`text-sm font-semibold ${ui.title}`}>
+                          {index + 1}. {release.name}
+                        </p>
+                        <p className={`text-sm ${ui.body}`}>
+                          Owner: {release.owner}
+                        </p>
+                      </div>
+                      <Badge color="neutral">{release.status}</Badge>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Fallback vacio"
+              className="max-w-2xl"
+              code={`<For
+  each={[]}
+  fallback={
+    <EmptyState align="start">
+      <EmptyStateTitle>No hay aprobaciones pendientes</EmptyStateTitle>
+      <EmptyStateDescription>
+        Cuando la colección está vacía puedes devolver un estado vacío completo.
+      </EmptyStateDescription>
+      <EmptyStateActions>
+        <Button variant="outline" color="neutral">Actualizar</Button>
+      </EmptyStateActions>
+    </EmptyState>
+  }
+>
+  {(item) => <div key={item.id}>{item.name}</div>}
+</For>`}
+            >
+              <For
+                each={[]}
+                fallback={
+                  <EmptyState align="start">
+                    <EmptyStateTitle>No hay aprobaciones pendientes</EmptyStateTitle>
+                    <EmptyStateDescription>
+                      Cuando la colección está vacía puedes devolver un estado vacío completo.
+                    </EmptyStateDescription>
+                    <EmptyStateActions>
+                      <Button variant="outline" color="neutral">Actualizar</Button>
+                    </EmptyStateActions>
+                  </EmptyState>
+                }
+              >
+                {(item) => <div key={item.id}>{item.name}</div>}
+              </For>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8">
+            <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+            <PropsTable rows={apis.for} ui={ui} />
+          </div>
+        </SectionCard>
+      ) : null}
+
       {isVisible(visibleIds, "avatar") ? (
         <SectionCard id="avatar" className={ui.divider}>
           <SectionHeading category="Identidad" title="Avatar" description="Representación compacta de usuarios, equipos o entidades con imagen, fallback y agrupación." ui={ui} />
@@ -139,6 +449,20 @@ export function UtilityDocs({ ui, visibleIds }) {
                 <Avatar size="lg"><AvatarFallback>TK</AvatarFallback></Avatar>
                 <Avatar size="lg"><AvatarFallback>+3</AvatarFallback></Avatar>
               </AvatarGroup>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Fallback por error de imagen"
+              code={`<Avatar size="lg">
+  <AvatarImage src="https://example.com/avatar-no-existe.png" alt="Elena Ruiz" />
+  <AvatarFallback>ER</AvatarFallback>
+</Avatar>`}
+            >
+              <Avatar size="lg">
+                <AvatarImage src="https://example.com/avatar-no-existe.png" alt="Elena Ruiz" />
+                <AvatarFallback>ER</AvatarFallback>
+              </Avatar>
             </PreviewPanel>
 
             <PreviewPanel
@@ -252,6 +576,40 @@ export function UtilityDocs({ ui, visibleIds }) {
                 </Link>
                 <Link href="#" appearance="button" color="neutral" activeMotion={false}>
                   Sin active motion
+                </Link>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Shapes compartidos con Button"
+              code={`<div className="flex flex-wrap items-center gap-3">
+  <Link href="#" appearance="button" color="neutral">Default</Link>
+  <Link href="#" appearance="button" shape="pill" color="neutral">Pill</Link>
+  <Link
+    href="#"
+    appearance="button"
+    shape="square"
+    color="neutral"
+    aria-label="Abrir panel"
+    title="Abrir panel"
+  >
+    +
+  </Link>
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-3">
+                <Link href="#" appearance="button" color="neutral">Default</Link>
+                <Link href="#" appearance="button" shape="pill" color="neutral">Pill</Link>
+                <Link
+                  href="#"
+                  appearance="button"
+                  shape="square"
+                  color="neutral"
+                  aria-label="Abrir panel"
+                  title="Abrir panel"
+                >
+                  +
                 </Link>
               </div>
             </PreviewPanel>

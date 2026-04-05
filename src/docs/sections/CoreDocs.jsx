@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import { Button } from "@/lib";
+import {
+  Button,
+  QUICKIT_SEMANTIC_COLORS,
+} from "@/lib";
 import {
   CodeExample,
   NotesList,
@@ -9,17 +12,10 @@ import {
   SectionHeading,
 } from "@/docs/components/DocsPrimitives";
 
-const buttonColors = [
-  { label: "Neutral", color: "neutral" },
-  { label: "Primary", color: "primary" },
-  { label: "Brand", color: "brand" },
-  { label: "Success", color: "success" },
-  { label: "Danger", color: "danger" },
-  { label: "Warning", color: "warning" },
-  { label: "Info", color: "info" },
-  { label: "Light", color: "light" },
-  { label: "Dark", color: "dark" },
-];
+const buttonColors = QUICKIT_SEMANTIC_COLORS.map((color) => ({
+  color,
+  label: color.charAt(0).toUpperCase() + color.slice(1),
+}));
 
 const buttonApi = [
   { prop: "variant", type: "solid | outline | ghost", defaultValue: "solid", description: "Define el tratamiento visual base del botón." },
@@ -146,6 +142,28 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
         <div className="space-y-4">
           <PreviewPanel
             ui={ui}
+            title="Caso real: toolbar de acciones"
+            code={`<div className="flex flex-wrap items-center gap-3">
+  <Button color="neutral">Guardar</Button>
+  <Button variant="outline" color="neutral">Vista previa</Button>
+  <Button variant="ghost" color="neutral">Descartar</Button>
+  <Button shape="square" variant="outline" color="neutral" aria-label="Más acciones">
+    +
+  </Button>
+</div>`}
+          >
+            <div className="flex flex-wrap items-center gap-3">
+              <Button color="neutral">Guardar</Button>
+              <Button variant="outline" color="neutral">Vista previa</Button>
+              <Button variant="ghost" color="neutral">Descartar</Button>
+              <Button shape="square" variant="outline" color="neutral" aria-label="Más acciones">
+                +
+              </Button>
+            </div>
+          </PreviewPanel>
+
+          <PreviewPanel
+            ui={ui}
             title="Tamaños y shape"
             code={`<div className="space-y-4">
   <div className="flex flex-wrap items-center gap-3">
@@ -185,6 +203,28 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
                 <Button shape="square" size="md" color="neutral" aria-label="Más">+</Button>
                 <Button shape="square" size="lg" color="neutral" aria-label="Cerrar">×</Button>
               </div>
+            </div>
+          </PreviewPanel>
+
+          <PreviewPanel
+            ui={ui}
+            title="Edge case: ancho flexible y texto largo"
+            code={`<div className="grid gap-3 sm:grid-cols-2">
+  <Button color="neutral" className="w-full justify-center">
+    Guardar cambios del entorno actual
+  </Button>
+  <Button variant="outline" color="neutral" className="w-full" loading loadingText="Sincronizando">
+    Sincronizar configuración
+  </Button>
+</div>`}
+          >
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Button color="neutral" className="w-full justify-center">
+                Guardar cambios del entorno actual
+              </Button>
+              <Button variant="outline" color="neutral" className="w-full" loading loadingText="Sincronizando">
+                Sincronizar configuración
+              </Button>
             </div>
           </PreviewPanel>
 

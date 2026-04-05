@@ -1,6 +1,11 @@
 import { useCallback, useId, useMemo, useState } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import {
+  QUICKIT_SEMANTIC_COLORS,
+  QUICKIT_TAB_SIZES,
+  resolveQuickitToken,
+} from "@/lib/tokens";
 import { TabsContext, useTabsContext } from "./tabs-context";
 
 const TABS_ROOT_PRIMITIVES = {
@@ -129,9 +134,12 @@ export function Tabs({
     orientation === "vertical" ? "vertical" : "horizontal";
   const resolvedActivationMode =
     activationMode === "manual" ? "manual" : "automatic";
-  const resolvedSize = Object.hasOwn(TABS_SIZE_CLASSES, size) ? size : "md";
-  const resolvedColor =
-    TABS_THEME_CLASSES.light.triggerActive[color] ? color : "neutral";
+  const resolvedSize = resolveQuickitToken(QUICKIT_TAB_SIZES, size, "md");
+  const resolvedColor = resolveQuickitToken(
+    QUICKIT_SEMANTIC_COLORS,
+    color,
+    "neutral",
+  );
 
   const contextValue = useMemo(
     () => ({

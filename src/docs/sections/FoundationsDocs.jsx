@@ -1,4 +1,13 @@
-import { Badge, Button, QuickitProvider, useQuickitTheme } from "@/lib";
+import {
+  Badge,
+  Button,
+  Link,
+  QUICKIT_BUTTON_SHAPES,
+  QUICKIT_CONTROL_SIZES,
+  QUICKIT_SEMANTIC_COLORS,
+  QuickitProvider,
+  useQuickitTheme,
+} from "@/lib";
 import {
   CodeExample,
   NotesList,
@@ -44,6 +53,7 @@ const foundationNotes = {
     "disabled bloquea interaccion y comunica el estado con feedback visual consistente.",
     "Props como loading, invalid, pressed o active solo aparecen donde tienen sentido semantico.",
     "La documentacion muestra los estados cerca del caso real para evitar props sin contexto.",
+    "Quickit UI ahora exporta tokens publicos como `QUICKIT_SEMANTIC_COLORS`, `QUICKIT_CONTROL_SIZES` y `QUICKIT_BUTTON_SHAPES` para alinear tus galerias, wrappers y helpers con la API real.",
   ],
 };
 
@@ -372,6 +382,87 @@ info    -> sky-*
               </div>
             </PreviewPanel>
 
+            <PreviewPanel
+              ui={ui}
+              title="API compartida entre controles"
+              className="space-y-4"
+              code={`<div className="space-y-4">
+  <div className="flex flex-wrap items-center gap-3">
+    {QUICKIT_CONTROL_SIZES.map((size) => (
+      <Button key={size} size={size} color="neutral">
+        {size}
+      </Button>
+    ))}
+  </div>
+
+  <div className="flex flex-wrap items-center gap-3">
+    {QUICKIT_BUTTON_SHAPES.map((shape) => (
+      <Link
+        key={shape}
+        href="#"
+        appearance="button"
+        shape={shape}
+        color="neutral"
+        aria-label={shape === "square" ? "Abrir atajo" : undefined}
+        title={shape === "square" ? "Abrir atajo" : undefined}
+      >
+        {shape === "square" ? "+" : shape}
+      </Link>
+    ))}
+  </div>
+</div>`}
+            >
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  {QUICKIT_CONTROL_SIZES.map((size) => (
+                    <Button key={size} size={size} color="neutral">
+                      {size}
+                    </Button>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  {QUICKIT_BUTTON_SHAPES.map((shape) => (
+                    <Link
+                      key={shape}
+                      href="#"
+                      appearance="button"
+                      shape={shape}
+                      color="neutral"
+                      aria-label={shape === "square" ? "Abrir atajo" : undefined}
+                      title={shape === "square" ? "Abrir atajo" : undefined}
+                    >
+                      {shape === "square" ? "+" : shape}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Tokens exportados"
+              className="space-y-3"
+              code={`<div className="flex flex-wrap items-center gap-2">
+  {QUICKIT_SEMANTIC_COLORS.map((color) => (
+    <Badge key={color} color={color === "light" || color === "dark" ? "neutral" : color}>
+      {color}
+    </Badge>
+  ))}
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                {QUICKIT_SEMANTIC_COLORS.map((color) => (
+                  <Badge
+                    key={color}
+                    color={color === "light" || color === "dark" ? "neutral" : color}
+                  >
+                    {color}
+                  </Badge>
+                ))}
+              </div>
+            </PreviewPanel>
+
             <CodeExample
               ui={ui}
               title="Criterio recomendado"
@@ -379,6 +470,21 @@ info    -> sky-*
 <Button loading={isSaving} disabled={isLocked}>
   Guardar
 </Button>`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Consumir tokens publicos"
+              code={`import {
+  QUICKIT_BUTTON_SHAPES,
+  QUICKIT_CONTROL_SIZES,
+  QUICKIT_SEMANTIC_COLORS,
+} from "quickit-ui";
+
+// Sirven para documentacion, wrappers o validacion propia
+const safeColor = QUICKIT_SEMANTIC_COLORS.includes(color)
+  ? color
+  : "neutral";`}
             />
           </div>
 

@@ -70,6 +70,14 @@ export const COMPONENT_GROUPS = [
     ],
   },
   {
+    label: "Logica",
+    items: [
+      { href: "/logica/show", label: "Show", id: "show" },
+      { href: "/logica/render-switch", label: "RenderSwitch", id: "render-switch" },
+      { href: "/logica/for", label: "For", id: "for" },
+    ],
+  },
+  {
     label: "Identidad",
     items: [{ href: "/identidad/avatar", label: "Avatar", id: "avatar" }],
   },

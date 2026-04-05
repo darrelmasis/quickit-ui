@@ -12,6 +12,11 @@ import {
 } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn, getAvatarRadius } from "@/lib/utils";
+import {
+  QUICKIT_AVATAR_SHAPES,
+  QUICKIT_AVATAR_SIZES,
+  resolveQuickitToken,
+} from "@/lib/tokens";
 
 const AvatarContext = createContext(null);
 
@@ -102,11 +107,11 @@ function resolveTheme(theme) {
 }
 
 function resolveAvatarShape(shape) {
-  return Object.hasOwn(AVATAR_SHAPE_CLASSES, shape) ? shape : "circle";
+  return resolveQuickitToken(QUICKIT_AVATAR_SHAPES, shape, "circle");
 }
 
 function resolveAvatarSize(size) {
-  return AVATAR_SIZE_CLASSES[size] ? size : "md";
+  return resolveQuickitToken(QUICKIT_AVATAR_SIZES, size, "md");
 }
 
 function useAvatarContext(componentName) {

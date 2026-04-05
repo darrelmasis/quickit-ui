@@ -1,6 +1,11 @@
 import { forwardRef } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn, getControlRadius } from "@/lib/utils";
+import {
+  QUICKIT_ACCENT_COLORS,
+  QUICKIT_COMPACT_CONTROL_SIZES,
+  resolveQuickitToken,
+} from "@/lib/tokens";
 
 const BADGE_PRIMITIVES = {
   base: "inline-flex items-center border font-medium",
@@ -82,16 +87,25 @@ const Badge = forwardRef(function Badge(
 ) {
   const theme = resolveTheme(useQuickitTheme());
   const palette = BADGE_THEME_CLASSES[theme][variant] ?? BADGE_THEME_CLASSES[theme].soft;
-  const resolvedColor = palette[color] ? color : "neutral";
+  const resolvedColor = resolveQuickitToken(
+    QUICKIT_ACCENT_COLORS,
+    color,
+    "neutral",
+  );
+  const resolvedSize = resolveQuickitToken(
+    QUICKIT_COMPACT_CONTROL_SIZES,
+    size,
+    "sm",
+  );
 
   return (
     <span
       ref={ref}
       className={cn(
         BADGE_PRIMITIVES.base,
-        getControlRadius(size),
-        BADGE_SIZE_CLASSES[size] ?? BADGE_SIZE_CLASSES.sm,
-        palette[resolvedColor],
+        getControlRadius(resolvedSize),
+        BADGE_SIZE_CLASSES[resolvedSize] ?? BADGE_SIZE_CLASSES.sm,
+        palette[resolvedColor] ?? palette.neutral,
         className,
       )}
       {...props}
