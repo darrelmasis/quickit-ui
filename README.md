@@ -4,6 +4,21 @@ Quickit UI es una libreria de componentes para React pensada para construir inte
 
 Incluye componentes base como `Button`, `Input`, `Modal`, `Dropdown`, `Tabs`, `Tooltip`, `Avatar`, `Badge`, `Skeleton` y mas.
 
+## Documentacion local
+
+La libreria incluye una documentacion local con ejemplos, API y fundamentos del sistema.
+
+```bash
+npm install
+npm run dev
+```
+
+Para generar la version estatica de la documentacion:
+
+```bash
+npm run build:docs
+```
+
 ## Instalacion
 
 Instala el paquete junto con sus dependencias peer:
@@ -94,7 +109,11 @@ export function ContactForm() {
 
       <FormControl>
         <Label htmlFor="topic">Tema</Label>
-        <Select id="topic" defaultValue="support">
+        <Select
+          id="topic"
+          defaultValue="support"
+          onValueChange={(value) => console.log(value)}
+        >
           <option value="support">Soporte</option>
           <option value="sales">Ventas</option>
         </Select>
@@ -107,6 +126,26 @@ export function ContactForm() {
         <FormMessage>Este campo es obligatorio.</FormMessage>
       </FormControl>
     </div>
+  )
+}
+```
+
+### Navegacion
+
+```jsx
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'quickit-ui'
+
+export function SettingsTabs() {
+  return (
+    <Tabs defaultValue="general" activationMode="manual">
+      <TabsList>
+        <TabsTrigger value="general">General</TabsTrigger>
+        <TabsTrigger value="security">Seguridad</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="general">Contenido general</TabsContent>
+      <TabsContent value="security">Contenido de seguridad</TabsContent>
+    </Tabs>
   )
 }
 ```
@@ -212,6 +251,14 @@ import {
   useQuickitTheme,
 } from 'quickit-ui'
 ```
+
+## Scripts utiles
+
+- `npm run dev`: entorno local de desarrollo.
+- `npm run build`: build de la libreria.
+- `npm run build:docs`: build estatico de la documentacion.
+- `npm run lint`: validacion con ESLint.
+- `npm run pack:check`: vista previa del paquete que se publicaria en npm.
 
 ## Licencia
 
