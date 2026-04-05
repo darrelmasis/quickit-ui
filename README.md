@@ -353,7 +353,7 @@ import {
 ## Scripts utiles
 
 - `npm run dev`: entorno local de desarrollo.
-- `npm run build`: build de la libreria.
+- `npm run build`: build de la libreria para distribucion. El paquete publicado no incluye sourcemaps para reducir el peso en npm.
 - `npm run build:docs`: build estatico de la documentacion.
 - `npm run lint`: validacion con ESLint.
 - `npm run pack:check`: vista previa del paquete que se publicaria en npm.

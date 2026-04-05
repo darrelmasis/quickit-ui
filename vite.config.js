@@ -32,7 +32,7 @@ export default defineConfig(({ command, mode }) => {
           }
         : {
           emptyOutDir: true,
-          sourcemap: true,
+          sourcemap: false,
           lib: {
             entry: libEntry,
             name: "QuickitUI",
