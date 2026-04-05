@@ -148,7 +148,7 @@ export function Example() {
               puedes partir de esta base y luego revisar componentes específicos
               en la columna principal.
             </p>
-            <Link href="#accordion" underline="hover">
+            <Link href="#" underline="hover">
               Ir al primer componente
             </Link>
           </div>

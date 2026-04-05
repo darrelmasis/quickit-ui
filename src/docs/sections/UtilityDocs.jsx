@@ -28,15 +28,16 @@ const apis = {
   link: [
     { prop: "appearance", type: "text | button", defaultValue: "text", description: "Cambia entre enlace de texto y enlace con apariencia de botón." },
     { prop: "variant", type: "default | muted | subtle | solid | outline | ghost", defaultValue: "default", description: "En `text` controla el tono del enlace. En `button` define la variante visual del botón." },
-    { prop: "color", type: "neutral | primary | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`. `brand` está pensado para la paleta de marca del producto." },
     { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Tamaño del enlace cuando `appearance=\"button\"`." },
     { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el enlace a `w-full` cuando usa apariencia de botón." },
+    { prop: "activeMotion", type: "boolean", defaultValue: "true", description: "Desactiva la animación nativa de presión cuando `appearance=\"button\"`." },
     { prop: "underline", type: "always | hover | none", defaultValue: "hover", description: "Controla el subrayado." },
     { prop: "disabled", type: "boolean", defaultValue: "false", description: "Deshabilita interacción." },
   ],
   badge: [
     { prop: "variant", type: "soft | outline | solid", defaultValue: "soft", description: "Tratamiento visual del badge." },
-    { prop: "color", type: "neutral | primary | success | danger | warning | info", defaultValue: "neutral", description: "Color semántico del badge." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Color semántico del badge." },
     { prop: "size", type: "sm | md", defaultValue: "sm", description: "Ajusta la densidad visual." },
   ],
   skeleton: [
@@ -132,16 +133,16 @@ export function UtilityDocs({ ui, visibleIds }) {
               ui={ui}
               title="Variantes"
               code={`<div className="flex flex-wrap items-center gap-4">
-  <Link href="#button">Default link</Link>
-  <Link href="#input" variant="muted">Muted link</Link>
-  <Link href="#accordion" variant="subtle" underline="always">Always underline</Link>
+  <Link href="#">Default link</Link>
+  <Link href="#" variant="muted">Muted link</Link>
+  <Link href="#" variant="subtle" underline="always">Always underline</Link>
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="#button">Default link</Link>
-                <Link href="#input" variant="muted">Muted link</Link>
-                <Link href="#accordion" variant="subtle" underline="always">Always underline</Link>
-                <Link href="#badge" variant="default" underline="none">No underline</Link>
+                <Link href="#">Default link</Link>
+                <Link href="#" variant="muted">Muted link</Link>
+                <Link href="#" variant="subtle" underline="always">Always underline</Link>
+                <Link href="#" variant="default" underline="none">No underline</Link>
               </div>
             </PreviewPanel>
 
@@ -149,26 +150,38 @@ export function UtilityDocs({ ui, visibleIds }) {
               ui={ui}
               title="Como botón"
               code={`<div className="flex flex-wrap items-center gap-3">
-  <Link href="/docs/getting-started" appearance="button" color="neutral">
+  <Link href="#" appearance="button" color="neutral">
     Abrir guía
   </Link>
-  <Link href="/pricing" appearance="button" variant="outline" color="neutral">
-    Ver planes
+  <Link href="#" appearance="button" color="brand">
+    Brand kit
   </Link>
-  <Link href="/contact" appearance="button" variant="ghost" color="neutral">
-    Contactar ventas
+  <Link href="#" appearance="button" variant="outline" color="neutral">
+    Ver ejemplo
+  </Link>
+  <Link href="#" appearance="button" variant="ghost" color="neutral">
+    Ver modal
+  </Link>
+  <Link href="#" appearance="button" color="neutral" activeMotion={false}>
+    Sin active motion
   </Link>
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-3">
-                <Link href="/docs/getting-started" appearance="button" color="neutral">
+                <Link href="#" appearance="button" color="neutral">
                   Abrir guía
                 </Link>
-                <Link href="/pricing" appearance="button" variant="outline" color="neutral">
-                  Ver planes
+                <Link href="#" appearance="button" color="brand">
+                  Brand kit
                 </Link>
-                <Link href="/contact" appearance="button" variant="ghost" color="neutral">
-                  Contactar ventas
+                <Link href="#" appearance="button" variant="outline" color="neutral">
+                  Ver ejemplo
+                </Link>
+                <Link href="#" appearance="button" variant="ghost" color="neutral">
+                  Ver modal
+                </Link>
+                <Link href="#" appearance="button" color="neutral" activeMotion={false}>
+                  Sin active motion
                 </Link>
               </div>
             </PreviewPanel>
@@ -177,11 +190,11 @@ export function UtilityDocs({ ui, visibleIds }) {
               ui={ui}
               title="Inline"
               code={`<p>
-  Puedes usar <Link href="#modal" underline="always">Link</Link> dentro de párrafos.
+  Puedes usar <Link href="#" underline="always">Link</Link> dentro de párrafos.
 </p>`}
             >
               <p className={`text-sm leading-7 ${ui.body}`}>
-                Puedes usar <Link href="#modal" underline="always">Link</Link> dentro de párrafos,
+                Puedes usar <Link href="#" underline="always">Link</Link> dentro de párrafos,
                 documentación o acciones secundarias sin tener que recurrir a estilos ad hoc.
               </p>
             </PreviewPanel>
@@ -233,6 +246,8 @@ export function UtilityDocs({ ui, visibleIds }) {
               ui={ui}
               title="Colores semánticos"
               code={`<div className="flex flex-wrap items-center gap-3">
+  <Badge color="primary">Primary</Badge>
+  <Badge color="brand">Brand</Badge>
   <Badge color="success">Activo</Badge>
   <Badge color="warning">Pendiente</Badge>
   <Badge color="danger">Error</Badge>
@@ -240,6 +255,8 @@ export function UtilityDocs({ ui, visibleIds }) {
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-3">
+                <Badge color="primary">Primary</Badge>
+                <Badge color="brand">Brand</Badge>
                 <Badge color="success">Activo</Badge>
                 <Badge color="warning">Pendiente</Badge>
                 <Badge color="danger">Error</Badge>

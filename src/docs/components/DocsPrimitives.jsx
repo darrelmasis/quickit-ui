@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, cn } from "@/lib";
+import { Button, Tabs, TabsContent, TabsList, TabsTrigger, cn } from "@/lib";
 import { Highlight, themes } from "prism-react-renderer";
 
 const CODE_THEMES = {
@@ -136,28 +136,55 @@ export function PreviewPanel({
   title,
   ui,
 }) {
+  if (!code) {
+    return (
+      <div className="mt-3 space-y-3">
+        {title ? (
+          <p className={`text-sm font-semibold ${ui.title}`}>{title}</p>
+        ) : null}
+        <div
+          className={cn(
+            "rounded-[1rem] border p-3 sm:rounded-[1.25rem] sm:p-4",
+            ui.preview,
+            className,
+          )}
+        >
+          {children}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-3 space-y-3">
       {title ? (
         <p className={`text-sm font-semibold ${ui.title}`}>{title}</p>
       ) : null}
-      <div
-        className={cn(
-          "rounded-[1rem] border p-3 sm:rounded-[1.25rem] sm:p-4",
-          ui.preview,
-          className,
-        )}
-      >
-        {children}
-      </div>
-      {code ? (
-        <CodeExample
-          code={code}
-          language={codeLanguage}
-          title={codeTitle}
-          ui={ui}
-        />
-      ) : null}
+      <Tabs defaultValue="preview" size="sm" color="neutral" className="space-y-3">
+        <TabsList>
+          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="code">Código</TabsTrigger>
+        </TabsList>
+        <TabsContent value="preview" className="mt-0">
+          <div
+            className={cn(
+              "rounded-[1rem] border p-3 sm:rounded-[1.25rem] sm:p-4",
+              ui.preview,
+              className,
+            )}
+          >
+            {children}
+          </div>
+        </TabsContent>
+        <TabsContent value="code" className="mt-0">
+          <CodeExample
+            code={code}
+            language={codeLanguage}
+            title={codeTitle}
+            ui={ui}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

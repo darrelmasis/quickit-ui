@@ -1,7 +1,8 @@
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useId, useMemo, useState } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
+import { Label } from "@/lib/components/label";
 
 const SWITCH_PRIMITIVES = {
   root: [
@@ -37,6 +38,7 @@ const SWITCH_THEME_CLASSES = {
     checked: {
       neutral: "border-neutral-950 bg-neutral-950",
       primary: "border-blue-700 bg-blue-700",
+      brand: "border-brand-700 bg-brand-700",
       success: "border-emerald-600 bg-emerald-600",
       danger: "border-red-600 bg-red-600",
       warning: "border-amber-500 bg-amber-500",
@@ -49,6 +51,7 @@ const SWITCH_THEME_CLASSES = {
     checked: {
       neutral: "border-neutral-100 bg-neutral-100 text-neutral-950",
       primary: "border-blue-300 bg-blue-300 text-zinc-950",
+      brand: "border-brand-300 bg-brand-300 text-zinc-950",
       success: "border-emerald-300 bg-emerald-300 text-zinc-950",
       danger: "border-red-300 bg-red-300 text-zinc-950",
       warning: "border-amber-300 bg-amber-300 text-zinc-950",
@@ -67,10 +70,13 @@ const Switch = forwardRef(function Switch(
     checked,
     className,
     color = "neutral",
+    containerClassName,
     defaultChecked = false,
     disabled = false,
     id,
     invalid = false,
+    label,
+    labelClassName,
     name,
     onCheckedChange,
     required = false,
@@ -80,6 +86,7 @@ const Switch = forwardRef(function Switch(
   },
   ref,
 ) {
+  const generatedId = useId();
   const isControlled = checked !== undefined;
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const resolvedChecked = isControlled ? checked : internalChecked;
@@ -91,6 +98,7 @@ const Switch = forwardRef(function Switch(
   const resolvedInvalid = invalid || field?.invalid;
   const resolvedColor = ui.checked[color] ? color : "neutral";
   const resolvedSize = SWITCH_SIZE_CLASSES[size] ? size : "md";
+  const resolvedId = id ?? field?.controlId ?? generatedId;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -126,13 +134,13 @@ const Switch = forwardRef(function Switch(
     onCheckedChange?.(nextValue);
   };
 
-  return (
+  const control = (
     <>
       <button
         ref={ref}
         type="button"
         role="switch"
-        id={id ?? field?.controlId}
+        id={resolvedId}
         aria-checked={resolvedChecked}
         aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
@@ -168,6 +176,19 @@ const Switch = forwardRef(function Switch(
         />
       ) : null}
     </>
+  );
+
+  if (!label) {
+    return control;
+  }
+
+  return (
+    <span className={cn("inline-flex items-center gap-3", containerClassName)}>
+      {control}
+      <Label htmlFor={resolvedId} className={labelClassName}>
+        {label}
+      </Label>
+    </span>
   );
 });
 

@@ -1,76 +1,82 @@
 export const STORAGE_KEY = "quickit-ui-docs-theme";
-export const DEFAULT_INTRO_SECTION = "#getting-started";
-export const DEFAULT_COMPONENT_SECTION = "#provider";
+export const DEFAULT_INTRO_SECTION = "/getting-started";
+export const DEFAULT_COMPONENT_SECTION = "/fundamentos/provider";
+export const DEFAULT_EXAMPLES_SECTION = "/ejemplos";
 
 export const INTRO_ITEMS = [
-  { href: "#getting-started", label: "Getting started" },
-  { href: "#instalacion", label: "Instalación" },
-  { href: "#compatibilidad", label: "Compatibilidad" },
+  { href: "/getting-started", label: "Getting started", id: "getting-started" },
+  { href: "/instalacion", label: "Instalación", id: "instalacion" },
+  { href: "/compatibilidad", label: "Compatibilidad", id: "compatibilidad" },
+];
+
+export const EXAMPLE_ITEMS = [
+  { href: "/ejemplos", label: "Ejemplos", id: "examples" },
 ];
 
 export const COMPONENT_GROUPS = [
   {
     label: "Fundamentos",
     items: [
-      { href: "#provider", label: "QuickitProvider" },
-      { href: "#theme", label: "Tema" },
-      { href: "#colors", label: "Colores" },
-      { href: "#states", label: "Estados" },
+      { href: "/fundamentos/provider", label: "QuickitProvider", id: "provider" },
+      { href: "/fundamentos/theme", label: "Tema", id: "theme" },
+      { href: "/fundamentos/colores", label: "Colores", id: "colors" },
+      { href: "/fundamentos/estados", label: "Estados", id: "states" },
     ],
   },
   {
     label: "Acciones",
     items: [
-      { href: "#button", label: "Button" },
-      { href: "#link", label: "Link" },
+      { href: "/acciones/button", label: "Button", id: "button" },
+      { href: "/acciones/link", label: "Link", id: "link" },
     ],
   },
   {
     label: "Formularios",
     items: [
-      { href: "#checkbox", label: "Checkbox" },
-      { href: "#form-control", label: "FormControl" },
-      { href: "#input", label: "Input" },
-      { href: "#label", label: "Label" },
-      { href: "#radio", label: "Radio" },
-      { href: "#select", label: "Select" },
-      { href: "#switch", label: "Switch" },
-      { href: "#textarea", label: "Textarea" },
+      { href: "/formularios/checkbox", label: "Checkbox", id: "checkbox" },
+      { href: "/formularios/form-control", label: "FormControl", id: "form-control" },
+      { href: "/formularios/input", label: "Input", id: "input" },
+      { href: "/formularios/label", label: "Label", id: "label" },
+      { href: "/formularios/radio", label: "Radio", id: "radio" },
+      { href: "/formularios/select", label: "Select", id: "select" },
+      { href: "/formularios/switch", label: "Switch", id: "switch" },
+      { href: "/formularios/textarea", label: "Textarea", id: "textarea" },
     ],
   },
   {
     label: "Overlays",
     items: [
-      { href: "#dropdown", label: "Dropdown" },
-      { href: "#modal", label: "Modal" },
-      { href: "#popover", label: "Popover" },
-      { href: "#tooltip", label: "Tooltip" },
+      { href: "/overlays/dropdown", label: "Dropdown", id: "dropdown" },
+      { href: "/overlays/modal", label: "Modal", id: "modal" },
+      { href: "/overlays/popover", label: "Popover", id: "popover" },
+      { href: "/overlays/tooltip", label: "Tooltip", id: "tooltip" },
     ],
   },
   {
     label: "Navegación",
     items: [
-      { href: "#accordion", label: "Accordion" },
-      { href: "#breadcrumb", label: "Breadcrumb" },
-      { href: "#pagination", label: "Pagination" },
-      { href: "#tabs", label: "Tabs" },
+      { href: "/navegacion/accordion", label: "Accordion", id: "accordion" },
+      { href: "/navegacion/breadcrumb", label: "Breadcrumb", id: "breadcrumb" },
+      { href: "/navegacion/pagination", label: "Pagination", id: "pagination" },
+      { href: "/navegacion/tabs", label: "Tabs", id: "tabs" },
     ],
   },
   {
     label: "Feedback",
     items: [
-      { href: "#badge", label: "Badge" },
-      { href: "#empty-state", label: "EmptyState" },
-      { href: "#skeleton", label: "Skeleton" },
+      { href: "/feedback/badge", label: "Badge", id: "badge" },
+      { href: "/feedback/empty-state", label: "EmptyState", id: "empty-state" },
+      { href: "/feedback/skeleton", label: "Skeleton", id: "skeleton" },
     ],
   },
   {
     label: "Identidad",
-    items: [{ href: "#avatar", label: "Avatar" }],
+    items: [{ href: "/identidad/avatar", label: "Avatar", id: "avatar" }],
   },
 ];
 
 export const COMPONENT_ITEMS = COMPONENT_GROUPS.flatMap((group) => group.items);
+export const ALL_ITEMS = [...INTRO_ITEMS, ...EXAMPLE_ITEMS, ...COMPONENT_ITEMS];
 
 export const docsConventions = [
   "Cada sección muestra primero el caso de uso principal y luego la API.",
@@ -133,8 +139,22 @@ export function getInitialTheme() {
     : "light";
 }
 
-function findSection(hash, items, fallback) {
-  return items.some((item) => item.href === hash) ? hash : fallback;
+function normalizePathname(pathname) {
+  if (!pathname || pathname === "/") {
+    return DEFAULT_INTRO_SECTION;
+  }
+
+  return pathname.endsWith("/") && pathname.length > 1
+    ? pathname.slice(0, -1)
+    : pathname;
+}
+
+function findSection(pathname, items, fallback) {
+  const normalizedPathname = normalizePathname(pathname);
+
+  return items.some((item) => item.href === normalizedPathname)
+    ? normalizedPathname
+    : fallback;
 }
 
 export function getInitialIntroSection() {
@@ -142,7 +162,7 @@ export function getInitialIntroSection() {
     return DEFAULT_INTRO_SECTION;
   }
 
-  return findSection(window.location.hash, INTRO_ITEMS, DEFAULT_INTRO_SECTION);
+  return findSection(window.location.pathname, INTRO_ITEMS, DEFAULT_INTRO_SECTION);
 }
 
 export function getInitialComponentSection() {
@@ -151,7 +171,7 @@ export function getInitialComponentSection() {
   }
 
   return findSection(
-    window.location.hash,
+    window.location.pathname,
     COMPONENT_ITEMS,
     DEFAULT_COMPONENT_SECTION,
   );

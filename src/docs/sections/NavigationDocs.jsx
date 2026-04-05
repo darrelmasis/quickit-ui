@@ -23,6 +23,7 @@ const apis = {
   tabs: [
     { prop: "defaultValue", type: "string", defaultValue: "undefined", description: "Tab inicial en modo no controlado." },
     { prop: "value / onValueChange", type: "string / (value) => void", defaultValue: "no controlado", description: "Modo controlado opcional." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "neutral", description: "Cambia el color del trigger activo." },
     { prop: "size", type: "xs | sm | md | lg", defaultValue: "md", description: "Escala el alto del list, el padding y el min-width de cada trigger." },
     { prop: "orientation", type: "horizontal | vertical", defaultValue: "horizontal", description: "Dirección del tabs list y de la navegación por teclado." },
     { prop: "activationMode", type: "automatic | manual", defaultValue: "automatic", description: "Controla si el foco activa el tab automáticamente o si solo cambia con click / Enter / Espacio." },
@@ -43,7 +44,7 @@ const apis = {
     { prop: "count", type: "number", defaultValue: "required", description: "Total de páginas disponibles." },
     { prop: "page / defaultPage", type: "number", defaultValue: "1", description: "Modo controlado o no controlado." },
     { prop: "siblingCount", type: "number", defaultValue: "1", description: "Cantidad de páginas visibles a cada lado." },
-    { prop: "color", type: "neutral | primary | success | danger | warning | info | light | dark", defaultValue: "neutral", description: "Color aplicado a la paginación." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "neutral", description: "Color aplicado a la paginación." },
   ],
 };
 
@@ -155,6 +156,46 @@ export function NavigationDocs({ ui, visibleIds }) {
                     <TabsTrigger value="overview">Overview</TabsTrigger>
                     <TabsTrigger value="api">API</TabsTrigger>
                     <TabsTrigger value="states">States</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Colores"
+              code={`<div className="space-y-4">
+  <Tabs defaultValue="overview" color="neutral">
+    <TabsList>
+      <TabsTrigger value="overview">Neutral</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="brand">
+    <TabsList>
+      <TabsTrigger value="overview">Brand</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+</div>`}
+            >
+              <div className="space-y-4">
+                <Tabs defaultValue="overview" color="neutral">
+                  <TabsList>
+                    <TabsTrigger value="overview">Neutral</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                <Tabs defaultValue="overview" color="brand">
+                  <TabsList>
+                    <TabsTrigger value="overview">Brand</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                <Tabs defaultValue="overview" color="success">
+                  <TabsList>
+                    <TabsTrigger value="overview">Success</TabsTrigger>
+                    <TabsTrigger value="api">API</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
@@ -333,10 +374,10 @@ export function NavigationDocs({ ui, visibleIds }) {
               title="Ruta corta"
               code={`<Breadcrumb>
   <BreadcrumbList>
-    <BreadcrumbItem allowLink href="#getting-started">
+    <BreadcrumbItem allowLink href="#">
       Docs
     </BreadcrumbItem>
-    <BreadcrumbItem allowLink href="#input">
+    <BreadcrumbItem allowLink href="#">
       Forms
     </BreadcrumbItem>
     <BreadcrumbItem current>
@@ -347,10 +388,10 @@ export function NavigationDocs({ ui, visibleIds }) {
             >
               <Breadcrumb>
                 <BreadcrumbList>
-                  <BreadcrumbItem allowLink href="#getting-started">
+                  <BreadcrumbItem allowLink href="#">
                     Docs
                   </BreadcrumbItem>
-                  <BreadcrumbItem allowLink href="#input">
+                  <BreadcrumbItem allowLink href="#">
                     Forms
                   </BreadcrumbItem>
                   <BreadcrumbItem current>
@@ -365,13 +406,13 @@ export function NavigationDocs({ ui, visibleIds }) {
               title="Ruta profunda"
               code={`<Breadcrumb>
   <BreadcrumbList separator="›">
-    <BreadcrumbItem allowLink href="#getting-started">
+    <BreadcrumbItem allowLink href="#">
       Quickit UI
     </BreadcrumbItem>
-    <BreadcrumbItem allowLink href="#modal">
+    <BreadcrumbItem allowLink href="#">
       Overlays
     </BreadcrumbItem>
-    <BreadcrumbItem allowLink href="#popover">
+    <BreadcrumbItem allowLink href="#">
       Popover
     </BreadcrumbItem>
     <BreadcrumbItem current>
@@ -382,13 +423,13 @@ export function NavigationDocs({ ui, visibleIds }) {
             >
               <Breadcrumb>
                 <BreadcrumbList separator="›">
-                  <BreadcrumbItem allowLink href="#getting-started">
+                  <BreadcrumbItem allowLink href="#">
                     Quickit UI
                   </BreadcrumbItem>
-                  <BreadcrumbItem allowLink href="#modal">
+                  <BreadcrumbItem allowLink href="#">
                     Overlays
                   </BreadcrumbItem>
-                  <BreadcrumbItem allowLink href="#popover">
+                  <BreadcrumbItem allowLink href="#">
                     Popover
                   </BreadcrumbItem>
                   <BreadcrumbItem current>
@@ -428,6 +469,18 @@ export function NavigationDocs({ ui, visibleIds }) {
               <div className="space-y-3">
                 <p className={`text-sm ${ui.body}`}>Para listados cortos puedes usar menos vecinos visibles y mantener la navegación más compacta.</p>
                 <Pagination count={8} defaultPage={2} siblingCount={0} />
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel ui={ui} title="Colores" code={`<div className="space-y-3">
+  <Pagination count={10} defaultPage={3} color="neutral" />
+  <Pagination count={10} defaultPage={3} color="brand" />
+  <Pagination count={10} defaultPage={3} color="success" />
+</div>`}>
+              <div className="space-y-3">
+                <Pagination count={10} defaultPage={3} color="neutral" />
+                <Pagination count={10} defaultPage={3} color="brand" />
+                <Pagination count={10} defaultPage={3} color="success" />
               </div>
             </PreviewPanel>
           </div>

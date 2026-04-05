@@ -1,7 +1,8 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
+import { Label } from "@/lib/components/label";
 
 const CHECKBOX_SIZE_CLASSES = {
   sm: {
@@ -27,6 +28,10 @@ const CHECKBOX_THEME_CLASSES = {
       },
       primary: {
         box: "peer-checked:border-blue-700 peer-checked:bg-blue-700",
+        icon: "text-white",
+      },
+      brand: {
+        box: "peer-checked:border-brand-700 peer-checked:bg-brand-700",
         icon: "text-white",
       },
       success: {
@@ -61,6 +66,10 @@ const CHECKBOX_THEME_CLASSES = {
         box: "peer-checked:border-blue-300 peer-checked:bg-blue-300",
         icon: "text-zinc-950",
       },
+      brand: {
+        box: "peer-checked:border-brand-300 peer-checked:bg-brand-300",
+        icon: "text-zinc-950",
+      },
       success: {
         box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300",
         icon: "text-zinc-950",
@@ -91,15 +100,19 @@ const Checkbox = forwardRef(function Checkbox(
   {
     className,
     color = "neutral",
+    containerClassName,
     disabled = false,
     id,
     invalid = false,
+    label,
+    labelClassName,
     required = false,
     size = "md",
     ...props
   },
   ref,
 ) {
+  const generatedId = useId();
   const theme = resolveTheme(useQuickitTheme());
   const ui = CHECKBOX_THEME_CLASSES[theme];
   const field = useFormControl();
@@ -108,6 +121,7 @@ const Checkbox = forwardRef(function Checkbox(
   const resolvedRequired = required || field?.required;
   const resolvedColor = ui.colors[color] ? color : "neutral";
   const resolvedSize = CHECKBOX_SIZE_CLASSES[size] ? size : "md";
+  const resolvedId = id ?? field?.controlId ?? generatedId;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -116,7 +130,7 @@ const Checkbox = forwardRef(function Checkbox(
     .filter(Boolean)
     .join(" ") || undefined;
 
-  return (
+  const control = (
     <span
       className={cn(
         "relative inline-flex shrink-0",
@@ -127,18 +141,18 @@ const Checkbox = forwardRef(function Checkbox(
       <input
         ref={ref}
         type="checkbox"
-        id={id ?? field?.controlId}
+        id={resolvedId}
         required={resolvedRequired}
         disabled={resolvedDisabled}
         aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
-        className="peer absolute inset-0 m-0 cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed"
+        className="peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed"
         {...props}
       />
       <span
         aria-hidden="true"
         className={cn(
-          "inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&_svg]:opacity-100",
+          "pointer-events-none inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&_svg]:opacity-100",
           CHECKBOX_SIZE_CLASSES[resolvedSize].box,
           ui.box,
           ui.focus,
@@ -148,7 +162,7 @@ const Checkbox = forwardRef(function Checkbox(
         <svg
           viewBox="0 0 16 16"
           className={cn(
-            "opacity-0 transition-opacity duration-150",
+            "pointer-events-none opacity-0 transition-opacity duration-150",
             CHECKBOX_SIZE_CLASSES[resolvedSize].icon,
             resolvedInvalid ? ui.invalidIcon : ui.colors[resolvedColor].icon,
           )}
@@ -163,6 +177,19 @@ const Checkbox = forwardRef(function Checkbox(
           />
         </svg>
       </span>
+    </span>
+  );
+
+  if (!label) {
+    return control;
+  }
+
+  return (
+    <span className={cn("inline-flex items-center gap-3", containerClassName)}>
+      {control}
+      <Label htmlFor={resolvedId} className={labelClassName}>
+        {label}
+      </Label>
     </span>
   );
 });

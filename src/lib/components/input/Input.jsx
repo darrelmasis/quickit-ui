@@ -6,9 +6,9 @@ import { useFormControl } from "@/lib/components/form-control";
 const INPUT_PRIMITIVES = {
   base: [
     "w-full border bg-transparent text-sm outline-none",
-    "transition-[background-color,border-color,color] duration-200",
+    "transition-[background-color,border-color,color,box-shadow] duration-200",
     "placeholder:text-current/45",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+    "focus-visible:ring-4 focus-visible:ring-offset-0",
     "disabled:cursor-not-allowed disabled:opacity-60",
   ].join(" "),
 };
@@ -21,14 +21,14 @@ const INPUT_SIZE_CLASSES = {
 
 const INPUT_THEME_CLASSES = {
   light: {
-    base: "border-slate-200 bg-white text-slate-950 focus-visible:outline-slate-300",
+    base: "border-slate-200 bg-white text-slate-950 focus-visible:border-slate-300 focus-visible:ring-slate-200/70",
     hover: "hover:border-slate-300",
-    invalid: "border-red-300 text-red-700 focus-visible:outline-red-300",
+    invalid: "border-red-300 text-red-700 focus-visible:border-red-400 focus-visible:ring-red-200/70",
   },
   dark: {
-    base: "border-zinc-800 bg-zinc-950 text-stone-50 focus-visible:outline-zinc-700",
+    base: "border-zinc-800 bg-zinc-950 text-stone-50 focus-visible:border-zinc-700 focus-visible:ring-zinc-800/80",
     hover: "hover:border-zinc-700",
-    invalid: "border-red-500/60 text-stone-50 focus-visible:outline-red-400",
+    invalid: "border-red-500/60 text-stone-50 focus-visible:border-red-400/80 focus-visible:ring-red-500/20",
   },
 };
 

@@ -15,6 +15,7 @@ const BADGE_THEME_CLASSES = {
   light: {
     solid: {
       primary: "border-blue-700 bg-blue-700 text-white",
+      brand: "border-brand-700 bg-brand-700 text-white",
       success: "border-emerald-600 bg-emerald-600 text-white",
       danger: "border-red-600 bg-red-600 text-white",
       warning: "border-amber-400 bg-amber-400 text-slate-950",
@@ -23,6 +24,7 @@ const BADGE_THEME_CLASSES = {
     },
     soft: {
       primary: "border-blue-200 bg-blue-50 text-blue-700",
+      brand: "border-brand-200 bg-brand-50 text-brand-700",
       success: "border-emerald-200 bg-emerald-50 text-emerald-700",
       danger: "border-red-200 bg-red-50 text-red-700",
       warning: "border-amber-200 bg-amber-50 text-amber-700",
@@ -31,6 +33,7 @@ const BADGE_THEME_CLASSES = {
     },
     outline: {
       primary: "border-blue-300 bg-transparent text-blue-700",
+      brand: "border-brand-300 bg-transparent text-brand-700",
       success: "border-emerald-300 bg-transparent text-emerald-700",
       danger: "border-red-300 bg-transparent text-red-700",
       warning: "border-amber-300 bg-transparent text-amber-700",
@@ -41,6 +44,7 @@ const BADGE_THEME_CLASSES = {
   dark: {
     solid: {
       primary: "border-blue-300 bg-blue-300 text-slate-950",
+      brand: "border-brand-300 bg-brand-300 text-slate-950",
       success: "border-emerald-300 bg-emerald-300 text-slate-950",
       danger: "border-red-300 bg-red-300 text-slate-950",
       warning: "border-amber-300 bg-amber-300 text-slate-950",
@@ -49,6 +53,7 @@ const BADGE_THEME_CLASSES = {
     },
     soft: {
       primary: "border-blue-500/30 bg-blue-500/10 text-blue-300",
+      brand: "border-brand-500/30 bg-brand-500/10 text-brand-300",
       success: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
       danger: "border-red-500/30 bg-red-500/10 text-red-300",
       warning: "border-amber-500/30 bg-amber-500/10 text-amber-300",
@@ -57,6 +62,7 @@ const BADGE_THEME_CLASSES = {
     },
     outline: {
       primary: "border-blue-500/50 bg-transparent text-blue-300",
+      brand: "border-brand-500/50 bg-transparent text-brand-300",
       success: "border-emerald-500/50 bg-transparent text-emerald-300",
       danger: "border-red-500/50 bg-transparent text-red-300",
       warning: "border-amber-500/50 bg-transparent text-amber-300",

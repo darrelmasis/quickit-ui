@@ -12,6 +12,7 @@ import {
 const buttonColors = [
   { label: "Neutral", color: "neutral" },
   { label: "Primary", color: "primary" },
+  { label: "Brand", color: "brand" },
   { label: "Success", color: "success" },
   { label: "Danger", color: "danger" },
   { label: "Warning", color: "warning" },
@@ -22,7 +23,7 @@ const buttonColors = [
 
 const buttonApi = [
   { prop: "variant", type: "solid | outline | ghost", defaultValue: "solid", description: "Define el tratamiento visual base del botón." },
-  { prop: "color", type: "neutral | primary | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Aplica el color semántico dentro de la variante elegida. En la documentación se usa `neutral` por defecto para mantener la UI base más sobria." },
+  { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Aplica el color semántico dentro de la variante elegida. `brand` está pensado para la paleta de marca de tu producto y en la documentación se usa `neutral` por defecto para mantener la UI base más sobria." },
   { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Controla altura, padding y tamaño tipográfico." },
   { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Cambia entre botón horizontal, icon button cuadrado o botón cápsula." },
   { prop: "loading", type: "boolean", defaultValue: "false", description: "Deshabilita interacción y muestra estado de carga." },
@@ -32,6 +33,7 @@ const buttonApi = [
   { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el botón a `w-full`." },
   { prop: "active", type: "boolean", defaultValue: "false", description: "Aplica un estado visual activo persistente." },
   { prop: "pressed", type: "boolean", defaultValue: "false", description: "Marca el botón como presionado y añade `aria-pressed`." },
+  { prop: "activeMotion", type: "boolean", defaultValue: "true", description: "Permite desactivar la animación nativa de `:active` al presionar." },
   { prop: "aria-label / aria-labelledby / title", type: "string", defaultValue: "undefined", description: "Recomendado cuando `shape=\"square\"` no tiene texto visible." },
 ];
 
@@ -40,7 +42,9 @@ const buttonNotes = [
   "En `size=\"sm\"` o `shape=\"square\"`, el estado loading muestra solo el spinner.",
   "Si `spinner={false}`, puedes mantener loading sin icono girando.",
   "El botón tiene feedback visual nativo en `:active` al presionar con puntero, además de los estados controlados `active` y `pressed`.",
+  "Si necesitas una interacción más sobria, `activeMotion={false}` desactiva ese feedback de presión.",
   "Los botones horizontales tienen un `min-width` por tamaño para mantener consistencia visual entre acciones.",
+  "Si necesitas que sea `full width` solo en móvil, usa clases responsivas como `w-full sm:w-48`; `fullWidth` por sí solo siempre aplica `w-full`.",
   "`shape=\"pill\"` usa radio completo y funciona bien para acciones más promocionales o filtros tipo cápsula.",
   "Los botones `square` deben incluir `aria-label`, `aria-labelledby` o `title`.",
 ];
@@ -121,6 +125,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
           code={`<div className="flex flex-wrap items-center gap-3">
   <Button variant="outline" color="neutral">Neutral</Button>
   <Button variant="outline" color="primary">Primary</Button>
+  <Button variant="outline" color="brand">Brand</Button>
   <Button variant="outline" color="success">Success</Button>
   <Button variant="outline" color="danger">Danger</Button>
   <Button variant="outline" color="warning">Warning</Button>
@@ -185,10 +190,24 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
 
           <PreviewPanel
             ui={ui}
-            title="Full width"
-            code={`<Button fullWidth color="neutral">Continuar</Button>`}
+            title="Responsive width"
+            code={`<div className="flex flex-col gap-3 sm:flex-row">
+  <Button color="neutral" className="w-full sm:w-48">
+    Continuar
+  </Button>
+  <Button variant="outline" color="neutral" className="w-full sm:w-48">
+    Cancelar
+  </Button>
+</div>`}
           >
-            <Button fullWidth color="neutral">Continuar</Button>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button color="neutral" className="w-full sm:w-48">
+                Continuar
+              </Button>
+              <Button variant="outline" color="neutral" className="w-full sm:w-48">
+                Cancelar
+              </Button>
+            </div>
           </PreviewPanel>
         </div>
       </div>
@@ -207,7 +226,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
   variant="outline"
   color="neutral"
   size="lg"
-  fullWidth
+  className="w-full sm:w-56"
 >
   Continuar
 </Button>`}

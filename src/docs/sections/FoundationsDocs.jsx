@@ -34,11 +34,11 @@ const foundationNotes = {
     "useQuickitTheme te permite reaccionar al tema actual desde cualquier componente descendiente.",
   ],
   colors: [
-    "La API actual sigue siendo semántica: `neutral`, `primary`, `success`, `danger`, `warning`, `info`, `light` y `dark`.",
-    "Si quieres cambiar cómo se ve uno de esos colores en toda la librería, sobrescribe las variables CSS correspondientes después de cargar `quickit-ui/styles.css`.",
-    "Si quieres reutilizar un color de marca con la API existente, remapea uno de los slots semánticos a tu paleta.",
+    "La API actual sigue siendo semántica: `neutral`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light` y `dark`.",
+    "Cada color semántico se apoya en una familia Tailwind interna. Si reemplazas esa familia, cambias el color semántico en toda la librería.",
+    "El slot recomendado para la marca es `brand`, y por debajo consume `brand-*`. Así puedes conectar tu identidad visual sin mezclarla con `primary`.",
+    "Crear una familia nueva como `gray-*` no hace que aparezca `color=\"gray\"` en la API. Para eso hace falta ampliar el mapa de colores del componente.",
     "Si necesitas un color nuevo solo en un caso puntual, usa `className` para sobreescribir ese componente.",
-    "Si quieres un nuevo valor de `color` reutilizable en toda la librería, eso ya requiere ampliar la API del componente.",
   ],
   states: [
     "disabled bloquea interaccion y comunica el estado con feedback visual consistente.",
@@ -161,7 +161,7 @@ return (
           <SectionHeading
             category="Fundamentos"
             title="Colores"
-            description="La librería ya expone colores semánticos. Lo normal no es inventar nuevos nombres desde CSS, sino decidir cómo quieres que se vea cada slot y remapear su paleta."
+            description="La API es semántica, pero por debajo consume familias Tailwind concretas. `brand` existe precisamente para que el usuario conecte su marca con una paleta propia `brand-*`."
             ui={ui}
           />
 
@@ -172,6 +172,7 @@ return (
               code={`<div className="flex flex-wrap items-center gap-3">
   <Button color="neutral">Neutral</Button>
   <Button color="primary">Primary</Button>
+  <Button color="brand">Brand</Button>
   <Button color="success">Success</Button>
   <Button color="danger">Danger</Button>
   <Button color="warning">Warning</Button>
@@ -183,6 +184,7 @@ return (
               <div className="flex flex-wrap items-center gap-3">
                 <Button color="neutral">Neutral</Button>
                 <Button color="primary">Primary</Button>
+                <Button color="brand">Brand</Button>
                 <Button color="success">Success</Button>
                 <Button color="danger">Danger</Button>
                 <Button color="warning">Warning</Button>
@@ -194,41 +196,82 @@ return (
 
             <CodeExample
               ui={ui}
-              title="2. Cambiar un color existente en toda la librería"
+              title="2. Qué familia usa cada color semántico"
+              language="jsx"
+              code={`// Mapeo actual de la librería
+neutral -> neutral-*
+primary -> blue-*
+brand   -> brand-*
+success -> emerald-*
+danger  -> red-*
+warning -> amber-*
+info    -> sky-*
+
+// Resultado práctico:
+// si reemplazas blue-*, cambias color="primary"
+// si reemplazas brand-*, cambias color="brand"
+// si reemplazas neutral-*, cambias color="neutral"`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="3. Usar tu color de marca con el slot brand"
               language="css"
               code={`/* app.css */
 @import "quickit-ui/styles.css";
 
 :root {
-  /* color="neutral" en light */
-  --color-neutral-700: oklch(46% 0 0);
-  --color-neutral-800: oklch(39% 0 0);
-  --color-neutral-300: oklch(88% 0 0);
-  --color-neutral-100: oklch(96% 0 0);
-
-  /* color="primary" en light */
-  --color-blue-700: oklch(58% 0.18 275);
-  --color-blue-800: oklch(51% 0.17 275);
-  --color-blue-300: oklch(82% 0.08 275);
-  --color-blue-100: oklch(95% 0.02 275);
+  /* Reemplazas brand-* porque color="brand" usa brand-* */
+  --color-brand-300: oklch(0.86 0.19 126);
+  --color-brand-400: oklch(0.8 0.2 126);
+  --color-brand-500: oklch(0.74 0.2 126);
+  --color-brand-600: oklch(0.68 0.19 126);
+  --color-brand-700: oklch(0.62 0.18 126);
+  --color-brand-800: oklch(0.55 0.16 126);
 }
 
 .dark {
-  /* color="neutral" en dark */
-  --color-neutral-200: oklch(90% 0 0);
-  --color-neutral-900: oklch(21% 0 0);
-
-  /* color="primary" en dark */
-  --color-blue-400: oklch(72% 0.15 275);
-  --color-blue-300: oklch(79% 0.12 275);
+  --color-brand-300: oklch(0.84 0.17 126);
+  --color-brand-400: oklch(0.78 0.18 126);
+  --color-brand-500: oklch(0.72 0.18 126);
 }`}
             />
 
             <CodeExample
               ui={ui}
-              title="3. Reutilizar un slot semántico como color de marca"
+              title="4. Si aún quieres que tu marca viva en primary"
               language="css"
-              code={`/* Si quieres que color="info" use tu color de marca */
+              code={`:root {
+  /* primary sigue consumiendo blue-* */
+  --color-blue-300: oklch(0.86 0.19 126);
+  --color-blue-400: oklch(0.8 0.2 126);
+  --color-blue-500: oklch(0.74 0.2 126);
+  --color-blue-600: oklch(0.68 0.19 126);
+  --color-blue-700: oklch(0.62 0.18 126);
+  --color-blue-800: oklch(0.55 0.16 126);
+}`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="5. Reemplazar neutral con tu propia escala"
+              language="css"
+              code={`:root {
+  --color-neutral-50: oklch(0.985 0.002 247);
+  --color-neutral-100: oklch(0.97 0.004 247);
+  --color-neutral-200: oklch(0.93 0.01 252);
+  --color-neutral-300: oklch(0.87 0.018 253);
+  --color-neutral-700: oklch(0.37 0.03 257);
+  --color-neutral-800: oklch(0.28 0.028 260);
+  --color-neutral-900: oklch(0.21 0.026 265);
+}`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="6. Reutilizar otro slot semántico"
+              language="css"
+              code={`/* Si prefieres que tu marca viva en color="info" */
 :root {
   --color-sky-600: oklch(62% 0.19 330);
   --color-sky-700: oklch(55% 0.18 330);
@@ -239,7 +282,28 @@ return (
 
             <CodeExample
               ui={ui}
-              title="4. Usar un color nuevo solo en un componente"
+              title="7. Crear una paleta nueva no habilita un color nuevo en props"
+              language="css"
+              code={`@theme {
+  --color-gray-50: oklch(0.984 0.003 247.858);
+  --color-gray-100: oklch(0.968 0.007 247.896);
+  --color-gray-200: oklch(0.929 0.013 255.508);
+  --color-gray-300: oklch(0.869 0.022 252.894);
+  --color-gray-400: oklch(0.704 0.04 256.788);
+  --color-gray-500: oklch(0.554 0.046 257.417);
+  --color-gray-600: oklch(0.446 0.043 257.281);
+  --color-gray-700: oklch(0.372 0.044 257.287);
+  --color-gray-800: oklch(0.279 0.041 260.031);
+  --color-gray-900: oklch(0.208 0.042 265.755);
+  --color-gray-950: oklch(0.129 0.042 264.695);
+}
+
+/* Esto crea gray-* en Tailwind, pero no habilita color="gray" en Quickit */`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="8. Usar un color nuevo solo en un componente"
               code={`<Button
   color="neutral"
   className="border-fuchsia-600 bg-fuchsia-600 text-white hover:border-fuchsia-700 hover:bg-fuchsia-700 focus-visible:outline-fuchsia-600"
@@ -252,17 +316,24 @@ return (
               ui={ui}
               title="Qué significa cada camino"
               language="jsx"
-              code={`// Quieres cambiar toda la familia neutral:
-// sobrescribe variables --color-neutral-*
+              code={`// Quieres un slot dedicado para tu marca:
+// reemplaza brand-*
 
-// Quieres que "info" sea tu color de marca:
-// remapea variables --color-sky-*
+// Quieres que primary use tu marca:
+// reemplaza blue-* si ese es tu criterio de producto
 
-// Quieres un botón especial solo en un lugar:
-// usa className
+// Quieres cambiar neutral en toda la librería:
+// reemplaza neutral-*
 
-// Quieres soportar color="brand" en toda la librería:
-// eso requiere ampliar la API de los componentes`}
+// Quieres un slot semántico distinto para tu marca:
+// remapea sky-*, emerald-*, etc.
+
+// Quieres crear gray-*:
+// puedes usar bg-gray-500 o text-gray-700 en className
+// pero no aparece color="gray" automáticamente
+
+// Quieres soportar color="gray" en la API:
+// eso requiere ampliar el mapa de colores del componente`}
             />
           </div>
 

@@ -5,21 +5,15 @@ import { cn, getControlRadius } from "@/lib/utils";
 const BUTTON_PRIMITIVES = {
   layout: "relative inline-flex items-center justify-center border font-medium",
   interaction:
-    "cursor-pointer transition-[background-color,border-color,color,transform,filter] duration-200 active:translate-y-px active:scale-[0.99] active:brightness-[0.97] active:saturate-125",
+    "cursor-pointer transition-[background-color,border-color,color,transform,filter] duration-200",
+  interactionAnimated:
+    "active:translate-y-px active:scale-[0.99] active:brightness-[0.97] active:saturate-125",
   spacing: "gap-2",
   focus:
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
   disabled:
     "disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-60",
 };
-
-const BUTTON_BASE_CLASSES = [
-  BUTTON_PRIMITIVES.layout,
-  BUTTON_PRIMITIVES.interaction,
-  BUTTON_PRIMITIVES.spacing,
-  BUTTON_PRIMITIVES.focus,
-  BUTTON_PRIMITIVES.disabled,
-].join(" ");
 
 const BUTTON_STATE_CLASSES = {
   idle: "",
@@ -62,6 +56,8 @@ const colorClasses = {
         "border-neutral-700 bg-neutral-700 text-white hover:border-neutral-800 hover:bg-neutral-800 focus-visible:outline-neutral-700",
       primary:
         "border-blue-700 bg-blue-700 text-white hover:border-blue-800 hover:bg-blue-800 focus-visible:outline-blue-700",
+      brand:
+        "border-brand-700 bg-brand-700 text-white hover:border-brand-800 hover:bg-brand-800 focus-visible:outline-brand-700",
       success:
         "border-emerald-600 bg-emerald-600 text-white hover:border-emerald-700 hover:bg-emerald-700 focus-visible:outline-emerald-600",
       danger:
@@ -80,6 +76,8 @@ const colorClasses = {
         "border-neutral-300 bg-neutral-50 text-neutral-700 hover:border-neutral-400 hover:bg-neutral-100 focus-visible:outline-neutral-500",
       primary:
         "border-blue-300 bg-blue-50 text-blue-700 hover:border-blue-400 hover:bg-blue-100 focus-visible:outline-blue-700",
+      brand:
+        "border-brand-300 bg-brand-50 text-brand-700 hover:border-brand-400 hover:bg-brand-100 focus-visible:outline-brand-700",
       success:
         "border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-100 focus-visible:outline-emerald-600",
       danger:
@@ -98,6 +96,8 @@ const colorClasses = {
         "border-transparent bg-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950 focus-visible:outline-neutral-500",
       primary:
         "border-transparent bg-transparent text-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-blue-700",
+      brand:
+        "border-transparent bg-transparent text-brand-700 hover:bg-brand-50 hover:text-brand-800 focus-visible:outline-brand-700",
       success:
         "border-transparent bg-transparent text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 focus-visible:outline-emerald-600",
       danger:
@@ -118,6 +118,8 @@ const colorClasses = {
         "border-neutral-200 bg-neutral-200 text-neutral-950 hover:border-neutral-50 hover:bg-neutral-50 focus-visible:outline-neutral-200",
       primary:
         "border-blue-400 bg-blue-400 text-slate-950 hover:border-blue-300 hover:bg-blue-300 focus-visible:outline-blue-300",
+      brand:
+        "border-brand-400 bg-brand-400 text-slate-950 hover:border-brand-300 hover:bg-brand-300 focus-visible:outline-brand-300",
       success:
         "border-emerald-400 bg-emerald-400 text-slate-950 hover:border-emerald-300 hover:bg-emerald-300 focus-visible:outline-emerald-300",
       danger:
@@ -136,6 +138,8 @@ const colorClasses = {
         "border-neutral-700 bg-neutral-900 text-neutral-200 hover:border-neutral-600 hover:bg-neutral-800 focus-visible:outline-neutral-500",
       primary:
         "border-blue-500/40 bg-blue-500/10 text-blue-300 hover:border-blue-400/60 hover:bg-blue-500/15 focus-visible:outline-blue-300",
+      brand:
+        "border-brand-500/40 bg-brand-500/10 text-brand-300 hover:border-brand-400/60 hover:bg-brand-500/15 focus-visible:outline-brand-300",
       success:
         "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:border-emerald-400/60 hover:bg-emerald-500/15 focus-visible:outline-emerald-300",
       danger:
@@ -154,6 +158,8 @@ const colorClasses = {
         "border-transparent bg-transparent text-neutral-300 hover:bg-neutral-800 hover:text-neutral-50 focus-visible:outline-neutral-500",
       primary:
         "border-transparent bg-transparent text-blue-300 hover:bg-blue-500/10 hover:text-blue-200 focus-visible:outline-blue-300",
+      brand:
+        "border-transparent bg-transparent text-brand-300 hover:bg-brand-500/10 hover:text-brand-200 focus-visible:outline-brand-300",
       success:
         "border-transparent bg-transparent text-emerald-300 hover:bg-emerald-500/10 hover:text-emerald-200 focus-visible:outline-emerald-300",
       danger:
@@ -202,6 +208,7 @@ const Button = forwardRef(function Button(
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     active = false,
+    activeMotion = true,
     children,
     className,
     disabled = false,
@@ -275,7 +282,12 @@ const Button = forwardRef(function Button(
       data-active={isActive || undefined}
       data-pressed={pressed || undefined}
       className={cn(
-        BUTTON_BASE_CLASSES,
+        BUTTON_PRIMITIVES.layout,
+        BUTTON_PRIMITIVES.interaction,
+        activeMotion && BUTTON_PRIMITIVES.interactionAnimated,
+        BUTTON_PRIMITIVES.spacing,
+        BUTTON_PRIMITIVES.focus,
+        BUTTON_PRIMITIVES.disabled,
         fullWidth && "w-full",
         isActive && BUTTON_VISUAL_STATE_CLASSES.active,
         pressed && BUTTON_VISUAL_STATE_CLASSES.pressed,

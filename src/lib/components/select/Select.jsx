@@ -38,8 +38,8 @@ const SELECT_PRIMITIVES = {
   wrapper: "relative w-full",
   trigger: [
     "flex w-full items-center justify-between gap-3 border bg-transparent px-3.5 text-sm outline-none",
-    "transition-[background-color,border-color,color] duration-200",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+    "transition-[background-color,border-color,color,box-shadow] duration-200",
+    "focus-visible:ring-4 focus-visible:ring-offset-0",
     "disabled:cursor-not-allowed disabled:opacity-60",
   ].join(" "),
   value: "min-w-0 truncate text-left",
@@ -59,16 +59,16 @@ const SELECT_SIZE_CLASSES = {
 
 const SELECT_THEME_CLASSES = {
   light: {
-    base: "border-slate-200 bg-white text-slate-950 focus-visible:outline-slate-300",
+    base: "border-slate-200 bg-white text-slate-950 focus-visible:border-slate-300 focus-visible:ring-slate-200/70",
     hover: "hover:border-slate-300",
-    invalid: "border-red-300 text-red-700 focus-visible:outline-red-300",
+    invalid: "border-red-300 text-red-700 focus-visible:border-red-400 focus-visible:ring-red-200/70",
     placeholder: "text-slate-500",
     selectedIndicator: "text-slate-950",
   },
   dark: {
-    base: "border-zinc-800 bg-zinc-950 text-stone-50 focus-visible:outline-zinc-700",
+    base: "border-zinc-800 bg-zinc-950 text-stone-50 focus-visible:border-zinc-700 focus-visible:ring-zinc-800/80",
     hover: "hover:border-zinc-700",
-    invalid: "border-red-500/60 text-stone-50 focus-visible:outline-red-400",
+    invalid: "border-red-500/60 text-stone-50 focus-visible:border-red-400/80 focus-visible:ring-red-500/20",
     placeholder: "text-stone-400",
     selectedIndicator: "text-stone-50",
   },

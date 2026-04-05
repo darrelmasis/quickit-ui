@@ -54,16 +54,34 @@ const TABS_THEME_CLASSES = {
     list: "border-slate-200 bg-slate-100/80",
     triggerIdle:
       "text-slate-600 hover:bg-white hover:text-slate-950 focus-visible:outline-slate-300",
-    triggerActive:
-      "border-slate-200 bg-white text-slate-950",
+    triggerActive: {
+      neutral: "border-slate-200 bg-white text-slate-950",
+      primary: "border-blue-200 bg-blue-50 text-blue-800",
+      brand: "border-brand-200 bg-brand-50 text-brand-800",
+      success: "border-emerald-200 bg-emerald-50 text-emerald-800",
+      danger: "border-red-200 bg-red-50 text-red-800",
+      warning: "border-amber-200 bg-amber-50 text-amber-800",
+      info: "border-sky-200 bg-sky-50 text-sky-800",
+      light: "border-slate-200 bg-slate-50 text-slate-700",
+      dark: "border-slate-950 bg-slate-950 text-white",
+    },
     content: "text-slate-600",
   },
   dark: {
     list: "border-zinc-800 bg-zinc-900/80",
     triggerIdle:
       "text-stone-300 hover:bg-zinc-950 hover:text-stone-50 focus-visible:outline-zinc-700",
-    triggerActive:
-      "border-zinc-800 bg-zinc-950 text-stone-50",
+    triggerActive: {
+      neutral: "border-zinc-800 bg-zinc-950 text-stone-50",
+      primary: "border-blue-500/40 bg-blue-500/10 text-blue-200",
+      brand: "border-brand-500/40 bg-brand-500/10 text-brand-200",
+      success: "border-emerald-500/40 bg-emerald-500/10 text-emerald-200",
+      danger: "border-red-500/40 bg-red-500/10 text-red-200",
+      warning: "border-amber-500/40 bg-amber-500/10 text-amber-200",
+      info: "border-sky-500/40 bg-sky-500/10 text-sky-200",
+      light: "border-slate-500/50 bg-slate-100/10 text-slate-50",
+      dark: "border-slate-700 bg-slate-900 text-white",
+    },
     content: "text-stone-300",
   },
 };
@@ -82,6 +100,7 @@ export function Tabs({
   activationMode = "automatic",
   children,
   className,
+  color = "neutral",
   defaultValue,
   onValueChange,
   orientation = "horizontal",
@@ -111,11 +130,14 @@ export function Tabs({
   const resolvedActivationMode =
     activationMode === "manual" ? "manual" : "automatic";
   const resolvedSize = Object.hasOwn(TABS_SIZE_CLASSES, size) ? size : "md";
+  const resolvedColor =
+    TABS_THEME_CLASSES.light.triggerActive[color] ? color : "neutral";
 
   const contextValue = useMemo(
     () => ({
       activationMode: resolvedActivationMode,
       baseId: generatedId,
+      color: resolvedColor,
       orientation: resolvedOrientation,
       setValue,
       size: resolvedSize,
@@ -124,6 +146,7 @@ export function Tabs({
     [
       generatedId,
       resolvedActivationMode,
+      resolvedColor,
       resolvedOrientation,
       resolvedSize,
       setValue,
@@ -176,6 +199,7 @@ export function TabsTrigger({
   const {
     activationMode,
     baseId,
+    color,
     orientation,
     setValue,
     size,
@@ -255,7 +279,7 @@ export function TabsTrigger({
         TABS_TRIGGER_PRIMITIVES.base,
         TABS_SIZE_CLASSES[size].trigger,
         orientation === "vertical" && TABS_TRIGGER_PRIMITIVES.vertical,
-        isSelected ? ui.triggerActive : ui.triggerIdle,
+        isSelected ? ui.triggerActive[color] : ui.triggerIdle,
         className,
       )}
     >

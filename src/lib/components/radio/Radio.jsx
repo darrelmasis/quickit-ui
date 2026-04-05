@@ -1,7 +1,8 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
+import { Label } from "@/lib/components/label";
 
 const RADIO_THEME_CLASSES = {
   light: {
@@ -10,6 +11,7 @@ const RADIO_THEME_CLASSES = {
     colors: {
       neutral: { ring: "peer-checked:border-neutral-950", dot: "bg-neutral-950" },
       primary: { ring: "peer-checked:border-blue-700", dot: "bg-blue-700" },
+      brand: { ring: "peer-checked:border-brand-700", dot: "bg-brand-700" },
       success: { ring: "peer-checked:border-emerald-600", dot: "bg-emerald-600" },
       danger: { ring: "peer-checked:border-red-600", dot: "bg-red-600" },
       warning: { ring: "peer-checked:border-amber-500", dot: "bg-amber-500" },
@@ -24,6 +26,7 @@ const RADIO_THEME_CLASSES = {
     colors: {
       neutral: { ring: "peer-checked:border-neutral-100", dot: "bg-neutral-100" },
       primary: { ring: "peer-checked:border-blue-300", dot: "bg-blue-300" },
+      brand: { ring: "peer-checked:border-brand-300", dot: "bg-brand-300" },
       success: { ring: "peer-checked:border-emerald-300", dot: "bg-emerald-300" },
       danger: { ring: "peer-checked:border-red-300", dot: "bg-red-300" },
       warning: { ring: "peer-checked:border-amber-300", dot: "bg-amber-300" },
@@ -55,15 +58,19 @@ const Radio = forwardRef(function Radio(
   {
     className,
     color = "neutral",
+    containerClassName,
     disabled = false,
     id,
     invalid = false,
+    label,
+    labelClassName,
     required = false,
     size = "md",
     ...props
   },
   ref,
 ) {
+  const generatedId = useId();
   const theme = resolveTheme(useQuickitTheme());
   const ui = RADIO_THEME_CLASSES[theme];
   const field = useFormControl();
@@ -73,6 +80,7 @@ const Radio = forwardRef(function Radio(
   const resolvedColor = ui.colors[color] ? color : "neutral";
   const resolvedSize = RADIO_SIZE_CLASSES[size] ? size : "md";
   const sizeUi = RADIO_SIZE_CLASSES[resolvedSize];
+  const resolvedId = id ?? field?.controlId ?? generatedId;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -81,23 +89,23 @@ const Radio = forwardRef(function Radio(
     .filter(Boolean)
     .join(" ") || undefined;
 
-  return (
+  const control = (
     <span className={cn("relative inline-flex shrink-0 cursor-pointer", sizeUi.root, className)}>
       <input
         ref={ref}
         type="radio"
-        id={id ?? field?.controlId}
+        id={resolvedId}
         required={resolvedRequired}
         disabled={resolvedDisabled}
         aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
-        className="peer absolute inset-0 m-0 cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
+        className="peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
         {...props}
       />
       <span
         aria-hidden="true"
         className={cn(
-          "inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
+          "pointer-events-none inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
           sizeUi.control,
           ui.ring,
           ui.focus,
@@ -106,12 +114,25 @@ const Radio = forwardRef(function Radio(
       >
         <span
           className={cn(
-            "scale-0 rounded-full transition-transform duration-150",
+            "pointer-events-none scale-0 rounded-full transition-transform duration-150",
             sizeUi.dot,
             resolvedInvalid ? ui.invalidDot : ui.colors[resolvedColor].dot,
           )}
         />
       </span>
+    </span>
+  );
+
+  if (!label) {
+    return control;
+  }
+
+  return (
+    <span className={cn("inline-flex items-center gap-3", containerClassName)}>
+      {control}
+      <Label htmlFor={resolvedId} className={labelClassName}>
+        {label}
+      </Label>
     </span>
   );
 });

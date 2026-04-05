@@ -9,10 +9,13 @@ import {
   Link,
 } from "@/lib";
 import {
+  ALL_ITEMS,
   COMPONENT_ITEMS,
   COMPONENT_GROUPS,
+  DEFAULT_COMPONENT_SECTION,
   DEFAULT_INTRO_SECTION,
   docsTheme,
+  EXAMPLE_ITEMS,
   getInitialTheme,
   INTRO_ITEMS,
   STORAGE_KEY,
@@ -22,16 +25,29 @@ import IntroductionDocs from "@/docs/sections/IntroductionDocs";
 import FoundationsDocs from "@/docs/sections/FoundationsDocs";
 import CoreDocs from "@/docs/sections/CoreDocs";
 import FormDocs from "@/docs/sections/FormDocs";
+import ExamplesDocs from "@/docs/sections/ExamplesDocs";
 import OverlayDocs from "@/docs/sections/OverlayDocs";
 import NavigationDocs from "@/docs/sections/NavigationDocs";
 import UtilityDocs from "@/docs/sections/UtilityDocs";
 import { cn } from "@/lib/utils";
 import packageMeta from "../../package.json";
 
-const ALL_ITEMS = [...INTRO_ITEMS, ...COMPONENT_ITEMS];
+function normalizePathname(pathname) {
+  if (!pathname || pathname === "/") {
+    return DEFAULT_INTRO_SECTION;
+  }
 
-function findSection(hash, fallback = DEFAULT_INTRO_SECTION) {
-  return ALL_ITEMS.some((item) => item.href === hash) ? hash : fallback;
+  return pathname.endsWith("/") && pathname.length > 1
+    ? pathname.slice(0, -1)
+    : pathname;
+}
+
+function findSection(pathname, fallback = DEFAULT_INTRO_SECTION) {
+  const normalizedPathname = normalizePathname(pathname);
+
+  return ALL_ITEMS.some((item) => item.href === normalizedPathname)
+    ? normalizedPathname
+    : fallback;
 }
 
 function getInitialActiveSection() {
@@ -39,7 +55,7 @@ function getInitialActiveSection() {
     return DEFAULT_INTRO_SECTION;
   }
 
-  return findSection(window.location.hash, DEFAULT_INTRO_SECTION);
+  return findSection(window.location.pathname, DEFAULT_INTRO_SECTION);
 }
 
 const NAV_THEME_CLASSES = {
@@ -60,6 +76,18 @@ const NAV_THEME_CLASSES = {
     helper: "text-zinc-500",
   },
 };
+
+const SIDEBAR_SCROLLBAR_CLASSES = [
+  "overflow-y-auto [scrollbar-width:thin]",
+  "[scrollbar-color:rgba(113,113,122,0.55)_transparent]",
+  "[&::-webkit-scrollbar]:w-2",
+  "[&::-webkit-scrollbar-track]:bg-transparent",
+  "[&::-webkit-scrollbar-thumb]:rounded-full",
+  "[&::-webkit-scrollbar-thumb]:border-[3px]",
+  "[&::-webkit-scrollbar-thumb]:border-transparent",
+  "[&::-webkit-scrollbar-thumb]:bg-zinc-500/55",
+  "[&::-webkit-scrollbar-thumb:hover]:bg-zinc-500/75",
+].join(" ");
 
 export default function DocsApp() {
   const [theme, setTheme] = useState(getInitialTheme);
@@ -100,17 +128,16 @@ export default function DocsApp() {
 
   const activeComponentItem =
     COMPONENT_ITEMS.find((item) => item.href === activeSection) ?? null;
+  const activeExamplePage =
+    EXAMPLE_ITEMS.find((item) => item.href === activeSection) ?? null;
   const activeIntroItem =
     INTRO_ITEMS.find((item) => item.href === activeSection) ?? null;
-  const activeComponentGroup =
-    COMPONENT_GROUPS.find((group) =>
-      group.items.some((item) => item.href === activeSection),
-    ) ?? null;
-  const activeSectionId = activeSection.slice(1);
-  const activeVisibleSet = useMemo(
-    () => new Set([activeSectionId]),
-    [activeSectionId],
-  );
+  const activeSectionId =
+    activeIntroItem?.id ??
+    activeExamplePage?.id ??
+    activeComponentItem?.id ??
+    "getting-started";
+  const activeVisibleSet = new Set([activeSectionId]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -150,25 +177,94 @@ export default function DocsApp() {
   }, []);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setActiveSection(
-        findSection(window.location.hash, DEFAULT_INTRO_SECTION),
-      );
+    const handlePopState = () => {
+      setActiveSection(findSection(window.location.pathname));
     };
 
-    handleHashChange();
-    window.addEventListener("hashchange", handleHashChange);
+    handlePopState();
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
-      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, []);
 
-  const navigateToSection = (href) => {
+  const navigateToSection = (href, { scrollToTop = false } = {}) => {
+    if (href !== activeSection) {
+      window.history.pushState(null, "", href);
+    }
+
     setActiveSection(href);
     setMobileMenuOpen(false);
-    window.history.replaceState(null, "", href);
+
+    if (scrollToTop) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
+
+  useEffect(() => {
+    const handleDocumentClick = (event) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
+      const anchor = event.target.closest('a[href]');
+
+      if (!anchor) {
+        return;
+      }
+
+      const href = anchor.getAttribute("href");
+
+      if (!href) {
+        return;
+      }
+
+      if (href.startsWith("#")) {
+        event.preventDefault();
+        return;
+      }
+
+      if (href.startsWith("mailto:") || href.startsWith("tel:")) {
+        return;
+      }
+
+      const url = new URL(anchor.href, window.location.origin);
+
+      if (url.origin !== window.location.origin) {
+        return;
+      }
+
+      const nextSection = findSection(url.pathname);
+
+      if (nextSection !== url.pathname && url.pathname !== "/") {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (nextSection !== activeSection) {
+        window.history.pushState(null, "", nextSection);
+      }
+
+      setActiveSection(nextSection);
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    document.addEventListener("click", handleDocumentClick);
+
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, [activeSection]);
 
   const handleButtonLoadingStart = () => {
     setButtonLoading(true);
@@ -192,36 +288,61 @@ export default function DocsApp() {
           "justify-start text-left disabled:cursor-default disabled:opacity-100",
           isActive ? navUi.itemActive : navUi.itemIdle,
         )}
-        onClick={() => navigateToSection(item.href)}
+        onClick={() =>
+          navigateToSection(item.href, { scrollToTop: true })
+        }
       >
         {item.label}
       </Button>
     );
   };
 
+  const renderHeaderNavLink = ({ href, label, isActive, color = "neutral" }) => (
+    <Link
+      key={href}
+      href={href}
+      appearance="button"
+      activeMotion={false}
+      size="sm"
+      color={color}
+      variant={isActive ? "solid" : "ghost"}
+      aria-current={isActive ? "page" : undefined}
+      className={cn(
+        "min-w-0 shrink-0 whitespace-nowrap px-3",
+        !isActive && navUi.itemIdle,
+      )}
+    >
+      {label}
+    </Link>
+  );
+
   const renderActivePage = () => {
     if (activeIntroItem) {
       return <IntroductionDocs ui={ui} visibleIds={activeVisibleSet} />;
     }
 
-    switch (activeSection) {
-      case "#provider":
-      case "#theme":
-      case "#colors":
-      case "#states":
+    if (activeExamplePage) {
+      return <ExamplesDocs ui={ui} />;
+    }
+
+    switch (activeSectionId) {
+      case "provider":
+      case "theme":
+      case "colors":
+      case "states":
         return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;
-      case "#accordion":
-      case "#breadcrumb":
-      case "#pagination":
-      case "#tabs":
+      case "accordion":
+      case "breadcrumb":
+      case "pagination":
+      case "tabs":
         return <NavigationDocs ui={ui} visibleIds={activeVisibleSet} />;
-      case "#avatar":
-      case "#badge":
-      case "#empty-state":
-      case "#link":
-      case "#skeleton":
+      case "avatar":
+      case "badge":
+      case "empty-state":
+      case "link":
+      case "skeleton":
         return <UtilityDocs ui={ui} visibleIds={activeVisibleSet} />;
-      case "#button":
+      case "button":
         return (
           <CoreDocs
             ui={ui}
@@ -230,19 +351,19 @@ export default function DocsApp() {
             onButtonLoadingStart={handleButtonLoadingStart}
           />
         );
-      case "#checkbox":
-      case "#form-control":
-      case "#input":
-      case "#label":
-      case "#radio":
-      case "#select":
-      case "#switch":
-      case "#textarea":
+      case "checkbox":
+      case "form-control":
+      case "input":
+      case "label":
+      case "radio":
+      case "select":
+      case "switch":
+      case "textarea":
         return <FormDocs ui={ui} visibleIds={activeVisibleSet} />;
-      case "#dropdown":
-      case "#modal":
-      case "#popover":
-      case "#tooltip":
+      case "dropdown":
+      case "modal":
+      case "popover":
+      case "tooltip":
         return (
           <OverlayDocs
             ui={ui}
@@ -266,54 +387,85 @@ export default function DocsApp() {
         <header
           className={`sticky top-0 z-50 border-b backdrop-blur ${ui.surface}`}
         >
-          <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-              <Link
-                href="/"
-                className={`flex min-w-0 items-center gap-2 ${theme === "dark" ? "text-white" : "text-neutral-900"}`}
-              >
-                <span className="flex h-8 items-center justify-center px-1">
-                  <QuickitLogo className="h-4 w-auto sm:h-5" />
-                </span>
-              </Link>
-
-              <span className="text-sm font-medium text-neutral-500">{`v${packageMeta.version}`}</span>
-            </div>
-
-            <div className="flex min-w-0 items-center gap-2">
-              <div className="hidden items-center gap-2 md:flex">
-                <Button
-                  size="sm"
-                  color="neutral"
-                  variant={theme === "light" ? "solid" : "ghost"}
-                  pressed={theme === "light"}
-                  onClick={() => setTheme("light")}
+          <div className="mx-auto max-w-[1800px] px-4 py-3 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+                <Link
+                  href="/"
+                  className={`flex min-w-0 items-center gap-2 ${theme === "dark" ? "text-white" : "text-neutral-900"}`}
                 >
-                  Claro
-                </Button>
-                <Button
-                  size="sm"
-                  color="neutral"
-                  variant={theme === "dark" ? "solid" : "ghost"}
-                  pressed={theme === "dark"}
-                  onClick={() => setTheme("dark")}
-                >
-                  Oscuro
-                </Button>
+                  <span className="flex h-8 items-center justify-center px-1">
+                    <QuickitLogo className="h-4 w-auto sm:h-5" />
+                  </span>
+                </Link>
+
+                <span className="text-sm font-medium text-neutral-500">{`v${packageMeta.version}`}</span>
+
+                <div className="hidden min-w-0 items-center gap-3 lg:flex">
+                  <div className="flex min-w-0 items-center gap-2 overflow-x-auto">
+                    {INTRO_ITEMS.map((item) =>
+                      renderHeaderNavLink({
+                        href: item.href,
+                        label: item.label,
+                        isActive: activeSection === item.href,
+                      }),
+                    )}
+                  </div>
+                  <div className={`h-6 w-px shrink-0 ${ui.divider}`} />
+                  <div className="flex min-w-0 items-center gap-2 overflow-x-auto">
+                    {EXAMPLE_ITEMS.map((item) =>
+                      renderHeaderNavLink({
+                        href: item.href,
+                        label: item.label,
+                        isActive: activeSection === item.href,
+                        color: "brand",
+                      }),
+                    )}
+                    {renderHeaderNavLink({
+                      href: activeComponentItem?.href ?? DEFAULT_COMPONENT_SECTION,
+                      label: "Componentes",
+                      isActive: Boolean(activeComponentItem),
+                    })}
+                  </div>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 lg:hidden">
-                <Button
-                  size="sm"
-                  color="neutral"
-                  variant="outline"
-                  pressed={mobileMenuOpen}
-                  onClick={() => setMobileMenuOpen((current) => !current)}
-                >
-                  Menú
-                </Button>
+              <div className="flex min-w-0 items-center gap-2">
+                <div className="hidden items-center gap-2 md:flex">
+                  <Button
+                    size="sm"
+                    color="neutral"
+                    variant={theme === "light" ? "solid" : "ghost"}
+                    pressed={theme === "light"}
+                    onClick={() => setTheme("light")}
+                  >
+                    Claro
+                  </Button>
+                  <Button
+                    size="sm"
+                    color="neutral"
+                    variant={theme === "dark" ? "solid" : "ghost"}
+                    pressed={theme === "dark"}
+                    onClick={() => setTheme("dark")}
+                  >
+                    Oscuro
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-2 lg:hidden">
+                  <Button
+                    size="sm"
+                    color="neutral"
+                    variant="outline"
+                    pressed={mobileMenuOpen}
+                    onClick={() => setMobileMenuOpen((current) => !current)}
+                  >
+                    Menú
+                  </Button>
+                </div>
               </div>
             </div>
+
           </div>
         </header>
 
@@ -343,17 +495,19 @@ export default function DocsApp() {
                     Cerrar
                   </Button>
                 </div>
-                <p className={`mt-2 text-xs leading-5 ${ui.body}`}>
-                  Introducción, componentes y tema en una sola navegación
-                  lateral.
-                </p>
-              </div>
+                  <p className={`mt-2 text-xs leading-5 ${ui.body}`}>
+                    Navega entre guía, ejemplos y el área de componentes con
+                    una estructura más clara.
+                  </p>
+                </div>
 
               <div
-                className="min-h-0 flex-1 overflow-y-auto p-4 [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                className={cn(
+                  "min-h-0 flex-1 p-4",
+                  SIDEBAR_SCROLLBAR_CLASSES,
+                )}
+                >
+                  <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
                   <p
                     className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
                   >
@@ -381,26 +535,62 @@ export default function DocsApp() {
                       Oscuro
                     </Button>
                   </div>
-                </div>
-
-                <div
-                  className={cn(
-                    "mt-4 rounded-[1.25rem] border p-4",
-                    navUi.card,
-                  )}
-                >
-                  <p
-                    className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                  >
-                    Introducción
-                  </p>
-                  <div className="mt-3 space-y-2">
-                    {INTRO_ITEMS.map(renderNavItem)}
                   </div>
-                </div>
 
-                <div
-                  className={cn(
+                  <div
+                    className={cn(
+                      "mt-4 rounded-[1.25rem] border p-4",
+                      navUi.card,
+                    )}
+                  >
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                  >
+                    Guía
+                  </p>
+                    <div className="mt-3 space-y-2">
+                      {INTRO_ITEMS.map(renderNavItem)}
+                    </div>
+                  </div>
+
+                  <div
+                    className={cn(
+                      "mt-4 rounded-[1.25rem] border p-4",
+                      navUi.card,
+                    )}
+                  >
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                    >
+                      Ejemplos
+                    </p>
+                    <div className="mt-3 space-y-2">
+                      {EXAMPLE_ITEMS.map(renderNavItem)}
+                    </div>
+                  </div>
+
+                  <div
+                    className={cn(
+                      "mt-4 rounded-[1.25rem] border p-4",
+                      navUi.card,
+                    )}
+                  >
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                    >
+                      Área de componentes
+                    </p>
+                    <div className="mt-3 space-y-2">
+                      {renderHeaderNavLink({
+                        href: activeComponentItem?.href ?? DEFAULT_COMPONENT_SECTION,
+                        label: "Componentes",
+                        isActive: Boolean(activeComponentItem),
+                      })}
+                    </div>
+                  </div>
+
+                  <div
+                    className={cn(
                     "mt-4 rounded-[1.25rem] border p-4",
                     navUi.card,
                   )}
@@ -411,9 +601,6 @@ export default function DocsApp() {
                     >
                       Componentes
                     </p>
-                    <span className={`text-xs ${navUi.helper}`}>
-                      {filteredComponents.length}
-                    </span>
                   </div>
                   <div className="mt-3">
                     <Input
@@ -452,23 +639,19 @@ export default function DocsApp() {
           </div>
         ) : null}
 
-        <div className="mx-auto w-full max-w-[1800px] lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8 lg:px-8">
-          <aside className="hidden py-6 lg:py-8 lg:block">
-            <div className={cn("rounded-[1.5rem] border p-4", navUi.card)}>
-              <p
-                className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-              >
-                Introducción
-              </p>
-              <div className="mt-3 space-y-2">
-                {INTRO_ITEMS.map(renderNavItem)}
-              </div>
-            </div>
-
-            <div className="sticky top-[89px] mt-4">
+        <div
+          className={cn(
+            "mx-auto w-full max-w-[1800px] lg:px-8",
+            activeComponentItem &&
+              "lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8",
+          )}
+        >
+          {activeComponentItem ? (
+          <aside className="hidden lg:sticky lg:top-[61px] lg:block lg:h-[calc(100vh-61px)] lg:py-8">
+            <div className="h-full">
               <div
                 className={cn(
-                  "flex max-h-[calc(100vh-89px-1.5rem)] min-h-0 flex-col overflow-hidden rounded-[1.5rem] border",
+                  "flex h-full min-h-0 flex-col overflow-hidden rounded-[1.5rem] border",
                   navUi.card,
                 )}
               >
@@ -485,9 +668,6 @@ export default function DocsApp() {
                     >
                       Componentes
                     </p>
-                    <span className={`text-xs ${navUi.helper}`}>
-                      {filteredComponents.length}
-                    </span>
                   </div>
                   <div className="mt-3">
                     <Input
@@ -500,8 +680,10 @@ export default function DocsApp() {
                 </div>
 
                 <div
-                  className="min-h-0 flex-1 overflow-y-auto p-4 [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0"
-                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                  className={cn(
+                    "min-h-0 flex-1 p-4",
+                    SIDEBAR_SCROLLBAR_CLASSES,
+                  )}
                 >
                   {filteredComponentGroups.length ? (
                     <div className="space-y-4">
@@ -527,70 +709,21 @@ export default function DocsApp() {
               </div>
             </div>
           </aside>
+          ) : null}
 
-          <section className="min-w-0 px-4 py-6 sm:px-6 lg:px-0 lg:py-8">
-            <div
-              className={cn(
-                "rounded-[1.75rem] border p-5 sm:p-6",
-                ui.introCard,
-              )}
-            >
-              <div className="flex flex-wrap gap-2">
-                <span
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${ui.badge}`}
-                >
-                  Quickit UI
-                </span>
-                <span
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${ui.badge}`}
-                >
-                  {activeIntroItem
-                    ? "Guía"
-                    : (activeComponentGroup?.label ?? "Componente")}
-                </span>
-                <span
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${ui.badge}`}
-                >
-                  Ejemplos + API
-                </span>
-              </div>
+          <section
+            className={cn(
+              "min-w-0 px-4 py-6 sm:px-6 lg:py-8",
+              activeComponentItem
+                ? "lg:px-0"
+                : activeExamplePage
+                  ? "mx-auto max-w-[1400px]"
+                  : "mx-auto max-w-6xl",
+            )}
+          >
+            <div>{renderActivePage()}</div>
 
-              <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <p
-                    className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                  >
-                    {activeIntroItem ? "Introducción" : "Componente"}
-                  </p>
-                  <h1
-                    className={`mt-2 text-2xl font-semibold tracking-[-0.03em] sm:text-3xl ${ui.title}`}
-                  >
-                    {activeIntroItem?.label ??
-                      activeComponentItem?.label ??
-                      "Quickit UI"}
-                  </h1>
-                  <p className={`mt-3 max-w-3xl text-sm leading-6 ${ui.body}`}>
-                    {activeIntroItem
-                      ? "Guías de arranque, instalación y compatibilidad para empezar a usar la librería sin ruido visual ni navegación duplicada."
-                      : "Referencia del componente seleccionado con ejemplos reales, props y notas de integración en una estructura más compacta."}
-                  </p>
-                </div>
-
-                <Button
-                  size="sm"
-                  color="neutral"
-                  variant="outline"
-                  className="lg:hidden"
-                  onClick={() => setMobileMenuOpen(true)}
-                >
-                  Ver navegación
-                </Button>
-              </div>
-            </div>
-
-            <div className="mt-8">{renderActivePage()}</div>
-
-            {!activeIntroItem &&
+            {activeComponentItem &&
             !filteredComponents.some((item) => item.href === activeSection) ? (
               <div className="pt-8">
                 <EmptyState>

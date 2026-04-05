@@ -66,31 +66,60 @@ export default function App() {
 
 ## Personalizar colores
 
-La API de color es semántica: `neutral`, `primary`, `success`, `danger`, `warning`, `info`, `light` y `dark`.
+La API de color es semántica: `neutral`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light` y `dark`.
 
 La lógica recomendada es esta:
-- si quieres cambiar un color existente en toda la librería, sobrescribe sus variables CSS
-- si quieres usar tu color de marca con la API actual, remapea uno de esos slots semánticos
+- cada color semántico usa una familia Tailwind interna
+- si reemplazas esa familia, cambias ese color en toda la librería
+- `brand` existe precisamente para tu color de marca y consume `brand-*`
+- si quieres usar tu color de marca en otro slot, reemplaza la familia que consume ese slot semántico
 - si quieres un color nuevo solo en un caso puntual, usa `className`
-- si quieres soportar un nuevo valor como `color="brand"` en toda la librería, eso requiere ampliar la API
+- si quieres soportar un nuevo valor como `color="gray"` o `color="clientA"` en toda la librería, eso requiere ampliar la API
 
-Ejemplo para cambiar colores existentes:
+Mapa actual:
+
+```txt
+neutral -> neutral-*
+primary -> blue-*
+brand   -> brand-*
+success -> emerald-*
+danger  -> red-*
+warning -> amber-*
+info    -> sky-*
+```
+
+Ejemplo recomendado: si tu marca debe vivir en `brand`, reemplaza `brand-*`:
 
 ```css
 @import "quickit-ui/styles.css";
 
 :root {
-  /* color="neutral" */
-  --color-neutral-700: oklch(46% 0 0);
-  --color-neutral-800: oklch(39% 0 0);
-
-  /* color="primary" */
-  --color-blue-700: oklch(58% 0.18 275);
-  --color-blue-800: oklch(51% 0.17 275);
+  --color-brand-300: oklch(0.86 0.19 126);
+  --color-brand-400: oklch(0.8 0.2 126);
+  --color-brand-500: oklch(0.74 0.2 126);
+  --color-brand-600: oklch(0.68 0.19 126);
+  --color-brand-700: oklch(0.62 0.18 126);
+  --color-brand-800: oklch(0.55 0.16 126);
 }
 ```
 
-Si quieres reutilizar un slot semántico como color de marca:
+Si prefieres que tu marca viva en `primary`, entonces reemplaza `blue-*`.
+
+Si quieres cambiar `neutral`, reemplaza `neutral-*`:
+
+```css
+:root {
+  --color-neutral-50: oklch(0.985 0.002 247);
+  --color-neutral-100: oklch(0.97 0.004 247);
+  --color-neutral-200: oklch(0.93 0.01 252);
+  --color-neutral-300: oklch(0.87 0.018 253);
+  --color-neutral-700: oklch(0.37 0.03 257);
+  --color-neutral-800: oklch(0.28 0.028 260);
+  --color-neutral-900: oklch(0.21 0.026 265);
+}
+```
+
+También puedes reutilizar otro slot semántico como color de marca:
 
 ```css
 :root {
@@ -99,6 +128,28 @@ Si quieres reutilizar un slot semántico como color de marca:
   --color-sky-700: oklch(55% 0.18 330);
 }
 ```
+
+Si creas una paleta nueva como `gray-*`, podrás usarla en clases Tailwind, pero no aparece sola en la API de Quickit:
+
+```css
+@theme {
+  --color-gray-50: oklch(0.984 0.003 247.858);
+  --color-gray-100: oklch(0.968 0.007 247.896);
+  --color-gray-200: oklch(0.929 0.013 255.508);
+  --color-gray-300: oklch(0.869 0.022 252.894);
+  --color-gray-400: oklch(0.704 0.04 256.788);
+  --color-gray-500: oklch(0.554 0.046 257.417);
+  --color-gray-600: oklch(0.446 0.043 257.281);
+  --color-gray-700: oklch(0.372 0.044 257.287);
+  --color-gray-800: oklch(0.279 0.041 260.031);
+  --color-gray-900: oklch(0.208 0.042 265.755);
+  --color-gray-950: oklch(0.129 0.042 264.695);
+}
+```
+
+Eso significa:
+- sí puedes usar `bg-gray-500`, `text-gray-700`, etc. en `className`
+- no puedes usar `color="gray"` a menos que la librería amplíe su mapa de colores
 
 Si quieres un color nuevo puntual, puedes sobreescribir estilos con `className`:
 

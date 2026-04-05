@@ -1,7 +1,7 @@
 import { Checkbox, FormControl, FormDescription, FormMessage, Input, Label, Radio, Select, Switch, Textarea } from "@/lib";
 import { CodeExample, PreviewPanel, PropsTable, SectionCard, SectionHeading } from "@/docs/components/DocsPrimitives";
 
-const colors = ["neutral", "primary", "success", "danger", "warning", "info"];
+const colors = ["neutral", "primary", "brand", "success", "danger", "warning", "info"];
 const apis = {
   formControl: [
     { prop: "id", type: "string", defaultValue: "auto", description: "Base para conectar label, descripción, mensaje y control." },
@@ -34,17 +34,26 @@ const apis = {
   ],
   checkbox: [
     { prop: "size", type: "sm | md", defaultValue: "md", description: "Ajusta el tamaño visual del box y del checkmark." },
-    { prop: "color", type: "neutral | primary | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del estado checked." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del estado checked." },
+    { prop: "label", type: "ReactNode", defaultValue: "undefined", description: "Renderiza internamente un `Label` asociado al checkbox." },
+    { prop: "labelClassName", type: "string", defaultValue: "undefined", description: "Permite ajustar el estilo del label interno." },
+    { prop: "containerClassName", type: "string", defaultValue: "undefined", description: "Ajusta el wrapper cuando control y label se renderizan juntos." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Prioriza el estado visual de error." },
   ],
   radio: [
     { prop: "size", type: "sm | md", defaultValue: "md", description: "Ajusta el tamaño visual del radio y del punto interno." },
-    { prop: "color", type: "neutral | primary | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del punto activo." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del punto activo." },
+    { prop: "label", type: "ReactNode", defaultValue: "undefined", description: "Renderiza internamente un `Label` asociado al radio." },
+    { prop: "labelClassName", type: "string", defaultValue: "undefined", description: "Permite ajustar el estilo del label interno." },
+    { prop: "containerClassName", type: "string", defaultValue: "undefined", description: "Ajusta el wrapper cuando control y label se renderizan juntos." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Prioriza el estado visual de error." },
   ],
   switch: [
     { prop: "size", type: "sm | md", defaultValue: "md", description: "Ajusta el tamaño del track y el thumb." },
-    { prop: "color", type: "neutral | primary | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del estado activo." },
+    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del estado activo." },
+    { prop: "label", type: "ReactNode", defaultValue: "undefined", description: "Renderiza internamente un `Label` asociado al switch." },
+    { prop: "labelClassName", type: "string", defaultValue: "undefined", description: "Permite ajustar el estilo del label interno." },
+    { prop: "containerClassName", type: "string", defaultValue: "undefined", description: "Ajusta el wrapper cuando control y label se renderizan juntos." },
     { prop: "checked / defaultChecked", type: "boolean", defaultValue: "false", description: "Modo controlado o no controlado." },
   ],
 };
@@ -64,11 +73,354 @@ export function FormDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "select") ? <SectionCard id="select" className={ui.divider}><SectionHeading category="Formularios" title="Select" description="Select custom con trigger y lista desplegable personalizada. Mantiene una API simple con `<option>`, pero visualmente usa un listbox propio." ui={ui} /><div className="mt-6 space-y-4"><div className="grid gap-4 md:grid-cols-2"><PreviewPanel ui={ui} title="Uso base" code={`<FormControl>\n  <Label>Tema de documentación</Label>\n  <Select defaultValue="system">\n    <option value="system">System</option>\n    <option value="light">Light</option>\n    <option value="dark">Dark</option>\n  </Select>\n</FormControl>`}><FormControl><Label>Tema de documentación</Label><Select defaultValue="system"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></Select></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Con placeholder e invalid" code={`<FormControl invalid>\n  <Label>Estado</Label>\n  <Select placeholder="Selecciona un estado">\n    <option value="draft">Draft</option>\n    <option value="review">Review</option>\n    <option value="published">Published</option>\n  </Select>\n  <FormMessage>Debes elegir un estado.</FormMessage>\n</FormControl>`}><FormControl invalid><Label>Estado</Label><Select placeholder="Selecciona un estado"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option></Select><FormMessage>Debes elegir un estado.</FormMessage></FormControl></PreviewPanel></div><PreviewPanel ui={ui} title="Tamaños" code={`<div className="grid gap-4 md:grid-cols-3">\n  <FormControl>\n    <Label>Tamaño sm</Label>\n    <Select size="sm" defaultValue="compacto">\n      <option value="compacto">Compacto</option>\n      <option value="medio">Medio</option>\n    </Select>\n  </FormControl>\n  <FormControl>\n    <Label>Tamaño md</Label>\n    <Select size="md" defaultValue="medio">\n      <option value="compacto">Compacto</option>\n      <option value="medio">Medio</option>\n    </Select>\n  </FormControl>\n  <FormControl>\n    <Label>Tamaño lg</Label>\n    <Select size="lg" defaultValue="grande">\n      <option value="medio">Medio</option>\n      <option value="grande">Grande</option>\n    </Select>\n  </FormControl>\n</div>`}><div className="grid gap-4 md:grid-cols-3"><FormControl><Label>Tamaño sm</Label><Select size="sm" defaultValue="compacto"><option value="compacto">Compacto</option><option value="medio">Medio</option></Select></FormControl><FormControl><Label>Tamaño md</Label><Select size="md" defaultValue="medio"><option value="compacto">Compacto</option><option value="medio">Medio</option></Select></FormControl><FormControl><Label>Tamaño lg</Label><Select size="lg" defaultValue="grande"><option value="medio">Medio</option><option value="grande">Grande</option></Select></FormControl></div></PreviewPanel><PreviewPanel ui={ui} title="Sin portal y con onValueChange" className="max-w-2xl" code={`<FormControl>\n  <Label>Vista</Label>\n  <Select defaultValue="list" usePortal={false} onValueChange={(value) => console.log(value)}>\n    <option value="list">List</option>\n    <option value="grid">Grid</option>\n    <option value="compact">Compact</option>\n  </Select>\n</FormControl>`}><FormControl><Label>Vista</Label><Select defaultValue="list" usePortal={false} onValueChange={() => {}}><option value="list">List</option><option value="grid">Grid</option><option value="compact">Compact</option></Select></FormControl></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.select} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Vista</Label>\n  <Select defaultValue="grid" onValueChange={(value) => console.log(value)}>\n    <option value="list">List</option>\n    <option value="grid">Grid</option>\n    <option value="compact">Compact</option>\n  </Select>\n</FormControl>`} /></div></SectionCard> : null}
 
-      {isVisible(visibleIds, "checkbox") ? <SectionCard id="checkbox" className={ui.divider}><SectionHeading category="Formularios" title="Checkbox" description="Checkbox custom con render consistente en light y dark mode, más colores semánticos opcionales sobre un default neutral." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Tamaños" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox size="sm" defaultChecked />\n    <span>Small</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox size="md" defaultChecked />\n    <span>Medium</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6"><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox size="sm" defaultChecked /><span className={`text-sm ${ui.body}`}>Small</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox size="md" defaultChecked /><span className={`text-sm ${ui.body}`}>Medium</span></label></div></PreviewPanel><PreviewPanel ui={ui} title="Colores" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox defaultChecked color="neutral" />\n    <span>neutral</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox defaultChecked color="primary" />\n    <span>primary</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox defaultChecked color="success" />\n    <span>success</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6">{colors.map((color) => <label key={color} className="inline-flex cursor-pointer items-center gap-3"><Checkbox defaultChecked color={color} /><span className={`text-sm ${ui.body}`}>{color}</span></label>)}</div></PreviewPanel><PreviewPanel ui={ui} title="Estados" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox />\n    <span>Neutral</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox invalid defaultChecked />\n    <span>Invalid</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox disabled defaultChecked />\n    <span>Disabled</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6"><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox /><span className={`text-sm ${ui.body}`}>Neutral</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox invalid defaultChecked /><span className={`text-sm ${ui.body}`}>Invalid</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox disabled defaultChecked /><span className={`text-sm ${ui.body}`}>Disabled</span></label></div></PreviewPanel><PreviewPanel ui={ui} title="Grupo de preferencias" className="max-w-2xl" code={`<FormControl>\n  <Label optional>Preferencias de publicación</Label>\n  <div className="space-y-3">\n    <label className="inline-flex cursor-pointer items-center gap-3">\n      <Checkbox defaultChecked />\n      <span>Publicar en changelog interno</span>\n    </label>\n    <label className="inline-flex cursor-pointer items-center gap-3">\n      <Checkbox />\n      <span>Notificar al equipo por correo</span>\n    </label>\n  </div>\n</FormControl>`}><FormControl><Label optional>Preferencias de publicación</Label><div className="space-y-3"><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox defaultChecked /><span className={`text-sm ${ui.body}`}>Publicar en changelog interno</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox /><span className={`text-sm ${ui.body}`}>Notificar al equipo por correo</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Checkbox disabled /><span className={`text-sm ${ui.body}`}>Sincronizar con producción</span></label></div></FormControl></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.checkbox} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label optional>Preferencias de publicación</Label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Checkbox defaultChecked />\n    <span>Publicar en changelog interno</span>\n  </label>\n</FormControl>`} /></div></SectionCard> : null}
+      {isVisible(visibleIds, "checkbox") ? (
+        <SectionCard id="checkbox" className={ui.divider}>
+          <SectionHeading
+            category="Formularios"
+            title="Checkbox"
+            description="Checkbox custom con render consistente en light y dark mode, más colores semánticos opcionales sobre un default neutral."
+            ui={ui}
+          />
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Tamaños"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Checkbox id="checkbox-size-sm" size="sm" defaultChecked label="Small" />
+  <Checkbox id="checkbox-size-md" size="md" defaultChecked label="Medium" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                <Checkbox id="checkbox-size-sm-preview" size="sm" defaultChecked label="Small" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-size-md-preview" size="md" defaultChecked label="Medium" labelClassName={`text-sm ${ui.body}`} />
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Colores"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Checkbox id="checkbox-neutral" defaultChecked color="neutral" label="neutral" />
+  <Checkbox id="checkbox-primary" defaultChecked color="primary" label="primary" />
+  <Checkbox id="checkbox-success" defaultChecked color="success" label="success" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                {colors.map((color) => {
+                  const id = `checkbox-color-${color}`;
+                  return (
+                    <Checkbox
+                      key={color}
+                      id={id}
+                      defaultChecked
+                      color={color}
+                      label={color}
+                      labelClassName={`text-sm ${ui.body}`}
+                    />
+                  );
+                })}
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Estados"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Checkbox id="checkbox-default" label="Neutral" />
+  <Checkbox id="checkbox-invalid" invalid defaultChecked label="Invalid" />
+  <Checkbox id="checkbox-disabled" disabled defaultChecked label="Disabled" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                <Checkbox id="checkbox-default-preview" label="Neutral" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-invalid-preview" invalid defaultChecked label="Invalid" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-disabled-preview" disabled defaultChecked label="Disabled" labelClassName={`text-sm ${ui.body}`} />
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Grupo de preferencias"
+              className="max-w-2xl"
+              code={`<FormControl>
+  <Label optional>Preferencias de publicación</Label>
+  <div className="space-y-3">
+    <div className="inline-flex items-center gap-3">
+      <Checkbox id="publish-changelog" defaultChecked />
+      <Label htmlFor="publish-changelog">Publicar en changelog interno</Label>
+    </div>
+    <div className="inline-flex items-center gap-3">
+      <Checkbox id="email-notify" />
+      <Label htmlFor="email-notify">Notificar al equipo por correo</Label>
+    </div>
+  </div>
+</FormControl>`}
+            >
+              <FormControl>
+                <Label optional>Preferencias de publicación</Label>
+                <div className="space-y-3">
+                  <div className="inline-flex items-center gap-3">
+                    <Checkbox id="publish-changelog-preview" defaultChecked />
+                    <Label htmlFor="publish-changelog-preview" className={`text-sm ${ui.body}`}>
+                      Publicar en changelog interno
+                    </Label>
+                  </div>
+                  <div className="inline-flex items-center gap-3">
+                    <Checkbox id="email-notify-preview" />
+                    <Label htmlFor="email-notify-preview" className={`text-sm ${ui.body}`}>
+                      Notificar al equipo por correo
+                    </Label>
+                  </div>
+                  <div className="inline-flex items-center gap-3">
+                    <Checkbox id="sync-production-preview" disabled />
+                    <Label htmlFor="sync-production-preview" className={`text-sm ${ui.body}`}>
+                      Sincronizar con producción
+                    </Label>
+                  </div>
+                </div>
+              </FormControl>
+            </PreviewPanel>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={apis.checkbox} ui={ui} />
+            </div>
+            <CodeExample
+              ui={ui}
+              code={`<FormControl>
+  <Label optional>Preferencias de publicación</Label>
+  <Checkbox
+    id="publish-changelog"
+    defaultChecked
+    label="Publicar en changelog interno"
+  />
+</FormControl>`}
+            />
+          </div>
+        </SectionCard>
+      ) : null}
 
-      {isVisible(visibleIds, "radio") ? <SectionCard id="radio" className={ui.divider}><SectionHeading category="Formularios" title="Radio" description="Radio custom alineado con `Checkbox`, con apariencia consistente entre temas y color opcional para el estado seleccionado." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Tamaños" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-sizes" size="sm" defaultChecked />\n    <span>Small</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-sizes" size="md" />\n    <span>Medium</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6"><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="radio-sizes" size="sm" defaultChecked /><span className={`text-sm ${ui.body}`}>Small</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="radio-sizes" size="md" /><span className={`text-sm ${ui.body}`}>Medium</span></label></div></PreviewPanel><PreviewPanel ui={ui} title="Colores" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-colors" defaultChecked color="neutral" />\n    <span>neutral</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-colors" color="primary" />\n    <span>primary</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6">{colors.map((color) => <label key={color} className="inline-flex cursor-pointer items-center gap-3"><Radio name="radio-colors" defaultChecked={color === "neutral"} color={color} /><span className={`text-sm ${ui.body}`}>{color}</span></label>)}</div></PreviewPanel><PreviewPanel ui={ui} title="Estados" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-states" defaultChecked />\n    <span>Default</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-states" invalid />\n    <span>Invalid</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="radio-disabled" disabled defaultChecked />\n    <span>Disabled</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6"><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="radio-states" defaultChecked /><span className={`text-sm ${ui.body}`}>Default</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="radio-states" invalid /><span className={`text-sm ${ui.body}`}>Invalid</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="radio-disabled" disabled defaultChecked /><span className={`text-sm ${ui.body}`}>Disabled</span></label></div></PreviewPanel><PreviewPanel ui={ui} title="Grupo de selección" className="max-w-2xl" code={`<FormControl>\n  <Label>Visibilidad del proyecto</Label>\n  <div className="space-y-3">\n    <label className="inline-flex cursor-pointer items-center gap-3">\n      <Radio name="visibility-docs" defaultChecked />\n      <span>Equipo interno</span>\n    </label>\n    <label className="inline-flex cursor-pointer items-center gap-3">\n      <Radio name="visibility-docs" />\n      <span>Solo stakeholders</span>\n    </label>\n  </div>\n</FormControl>`}><FormControl><Label>Visibilidad del proyecto</Label><div className="space-y-3"><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="visibility-docs" defaultChecked /><span className={`text-sm ${ui.body}`}>Equipo interno</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="visibility-docs" /><span className={`text-sm ${ui.body}`}>Solo stakeholders</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Radio name="visibility-docs" /><span className={`text-sm ${ui.body}`}>Público</span></label></div></FormControl></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.radio} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Visibilidad del proyecto</Label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Radio name="privacy" size="sm" defaultChecked />\n    <span>Equipo interno</span>\n  </label>\n</FormControl>`} /></div></SectionCard> : null}
+      {isVisible(visibleIds, "radio") ? (
+        <SectionCard id="radio" className={ui.divider}>
+          <SectionHeading
+            category="Formularios"
+            title="Radio"
+            description="Radio custom alineado con `Checkbox`, con apariencia consistente entre temas y color opcional para el estado seleccionado."
+            ui={ui}
+          />
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Tamaños"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Radio id="radio-size-sm" name="radio-sizes" size="sm" defaultChecked label="Small" />
+  <Radio id="radio-size-md" name="radio-sizes" size="md" label="Medium" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                <Radio id="radio-size-sm-preview" name="radio-sizes-preview" size="sm" defaultChecked label="Small" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-size-md-preview" name="radio-sizes-preview" size="md" label="Medium" labelClassName={`text-sm ${ui.body}`} />
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Colores"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Radio id="radio-neutral" name="radio-colors" defaultChecked color="neutral" label="neutral" />
+  <Radio id="radio-primary" name="radio-colors" color="primary" label="primary" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                {colors.map((color) => {
+                  const id = `radio-color-${color}`;
+                  return (
+                    <Radio
+                      key={color}
+                      id={id}
+                      name="radio-colors-preview"
+                      defaultChecked={color === "neutral"}
+                      color={color}
+                      label={color}
+                      labelClassName={`text-sm ${ui.body}`}
+                    />
+                  );
+                })}
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Estados"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Radio id="radio-default" name="radio-states" defaultChecked label="Default" />
+  <Radio id="radio-invalid" name="radio-states" invalid label="Invalid" />
+  <Radio id="radio-disabled" name="radio-disabled" disabled defaultChecked label="Disabled" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                <Radio id="radio-default-preview" name="radio-states-preview" defaultChecked label="Default" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-invalid-preview" name="radio-states-preview" invalid label="Invalid" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-disabled-preview" name="radio-disabled-preview" disabled defaultChecked label="Disabled" labelClassName={`text-sm ${ui.body}`} />
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Grupo de selección"
+              className="max-w-2xl"
+              code={`<FormControl>
+  <Label>Visibilidad del proyecto</Label>
+  <div className="space-y-3">
+    <div className="inline-flex items-center gap-3">
+      <Radio id="visibility-team" name="visibility-docs" defaultChecked />
+      <Label htmlFor="visibility-team">Equipo interno</Label>
+    </div>
+    <div className="inline-flex items-center gap-3">
+      <Radio id="visibility-stakeholders" name="visibility-docs" />
+      <Label htmlFor="visibility-stakeholders">Solo stakeholders</Label>
+    </div>
+  </div>
+</FormControl>`}
+            >
+              <FormControl>
+                <Label>Visibilidad del proyecto</Label>
+                <div className="space-y-3">
+                  <div className="inline-flex items-center gap-3">
+                    <Radio id="visibility-team-preview" name="visibility-docs-preview" defaultChecked />
+                    <Label htmlFor="visibility-team-preview" className={`text-sm ${ui.body}`}>
+                      Equipo interno
+                    </Label>
+                  </div>
+                  <div className="inline-flex items-center gap-3">
+                    <Radio id="visibility-stakeholders-preview" name="visibility-docs-preview" />
+                    <Label htmlFor="visibility-stakeholders-preview" className={`text-sm ${ui.body}`}>
+                      Solo stakeholders
+                    </Label>
+                  </div>
+                  <div className="inline-flex items-center gap-3">
+                    <Radio id="visibility-public-preview" name="visibility-docs-preview" />
+                    <Label htmlFor="visibility-public-preview" className={`text-sm ${ui.body}`}>
+                      Público
+                    </Label>
+                  </div>
+                </div>
+              </FormControl>
+            </PreviewPanel>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={apis.radio} ui={ui} />
+            </div>
+            <CodeExample
+              ui={ui}
+              code={`<FormControl>
+  <Label>Visibilidad del proyecto</Label>
+  <Radio
+    id="privacy-team"
+    name="privacy"
+    size="sm"
+    defaultChecked
+    label="Equipo interno"
+  />
+</FormControl>`}
+            />
+          </div>
+        </SectionCard>
+      ) : null}
 
-      {isVisible(visibleIds, "switch") ? <SectionCard id="switch" className={ui.divider}><SectionHeading category="Formularios" title="Switch" description="Switch para toggles binarios con tamaños `sm` y `md`, además de colores semánticos opcionales." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Tamaños" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Switch size="sm" defaultChecked />\n    <span>Small</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Switch size="md" defaultChecked />\n    <span>Medium</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6"><label className="inline-flex cursor-pointer items-center gap-3"><Switch size="sm" defaultChecked /><span className={`text-sm ${ui.body}`}>Small</span></label><label className="inline-flex cursor-pointer items-center gap-3"><Switch size="md" defaultChecked /><span className={`text-sm ${ui.body}`}>Medium</span></label></div></PreviewPanel><PreviewPanel ui={ui} title="Colores" code={`<div className="flex flex-wrap items-center gap-6">\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Switch color="neutral" defaultChecked />\n    <span>neutral</span>\n  </label>\n  <label className="inline-flex cursor-pointer items-center gap-3">\n    <Switch color="primary" defaultChecked />\n    <span>primary</span>\n  </label>\n</div>`}><div className="flex flex-wrap items-center gap-6">{colors.map((color) => <label key={color} className="inline-flex cursor-pointer items-center gap-3"><Switch color={color} defaultChecked /><span className={`text-sm ${ui.body}`}>{color}</span></label>)}</div></PreviewPanel><PreviewPanel ui={ui} title="En contexto" className="max-w-2xl" code={`<div className="space-y-3">\n  <div className="flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3">\n    <div>\n      <p className="text-sm font-medium">Notificaciones del proyecto</p>\n      <p className="text-sm text-neutral-500">Recibe alertas cuando cambien componentes críticos.</p>\n    </div>\n    <Switch defaultChecked />\n  </div>\n</div>`}><div className="space-y-3"><div className={`flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3 ${ui.preview}`}><div><p className={`text-sm font-medium ${ui.title}`}>Notificaciones del proyecto</p><p className={`text-sm ${ui.body}`}>Recibe alertas cuando cambien componentes críticos.</p></div><Switch defaultChecked /></div><div className={`flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3 ${ui.preview}`}><div><p className={`text-sm font-medium ${ui.title}`}>Modo revisión</p><p className={`text-sm ${ui.body}`}>Activa comentarios y aprobaciones antes de publicar.</p></div><Switch size="sm" /></div></div></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.switch} ui={ui} /></div><CodeExample ui={ui} code={`<div className="flex items-center justify-between gap-4">\n  <div>\n    <p className="text-sm font-medium">Notificaciones del proyecto</p>\n    <p className="text-sm text-neutral-500">Recibe alertas cuando cambien componentes críticos.</p>\n  </div>\n  <Switch defaultChecked />\n</div>`} /></div></SectionCard> : null}
+      {isVisible(visibleIds, "switch") ? (
+        <SectionCard id="switch" className={ui.divider}>
+          <SectionHeading
+            category="Formularios"
+            title="Switch"
+            description="Switch para toggles binarios con tamaños `sm` y `md`, además de colores semánticos opcionales."
+            ui={ui}
+          />
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Tamaños"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Switch id="switch-size-sm" size="sm" defaultChecked label="Small" />
+  <Switch id="switch-size-md" size="md" defaultChecked label="Medium" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                <Switch id="switch-size-sm-preview" size="sm" defaultChecked label="Small" labelClassName={`text-sm ${ui.body}`} />
+                <Switch id="switch-size-md-preview" size="md" defaultChecked label="Medium" labelClassName={`text-sm ${ui.body}`} />
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="Colores"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <Switch id="switch-neutral" color="neutral" defaultChecked label="neutral" />
+  <Switch id="switch-primary" color="primary" defaultChecked label="primary" />
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                {colors.map((color) => {
+                  const id = `switch-color-${color}`;
+                  return (
+                    <Switch
+                      key={color}
+                      id={id}
+                      color={color}
+                      defaultChecked
+                      label={color}
+                      labelClassName={`text-sm ${ui.body}`}
+                    />
+                  );
+                })}
+              </div>
+            </PreviewPanel>
+            <PreviewPanel
+              ui={ui}
+              title="En contexto"
+              className="max-w-2xl"
+              code={`<div className="space-y-3">
+  <div className="flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3">
+    <div>
+      <p className="text-sm font-medium">Notificaciones del proyecto</p>
+      <p className="text-sm text-neutral-500">Recibe alertas cuando cambien componentes críticos.</p>
+    </div>
+    <Switch id="project-notifications" defaultChecked />
+  </div>
+</div>`}
+            >
+              <div className="space-y-3">
+                <div className={`flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3 ${ui.preview}`}>
+                  <div>
+                    <p className={`text-sm font-medium ${ui.title}`}>Notificaciones del proyecto</p>
+                    <p className={`text-sm ${ui.body}`}>Recibe alertas cuando cambien componentes críticos.</p>
+                  </div>
+                  <Switch id="project-notifications-preview" defaultChecked />
+                </div>
+                <div className={`flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3 ${ui.preview}`}>
+                  <div>
+                    <p className={`text-sm font-medium ${ui.title}`}>Modo revisión</p>
+                    <p className={`text-sm ${ui.body}`}>Activa comentarios y aprobaciones antes de publicar.</p>
+                  </div>
+                  <Switch id="review-mode-preview" size="sm" />
+                </div>
+              </div>
+            </PreviewPanel>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={apis.switch} ui={ui} />
+            </div>
+            <CodeExample
+              ui={ui}
+              code={`<div className="flex items-center justify-between gap-4">
+  <div>
+    <p className="text-sm font-medium">Notificaciones del proyecto</p>
+    <p className="text-sm text-neutral-500">Recibe alertas cuando cambien componentes críticos.</p>
+  </div>
+  <Switch id="project-notifications" defaultChecked />
+</div>`}
+            />
+          </div>
+        </SectionCard>
+      ) : null}
     </>
   );
 }
