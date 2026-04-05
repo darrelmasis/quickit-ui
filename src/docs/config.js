@@ -14,7 +14,6 @@ export const COMPONENT_GROUPS = [
     items: [
       { href: "#provider", label: "QuickitProvider" },
       { href: "#theme", label: "Tema" },
-      { href: "#tokens", label: "Tokens" },
       { href: "#states", label: "Estados" },
     ],
   },

@@ -39,6 +39,7 @@ const buttonNotes = [
   "Cuando `loading` es `true`, el botón se deshabilita automáticamente.",
   "En `size=\"sm\"` o `shape=\"square\"`, el estado loading muestra solo el spinner.",
   "Si `spinner={false}`, puedes mantener loading sin icono girando.",
+  "Los botones horizontales tienen un `min-width` por tamaño para mantener consistencia visual entre acciones.",
   "Los botones `square` deben incluir `aria-label`, `aria-labelledby` o `title`.",
 ];
 

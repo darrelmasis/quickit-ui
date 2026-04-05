@@ -33,11 +33,6 @@ const foundationNotes = {
     "Los componentes priorizan defaults neutros y dejan los colores semanticos como decision explicita del producto.",
     "useQuickitTheme te permite reaccionar al tema actual desde cualquier componente descendiente.",
   ],
-  tokens: [
-    "Los componentes repiten contratos visuales consistentes: color, variant, size, shape y estados.",
-    "No todos los componentes exponen exactamente las mismas props, pero el vocabulario visual se mantiene estable.",
-    "Antes de crear estilos ad hoc, conviene verificar si la necesidad ya entra en los tokens existentes.",
-  ],
   states: [
     "disabled bloquea interaccion y comunica el estado con feedback visual consistente.",
     "Props como loading, invalid, pressed o active solo aparecen donde tienen sentido semantico.",
@@ -150,60 +145,6 @@ return (
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
             <NotesList items={foundationNotes.theme} ui={ui} />
-          </div>
-        </SectionCard>
-      ) : null}
-
-      {isVisible(visibleIds, "tokens") ? (
-        <SectionCard id="tokens" className={ui.divider}>
-          <SectionHeading
-            category="Fundamentos"
-            title="Tokens y contratos"
-            description="La libreria no expone un archivo publico de tokens de diseno todavia, pero si mantiene contratos de props y estados que actuan como base del sistema."
-            ui={ui}
-          />
-
-          <div className="mt-6 space-y-4">
-            <PreviewPanel
-              ui={ui}
-              title="Color semantico"
-              code={`<div className="flex flex-wrap items-center gap-3">
-  <Button variant="outline" color="neutral">Neutral</Button>
-  <Button variant="outline" color="success">Success</Button>
-  <Button variant="outline" color="danger">Danger</Button>
-</div>`}
-            >
-              <div className="flex flex-wrap items-center gap-3">
-                <Button variant="outline" color="neutral">Neutral</Button>
-                <Button variant="outline" color="success">Success</Button>
-                <Button variant="outline" color="danger">Danger</Button>
-              </div>
-            </PreviewPanel>
-
-            <PreviewPanel
-              ui={ui}
-              title="Densidad y tamanos"
-              code={`<div className="flex flex-wrap items-center gap-3">
-  <Button size="sm" color="neutral">Small</Button>
-  <Button size="md" color="neutral">Medium</Button>
-  <Button size="lg" color="neutral">Large</Button>
-  <Badge size="sm" color="neutral">sm</Badge>
-  <Badge size="md" color="neutral">md</Badge>
-</div>`}
-            >
-              <div className="flex flex-wrap items-center gap-3">
-                <Button size="sm" color="neutral">Small</Button>
-                <Button size="md" color="neutral">Medium</Button>
-                <Button size="lg" color="neutral">Large</Button>
-                <Badge size="sm" color="neutral">sm</Badge>
-                <Badge size="md" color="neutral">md</Badge>
-              </div>
-            </PreviewPanel>
-          </div>
-
-          <div className="mt-8">
-            <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
-            <NotesList items={foundationNotes.tokens} ui={ui} />
           </div>
         </SectionCard>
       ) : null}

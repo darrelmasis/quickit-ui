@@ -33,11 +33,11 @@ const BUTTON_VISUAL_STATE_CLASSES = {
 
 const sizeClasses = {
   default: {
-    sm: "h-9 px-3.5 text-sm",
-    md: "h-11 px-[1.125rem] text-sm",
-    lg: "h-12 px-5 text-base",
-    xl: "h-14 px-6 text-lg",
-    "2xl": "h-16 px-7 text-lg",
+    sm: "h-9 min-w-[5.5rem] px-3.5 text-sm",
+    md: "h-11 min-w-[6.5rem] px-[1.125rem] text-sm",
+    lg: "h-12 min-w-[7.5rem] px-5 text-base",
+    xl: "h-14 min-w-[8.5rem] px-6 text-lg",
+    "2xl": "h-16 min-w-[9.5rem] px-7 text-lg",
   },
   square: {
     sm: "size-9 text-sm",
@@ -228,6 +228,10 @@ const Button = forwardRef(function Button(
   const showLoadingText = !isSmall && resolvedShape !== "square";
   const baseContent = children ?? loadingText;
   const loadingContent = loadingText ?? children;
+  const resolvedSizeClasses =
+    sizeClasses[resolvedShape][size] ??
+    sizeClasses[resolvedShape].md ??
+    sizeClasses.default.md;
 
   useEffect(() => {
     if (import.meta.env.PROD) {
@@ -265,7 +269,7 @@ const Button = forwardRef(function Button(
         isActive && BUTTON_VISUAL_STATE_CLASSES.active,
         pressed && BUTTON_VISUAL_STATE_CLASSES.pressed,
         getControlRadius(size),
-        sizeClasses[resolvedShape][size] ?? sizeClasses.default.md,
+        resolvedSizeClasses,
         stateClass,
         colorClasses[resolvedTheme][variant]?.[resolvedColor] ??
           colorClasses[resolvedTheme].solid.primary,

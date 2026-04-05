@@ -199,7 +199,6 @@ export default function DocsApp() {
     switch (activeSection) {
       case "#provider":
       case "#theme":
-      case "#tokens":
       case "#states":
         return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;
       case "#accordion":

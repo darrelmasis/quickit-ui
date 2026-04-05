@@ -92,31 +92,31 @@ export function NavigationDocs({ ui, visibleIds }) {
               title="Orientación vertical"
               className="max-w-3xl"
               code={`<Tabs
-  defaultValue="tokens"
+  defaultValue="general"
   orientation="vertical"
   className="grid gap-4 md:grid-cols-[180px_minmax(0,1fr)]"
 >
   <TabsList className="w-full">
-    <TabsTrigger value="tokens">Tokens</TabsTrigger>
+    <TabsTrigger value="general">General</TabsTrigger>
     <TabsTrigger value="motion">Motion</TabsTrigger>
     <TabsTrigger value="usage">Usage</TabsTrigger>
   </TabsList>
-  <TabsContent value="tokens">Puedes usar orientación vertical para side settings o docs internas.</TabsContent>
+  <TabsContent value="general">Puedes usar orientación vertical para side settings o docs internas.</TabsContent>
   <TabsContent value="motion">La navegación por teclado se mantiene activa.</TabsContent>
   <TabsContent value="usage">También soporta \`activationMode="manual"\`.</TabsContent>
 </Tabs>`}
             >
               <Tabs
-                defaultValue="tokens"
+                defaultValue="general"
                 orientation="vertical"
                 className="grid gap-4 md:grid-cols-[180px_minmax(0,1fr)]"
               >
                 <TabsList className="w-full">
-                  <TabsTrigger value="tokens">Tokens</TabsTrigger>
+                  <TabsTrigger value="general">General</TabsTrigger>
                   <TabsTrigger value="motion">Motion</TabsTrigger>
                   <TabsTrigger value="usage">Usage</TabsTrigger>
                 </TabsList>
-                <TabsContent value="tokens">Puedes usar orientación vertical para side settings o docs internas.</TabsContent>
+                <TabsContent value="general">Puedes usar orientación vertical para side settings o docs internas.</TabsContent>
                 <TabsContent value="motion">La navegación por teclado se mantiene activa.</TabsContent>
                 <TabsContent value="usage">También soporta `activationMode="manual"`.</TabsContent>
               </Tabs>
