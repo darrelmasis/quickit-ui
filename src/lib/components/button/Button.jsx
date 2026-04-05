@@ -137,21 +137,21 @@ const colorClasses = {
       neutral:
         "border-neutral-700 bg-neutral-900 text-neutral-200 hover:border-neutral-600 hover:bg-neutral-800 focus-visible:outline-neutral-500",
       primary:
-        "border-blue-500/40 bg-blue-500/10 text-blue-300 hover:border-blue-400/60 hover:bg-blue-500/15 focus-visible:outline-blue-300",
+        "border-blue-800 bg-blue-950 text-blue-200 hover:border-blue-700 hover:bg-blue-900 focus-visible:outline-blue-300",
       brand:
-        "border-brand-500/40 bg-brand-500/10 text-brand-300 hover:border-brand-400/60 hover:bg-brand-500/15 focus-visible:outline-brand-300",
+        "border-brand-800 bg-brand-950 text-brand-200 hover:border-brand-700 hover:bg-brand-900 focus-visible:outline-brand-300",
       success:
-        "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:border-emerald-400/60 hover:bg-emerald-500/15 focus-visible:outline-emerald-300",
+        "border-emerald-800 bg-emerald-950 text-emerald-200 hover:border-emerald-700 hover:bg-emerald-900 focus-visible:outline-emerald-300",
       danger:
-        "border-red-500/40 bg-red-500/10 text-red-300 hover:border-red-400/60 hover:bg-red-500/15 focus-visible:outline-red-300",
+        "border-red-800 bg-red-950 text-red-200 hover:border-red-700 hover:bg-red-900 focus-visible:outline-red-300",
       warning:
-        "border-amber-500/40 bg-amber-500/10 text-amber-300 hover:border-amber-400/60 hover:bg-amber-500/15 focus-visible:outline-amber-300",
+        "border-amber-800 bg-amber-950 text-amber-200 hover:border-amber-700 hover:bg-amber-900 focus-visible:outline-amber-300",
       info:
-        "border-sky-500/40 bg-sky-500/10 text-sky-300 hover:border-sky-400/60 hover:bg-sky-500/15 focus-visible:outline-sky-300",
+        "border-sky-800 bg-sky-950 text-sky-200 hover:border-sky-700 hover:bg-sky-900 focus-visible:outline-sky-300",
       light:
-        "border-slate-600 bg-slate-200/10 text-slate-100 hover:border-slate-500 hover:bg-slate-200/15 focus-visible:outline-slate-300",
+        "border-slate-600 bg-slate-800 text-slate-100 hover:border-slate-500 hover:bg-slate-700 focus-visible:outline-slate-300",
       dark:
-        "border-slate-300/70 bg-slate-800/35 text-slate-50 hover:border-slate-200 hover:bg-slate-700/45 focus-visible:outline-slate-200",
+        "border-slate-600 bg-slate-800 text-slate-50 hover:border-slate-500 hover:bg-slate-700 focus-visible:outline-slate-200",
     },
     ghost: {
       neutral:

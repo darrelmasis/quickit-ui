@@ -27,11 +27,15 @@ const apis = {
     { prop: "size", type: "xs | sm | md | lg", defaultValue: "md", description: "Escala el alto del list, el padding y el min-width de cada trigger." },
     { prop: "orientation", type: "horizontal | vertical", defaultValue: "horizontal", description: "Dirección del tabs list y de la navegación por teclado." },
     { prop: "activationMode", type: "automatic | manual", defaultValue: "automatic", description: "Controla si el foco activa el tab automáticamente o si solo cambia con click / Enter / Espacio." },
+    { prop: "TabsTrigger.disabled", type: "boolean", defaultValue: "false", description: "Desactiva un trigger individual." },
+    { prop: "TabsContent.forceMount", type: "boolean", defaultValue: "false", description: "Mantiene el panel montado aunque no esté activo." },
   ],
   accordion: [
     { prop: "type", type: "single | multiple", defaultValue: "single", description: "Permite uno o varios items abiertos." },
     { prop: "collapsible", type: "boolean", defaultValue: "true", description: "Permite cerrar el item activo en modo single." },
     { prop: "defaultValue", type: "string | string[]", defaultValue: "undefined", description: "Valor inicial de los items abiertos." },
+    { prop: "value / onValueChange", type: "string | string[] / (value) => void", defaultValue: "no controlado", description: "Modo controlado opcional." },
+    { prop: "AccordionContent.forceMount", type: "boolean", defaultValue: "false", description: "Mantiene el contenido montado aunque el item esté cerrado." },
   ],
   breadcrumb: [
     { prop: "separator", type: "ReactNode", defaultValue: "\"/\"", description: "Define el separador automático entre items desde `BreadcrumbList`." },
@@ -45,8 +49,12 @@ const apis = {
     { prop: "page / defaultPage", type: "number", defaultValue: "1", description: "Modo controlado o no controlado." },
     { prop: "siblingCount", type: "number", defaultValue: "1", description: "Cantidad de páginas visibles a cada lado." },
     { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "neutral", description: "Color aplicado a la paginación." },
+    { prop: "disabled", type: "boolean", defaultValue: "false", description: "Bloquea la navegación y los botones de cambio de página." },
   ],
 };
+
+const tabsColors = ["neutral", "primary", "brand", "success", "danger", "warning", "info", "light", "dark"];
+const paginationColors = ["neutral", "primary", "brand", "success", "danger", "warning", "info", "light", "dark"];
 
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
@@ -171,33 +179,65 @@ export function NavigationDocs({ ui, visibleIds }) {
       <TabsTrigger value="api">API</TabsTrigger>
     </TabsList>
   </Tabs>
+  <Tabs defaultValue="overview" color="primary">
+    <TabsList>
+      <TabsTrigger value="overview">Primary</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
   <Tabs defaultValue="overview" color="brand">
     <TabsList>
       <TabsTrigger value="overview">Brand</TabsTrigger>
       <TabsTrigger value="api">API</TabsTrigger>
     </TabsList>
   </Tabs>
+  <Tabs defaultValue="overview" color="success">
+    <TabsList>
+      <TabsTrigger value="overview">Success</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="danger">
+    <TabsList>
+      <TabsTrigger value="overview">Danger</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="warning">
+    <TabsList>
+      <TabsTrigger value="overview">Warning</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="info">
+    <TabsList>
+      <TabsTrigger value="overview">Info</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="light">
+    <TabsList>
+      <TabsTrigger value="overview">Light</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="dark">
+    <TabsList>
+      <TabsTrigger value="overview">Dark</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
 </div>`}
             >
               <div className="space-y-4">
-                <Tabs defaultValue="overview" color="neutral">
-                  <TabsList>
-                    <TabsTrigger value="overview">Neutral</TabsTrigger>
-                    <TabsTrigger value="api">API</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-                <Tabs defaultValue="overview" color="brand">
-                  <TabsList>
-                    <TabsTrigger value="overview">Brand</TabsTrigger>
-                    <TabsTrigger value="api">API</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-                <Tabs defaultValue="overview" color="success">
-                  <TabsList>
-                    <TabsTrigger value="overview">Success</TabsTrigger>
-                    <TabsTrigger value="api">API</TabsTrigger>
-                  </TabsList>
-                </Tabs>
+                {tabsColors.map((color) => (
+                  <Tabs key={color} defaultValue="overview" color={color}>
+                    <TabsList>
+                      <TabsTrigger value="overview">{color.charAt(0).toUpperCase() + color.slice(1)}</TabsTrigger>
+                      <TabsTrigger value="api">API</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                ))}
               </div>
             </PreviewPanel>
 
@@ -287,7 +327,11 @@ export function NavigationDocs({ ui, visibleIds }) {
               code={`<Accordion defaultValue="architecture">
   <AccordionItem value="architecture">
     <AccordionTrigger>Arquitectura base</AccordionTrigger>
-    <AccordionContent>Contenido...</AccordionContent>
+    <AccordionContent>Quickit UI se apoya en React, Tailwind y Floating UI, con documentación integrada en la misma base del proyecto.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="theme">
+    <AccordionTrigger>Sistema de tema</AccordionTrigger>
+    <AccordionContent>Todos los componentes consumen \`QuickitProvider\` para resolver light y dark mode de forma consistente.</AccordionContent>
   </AccordionItem>
 </Accordion>`}
             >
@@ -331,7 +375,15 @@ export function NavigationDocs({ ui, visibleIds }) {
               code={`<Accordion defaultValue="shipping">
   <AccordionItem value="shipping">
     <AccordionTrigger>¿Cuándo usar Accordion?</AccordionTrigger>
-    <AccordionContent>...</AccordionContent>
+    <AccordionContent>Cuando el contenido es denso y no quieres mostrarlo todo al mismo tiempo, por ejemplo FAQs, filtros avanzados o ajustes secundarios.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="keyboard">
+    <AccordionTrigger>¿Qué soporte de teclado tiene?</AccordionTrigger>
+    <AccordionContent>Los triggers son accesibles y mantienen estados ARIA básicos para mejorar navegación y lectura por asistentes.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="layout">
+    <AccordionTrigger>¿Puedo usarlo dentro de formularios?</AccordionTrigger>
+    <AccordionContent>Sí. Funciona bien para agrupar configuraciones opcionales o bloques de ayuda contextual.</AccordionContent>
   </AccordionItem>
 </Accordion>`}
             >
@@ -474,13 +526,19 @@ export function NavigationDocs({ ui, visibleIds }) {
 
             <PreviewPanel ui={ui} title="Colores" code={`<div className="space-y-3">
   <Pagination count={10} defaultPage={3} color="neutral" />
+  <Pagination count={10} defaultPage={3} color="primary" />
   <Pagination count={10} defaultPage={3} color="brand" />
   <Pagination count={10} defaultPage={3} color="success" />
+  <Pagination count={10} defaultPage={3} color="danger" />
+  <Pagination count={10} defaultPage={3} color="warning" />
+  <Pagination count={10} defaultPage={3} color="info" />
+  <Pagination count={10} defaultPage={3} color="light" />
+  <Pagination count={10} defaultPage={3} color="dark" />
 </div>`}>
               <div className="space-y-3">
-                <Pagination count={10} defaultPage={3} color="neutral" />
-                <Pagination count={10} defaultPage={3} color="brand" />
-                <Pagination count={10} defaultPage={3} color="success" />
+                {paginationColors.map((color) => (
+                  <Pagination key={color} count={10} defaultPage={3} color={color} />
+                ))}
               </div>
             </PreviewPanel>
           </div>

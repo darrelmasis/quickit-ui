@@ -23,7 +23,8 @@ const apis = {
   avatar: [
     { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Controla el tamaño del avatar base." },
     { prop: "shape", type: "circle | rounded | square", defaultValue: "circle", description: "Permite cambiar la geometría del avatar." },
-    { prop: "AvatarImage / AvatarFallback / AvatarGroup", type: "subcomponentes", defaultValue: "-", description: "Partes disponibles para construir el avatar." },
+    { prop: "stacked", type: "boolean", defaultValue: "true", description: "En `AvatarGroup` activa el overlap con mask adaptado por `shape` y `size`." },
+    { prop: "AvatarImage / AvatarFallback / AvatarGroup", type: "subcomponentes", defaultValue: "-", description: "Partes disponibles para construir el avatar. `AvatarGroup` adapta el overlap y el mask al `shape` y `size` de cada item." },
   ],
   link: [
     { prop: "appearance", type: "text | button", defaultValue: "text", description: "Cambia entre enlace de texto y enlace con apariencia de botón." },
@@ -49,6 +50,28 @@ const apis = {
     { prop: "EmptyStateActions", type: "subcomponente", defaultValue: "-", description: "Agrupa botones o links de acción." },
   ],
 };
+
+const linkButtonColors = [
+  "neutral",
+  "primary",
+  "brand",
+  "success",
+  "danger",
+  "warning",
+  "info",
+  "light",
+  "dark",
+];
+
+const badgeColors = [
+  { color: "neutral", label: "Neutral" },
+  { color: "primary", label: "Primary" },
+  { color: "brand", label: "Brand" },
+  { color: "success", label: "Activo" },
+  { color: "warning", label: "Pendiente" },
+  { color: "danger", label: "Error" },
+  { color: "info", label: "Info" },
+];
 
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
@@ -103,6 +126,8 @@ export function UtilityDocs({ ui, visibleIds }) {
     <AvatarFallback>EL</AvatarFallback>
   </Avatar>
   <Avatar size="lg"><AvatarFallback>RS</AvatarFallback></Avatar>
+  <Avatar size="lg"><AvatarFallback>TK</AvatarFallback></Avatar>
+  <Avatar size="lg"><AvatarFallback>+3</AvatarFallback></Avatar>
 </AvatarGroup>`}
             >
               <AvatarGroup>
@@ -114,6 +139,50 @@ export function UtilityDocs({ ui, visibleIds }) {
                 <Avatar size="lg"><AvatarFallback>TK</AvatarFallback></Avatar>
                 <Avatar size="lg"><AvatarFallback>+3</AvatarFallback></Avatar>
               </AvatarGroup>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Group por shape"
+              code={`<div className="flex flex-wrap items-center gap-6">
+  <AvatarGroup>
+    <Avatar size="lg" shape="circle"><AvatarFallback>CI</AvatarFallback></Avatar>
+    <Avatar size="lg" shape="circle"><AvatarFallback>RS</AvatarFallback></Avatar>
+    <Avatar size="lg" shape="circle"><AvatarFallback>TK</AvatarFallback></Avatar>
+  </AvatarGroup>
+
+  <AvatarGroup>
+    <Avatar size="lg" shape="rounded"><AvatarFallback>RO</AvatarFallback></Avatar>
+    <Avatar size="lg" shape="rounded"><AvatarFallback>MV</AvatarFallback></Avatar>
+    <Avatar size="lg" shape="rounded"><AvatarFallback>QA</AvatarFallback></Avatar>
+  </AvatarGroup>
+
+  <AvatarGroup>
+    <Avatar size="lg" shape="square"><AvatarFallback>SQ</AvatarFallback></Avatar>
+    <Avatar size="lg" shape="square"><AvatarFallback>UI</AvatarFallback></Avatar>
+    <Avatar size="lg" shape="square"><AvatarFallback>DS</AvatarFallback></Avatar>
+  </AvatarGroup>
+</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                <AvatarGroup>
+                  <Avatar size="lg" shape="circle"><AvatarFallback>CI</AvatarFallback></Avatar>
+                  <Avatar size="lg" shape="circle"><AvatarFallback>RS</AvatarFallback></Avatar>
+                  <Avatar size="lg" shape="circle"><AvatarFallback>TK</AvatarFallback></Avatar>
+                </AvatarGroup>
+
+                <AvatarGroup>
+                  <Avatar size="lg" shape="rounded"><AvatarFallback>RO</AvatarFallback></Avatar>
+                  <Avatar size="lg" shape="rounded"><AvatarFallback>MV</AvatarFallback></Avatar>
+                  <Avatar size="lg" shape="rounded"><AvatarFallback>QA</AvatarFallback></Avatar>
+                </AvatarGroup>
+
+                <AvatarGroup>
+                  <Avatar size="lg" shape="square"><AvatarFallback>SQ</AvatarFallback></Avatar>
+                  <Avatar size="lg" shape="square"><AvatarFallback>UI</AvatarFallback></Avatar>
+                  <Avatar size="lg" shape="square"><AvatarFallback>DS</AvatarFallback></Avatar>
+                </AvatarGroup>
+              </div>
             </PreviewPanel>
           </div>
 
@@ -136,6 +205,7 @@ export function UtilityDocs({ ui, visibleIds }) {
   <Link href="#">Default link</Link>
   <Link href="#" variant="muted">Muted link</Link>
   <Link href="#" variant="subtle" underline="always">Always underline</Link>
+  <Link href="#" variant="default" underline="none">No underline</Link>
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-4">
@@ -183,6 +253,48 @@ export function UtilityDocs({ ui, visibleIds }) {
                 <Link href="#" appearance="button" color="neutral" activeMotion={false}>
                   Sin active motion
                 </Link>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Button sizes y colores"
+              code={`<div className="space-y-4">
+  <div className="flex flex-wrap items-center gap-3">
+    <Link href="#" appearance="button" size="sm" color="neutral">Small</Link>
+    <Link href="#" appearance="button" size="md" color="neutral">Medium</Link>
+    <Link href="#" appearance="button" size="lg" color="neutral">Large</Link>
+    <Link href="#" appearance="button" size="xl" color="neutral">XL</Link>
+    <Link href="#" appearance="button" size="2xl" color="neutral">2XL</Link>
+  </div>
+  <div className="flex flex-wrap items-center gap-3">
+    <Link href="#" appearance="button" variant="outline" color="neutral">neutral</Link>
+    <Link href="#" appearance="button" variant="outline" color="primary">primary</Link>
+    <Link href="#" appearance="button" variant="outline" color="brand">brand</Link>
+    <Link href="#" appearance="button" variant="outline" color="success">success</Link>
+    <Link href="#" appearance="button" variant="outline" color="danger">danger</Link>
+    <Link href="#" appearance="button" variant="outline" color="warning">warning</Link>
+    <Link href="#" appearance="button" variant="outline" color="info">info</Link>
+    <Link href="#" appearance="button" variant="outline" color="light">light</Link>
+    <Link href="#" appearance="button" variant="outline" color="dark">dark</Link>
+  </div>
+</div>`}
+            >
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link href="#" appearance="button" size="sm" color="neutral">Small</Link>
+                  <Link href="#" appearance="button" size="md" color="neutral">Medium</Link>
+                  <Link href="#" appearance="button" size="lg" color="neutral">Large</Link>
+                  <Link href="#" appearance="button" size="xl" color="neutral">XL</Link>
+                  <Link href="#" appearance="button" size="2xl" color="neutral">2XL</Link>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  {linkButtonColors.map((color) => (
+                    <Link key={color} href="#" appearance="button" variant="outline" color={color}>
+                      {color}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </PreviewPanel>
 
@@ -246,6 +358,7 @@ export function UtilityDocs({ ui, visibleIds }) {
               ui={ui}
               title="Colores semánticos"
               code={`<div className="flex flex-wrap items-center gap-3">
+  <Badge color="neutral">Neutral</Badge>
   <Badge color="primary">Primary</Badge>
   <Badge color="brand">Brand</Badge>
   <Badge color="success">Activo</Badge>
@@ -255,12 +368,9 @@ export function UtilityDocs({ ui, visibleIds }) {
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-3">
-                <Badge color="primary">Primary</Badge>
-                <Badge color="brand">Brand</Badge>
-                <Badge color="success">Activo</Badge>
-                <Badge color="warning">Pendiente</Badge>
-                <Badge color="danger">Error</Badge>
-                <Badge color="info">Info</Badge>
+                {badgeColors.map((item) => (
+                  <Badge key={item.color} color={item.color}>{item.label}</Badge>
+                ))}
               </div>
             </PreviewPanel>
 
@@ -295,7 +405,7 @@ export function UtilityDocs({ ui, visibleIds }) {
           <div className="mt-6 space-y-4">
             <PreviewPanel
               ui={ui}
-              title="Simple"
+              title="Shapes"
               className="max-w-xl space-y-3"
               code={`<div className="flex items-center gap-3">
   <Skeleton shape="circle" />
@@ -303,6 +413,7 @@ export function UtilityDocs({ ui, visibleIds }) {
     <Skeleton className="w-1/3" />
     <Skeleton className="w-2/3" />
   </div>
+  <Skeleton shape="rect" className="h-16 w-28" />
 </div>`}
             >
               <div className="flex items-center gap-3">
@@ -311,8 +422,8 @@ export function UtilityDocs({ ui, visibleIds }) {
                   <Skeleton className="w-1/3" />
                   <Skeleton className="w-2/3" />
                 </div>
+                <Skeleton shape="rect" className="h-16 w-28" />
               </div>
-              <Skeleton shape="rect" className="h-32" />
             </PreviewPanel>
 
             <PreviewPanel
@@ -328,6 +439,11 @@ export function UtilityDocs({ ui, visibleIds }) {
     </div>
   </div>
   <Skeleton shape="rect" className="h-56 rounded-[1.5rem]" />
+  <div className="grid gap-3 md:grid-cols-3">
+    <Skeleton shape="rect" className="h-24" />
+    <Skeleton shape="rect" className="h-24" />
+    <Skeleton shape="rect" className="h-24" />
+  </div>
 </div>`}
             >
               <div className="flex items-center gap-3">
@@ -365,7 +481,7 @@ export function UtilityDocs({ ui, visibleIds }) {
               code={`<EmptyState>
   <EmptyStateTitle>No hay proyectos publicados</EmptyStateTitle>
   <EmptyStateDescription>
-    Crea tu primer proyecto para empezar a documentar componentes.
+    Crea tu primer proyecto para empezar a documentar componentes, estados y casos de uso dentro de Quickit UI.
   </EmptyStateDescription>
   <EmptyStateActions>
     <Button variant="ghost" color="neutral">Ver guía</Button>
@@ -392,7 +508,7 @@ export function UtilityDocs({ ui, visibleIds }) {
               code={`<EmptyState align="start">
   <EmptyStateTitle>No hay resultados</EmptyStateTitle>
   <EmptyStateDescription>
-    Ajusta tus filtros o cambia el criterio de búsqueda.
+    Ajusta tus filtros o cambia el criterio de búsqueda para seguir explorando.
   </EmptyStateDescription>
   <EmptyStateActions>
     <Button variant="outline" color="neutral">Limpiar filtros</Button>

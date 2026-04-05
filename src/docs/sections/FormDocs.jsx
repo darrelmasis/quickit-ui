@@ -17,11 +17,13 @@ const apis = {
   input: [
     { prop: "size", type: "sm | md | lg", defaultValue: "md", description: "Controla altura y padding interno del campo." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Aplica estado visual inválido fuera de `FormControl`." },
+    { prop: "disabled", type: "boolean", defaultValue: "false", description: "Deshabilita interacción." },
     { prop: "type", type: "string", defaultValue: "text", description: "Tipo nativo del input." },
   ],
   textarea: [
     { prop: "minRows", type: "number", defaultValue: "4", description: "Define las filas iniciales del textarea." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Aplica estado visual inválido." },
+    { prop: "disabled", type: "boolean", defaultValue: "false", description: "Deshabilita interacción." },
   ],
   select: [
     { prop: "size", type: "sm | md | lg", defaultValue: "md", description: "Controla altura y densidad del trigger." },
@@ -30,23 +32,28 @@ const apis = {
     { prop: "onChange", type: "(event) => void", defaultValue: "undefined", description: "Emite un evento compatible con formularios cuando cambia la selección." },
     { prop: "placeholder", type: "string", defaultValue: "\"Selecciona una opción\"", description: "Texto mostrado cuando no hay una opción seleccionada." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Aplica estado visual inválido." },
+    { prop: "disabled / required / name", type: "boolean / boolean / string", defaultValue: "false / false / undefined", description: "Soporte para formularios nativos y validación." },
     { prop: "usePortal", type: "boolean", defaultValue: "true", description: "Controla si el panel se monta en portal." },
   ],
   checkbox: [
     { prop: "size", type: "sm | md", defaultValue: "md", description: "Ajusta el tamaño visual del box y del checkmark." },
     { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del estado checked." },
+    { prop: "checked / defaultChecked", type: "boolean", defaultValue: "false", description: "Modo controlado o no controlado usando la API nativa del input." },
     { prop: "label", type: "ReactNode", defaultValue: "undefined", description: "Renderiza internamente un `Label` asociado al checkbox." },
     { prop: "labelClassName", type: "string", defaultValue: "undefined", description: "Permite ajustar el estilo del label interno." },
     { prop: "containerClassName", type: "string", defaultValue: "undefined", description: "Ajusta el wrapper cuando control y label se renderizan juntos." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Prioriza el estado visual de error." },
+    { prop: "disabled / required", type: "boolean / boolean", defaultValue: "false / false", description: "Estados soportados por el control." },
   ],
   radio: [
     { prop: "size", type: "sm | md", defaultValue: "md", description: "Ajusta el tamaño visual del radio y del punto interno." },
     { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Controla el color del punto activo." },
+    { prop: "checked / defaultChecked / name", type: "boolean / boolean / string", defaultValue: "false / false / undefined", description: "Soporte para grupos nativos y modo controlado o no controlado." },
     { prop: "label", type: "ReactNode", defaultValue: "undefined", description: "Renderiza internamente un `Label` asociado al radio." },
     { prop: "labelClassName", type: "string", defaultValue: "undefined", description: "Permite ajustar el estilo del label interno." },
     { prop: "containerClassName", type: "string", defaultValue: "undefined", description: "Ajusta el wrapper cuando control y label se renderizan juntos." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Prioriza el estado visual de error." },
+    { prop: "disabled / required", type: "boolean / boolean", defaultValue: "false / false", description: "Estados soportados por el control." },
   ],
   switch: [
     { prop: "size", type: "sm | md", defaultValue: "md", description: "Ajusta el tamaño del track y el thumb." },
@@ -55,6 +62,8 @@ const apis = {
     { prop: "labelClassName", type: "string", defaultValue: "undefined", description: "Permite ajustar el estilo del label interno." },
     { prop: "containerClassName", type: "string", defaultValue: "undefined", description: "Ajusta el wrapper cuando control y label se renderizan juntos." },
     { prop: "checked / defaultChecked", type: "boolean", defaultValue: "false", description: "Modo controlado o no controlado." },
+    { prop: "onCheckedChange", type: "(checked: boolean) => void", defaultValue: "undefined", description: "Se dispara cuando cambia el estado del switch." },
+    { prop: "invalid / disabled / required / name", type: "boolean / boolean / boolean / string", defaultValue: "false / false / false / undefined", description: "Estados y compatibilidad con formularios nativos." },
   ],
 };
 
@@ -101,7 +110,11 @@ export function FormDocs({ ui, visibleIds }) {
               code={`<div className="flex flex-wrap items-center gap-6">
   <Checkbox id="checkbox-neutral" defaultChecked color="neutral" label="neutral" />
   <Checkbox id="checkbox-primary" defaultChecked color="primary" label="primary" />
+  <Checkbox id="checkbox-brand" defaultChecked color="brand" label="brand" />
   <Checkbox id="checkbox-success" defaultChecked color="success" label="success" />
+  <Checkbox id="checkbox-danger" defaultChecked color="danger" label="danger" />
+  <Checkbox id="checkbox-warning" defaultChecked color="warning" label="warning" />
+  <Checkbox id="checkbox-info" defaultChecked color="info" label="info" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
@@ -149,6 +162,10 @@ export function FormDocs({ ui, visibleIds }) {
     <div className="inline-flex items-center gap-3">
       <Checkbox id="email-notify" />
       <Label htmlFor="email-notify">Notificar al equipo por correo</Label>
+    </div>
+    <div className="inline-flex items-center gap-3">
+      <Checkbox id="sync-production" disabled />
+      <Label htmlFor="sync-production">Sincronizar con producción</Label>
     </div>
   </div>
 </FormControl>`}
@@ -226,6 +243,11 @@ export function FormDocs({ ui, visibleIds }) {
               code={`<div className="flex flex-wrap items-center gap-6">
   <Radio id="radio-neutral" name="radio-colors" defaultChecked color="neutral" label="neutral" />
   <Radio id="radio-primary" name="radio-colors" color="primary" label="primary" />
+  <Radio id="radio-brand" name="radio-colors" color="brand" label="brand" />
+  <Radio id="radio-success" name="radio-colors" color="success" label="success" />
+  <Radio id="radio-danger" name="radio-colors" color="danger" label="danger" />
+  <Radio id="radio-warning" name="radio-colors" color="warning" label="warning" />
+  <Radio id="radio-info" name="radio-colors" color="info" label="info" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
@@ -274,6 +296,10 @@ export function FormDocs({ ui, visibleIds }) {
     <div className="inline-flex items-center gap-3">
       <Radio id="visibility-stakeholders" name="visibility-docs" />
       <Label htmlFor="visibility-stakeholders">Solo stakeholders</Label>
+    </div>
+    <div className="inline-flex items-center gap-3">
+      <Radio id="visibility-public" name="visibility-docs" />
+      <Label htmlFor="visibility-public">Público</Label>
     </div>
   </div>
 </FormControl>`}
@@ -353,6 +379,11 @@ export function FormDocs({ ui, visibleIds }) {
               code={`<div className="flex flex-wrap items-center gap-6">
   <Switch id="switch-neutral" color="neutral" defaultChecked label="neutral" />
   <Switch id="switch-primary" color="primary" defaultChecked label="primary" />
+  <Switch id="switch-brand" color="brand" defaultChecked label="brand" />
+  <Switch id="switch-success" color="success" defaultChecked label="success" />
+  <Switch id="switch-danger" color="danger" defaultChecked label="danger" />
+  <Switch id="switch-warning" color="warning" defaultChecked label="warning" />
+  <Switch id="switch-info" color="info" defaultChecked label="info" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
@@ -382,6 +413,13 @@ export function FormDocs({ ui, visibleIds }) {
       <p className="text-sm text-neutral-500">Recibe alertas cuando cambien componentes críticos.</p>
     </div>
     <Switch id="project-notifications" defaultChecked />
+  </div>
+  <div className="flex items-center justify-between gap-4 rounded-[1rem] border px-4 py-3">
+    <div>
+      <p className="text-sm font-medium">Modo revisión</p>
+      <p className="text-sm text-neutral-500">Activa comentarios y aprobaciones antes de publicar.</p>
+    </div>
+    <Switch id="review-mode" size="sm" />
   </div>
 </div>`}
             >

@@ -52,12 +52,12 @@ const BADGE_THEME_CLASSES = {
       neutral: "border-neutral-100 bg-neutral-100 text-neutral-950",
     },
     soft: {
-      primary: "border-blue-500/30 bg-blue-500/10 text-blue-300",
-      brand: "border-brand-500/30 bg-brand-500/10 text-brand-300",
-      success: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
-      danger: "border-red-500/30 bg-red-500/10 text-red-300",
-      warning: "border-amber-500/30 bg-amber-500/10 text-amber-300",
-      info: "border-sky-500/30 bg-sky-500/10 text-sky-300",
+      primary: "border-blue-800 bg-blue-950 text-blue-200",
+      brand: "border-brand-800 bg-brand-950 text-brand-200",
+      success: "border-emerald-800 bg-emerald-950 text-emerald-200",
+      danger: "border-red-800 bg-red-950 text-red-200",
+      warning: "border-amber-800 bg-amber-950 text-amber-200",
+      info: "border-sky-800 bg-sky-950 text-sky-200",
       neutral: "border-neutral-700 bg-neutral-900 text-neutral-200",
     },
     outline: {

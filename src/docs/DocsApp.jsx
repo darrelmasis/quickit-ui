@@ -58,6 +58,24 @@ function getInitialActiveSection() {
   return findSection(window.location.pathname, DEFAULT_INTRO_SECTION);
 }
 
+function scrollPageToTop(behavior = "smooth") {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const scrollOptions = { top: 0, left: 0, behavior };
+
+  window.scrollTo(scrollOptions);
+  document.documentElement.scrollTo?.(scrollOptions);
+  document.body.scrollTo?.(scrollOptions);
+
+  window.requestAnimationFrame(() => {
+    window.scrollTo(scrollOptions);
+    document.documentElement.scrollTo?.(scrollOptions);
+    document.body.scrollTo?.(scrollOptions);
+  });
+}
+
 const NAV_THEME_CLASSES = {
   light: {
     card: "border-zinc-200 bg-zinc-50/80",
@@ -198,7 +216,7 @@ export default function DocsApp() {
     setMobileMenuOpen(false);
 
     if (scrollToTop) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollPageToTop("smooth");
     }
   };
 
@@ -256,7 +274,7 @@ export default function DocsApp() {
 
       setActiveSection(nextSection);
       setMobileMenuOpen(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollPageToTop("smooth");
     };
 
     document.addEventListener("click", handleDocumentClick);

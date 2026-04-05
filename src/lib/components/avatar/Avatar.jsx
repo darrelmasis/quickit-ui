@@ -1,8 +1,12 @@
 import {
+  Children,
+  cloneElement,
   createContext,
   forwardRef,
+  isValidElement,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useState,
 } from "react";
@@ -45,6 +49,39 @@ const AVATAR_SIZE_CLASSES = {
   },
 };
 
+const AVATAR_SIZE_PX = {
+  sm: 32,
+  md: 40,
+  lg: 48,
+  xl: 56,
+  "2xl": 64,
+};
+
+const AVATAR_RADIUS_PX = {
+  sm: {
+    rounded: 12,
+    square: 8,
+  },
+  md: {
+    rounded: 14,
+    square: 10,
+  },
+  lg: {
+    rounded: 16,
+    square: 12,
+  },
+  xl: {
+    rounded: 18,
+    square: 14,
+  },
+  "2xl": {
+    rounded: 20,
+    square: 16,
+  },
+};
+
+const AVATAR_GROUP_OVERLAP_RATIO = 0.25;
+
 const AVATAR_SHAPE_CLASSES = {
   circle: "rounded-full",
   rounded: "",
@@ -54,16 +91,22 @@ const AVATAR_SHAPE_CLASSES = {
 const AVATAR_THEME_CLASSES = {
   light: {
     root: "border-slate-200 bg-slate-100 text-slate-700",
-    groupRing: "[&>[data-slot='avatar']]:ring-white",
   },
   dark: {
     root: "border-zinc-800 bg-zinc-900 text-stone-200",
-    groupRing: "[&>[data-slot='avatar']]:ring-neutral-950",
   },
 };
 
 function resolveTheme(theme) {
   return theme === "dark" ? "dark" : "light";
+}
+
+function resolveAvatarShape(shape) {
+  return Object.hasOwn(AVATAR_SHAPE_CLASSES, shape) ? shape : "circle";
+}
+
+function resolveAvatarSize(size) {
+  return AVATAR_SIZE_CLASSES[size] ? size : "md";
 }
 
 function useAvatarContext(componentName) {
@@ -76,16 +119,67 @@ function useAvatarContext(componentName) {
   return context;
 }
 
+function getAvatarGroupMaskVariant(index, total) {
+  if (total <= 1) {
+    return null;
+  }
+
+  if (index === total - 1) {
+    return null;
+  }
+
+  return "stacked";
+}
+
+function getAvatarGroupOverlapPx(size) {
+  return Math.round(AVATAR_SIZE_PX[size] * AVATAR_GROUP_OVERLAP_RATIO);
+}
+
+function getAvatarGroupRadiusRatio(shape, size) {
+  if (shape === "circle") {
+    return 0.5;
+  }
+
+  const radiusPx =
+    AVATAR_RADIUS_PX[size]?.[shape] ?? AVATAR_RADIUS_PX.md.rounded;
+
+  return radiusPx / AVATAR_SIZE_PX[size];
+}
+
+function getAvatarGroupMaskDefinition(shape, size) {
+  const cutRatio = getAvatarGroupOverlapPx(size) / AVATAR_SIZE_PX[size];
+  const cutStart = Number((1 - cutRatio * 1.24).toFixed(4));
+
+  if (shape === "circle") {
+    return {
+      type: "circle",
+      cx: Number((cutStart + 0.5).toFixed(4)),
+      cy: 0.5,
+      r: 0.5,
+    };
+  }
+
+  const radiusRatio = getAvatarGroupRadiusRatio(shape, size);
+
+  return {
+    type: "rect",
+    x: cutStart,
+    y: 0,
+    width: 1,
+    height: 1,
+    rx: Number(radiusRatio.toFixed(4)),
+    ry: Number(radiusRatio.toFixed(4)),
+  };
+}
+
 const Avatar = forwardRef(function Avatar(
   { children, className, shape = "circle", size = "md", ...props },
   ref,
 ) {
   const theme = resolveTheme(useQuickitTheme());
   const ui = AVATAR_THEME_CLASSES[theme];
-  const resolvedShape = Object.hasOwn(AVATAR_SHAPE_CLASSES, shape)
-    ? shape
-    : "circle";
-  const resolvedSize = AVATAR_SIZE_CLASSES[size] ? size : "md";
+  const resolvedShape = resolveAvatarShape(shape);
+  const resolvedSize = resolveAvatarSize(size);
   const [status, setStatus] = useState("error");
 
   const contextValue = useMemo(
@@ -183,22 +277,109 @@ const AvatarGroup = forwardRef(function AvatarGroup(
   { children, className, stacked = true, ...props },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
-  const ui = AVATAR_THEME_CLASSES[theme];
+  const avatarItems = Children.toArray(children);
+  const maskIdPrefix = useId().replaceAll(":", "");
+  const shouldMask = stacked && avatarItems.length > 1;
+  const stackedItems = avatarItems.map((child, index) => {
+    if (!isValidElement(child)) {
+      return {
+        child,
+        index,
+        maskId: null,
+        overlapPx: 0,
+      };
+    }
+
+    const resolvedShape = resolveAvatarShape(child.props.shape);
+    const resolvedSize = resolveAvatarSize(child.props.size);
+    const maskVariant = getAvatarGroupMaskVariant(index, avatarItems.length);
+    const maskId = maskVariant
+      ? `${maskIdPrefix}-avatar-group-${index}`
+      : null;
+
+    return {
+      child,
+      index,
+      maskId,
+      maskDefinition: maskId
+        ? getAvatarGroupMaskDefinition(resolvedShape, resolvedSize)
+        : null,
+      overlapPx: index > 0 ? getAvatarGroupOverlapPx(resolvedSize) : 0,
+    };
+  });
 
   return (
     <div
       ref={ref}
       className={cn(
         AVATAR_PRIMITIVES.group,
-        stacked && "-space-x-3",
-        stacked && "[&>[data-slot='avatar']]:ring-2",
-        stacked && ui.groupRing,
+        stacked && "relative",
         className,
       )}
       {...props}
     >
-      {children}
+      {shouldMask ? (
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute h-0 w-0 overflow-hidden"
+          focusable="false"
+        >
+          <defs>
+            {stackedItems.map(({ maskId, maskDefinition }) =>
+              maskId ? (
+                <mask
+                  key={maskId}
+                  id={maskId}
+                  maskContentUnits="objectBoundingBox"
+                  maskUnits="objectBoundingBox"
+                >
+                  <rect width="1" height="1" fill="white" />
+                  {maskDefinition.type === "circle" ? (
+                    <circle
+                      cx={maskDefinition.cx}
+                      cy={maskDefinition.cy}
+                      r={maskDefinition.r}
+                      fill="black"
+                    />
+                  ) : (
+                    <rect
+                      x={maskDefinition.x}
+                      y={maskDefinition.y}
+                      width={maskDefinition.width}
+                      height={maskDefinition.height}
+                      rx={maskDefinition.rx}
+                      ry={maskDefinition.ry}
+                      fill="black"
+                    />
+                  )}
+                </mask>
+              ) : null,
+            )}
+          </defs>
+        </svg>
+      ) : null}
+      {stacked
+        ? stackedItems.map(({ child, index, maskId, overlapPx }) => {
+            if (!isValidElement(child)) {
+              return child;
+            }
+
+            return cloneElement(child, {
+              style: {
+                ...(child.props.style ?? {}),
+                marginInlineStart:
+                  index > 0 ? `${overlapPx * -1}px` : child.props.style?.marginInlineStart,
+                zIndex: avatarItems.length - index,
+                ...(maskId
+                  ? {
+                      WebkitMask: `url(#${maskId}) center / 100% 100% no-repeat`,
+                      mask: `url(#${maskId}) center / 100% 100% no-repeat`,
+                    }
+                  : {}),
+              },
+            });
+          })
+        : children}
     </div>
   );
 });
