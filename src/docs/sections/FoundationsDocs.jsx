@@ -7,6 +7,7 @@ import {
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
   useBreakpoint,
+  useMediaQuery,
   useQuickitTheme,
 } from "@/lib";
 import {
@@ -58,6 +59,27 @@ function BreakpointHookPreview() {
   );
 }
 
+function MediaQueryHookPreview() {
+  const prefersDesktop = useMediaQuery("(min-width: 1024px)");
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)",
+  );
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge color={prefersDesktop ? "success" : "neutral"} variant="outline">
+        desktop query: {String(prefersDesktop)}
+      </Badge>
+      <Badge
+        color={prefersReducedMotion ? "warning" : "neutral"}
+        variant="outline"
+      >
+        reduced motion: {String(prefersReducedMotion)}
+      </Badge>
+    </div>
+  );
+}
+
 const foundationApis = {
   useBreakpoint: [
     { prop: "breakpoint", type: "xs | sm | md | lg | xl | 2xl | null", defaultValue: "null en SSR", description: "Breakpoint actual resuelto con los tokens de Quickit o con el override que pases." },
@@ -65,6 +87,11 @@ const foundationApis = {
     { prop: "width / height", type: "number | null", defaultValue: "null en SSR", description: "Dimensiones actuales del viewport." },
     { prop: "ready", type: "boolean", defaultValue: "false en SSR", description: "Indica si el hook ya tiene medidas reales del navegador." },
     { prop: "options.breakpoints", type: "Partial<{ sm, md, lg, xl, 2xl }>", defaultValue: "QUICKIT_BREAKPOINTS", description: "Permite sobreescribir el mapa de breakpoints sin salirte de la API del hook." },
+  ],
+  useMediaQuery: [
+    { prop: "query", type: "string", defaultValue: "required", description: "Media query nativa que quieres observar, por ejemplo `(min-width: 1024px)` o `(prefers-reduced-motion: reduce)`." },
+    { prop: "options.defaultValue", type: "boolean", defaultValue: "false", description: "Fallback usado durante SSR o cuando `matchMedia` no está disponible." },
+    { prop: "return", type: "boolean", defaultValue: "-", description: "Devuelve `true` cuando la query coincide y se actualiza automáticamente al cambiar." },
   ],
 };
 
@@ -83,6 +110,11 @@ const foundationNotes = {
     "useBreakpoint es seguro para SSR: en servidor devuelve `ready: false` y medidas nulas hasta que el navegador hidrata.",
     "El criterio por defecto es pragmático y simple: mobile bajo `md`, tablet entre `md` y `lg`, desktop desde `lg`.",
     "También exporta `QUICKIT_BREAKPOINTS` para que puedas alinear tus wrappers, layouts o ejemplos con los mismos cortes de la librería.",
+  ],
+  useMediaQuery: [
+    "useMediaQuery es el nivel más bajo: sirve cuando no quieres breakpoint semántico, sino consultar una media query exacta.",
+    "Es útil no solo para ancho de viewport, sino también para preferencias del usuario como `prefers-reduced-motion` o `prefers-color-scheme`.",
+    "Si tu caso es estrictamente responsive de layout, `useBreakpoint` suele ser más cómodo; si necesitas precisión, usa `useMediaQuery`.",
   ],
   colors: [
     "La API actual sigue siendo semántica: `neutral`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light` y `dark`.",
@@ -289,6 +321,73 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
             <div>
               <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
               <NotesList items={foundationNotes.useBreakpoint} ui={ui} />
+            </div>
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "use-media-query") ? (
+        <SectionCard id="use-media-query" className={ui.divider}>
+          <SectionHeading
+            category="Fundamentos"
+            title="useMediaQuery"
+            description="Hook de bajo nivel para escuchar media queries nativas y reaccionar a cambios del viewport o a preferencias del sistema."
+            ui={ui}
+          />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Lectura de queries exactas"
+              code={`function MotionAndDesktopFlags() {
+  const prefersDesktop = useMediaQuery("(min-width: 1024px)");
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)",
+  );
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge variant="outline">
+        desktop query: {String(prefersDesktop)}
+      </Badge>
+      <Badge variant="outline">
+        reduced motion: {String(prefersReducedMotion)}
+      </Badge>
+    </div>
+  );
+}`}
+            >
+              <MediaQueryHookPreview />
+            </PreviewPanel>
+
+            <CodeExample
+              ui={ui}
+              title="Fallback para SSR"
+              code={`const prefersDark = useMediaQuery(
+  "(prefers-color-scheme: dark)",
+  { defaultValue: false },
+);`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Uso típico"
+              code={`function CommandPalette() {
+  const isCompact = useMediaQuery("(max-width: 767px)");
+
+  return isCompact ? <MobilePalette /> : <DesktopPalette />;
+}`}
+            />
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={foundationApis.useMediaQuery} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
+              <NotesList items={foundationNotes.useMediaQuery} ui={ui} />
             </div>
           </div>
         </SectionCard>

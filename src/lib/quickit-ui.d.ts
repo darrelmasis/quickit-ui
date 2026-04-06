@@ -139,6 +139,13 @@ export interface UseBreakpointResult {
 export declare function useBreakpoint(
   options?: UseBreakpointOptions,
 ): UseBreakpointResult;
+export interface UseMediaQueryOptions {
+  defaultValue?: boolean;
+}
+export declare function useMediaQuery(
+  query: string,
+  options?: UseMediaQueryOptions,
+): boolean;
 
 export interface QuickitFormControlContextValue {
   controlId: string;

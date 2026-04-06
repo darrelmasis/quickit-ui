@@ -21,6 +21,7 @@ import {
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
   useBreakpoint,
+  useMediaQuery,
   Radio,
   RenderSwitch,
   Select,
@@ -64,10 +65,12 @@ const customBreakpoints: Partial<QuickitBreakpoints> = { lg: desktopCutoff + 100
 export function ConsumerPreview() {
   const responsive = useBreakpoint({ breakpoints: customBreakpoints });
   const activeBreakpoint: QuickitBreakpoint | null = responsive.breakpoint;
+  const prefersDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
     <QuickitProvider theme="dark">
       <span>{activeBreakpoint}</span>
+      <span>{String(prefersDesktop)}</span>
       <Button {...buttonProps}>Guardar</Button>
       <Link {...linkProps}>Ir a docs</Link>
       <Badge color="success">Activo</Badge>
