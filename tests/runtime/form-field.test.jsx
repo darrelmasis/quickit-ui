@@ -37,8 +37,8 @@ describe("form field variants", () => {
     expect(screen.getByPlaceholderText("Neutral field").className).toContain(
       "hover:border-slate-700",
     );
-    expect(screen.getByPlaceholderText("Neutral field").className).toContain(
-      "hover:bg-slate-300/95",
+    expect(screen.getByPlaceholderText("Neutral field").className).not.toContain(
+      "hover:bg-",
     );
   });
 
