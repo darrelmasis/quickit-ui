@@ -96,7 +96,7 @@ export function FormDocs({ ui, visibleIds }) {
           <SectionHeading
             category="Formularios"
             title="Checkbox"
-            description="Checkbox custom con render consistente en light y dark mode, más colores semánticos opcionales sobre un default neutral."
+            description="Checkbox custom con render consistente en light y dark mode, más colores semánticos opcionales sobre un default neutral y foco visible real al navegar con teclado."
             ui={ui}
           />
           <div className="mt-6 space-y-4">
@@ -235,7 +235,7 @@ export function FormDocs({ ui, visibleIds }) {
           <SectionHeading
             category="Formularios"
             title="Radio"
-            description="Radio custom alineado con `Checkbox`, con apariencia consistente entre temas y color opcional para el estado seleccionado."
+            description="Radio custom alineado con `Checkbox`, con apariencia consistente entre temas, color opcional para el estado seleccionado y foco visible real al navegar con teclado."
             ui={ui}
           />
           <div className="mt-6 space-y-4">

@@ -58,7 +58,7 @@ const apis = {
     { prop: "variant", type: "default | muted | subtle | solid | outline | ghost", defaultValue: "default", description: "En `text` controla el tono del enlace. En `button` define la variante visual del botón." },
     { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`. `neutral` mantiene la base premium; `slate`, `zinc`, `dark` y `black` cubren escalas neutras más explícitas." },
     { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Tamaño del enlace cuando `appearance=\"button\"`." },
-    { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Comparte la misma geometría de `Button` cuando `appearance=\"button\"`." },
+    { prop: "shape", type: "default | square | circle | pill", defaultValue: "default", description: "Comparte la misma geometría de `Button` cuando `appearance=\"button\"`." },
     { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el enlace a `w-full` cuando usa apariencia de botón." },
     { prop: "activeMotion", type: "boolean", defaultValue: "true", description: "Desactiva la animación nativa de presión cuando `appearance=\"button\"`." },
     { prop: "underline", type: "always | hover | none", defaultValue: "hover", description: "Controla el subrayado." },
@@ -826,6 +826,10 @@ export function UtilityDocs({ ui, visibleIds }) {
                 documentación o acciones secundarias sin tener que recurrir a estilos ad hoc.
               </p>
             </PreviewPanel>
+
+            <p className={`text-sm ${ui.body}`}>
+              Al navegar con <code>Tab</code>, los enlaces de texto muestran un halo visible y los enlaces con apariencia de botón comparten la misma política de focus ring que <code>Button</code>.
+            </p>
           </div>
 
           <div className="mt-8">

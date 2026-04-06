@@ -8,7 +8,8 @@ import { Label } from "@/lib/components/label";
 const RADIO_THEME_CLASSES = {
   light: {
     ring: "border-slate-500 bg-slate-200/90 shadow-[0_1px_2px_rgba(15,23,42,0.09)] peer-hover:border-slate-700 peer-hover:bg-slate-100",
-    focus: "peer-focus-visible:outline-slate-600",
+    focus:
+      "peer-focus-visible:outline-slate-700 peer-focus-visible:ring-slate-400/35 peer-focus-visible:ring-offset-stone-50",
     colors: {
       neutral: { ring: "peer-checked:border-slate-800", dot: "bg-slate-800" },
       slate: { ring: "peer-checked:border-slate-800", dot: "bg-slate-800" },
@@ -28,7 +29,8 @@ const RADIO_THEME_CLASSES = {
   },
   dark: {
     ring: "border-zinc-700 bg-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.34)] peer-hover:border-zinc-600 peer-hover:bg-zinc-900",
-    focus: "peer-focus-visible:outline-zinc-500",
+    focus:
+      "peer-focus-visible:outline-zinc-400 peer-focus-visible:ring-zinc-400/35 peer-focus-visible:ring-offset-[#09090b]",
     colors: {
       neutral: { ring: "peer-checked:border-zinc-100", dot: "bg-zinc-100" },
       slate: { ring: "peer-checked:border-slate-100", dot: "bg-slate-100" },
@@ -125,7 +127,7 @@ const Radio = forwardRef(function Radio(
         className={cn(
           resolveQuickitFocusRingClasses(
             focusRingEnabled,
-            "pointer-events-none inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
+            "pointer-events-none inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity,box-shadow] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:ring-4 peer-focus-visible:ring-offset-2 peer-checked:[&>span]:scale-100",
           ),
           sizeUi.control,
           ui.ring,

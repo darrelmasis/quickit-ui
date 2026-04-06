@@ -16,14 +16,20 @@ import {
 
 const LINK_THEME_CLASSES = {
   light: {
-    default: "text-blue-700 hover:text-blue-800 focus-visible:outline-blue-300",
-    muted: "text-slate-600 hover:text-slate-950 focus-visible:outline-slate-300",
-    subtle: "text-slate-500 hover:text-slate-950 focus-visible:outline-slate-300",
+    default:
+      "text-blue-700 hover:text-blue-800 focus-visible:bg-blue-50/80 focus-visible:outline-blue-300 focus-visible:ring-blue-200/70",
+    muted:
+      "text-slate-600 hover:text-slate-950 focus-visible:bg-slate-100 focus-visible:outline-slate-300 focus-visible:ring-slate-300/80",
+    subtle:
+      "text-slate-500 hover:text-slate-950 focus-visible:bg-slate-100/90 focus-visible:outline-slate-300 focus-visible:ring-slate-300/80",
   },
   dark: {
-    default: "text-blue-300 hover:text-blue-200 focus-visible:outline-blue-300",
-    muted: "text-stone-300 hover:text-stone-50 focus-visible:outline-zinc-700",
-    subtle: "text-stone-400 hover:text-stone-50 focus-visible:outline-zinc-700",
+    default:
+      "text-blue-300 hover:text-blue-200 focus-visible:bg-blue-400/10 focus-visible:outline-blue-300 focus-visible:ring-blue-400/30",
+    muted:
+      "text-stone-300 hover:text-stone-50 focus-visible:bg-zinc-900 focus-visible:outline-zinc-700 focus-visible:ring-zinc-500/35",
+    subtle:
+      "text-stone-400 hover:text-stone-50 focus-visible:bg-zinc-900 focus-visible:outline-zinc-700 focus-visible:ring-zinc-500/35",
   },
 };
 
@@ -114,7 +120,7 @@ const Link = forwardRef(function Link(
             )
           : resolveQuickitFocusRingClasses(
               focusRingEnabled,
-              "inline-flex items-center gap-1 text-sm font-medium outline-none transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+              "inline-flex items-center gap-1 rounded-[0.45rem] px-1.5 py-0.5 text-sm font-medium outline-none transition-[color,background-color,box-shadow] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-4 focus-visible:ring-offset-0",
             ),
         isButtonAppearance
           ? [

@@ -21,7 +21,8 @@ const CHECKBOX_SIZE_CLASSES = {
 const CHECKBOX_THEME_CLASSES = {
   light: {
     box: "border-slate-500 bg-slate-200/90 shadow-[0_1px_2px_rgba(15,23,42,0.09)] peer-hover:border-slate-700 peer-hover:bg-slate-100",
-    focus: "peer-focus-visible:outline-slate-600",
+    focus:
+      "peer-focus-visible:outline-slate-700 peer-focus-visible:ring-slate-400/35 peer-focus-visible:ring-offset-stone-50",
     colors: {
       neutral: {
         box: "peer-checked:border-slate-800 peer-checked:bg-slate-800 peer-hover:peer-checked:border-slate-950 peer-hover:peer-checked:bg-slate-950",
@@ -77,7 +78,8 @@ const CHECKBOX_THEME_CLASSES = {
   },
   dark: {
     box: "border-zinc-700 bg-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.34)] peer-hover:border-zinc-600 peer-hover:bg-zinc-900",
-    focus: "peer-focus-visible:outline-zinc-500",
+    focus:
+      "peer-focus-visible:outline-zinc-400 peer-focus-visible:ring-zinc-400/35 peer-focus-visible:ring-offset-[#09090b]",
     colors: {
       neutral: {
         box: "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
@@ -202,7 +204,7 @@ const Checkbox = forwardRef(function Checkbox(
         className={cn(
           resolveQuickitFocusRingClasses(
             focusRingEnabled,
-            "pointer-events-none inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&_svg]:opacity-100",
+            "pointer-events-none inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity,box-shadow] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:ring-4 peer-focus-visible:ring-offset-2 peer-checked:[&_svg]:opacity-100",
           ),
           CHECKBOX_SIZE_CLASSES[resolvedSize].box,
           ui.box,
