@@ -11,6 +11,10 @@ import {
   For,
   getInitials,
   Input,
+  InputGroup,
+  InputGroupAction,
+  InputGroupAddon,
+  InputGroupItem,
   Initials,
   Link,
   Match,
@@ -87,13 +91,32 @@ export function ConsumerPreview() {
         defaultValue="Quickit"
         clearButton
         actionShape="circle"
+        shape="pill"
+        leftElement={<span>S</span>}
       />
       <Input
         color="brand"
         type="password"
         passwordToggle
         showPasswordLabel="Ver"
+        rightElement={<span>!</span>}
       />
+      <InputGroup attached layout="grid" columns={2} color="dark">
+        <InputGroupItem span={2}>
+          <Input placeholder="Card number" />
+        </InputGroupItem>
+        <InputGroupItem>
+          <Input placeholder="MM / YY" />
+        </InputGroupItem>
+        <InputGroupItem>
+          <Input placeholder="CVC" />
+        </InputGroupItem>
+      </InputGroup>
+      <InputGroup attached shape="pill">
+        <InputGroupAddon align="inline-start">https://</InputGroupAddon>
+        <Input placeholder="quickit.dev" />
+        <InputGroupAction variant="outline">Ir</InputGroupAction>
+      </InputGroup>
       <Textarea color="light" minRows={3} />
       <Checkbox
         defaultChecked

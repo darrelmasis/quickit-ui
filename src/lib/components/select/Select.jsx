@@ -25,6 +25,7 @@ import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
+import { useInputGroup } from "@/lib/components/input/input-group.context";
 import {
   FORM_FIELD_THEME_CLASSES,
   resolveFormFieldColor,
@@ -163,6 +164,8 @@ const Select = forwardRef(function Select(
   {
     children,
     className,
+    color: colorProp,
+    size: controlSizeProp,
     defaultValue,
     disabled = false,
     id,
@@ -172,18 +175,20 @@ const Select = forwardRef(function Select(
     onValueChange,
     placeholder,
     required = false,
-    size: controlSize = "md",
     usePortal = true,
     value: controlledValue,
-    color = "neutral",
     ...props
   },
   ref,
 ) {
+  const group = useInputGroup();
+  const isAttached = Boolean(group?.attached);
   const theme = resolveFloatingListTheme(useQuickitTheme());
   const fieldTheme = resolveFormFieldTheme(useQuickitTheme());
   const focusRingEnabled = useQuickitFocusRing("select");
   const ui = SELECT_THEME_CLASSES[fieldTheme];
+  const controlSize = controlSizeProp ?? group?.size ?? "md";
+  const color = colorProp ?? group?.color ?? "neutral";
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[fieldTheme][resolvedColor];
   const field = useFormControl();
@@ -414,7 +419,13 @@ const Select = forwardRef(function Select(
   ) : null;
 
   return (
-    <span className={SELECT_PRIMITIVES.wrapper}>
+    <span
+      className={cn(
+        SELECT_PRIMITIVES.wrapper,
+        isAttached && "h-full",
+        group?.layout === "inline" && "flex-1",
+      )}
+    >
       {name ? (
         <input type="hidden" name={name} value={resolvedValue} />
       ) : null}
@@ -430,17 +441,20 @@ const Select = forwardRef(function Select(
         aria-required={resolvedRequired || undefined}
         className={cn(
           SELECT_PRIMITIVES.trigger,
+          isAttached
+            ? "h-full rounded-none border-0 shadow-none focus-visible:border-transparent focus-visible:ring-0"
+            : getControlRadius(controlSize),
+          isAttached
+            ? null
+            : SELECT_SIZE_CLASSES[controlSize] ?? SELECT_SIZE_CLASSES.md,
           resolveQuickitFocusRingClasses(
-            focusRingEnabled,
-            SELECT_PRIMITIVES.trigger,
-          ),
-          getControlRadius(controlSize),
-          SELECT_SIZE_CLASSES[controlSize] ?? SELECT_SIZE_CLASSES.md,
-          resolveQuickitFocusRingClasses(
-            focusRingEnabled,
+            isAttached ? false : focusRingEnabled,
             resolvedInvalid ? ui.invalid : colorUi.base,
           ),
-          !resolvedDisabled && !resolvedInvalid && colorUi.hover,
+          !isAttached &&
+            !resolvedDisabled &&
+            !resolvedInvalid &&
+            colorUi.hover,
           className,
         )}
         {...interactions.getReferenceProps({

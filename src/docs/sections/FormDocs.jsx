@@ -1,4 +1,25 @@
-import { Checkbox, FormControl, FormDescription, FormMessage, Input, Label, Radio, Select, Switch, Textarea } from "@/lib";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownSeparator,
+  DropdownTrigger,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  Input,
+  InputGroup,
+  InputGroupAction,
+  InputGroupAddon,
+  InputGroupItem,
+  Label,
+  Radio,
+  Select,
+  Switch,
+  Textarea,
+} from "@/lib";
 import { CodeExample, PreviewPanel, PropsTable, SectionCard, SectionHeading } from "@/docs/components/DocsPrimitives";
 
 const fieldColors = ["neutral", "slate", "zinc", "primary", "brand", "success", "danger", "warning", "info", "light", "dark", "black"];
@@ -16,14 +37,41 @@ const apis = {
   ],
   input: [
     { prop: "size", type: "sm | md | lg", defaultValue: "md", description: "Controla altura y padding interno del campo." },
+    { prop: "shape", type: "square | pill", defaultValue: "square", description: "Cambia la geometría del input. `square` usa el radio actual del sistema y `pill` lo vuelve totalmente redondeado." },
     { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "neutral", description: "Cambia borde, fondo y focus ring del campo. `neutral` mantiene la base premium; `slate`, `zinc`, `dark` y `black` cubren escalas neutras más explícitas." },
     { prop: "type", type: "string", defaultValue: "text", description: "Tipo nativo del input. `search` activa clear automático y `password` activa toggle de visibilidad." },
+    { prop: "leftElement / rightElement", type: "ReactNode", defaultValue: "undefined", description: "Permite inyectar iconos o contenido visual en el lado izquierdo o derecho del campo sin salir del propio componente." },
     { prop: "clearButton / onClear / clearButtonLabel", type: "boolean / () => void / string", defaultValue: "auto en search / undefined / \"Limpiar búsqueda\"", description: "Permite mostrar, controlar y etiquetar el botón interno para limpiar búsquedas." },
     { prop: "passwordToggle / onPasswordVisibilityChange", type: "boolean / (visible) => void", defaultValue: "auto en password / undefined", description: "Permite mostrar u ocultar el toggle interno para contraseñas y escuchar cambios de visibilidad." },
     { prop: "actionShape", type: "square | circle", defaultValue: "circle", description: "Cambia la forma del botón interno de clear o visibility toggle. `circle` es la opción recomendada para icon buttons." },
     { prop: "clearIcon / showPasswordIcon / hidePasswordIcon", type: "ReactNode", defaultValue: "SVG interno / SVG interno / SVG interno", description: "Permite reemplazar el contenido visual del botón interno, por ejemplo con SVGs propios." },
     { prop: "invalid", type: "boolean", defaultValue: "false", description: "Aplica estado visual inválido fuera de `FormControl`." },
     { prop: "disabled", type: "boolean", defaultValue: "false", description: "Deshabilita interacción." },
+  ],
+  inputGroup: [
+    { prop: "attached", type: "boolean", defaultValue: "false", description: "Fusiona los segmentos visualmente para que el grupo se vea como un solo campo dividido." },
+    { prop: "layout", type: "inline | grid", defaultValue: "inline", description: "Permite trabajar tanto en fila como en grid para composiciones tipo tarjeta o campos segmentados." },
+    { prop: "columns", type: "number | string", defaultValue: "undefined", description: "Define columnas cuando `layout=\"grid\"`, por ejemplo para tarjetas, fechas o OTP." },
+    { prop: "size / shape / color", type: "sm | md | lg / square | pill / QuickitSemanticColor", defaultValue: "md / square / neutral", description: "Sirve como contexto visual para `Input`, `InputGroupAddon` y `InputGroupAction` dentro del grupo." },
+    { prop: "fullWidth", type: "boolean", defaultValue: "true", description: "Expande el grupo a `w-full` para componer campos y acciones en una misma fila." },
+    { prop: "children", type: "ReactNode", defaultValue: "-", description: "Contenido libre para agrupar `Input`, `InputGroupItem`, `InputGroupAddon` e `InputGroupAction`." },
+  ],
+  inputGroupItem: [
+    { prop: "span", type: "number", defaultValue: "undefined", description: "Hace que el item ocupe varias columnas cuando el grupo está en `layout=\"grid\"`." },
+    { prop: "grow", type: "boolean", defaultValue: "true", description: "Permite que el item crezca en layouts inline. Útil para inputs que deben ocupar el espacio principal." },
+    { prop: "children", type: "ReactNode", defaultValue: "-", description: "Segmento libre para `Input` u otros elementos dentro del grupo." },
+  ],
+  inputGroupAddon: [
+    { prop: "align", type: "start | center | end | inline-start | inline-end", defaultValue: "start", description: "Alinea el contenido pasivo dentro del segmento, por ejemplo iconos, prefijos o contadores." },
+    { prop: "color / size / shape", type: "QuickitSemanticColor / sm | md | lg / square | pill", defaultValue: "heredado del grupo", description: "Permite sobrescribir la apariencia del addon respecto al contexto de `InputGroup`." },
+    { prop: "children", type: "ReactNode", defaultValue: "-", description: "Contenido no interactivo como iconos, texto, prefijos o resultados. Si el segmento debe responder a click o teclado, usa `InputGroupAction`." },
+  ],
+  inputGroupAction: [
+    { prop: "variant", type: "solid | outline | ghost", defaultValue: "solid", description: "Define el estilo visual de la acción cuando se usa como segmento interactivo del grupo. `InputGroupAction` reutiliza `Button` y renderiza un `<button>` real." },
+    { prop: "color / size / shape", type: "QuickitSemanticColor / sm | md | lg / square | pill", defaultValue: "heredado del grupo", description: "Permite adaptar la acción al mismo sistema visual del resto del grupo." },
+    { prop: "activeMotion", type: "boolean", defaultValue: "false", description: "Viene desactivado por defecto para que el grupo attached se sienta más estable." },
+    { prop: "type / onClick / disabled", type: "\"button\" | \"submit\" | \"reset\" / (event) => void / boolean", defaultValue: "\"button\" / undefined / false", description: "Se comporta como cualquier botón nativo: participa en foco, teclado, submit de formularios y estados disabled." },
+    { prop: "children", type: "ReactNode", defaultValue: "-", description: "Contenido interactivo del segmento, normalmente texto corto o un icono SVG." },
   ],
   textarea: [
     { prop: "minRows", type: "number", defaultValue: "4", description: "Define las filas iniciales del textarea." },
@@ -85,7 +133,335 @@ export function FormDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "label") ? <SectionCard id="label" className={ui.divider}><SectionHeading category="Formularios" title="Label" description="Etiqueta base para campos, compatible tanto con ids manuales como con `FormControl`." ui={ui} /><PreviewPanel ui={ui} title="Label manual y con contexto" className="mt-6" code={`<div className="space-y-2">\n  <Label htmlFor="docs-label-basic">Nombre</Label>\n  <Input id="docs-label-basic" placeholder="Quickit UI" />\n</div>\n\n<FormControl required>\n  <Label>Proyecto</Label>\n  <Input placeholder="Dashboard interno" />\n</FormControl>`}><div className="flex flex-wrap items-center gap-6"><div className="space-y-2"><Label htmlFor="docs-label-basic">Nombre</Label><Input id="docs-label-basic" placeholder="Quickit UI" /></div><div className="space-y-2"><FormControl required><Label>Proyecto</Label><Input placeholder="Dashboard interno" /></FormControl></div></div></PreviewPanel><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.label} ui={ui} /></div><CodeExample ui={ui} code={`<Label htmlFor="project-name">Proyecto</Label>\n<Input id="project-name" placeholder="Quickit UI" />`} /></div></SectionCard> : null}
 
-      {isVisible(visibleIds, "input") ? <SectionCard id="input" className={ui.divider}><SectionHeading category="Formularios" title="Input" description="Campo de texto base con tamaños, estado inválido y soporte automático para `FormControl`." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Tamaños" code={`<div className="flex flex-wrap items-center gap-3">\n  <Input size="sm" placeholder="Small input" className="max-w-[180px]" />\n  <Input size="md" placeholder="Medium input" className="max-w-[200px]" />\n  <Input size="lg" placeholder="Large input" className="max-w-[220px]" />\n</div>`}><div className="flex flex-wrap items-center gap-3"><Input size="sm" placeholder="Small input" className="max-w-[180px]" /><Input size="md" placeholder="Medium input" className="max-w-[200px]" /><Input size="lg" placeholder="Large input" className="max-w-[220px]" /></div></PreviewPanel><PreviewPanel ui={ui} title="Colores y focus ring" className="grid gap-3 md:grid-cols-3" code={`<div className="grid gap-3 md:grid-cols-3">\n  <Input color="neutral" defaultValue="neutral" />\n  <Input color="slate" defaultValue="slate" />\n  <Input color="zinc" defaultValue="zinc" />\n  <Input color="primary" defaultValue="primary" />\n  <Input color="brand" defaultValue="brand" />\n  <Input color="success" defaultValue="success" />\n  <Input color="danger" defaultValue="danger" />\n  <Input color="warning" defaultValue="warning" />\n  <Input color="info" defaultValue="info" />\n  <Input color="light" defaultValue="light" />\n  <Input color="dark" defaultValue="dark" />\n  <Input color="black" defaultValue="black" />\n</div>`}><div className="grid gap-3 md:grid-cols-3">{fieldColors.map((color) => <Input key={color} color={color} defaultValue={color} />)}</div></PreviewPanel><PreviewPanel ui={ui} title="Con FormControl e invalid" className="grid gap-4 md:grid-cols-2" code={`<FormControl>\n  <Label>Usuario</Label>\n  <Input placeholder="@quickit" />\n</FormControl>\n\n<FormControl invalid>\n  <Label>Correo</Label>\n  <Input type="email" placeholder="correo@dominio.com" />\n  <FormMessage>Ingresa un correo válido.</FormMessage>\n</FormControl>`}><FormControl><Label>Usuario</Label><Input placeholder="@quickit" /></FormControl><FormControl invalid><Label>Correo</Label><Input type="email" placeholder="correo@dominio.com" /><FormMessage>Ingresa un correo válido.</FormMessage></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Tipos comunes" className="grid gap-4 md:grid-cols-2" code={`<FormControl>\n  <Label>Buscar componente</Label>\n  <Input type="search" placeholder="Button, Modal, Input..." />\n</FormControl>\n\n<FormControl>\n  <Label>Clave temporal</Label>\n  <Input type="password" placeholder="••••••••" />\n</FormControl>`}><FormControl><Label>Buscar componente</Label><Input type="search" placeholder="Button, Modal, Input..." /></FormControl><FormControl><Label>Clave temporal</Label><Input type="password" placeholder="••••••••" /></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Input type=search con clear" className="grid gap-4 md:grid-cols-2" code={`<FormControl>\n  <Label>Buscar en la librería</Label>\n  <Input type="search" defaultValue="Modal" placeholder="Busca por nombre o categoría" />\n</FormControl>\n\n<FormControl>\n  <Label>Búsqueda con icon button</Label>\n  <Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" />\n</FormControl>`}><FormControl><Label>Buscar en la librería</Label><Input type="search" defaultValue="Modal" placeholder="Busca por nombre o categoría" /></FormControl><FormControl><Label>Búsqueda con icon button</Label><Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" /></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Input type=password con toggle" className="grid gap-4 md:grid-cols-2" code={`<FormControl>\n  <Label>Contraseña</Label>\n  <Input type="password" placeholder="••••••••" />\n</FormControl>\n\n<FormControl>\n  <Label>Acceso administrativo</Label>\n  <Input type="password" color="dark" actionShape="circle" placeholder="••••••••" />\n</FormControl>`}><FormControl><Label>Contraseña</Label><Input type="password" placeholder="••••••••" /></FormControl><FormControl><Label>Acceso administrativo</Label><Input type="password" color="dark" actionShape="circle" placeholder="••••••••" /></FormControl></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.input} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Usuario</Label>\n  <Input placeholder="@quickit" />\n</FormControl>\n\n<FormControl>\n  <Label>Buscar componente</Label>\n  <Input type="search" actionShape="circle" placeholder="Button, Modal, Input..." />\n</FormControl>\n\n<FormControl>\n  <Label>Clave temporal</Label>\n  <Input type="password" placeholder="••••••••" />\n</FormControl>`} /></div></SectionCard> : null}
+      {isVisible(visibleIds, "input") ? (
+        <SectionCard id="input" className={ui.divider}>
+          <SectionHeading
+            category="Formularios"
+            title="Input"
+            description="Campo de texto base con tamaños, estado inválido y soporte automático para `FormControl`."
+            ui={ui}
+          />
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Tamaños"
+              code={`<div className="flex flex-wrap items-center gap-3">\n  <Input size="sm" placeholder="Small input" className="max-w-[180px]" />\n  <Input size="md" placeholder="Medium input" className="max-w-[200px]" />\n  <Input size="lg" placeholder="Large input" className="max-w-[220px]" />\n</div>`}
+            >
+              <div className="flex flex-wrap items-center gap-3">
+                <Input size="sm" placeholder="Small input" className="max-w-[180px]" />
+                <Input size="md" placeholder="Medium input" className="max-w-[200px]" />
+                <Input size="lg" placeholder="Large input" className="max-w-[220px]" />
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Colores y focus ring"
+              className="grid gap-3 md:grid-cols-3"
+              code={`<div className="grid gap-3 md:grid-cols-3">\n  <Input color="neutral" defaultValue="neutral" />\n  <Input color="slate" defaultValue="slate" />\n  <Input color="zinc" defaultValue="zinc" />\n  <Input color="primary" defaultValue="primary" />\n  <Input color="brand" defaultValue="brand" />\n  <Input color="success" defaultValue="success" />\n  <Input color="danger" defaultValue="danger" />\n  <Input color="warning" defaultValue="warning" />\n  <Input color="info" defaultValue="info" />\n  <Input color="light" defaultValue="light" />\n  <Input color="dark" defaultValue="dark" />\n  <Input color="black" defaultValue="black" />\n</div>`}
+            >
+              <div className="grid gap-3 md:grid-cols-3">
+                {fieldColors.map((color) => (
+                  <Input key={color} color={color} defaultValue={color} />
+                ))}
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Con FormControl e invalid"
+              className="grid gap-4 md:grid-cols-2"
+              code={`<FormControl>\n  <Label>Usuario</Label>\n  <Input placeholder="@quickit" />\n</FormControl>\n\n<FormControl invalid>\n  <Label>Correo</Label>\n  <Input type="email" placeholder="correo@dominio.com" />\n  <FormMessage>Ingresa un correo válido.</FormMessage>\n</FormControl>`}
+            >
+              <FormControl>
+                <Label>Usuario</Label>
+                <Input placeholder="@quickit" />
+              </FormControl>
+
+              <FormControl invalid>
+                <Label>Correo</Label>
+                <Input type="email" placeholder="correo@dominio.com" />
+                <FormMessage>Ingresa un correo válido.</FormMessage>
+              </FormControl>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Tipos comunes"
+              className="grid gap-4 md:grid-cols-2"
+              code={`<FormControl>\n  <Label>Buscar componente</Label>\n  <Input type="search" placeholder="Button, Modal, Input..." />\n</FormControl>\n\n<FormControl>\n  <Label>Clave temporal</Label>\n  <Input type="password" placeholder="••••••••" />\n</FormControl>`}
+            >
+              <FormControl>
+                <Label>Buscar componente</Label>
+                <Input type="search" placeholder="Button, Modal, Input..." />
+              </FormControl>
+
+              <FormControl>
+                <Label>Clave temporal</Label>
+                <Input type="password" placeholder="••••••••" />
+              </FormControl>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Input type=search con clear"
+              className="grid gap-4 md:grid-cols-2"
+              code={`<FormControl>\n  <Label>Buscar en la librería</Label>\n  <Input type="search" defaultValue="Modal" placeholder="Busca por nombre o categoría" />\n</FormControl>\n\n<FormControl>\n  <Label>Búsqueda con icon button</Label>\n  <Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" />\n</FormControl>`}
+            >
+              <FormControl>
+                <Label>Buscar en la librería</Label>
+                <Input type="search" defaultValue="Modal" placeholder="Busca por nombre o categoría" />
+              </FormControl>
+
+              <FormControl>
+                <Label>Búsqueda con icon button</Label>
+                <Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" />
+              </FormControl>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Input type=password con toggle"
+              className="grid gap-4 md:grid-cols-2"
+              code={`<FormControl>\n  <Label>Contraseña</Label>\n  <Input type="password" placeholder="••••••••" />\n</FormControl>\n\n<FormControl>\n  <Label>Acceso administrativo</Label>\n  <Input type="password" color="dark" actionShape="circle" placeholder="••••••••" />\n</FormControl>`}
+            >
+              <FormControl>
+                <Label>Contraseña</Label>
+                <Input type="password" placeholder="••••••••" />
+              </FormControl>
+
+              <FormControl>
+                <Label>Acceso administrativo</Label>
+                <Input type="password" color="dark" actionShape="circle" placeholder="••••••••" />
+              </FormControl>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Shape e iconos"
+              className="space-y-4"
+              code={`<div className="space-y-4">\n  <Input\n    type="search"\n    shape="pill"\n    placeholder="Buscar en AVA"\n    leftElement={\n      <svg viewBox="0 0 20 20" fill="none" className="size-4">\n        <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n        <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n      </svg>\n    }\n  />\n\n  <Input\n    type="text"\n    color="slate"\n    placeholder="Proyecto actual"\n    leftElement={<span className="text-xs font-semibold">AVA</span>}\n    rightElement={<span className="text-xs">v0.1.17</span>}\n  />\n</div>`}
+            >
+              <div className="space-y-4">
+                <Input
+                  type="search"
+                  shape="pill"
+                  placeholder="Buscar en AVA"
+                  leftElement={
+                    <svg viewBox="0 0 20 20" fill="none" className="size-4">
+                      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+                      <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  }
+                />
+
+                <Input
+                  type="text"
+                  color="slate"
+                  placeholder="Proyecto actual"
+                  leftElement={<span className="text-xs font-semibold">AVA</span>}
+                  rightElement={<span className="text-xs">v0.1.17</span>}
+                />
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="InputGroup attached: addons pasivos y botones reales"
+              className="space-y-4"
+              code={`<div className="space-y-4">\n  <InputGroup attached shape="pill" color="dark">\n    <InputGroupAddon>\n      <svg viewBox="0 0 20 20" fill="none" className="size-4">\n        <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n        <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n      </svg>\n    </InputGroupAddon>\n    <Input type="search" placeholder="Buscar en AVA" />\n    <InputGroupAddon align="inline-end">12 results</InputGroupAddon>\n  </InputGroup>\n\n  <InputGroup attached color="zinc">\n    <InputGroupAddon>https://</InputGroupAddon>\n    <Input placeholder="quickit.dev" />\n    <InputGroupAction color="brand" onClick={() => console.log("ir")}>\n      Ir\n    </InputGroupAction>\n  </InputGroup>\n</div>`}
+            >
+              <div className="space-y-4">
+                <InputGroup attached shape="pill" color="dark">
+                  <InputGroupAddon>
+                    <svg viewBox="0 0 20 20" fill="none" className="size-4">
+                      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+                      <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </InputGroupAddon>
+                  <Input type="search" placeholder="Buscar en AVA" />
+                  <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+                </InputGroup>
+
+                <InputGroup attached color="zinc">
+                  <InputGroupAddon>https://</InputGroupAddon>
+                  <Input placeholder="quickit.dev" />
+                  <InputGroupAction color="brand" onClick={() => {}}>
+                    Ir
+                  </InputGroupAction>
+                </InputGroup>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="InputGroup: toolbar, botones y grid"
+              className="space-y-4"
+              code={`<div className="space-y-4">\n  <InputGroup attached>\n    <InputGroupAction variant="outline" onClick={() => console.log("todo")}>\n      Todo\n    </InputGroupAction>\n    <Input placeholder="Filtra por nombre o etiqueta" />\n    <InputGroupAction variant="outline" onClick={() => console.log("estado")}>\n      Estado\n    </InputGroupAction>\n  </InputGroup>\n\n  <InputGroup attached layout="grid" columns={2} className="max-w-md">\n    <InputGroupItem span={2}>\n      <Input placeholder="Card number" />\n    </InputGroupItem>\n    <InputGroupItem>\n      <Input placeholder="MM / YY" />\n    </InputGroupItem>\n    <InputGroupItem>\n      <Input placeholder="CVC" />\n    </InputGroupItem>\n  </InputGroup>\n</div>`}
+            >
+              <div className="space-y-4">
+                <InputGroup attached>
+                  <InputGroupAction variant="outline" onClick={() => {}}>
+                    Todo
+                  </InputGroupAction>
+                  <Input placeholder="Filtra por nombre o etiqueta" />
+                  <InputGroupAction variant="outline" onClick={() => {}}>
+                    Estado
+                  </InputGroupAction>
+                </InputGroup>
+
+                <InputGroup attached layout="grid" columns={2} className="max-w-md">
+                  <InputGroupItem span={2}>
+                    <Input placeholder="Card number" />
+                  </InputGroupItem>
+                  <InputGroupItem>
+                    <Input placeholder="MM / YY" />
+                  </InputGroupItem>
+                  <InputGroupItem>
+                    <Input placeholder="CVC" />
+                  </InputGroupItem>
+                </InputGroup>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="InputGroup combinado con Dropdown"
+              className="space-y-4"
+              code={`<div className="space-y-4">\n  <InputGroup attached>\n    <Dropdown>\n      <DropdownTrigger asChild>\n        <InputGroupAction variant="outline">Estado</InputGroupAction>\n      </DropdownTrigger>\n      <DropdownContent className="w-44">\n        <DropdownItem>Todos</DropdownItem>\n        <DropdownItem>Activo</DropdownItem>\n        <DropdownItem>Pausado</DropdownItem>\n      </DropdownContent>\n    </Dropdown>\n    <Input placeholder="Filtra por nombre o etiqueta" />\n    <Dropdown>\n      <DropdownTrigger asChild>\n        <InputGroupAction variant="outline">Ordenar</InputGroupAction>\n      </DropdownTrigger>\n      <DropdownContent className="w-44">\n        <DropdownItem>Recientes</DropdownItem>\n        <DropdownItem>Nombre</DropdownItem>\n        <DropdownItem>Uso</DropdownItem>\n      </DropdownContent>\n    </Dropdown>\n  </InputGroup>\n\n  <InputGroup attached shape="pill" color="dark">\n    <Dropdown>\n      <DropdownTrigger asChild>\n        <InputGroupAction variant="outline">Componentes</InputGroupAction>\n      </DropdownTrigger>\n      <DropdownContent className="w-48">\n        <DropdownItem>Todos</DropdownItem>\n        <DropdownItem>Core</DropdownItem>\n        <DropdownItem>Formularios</DropdownItem>\n        <DropdownSeparator />\n        <DropdownItem variant="danger">Limpiar filtro</DropdownItem>\n      </DropdownContent>\n    </Dropdown>\n    <Input type="search" placeholder="Buscar en documentación" />\n  </InputGroup>\n</div>`}
+            >
+              <div className="space-y-4">
+                <InputGroup attached>
+                  <Dropdown>
+                    <DropdownTrigger asChild>
+                      <InputGroupAction variant="outline">Estado</InputGroupAction>
+                    </DropdownTrigger>
+                    <DropdownContent className="w-44">
+                      <DropdownItem>Todos</DropdownItem>
+                      <DropdownItem>Activo</DropdownItem>
+                      <DropdownItem>Pausado</DropdownItem>
+                    </DropdownContent>
+                  </Dropdown>
+                  <Input placeholder="Filtra por nombre o etiqueta" />
+                  <Dropdown>
+                    <DropdownTrigger asChild>
+                      <InputGroupAction variant="outline">Ordenar</InputGroupAction>
+                    </DropdownTrigger>
+                    <DropdownContent className="w-44">
+                      <DropdownItem>Recientes</DropdownItem>
+                      <DropdownItem>Nombre</DropdownItem>
+                      <DropdownItem>Uso</DropdownItem>
+                    </DropdownContent>
+                  </Dropdown>
+                </InputGroup>
+
+                <InputGroup attached shape="pill" color="dark">
+                  <Dropdown>
+                    <DropdownTrigger asChild>
+                      <InputGroupAction variant="outline">Componentes</InputGroupAction>
+                    </DropdownTrigger>
+                    <DropdownContent className="w-48">
+                      <DropdownItem>Todos</DropdownItem>
+                      <DropdownItem>Core</DropdownItem>
+                      <DropdownItem>Formularios</DropdownItem>
+                      <DropdownSeparator />
+                      <DropdownItem variant="danger">Limpiar filtro</DropdownItem>
+                    </DropdownContent>
+                  </Dropdown>
+                  <Input type="search" placeholder="Buscar en documentación" />
+                </InputGroup>
+              </div>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="InputGroup combinado con Select"
+              className="space-y-4"
+              code={`<div className="space-y-4">\n  <InputGroup>\n    <InputGroupItem className="w-[220px]" grow={false}>\n      <Select defaultValue="all" usePortal={false}>\n        <option value="all">Todos los componentes</option>\n        <option value="core">Core</option>\n        <option value="forms">Formularios</option>\n        <option value="overlays">Overlays</option>\n      </Select>\n    </InputGroupItem>\n    <Input placeholder="Busca por nombre, alias o etiqueta" />\n    <InputGroupAction color="brand">Aplicar</InputGroupAction>\n  </InputGroup>\n\n  <InputGroup attached>\n    <InputGroupItem className="w-[240px]" grow={false}>\n      <Select defaultValue="all">\n        <option value="all">Todos los componentes</option>\n        <option value="core">Core</option>\n        <option value="forms">Formularios</option>\n      </Select>\n    </InputGroupItem>\n    <Input type="search" placeholder="Buscar por nombre o alias" />\n    <InputGroupAction variant="outline">Ir</InputGroupAction>\n  </InputGroup>\n\n  <InputGroup>\n    <InputGroupItem className="w-[180px]" grow={false}>\n      <Select defaultValue="recent" usePortal={false}>\n        <option value="recent">Más recientes</option>\n        <option value="name">Nombre</option>\n        <option value="usage">Uso</option>\n      </Select>\n    </InputGroupItem>\n    <InputGroupItem className="w-[180px]" grow={false}>\n      <Select defaultValue="active" color="slate" usePortal={false}>\n        <option value="active">Activo</option>\n        <option value="draft">Borrador</option>\n        <option value="archived">Archivado</option>\n      </Select>\n    </InputGroupItem>\n    <Input placeholder="Filtra por responsable o feature" />\n  </InputGroup>\n</div>`}
+            >
+              <div className="space-y-4">
+                <InputGroup>
+                  <InputGroupItem className="w-[220px]" grow={false}>
+                    <Select defaultValue="all" usePortal={false}>
+                      <option value="all">Todos los componentes</option>
+                      <option value="core">Core</option>
+                      <option value="forms">Formularios</option>
+                      <option value="overlays">Overlays</option>
+                    </Select>
+                  </InputGroupItem>
+                  <Input placeholder="Busca por nombre, alias o etiqueta" />
+                  <InputGroupAction color="brand">Aplicar</InputGroupAction>
+                </InputGroup>
+
+                <InputGroup attached>
+                  <InputGroupItem className="w-[240px]" grow={false}>
+                    <Select defaultValue="all">
+                      <option value="all">Todos los componentes</option>
+                      <option value="core">Core</option>
+                      <option value="forms">Formularios</option>
+                    </Select>
+                  </InputGroupItem>
+                  <Input type="search" placeholder="Buscar por nombre o alias" />
+                  <InputGroupAction variant="outline">Ir</InputGroupAction>
+                </InputGroup>
+
+                <InputGroup>
+                  <InputGroupItem className="w-[180px]" grow={false}>
+                    <Select defaultValue="recent" usePortal={false}>
+                      <option value="recent">Más recientes</option>
+                      <option value="name">Nombre</option>
+                      <option value="usage">Uso</option>
+                    </Select>
+                  </InputGroupItem>
+                  <InputGroupItem className="w-[180px]" grow={false}>
+                    <Select defaultValue="active" color="slate" usePortal={false}>
+                      <option value="active">Activo</option>
+                      <option value="draft">Borrador</option>
+                      <option value="archived">Archivado</option>
+                    </Select>
+                  </InputGroupItem>
+                  <Input placeholder="Filtra por responsable o feature" />
+                </InputGroup>
+              </div>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={apis.input} ui={ui} />
+            </div>
+
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>InputGroup</p>
+              <PropsTable rows={apis.inputGroup} ui={ui} />
+            </div>
+
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>InputGroupItem</p>
+              <PropsTable rows={apis.inputGroupItem} ui={ui} />
+            </div>
+
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>InputGroupAddon</p>
+              <PropsTable rows={apis.inputGroupAddon} ui={ui} />
+            </div>
+
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>InputGroupAction</p>
+              <PropsTable rows={apis.inputGroupAction} ui={ui} />
+            </div>
+
+            <CodeExample
+              ui={ui}
+              code={`<InputGroup attached shape="pill" color="dark">\n  <InputGroupAddon>\n    <svg viewBox="0 0 20 20" fill="none" className="size-4">\n      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n      <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n    </svg>\n  </InputGroupAddon>\n  <Input type="search" placeholder="Buscar en AVA" />\n  <InputGroupAddon align="inline-end">12 results</InputGroupAddon>\n</InputGroup>\n\n<InputGroup attached>\n  <Dropdown>\n    <DropdownTrigger asChild>\n      <InputGroupAction variant="outline">Estado</InputGroupAction>\n    </DropdownTrigger>\n    <DropdownContent className="w-44">\n      <DropdownItem>Todos</DropdownItem>\n      <DropdownItem>Activo</DropdownItem>\n      <DropdownItem>Pausado</DropdownItem>\n    </DropdownContent>\n  </Dropdown>\n  <Input placeholder="Filtra por nombre o etiqueta" />\n  <Dropdown>\n    <DropdownTrigger asChild>\n      <InputGroupAction variant="outline">Ordenar</InputGroupAction>\n    </DropdownTrigger>\n    <DropdownContent className="w-44">\n      <DropdownItem>Recientes</DropdownItem>\n      <DropdownItem>Nombre</DropdownItem>\n      <DropdownItem>Uso</DropdownItem>\n    </DropdownContent>\n  </Dropdown>\n</InputGroup>\n\n<InputGroup attached>\n  <InputGroupItem className="w-[240px]" grow={false}>\n    <Select defaultValue="all">\n      <option value="all">Todos los componentes</option>\n      <option value="core">Core</option>\n      <option value="forms">Formularios</option>\n    </Select>\n  </InputGroupItem>\n  <Input type="search" placeholder="Buscar por nombre o alias" />\n  <InputGroupAction variant="outline">Ir</InputGroupAction>\n</InputGroup>\n\n<InputGroup attached layout="grid" columns={2} className="max-w-md">\n  <InputGroupItem span={2}>\n    <Input placeholder="Card number" />\n  </InputGroupItem>\n  <InputGroupItem>\n    <Input placeholder="MM / YY" />\n  </InputGroupItem>\n  <InputGroupItem>\n    <Input placeholder="CVC" />\n  </InputGroupItem>\n</InputGroup>`}
+            />
+            <p className={`text-sm ${ui.body}`}>
+              Cuando `InputGroup` usa `attached`, el grupo recorta su contenido para conservar el borde exterior. `Dropdown` y `Select` deben renderizar su panel en portal para salir del clipping; el trigger de `Select` sí puede fusionarse dentro del grupo porque forma parte del mismo campo.
+            </p>
+          </div>
+        </SectionCard>
+      ) : null}
 
       {isVisible(visibleIds, "textarea") ? <SectionCard id="textarea" className={ui.divider}><SectionHeading category="Formularios" title="Textarea" description="Campo multilínea para notas, descripciones y bloques de texto más largos." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Uso editorial" className="max-w-2xl" code={`<FormControl>\n  <Label>Descripción</Label>\n  <Textarea minRows={5} placeholder="Describe el objetivo de este componente o flujo." />\n  <FormDescription>Ideal para briefs, feedback o notas editoriales.</FormDescription>\n</FormControl>`}><FormControl><Label>Descripción</Label><Textarea minRows={5} placeholder="Describe el objetivo de este componente o flujo." /><FormDescription>Ideal para briefs, feedback o notas editoriales.</FormDescription></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Variantes de color" className="grid gap-3 md:grid-cols-3" code={`<div className="grid gap-3 md:grid-cols-3">\n  <Textarea color="neutral" minRows={3} defaultValue="neutral" />\n  <Textarea color="slate" minRows={3} defaultValue="slate" />\n  <Textarea color="zinc" minRows={3} defaultValue="zinc" />\n  <Textarea color="primary" minRows={3} defaultValue="primary" />\n  <Textarea color="brand" minRows={3} defaultValue="brand" />\n  <Textarea color="success" minRows={3} defaultValue="success" />\n  <Textarea color="danger" minRows={3} defaultValue="danger" />\n  <Textarea color="warning" minRows={3} defaultValue="warning" />\n  <Textarea color="info" minRows={3} defaultValue="info" />\n  <Textarea color="light" minRows={3} defaultValue="light" />\n  <Textarea color="dark" minRows={3} defaultValue="dark" />\n  <Textarea color="black" minRows={3} defaultValue="black" />\n</div>`}><div className="grid gap-3 md:grid-cols-3">{fieldColors.map((color) => <Textarea key={color} color={color} minRows={3} defaultValue={color} />)}</div></PreviewPanel><PreviewPanel ui={ui} title="Estado inválido" className="max-w-2xl" code={`<FormControl invalid>\n  <Label>Notas de publicación</Label>\n  <Textarea minRows={4} defaultValue="Pendiente de completar los casos de uso." />\n  <FormMessage>Antes de publicar, detalla el alcance del componente.</FormMessage>\n</FormControl>`}><FormControl invalid><Label>Notas de publicación</Label><Textarea minRows={4} defaultValue="Pendiente de completar los casos de uso." /><FormMessage>Antes de publicar, detalla el alcance del componente.</FormMessage></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Disabled" className="max-w-2xl" code={`<Textarea disabled placeholder="Estado disabled" />`}><Textarea disabled placeholder="Estado disabled" /></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.textarea} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Descripción</Label>\n  <Textarea minRows={5} placeholder="Describe el objetivo." />\n  <FormDescription>Ideal para briefs o notas editoriales.</FormDescription>\n</FormControl>`} /></div></SectionCard> : null}
 

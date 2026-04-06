@@ -186,6 +186,33 @@ import {
 } from "quickit-ui";
 ```
 
+## InputGroup
+
+Usa `InputGroupAddon` para segmentos pasivos y `InputGroupAction` para segmentos interactivos.
+`InputGroupAction` reutiliza `Button` y renderiza un `<button>` real, así que soporta `type`, `onClick`, `disabled`, foco y teclado.
+
+```jsx
+import {
+  Input,
+  InputGroup,
+  InputGroupAction,
+} from "quickit-ui";
+
+export function Filters() {
+  return (
+    <InputGroup attached>
+      <InputGroupAction variant="outline" onClick={() => console.log("todo")}>
+        Todo
+      </InputGroupAction>
+      <Input placeholder="Filtra por nombre o etiqueta" />
+      <InputGroupAction variant="outline" onClick={() => console.log("estado")}>
+        Estado
+      </InputGroupAction>
+    </InputGroup>
+  );
+}
+```
+
 ## Ejemplos
 
 ### Button

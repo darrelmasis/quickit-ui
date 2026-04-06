@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { useQuickitFocusRing } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import {
@@ -10,9 +10,13 @@ import {
   INPUT_ACTION_ICON_SIZE_CLASSES,
   INPUT_ACTION_PADDING_CLASSES,
   INPUT_PRIMITIVES,
+  INPUT_SIDE_ELEMENT_SIZE_CLASSES,
+  INPUT_SIDE_ELEMENT_THEME_CLASSES,
   normalizeInputValue,
+  resolveInputShape,
   useInputFieldState,
 } from "./input.shared";
+import { useInputGroup } from "./input-group.context";
 
 function ClearIcon({ className }) {
   return (
@@ -91,27 +95,37 @@ const Input = forwardRef(function Input(
     clearButton,
     clearButtonLabel = "Limpiar búsqueda",
     clearIcon,
-    color = "neutral",
+    color: colorProp,
     defaultPasswordVisible = false,
     disabled = false,
     hidePasswordIcon,
     hidePasswordLabel = "Ocultar contraseña",
     id,
     invalid = false,
+    leftElement,
     onClear,
     onPasswordVisibilityChange,
     required = false,
+    rightElement,
+    shape: shapeProp,
     showPasswordIcon,
     showPasswordLabel = "Mostrar contraseña",
     passwordToggle,
-    size = "md",
+    size: sizeProp,
+    style,
     ...props
   },
   ref,
 ) {
   const originalType = props.type ?? "text";
   const inputRef = useRef(null);
+  const leftElementRef = useRef(null);
+  const rightClusterRef = useRef(null);
+  const group = useInputGroup();
   const focusRingEnabled = useQuickitFocusRing("input");
+  const size = sizeProp ?? group?.size ?? "md";
+  const color = colorProp ?? group?.color ?? "neutral";
+  const shape = shapeProp ?? group?.shape ?? "square";
   const isControlled = props.value !== undefined;
   const shouldEnableClear = clearButton ?? originalType === "search";
   const shouldEnablePasswordToggle =
@@ -120,6 +134,8 @@ const Input = forwardRef(function Input(
   const [uncontrolledValue, setUncontrolledValue] = useState(() =>
     normalizeInputValue(props.value ?? props.defaultValue),
   );
+  const [leftElementWidth, setLeftElementWidth] = useState(0);
+  const [rightClusterWidth, setRightClusterWidth] = useState(0);
   const currentValue = isControlled
     ? normalizeInputValue(props.value)
     : uncontrolledValue;
@@ -142,11 +158,14 @@ const Input = forwardRef(function Input(
   });
   const resolvedActionShape =
     actionShape === "circle" ? "circle" : "square";
+  const resolvedShape = resolveInputShape(shape);
+  const isAttached = Boolean(group?.attached);
   const resolvedActionSize =
     INPUT_ACTION_BUTTON_SIZE_CLASSES[resolvedActionShape]?.[size]
       ? size
       : "md";
-  const hasAction = shouldEnableClear || shouldEnablePasswordToggle;
+  const hasLeftElement = Boolean(leftElement);
+  const hasRightElement = Boolean(rightElement);
   const resolvedType = shouldEnablePasswordToggle
     ? passwordVisible
       ? "text"
@@ -164,9 +183,94 @@ const Input = forwardRef(function Input(
   const passwordButtonContent = passwordVisible
     ? hidePasswordIcon ?? <EyeOffIcon className={iconSizeClassName} />
     : showPasswordIcon ?? <EyeIcon className={iconSizeClassName} />;
+  const hasActionButton = showClearButton || shouldEnablePasswordToggle;
+  const paddingStartClassName = hasLeftElement
+    ? INPUT_ACTION_PADDING_CLASSES.leftElement[resolvedActionSize]
+    : undefined;
+  const paddingEndClassName = hasRightElement && hasActionButton
+    ? INPUT_ACTION_PADDING_CLASSES.elementWithAction[resolvedActionSize]
+    : hasActionButton
+      ? shouldEnablePasswordToggle
+        ? INPUT_ACTION_PADDING_CLASSES.password[resolvedActionSize]
+        : INPUT_ACTION_PADDING_CLASSES.clear[resolvedActionSize]
+      : hasRightElement
+        ? INPUT_ACTION_PADDING_CLASSES.element[resolvedActionSize]
+        : undefined;
+  const sideElementClassName = cn(
+    INPUT_SIDE_ELEMENT_SIZE_CLASSES[resolvedActionSize] ??
+      INPUT_SIDE_ELEMENT_SIZE_CLASSES.md,
+    INPUT_SIDE_ELEMENT_THEME_CLASSES[theme],
+  );
+  const inputStyle = {
+    ...style,
+    ...(hasLeftElement
+      ? {
+          paddingLeft: `calc(${leftElementWidth}px + 1.75rem)`,
+        }
+      : null),
+    ...(hasRightElement || hasActionButton
+      ? {
+          paddingRight: `calc(${rightClusterWidth}px + 1rem)`,
+        }
+      : null),
+  };
+
+  useEffect(() => {
+    const leftNode = leftElementRef.current;
+    const rightNode = rightClusterRef.current;
+    const updateMeasurements = () => {
+      setLeftElementWidth(leftNode?.offsetWidth ?? 0);
+      setRightClusterWidth(rightNode?.offsetWidth ?? 0);
+    };
+
+    updateMeasurements();
+
+    if (typeof ResizeObserver === "undefined") {
+      return undefined;
+    }
+
+    const resizeObserver = new ResizeObserver(updateMeasurements);
+
+    if (leftNode) {
+      resizeObserver.observe(leftNode);
+    }
+
+    if (rightNode) {
+      resizeObserver.observe(rightNode);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [
+    currentValue,
+    hasActionButton,
+    hasLeftElement,
+    hasRightElement,
+    leftElement,
+    passwordVisible,
+    rightElement,
+    resolvedActionSize,
+    showClearButton,
+  ]);
 
   return (
-    <div className={cn(INPUT_PRIMITIVES.shell, props.type === "hidden" && "contents")}>
+    <div
+      data-slot="input-shell"
+      data-attached={isAttached ? "" : undefined}
+      className={cn(
+        INPUT_PRIMITIVES.shell,
+        isAttached && "h-full",
+        group?.layout === "inline" && "flex-1",
+        props.type === "hidden" && "contents",
+      )}
+    >
+      {hasLeftElement ? (
+        <span ref={leftElementRef} className={INPUT_PRIMITIVES.leftElement}>
+          <span className={sideElementClassName}>{leftElement}</span>
+        </span>
+      ) : null}
+
       <input
         ref={composeInputRefs(ref, inputRef)}
         id={resolvedId}
@@ -175,19 +279,19 @@ const Input = forwardRef(function Input(
         aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
         className={getInputClassName({
+          attached: isAttached,
           className,
           colorUi,
-          focusRingEnabled,
+          focusRingEnabled: isAttached ? false : focusRingEnabled,
+          shape: resolvedShape,
           resolvedDisabled,
           resolvedInvalid,
           size,
           ui,
-          paddingEndClassName: hasAction
-            ? shouldEnablePasswordToggle
-              ? INPUT_ACTION_PADDING_CLASSES.password[resolvedActionSize]
-              : INPUT_ACTION_PADDING_CLASSES.clear[resolvedActionSize]
-            : undefined,
+          paddingStartClassName,
+          paddingEndClassName,
         })}
+        style={inputStyle}
         {...props}
         type={resolvedType}
         onChange={(event) => {
@@ -198,53 +302,63 @@ const Input = forwardRef(function Input(
         }}
       />
 
-      {showClearButton ? (
-        <button
-          type="button"
-          tabIndex={resolvedDisabled ? -1 : 0}
-          aria-label={clearButtonLabel}
-          disabled={resolvedDisabled}
-          title={clearButtonLabel}
-          className={getInputActionButtonClassName({
-            shape: resolvedActionShape,
-            size: resolvedActionSize,
-            theme,
-            focusRingEnabled,
-          })}
-          onMouseDown={(event) => event.preventDefault()}
-          onClick={() => {
-            dispatchNativeInputValue(inputRef.current, "");
-            inputRef.current?.focus();
-            onClear?.();
-          }}
-        >
-          {clearButtonContent}
-        </button>
-      ) : null}
+      {hasRightElement || hasActionButton ? (
+        <span ref={rightClusterRef} className={INPUT_PRIMITIVES.rightCluster}>
+          {hasRightElement ? (
+            <span className={cn(INPUT_PRIMITIVES.rightElement, sideElementClassName)}>
+              {rightElement}
+            </span>
+          ) : null}
 
-      {shouldEnablePasswordToggle ? (
-        <button
-          type="button"
-          tabIndex={resolvedDisabled ? -1 : 0}
-          aria-label={passwordVisible ? hidePasswordLabel : showPasswordLabel}
-          aria-pressed={passwordVisible}
-          disabled={resolvedDisabled}
-          title={passwordVisible ? hidePasswordLabel : showPasswordLabel}
-          className={getInputActionButtonClassName({
-            shape: resolvedActionShape,
-            size: resolvedActionSize,
-            theme,
-            focusRingEnabled,
-          })}
-          onMouseDown={(event) => event.preventDefault()}
-          onClick={() => {
-            const nextVisible = !passwordVisible;
-            setPasswordVisible(nextVisible);
-            onPasswordVisibilityChange?.(nextVisible);
-          }}
-        >
-          {passwordButtonContent}
-        </button>
+          {showClearButton ? (
+            <button
+              type="button"
+              tabIndex={resolvedDisabled ? -1 : 0}
+              aria-label={clearButtonLabel}
+              disabled={resolvedDisabled}
+              title={clearButtonLabel}
+              className={getInputActionButtonClassName({
+                shape: resolvedActionShape,
+                size: resolvedActionSize,
+                theme,
+                focusRingEnabled,
+              })}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => {
+                dispatchNativeInputValue(inputRef.current, "");
+                inputRef.current?.focus();
+                onClear?.();
+              }}
+            >
+              {clearButtonContent}
+            </button>
+          ) : null}
+
+          {shouldEnablePasswordToggle ? (
+            <button
+              type="button"
+              tabIndex={resolvedDisabled ? -1 : 0}
+              aria-label={passwordVisible ? hidePasswordLabel : showPasswordLabel}
+              aria-pressed={passwordVisible}
+              disabled={resolvedDisabled}
+              title={passwordVisible ? hidePasswordLabel : showPasswordLabel}
+              className={getInputActionButtonClassName({
+                shape: resolvedActionShape,
+                size: resolvedActionSize,
+                theme,
+                focusRingEnabled,
+              })}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => {
+                const nextVisible = !passwordVisible;
+                setPasswordVisible(nextVisible);
+                onPasswordVisibilityChange?.(nextVisible);
+              }}
+            >
+              {passwordButtonContent}
+            </button>
+          ) : null}
+        </span>
       ) : null}
     </div>
   );

@@ -373,6 +373,11 @@ type InputBaseProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "size"
 >;
+type InputGroupBaseProps = React.HTMLAttributes<HTMLDivElement>;
+type InputGroupActionBaseProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "color"
+>;
 type TextareaBaseProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 type LabelBaseProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 
@@ -386,16 +391,60 @@ export interface InputProps extends InputBaseProps {
   hidePasswordIcon?: React.ReactNode;
   hidePasswordLabel?: string;
   invalid?: boolean;
+  leftElement?: React.ReactNode;
   onClear?: () => void;
   onPasswordVisibilityChange?: (visible: boolean) => void;
   passwordToggle?: boolean;
   required?: boolean;
+  rightElement?: React.ReactNode;
+  shape?: "square" | "pill";
   size?: "sm" | "md" | "lg";
   showPasswordIcon?: React.ReactNode;
   showPasswordLabel?: string;
 }
 export declare const Input: React.ForwardRefExoticComponent<
   InputProps & React.RefAttributes<HTMLInputElement>
+>;
+export interface InputGroupProps extends InputGroupBaseProps {
+  attached?: boolean;
+  children?: React.ReactNode;
+  color?: QuickitSemanticColor;
+  columns?: number | string;
+  fullWidth?: boolean;
+  layout?: "inline" | "grid";
+  shape?: "square" | "pill";
+  size?: "sm" | "md" | "lg";
+}
+export declare const InputGroup: React.ForwardRefExoticComponent<
+  InputGroupProps & React.RefAttributes<HTMLDivElement>
+>;
+export interface InputGroupItemProps extends InputGroupBaseProps {
+  children?: React.ReactNode;
+  grow?: boolean;
+  span?: number;
+}
+export declare const InputGroupItem: React.ForwardRefExoticComponent<
+  InputGroupItemProps & React.RefAttributes<HTMLDivElement>
+>;
+export interface InputGroupAddonProps extends InputGroupBaseProps {
+  align?: "start" | "center" | "end" | "inline-start" | "inline-end";
+  children?: React.ReactNode;
+  color?: QuickitSemanticColor;
+  shape?: "square" | "pill";
+  size?: "sm" | "md" | "lg";
+}
+export declare const InputGroupAddon: React.ForwardRefExoticComponent<
+  InputGroupAddonProps & React.RefAttributes<HTMLDivElement>
+>;
+export interface InputGroupActionProps extends InputGroupActionBaseProps {
+  activeMotion?: boolean;
+  color?: QuickitSemanticColor;
+  shape?: "square" | "pill";
+  size?: "sm" | "md" | "lg";
+  variant?: QuickitButtonVariant;
+}
+export declare const InputGroupAction: React.ForwardRefExoticComponent<
+  InputGroupActionProps & React.RefAttributes<HTMLButtonElement>
 >;
 
 export interface TextareaProps extends TextareaBaseProps {
