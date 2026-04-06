@@ -31,6 +31,17 @@ describe("form field variants", () => {
     );
   });
 
+  it("keeps the neutral hover darker than the base field tone", () => {
+    renderWithProvider(<Input placeholder="Neutral field" color="neutral" />);
+
+    expect(screen.getByPlaceholderText("Neutral field").className).toContain(
+      "hover:border-slate-700",
+    );
+    expect(screen.getByPlaceholderText("Neutral field").className).toContain(
+      "hover:bg-slate-300/95",
+    );
+  });
+
   it("uses the selected color on select and keeps invalid state priority", () => {
     renderWithProvider(
       <div>

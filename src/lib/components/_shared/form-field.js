@@ -7,7 +7,7 @@ export const FORM_FIELD_THEME_CLASSES = {
   light: {
     neutral: {
       base: "border-slate-500 bg-slate-200/90 text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-visible:border-slate-700 focus-visible:ring-slate-600/22",
-      hover: "hover:border-slate-600 hover:bg-slate-200",
+      hover: "hover:border-slate-700 hover:bg-slate-300/95",
     },
     slate: {
       base: "border-slate-600 bg-slate-300 text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-visible:border-slate-800 focus-visible:ring-slate-700/20",
@@ -58,7 +58,7 @@ export const FORM_FIELD_THEME_CLASSES = {
   dark: {
     neutral: {
       base: "border-zinc-700 bg-zinc-950 text-stone-50 shadow-[0_1px_2px_rgba(0,0,0,0.38)] focus-visible:border-zinc-500 focus-visible:ring-zinc-500/32",
-      hover: "hover:border-zinc-600 hover:bg-zinc-900/95",
+      hover: "hover:border-zinc-500 hover:bg-zinc-900",
     },
     slate: {
       base: "border-slate-700 bg-slate-900 text-slate-50 shadow-[0_1px_2px_rgba(0,0,0,0.36)] focus-visible:border-slate-500 focus-visible:ring-slate-600/30",

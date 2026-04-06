@@ -118,6 +118,8 @@ const foundationNotes = {
   ],
   colors: [
     "La API actual sigue siendo semántica: `neutral`, `slate`, `zinc`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light`, `dark` y `black`.",
+    "`neutral` mantiene la base premium de la librería: usa un neutral más frío en light y uno más denso en dark, en lugar de exponer una sola familia plana.",
+    "`dark` es una variante oscura intermedia y `black` queda como la opción de mayor contraste.",
     "Cada color semántico se apoya en una familia Tailwind interna. Si reemplazas esa familia, cambias el color semántico en toda la librería.",
     "El slot recomendado para la marca es `brand`, y por debajo consume `brand-*`. Así puedes conectar tu identidad visual sin mezclarla con `primary`.",
     "Crear una familia nueva como `gray-*` no hace que aparezca `color=\"gray\"` en la API. Para eso hace falta ampliar el mapa de colores del componente.",
@@ -408,6 +410,8 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
               title="1. Qué colores soporta hoy la API"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Button color="neutral">Neutral</Button>
+  <Button color="slate">Slate</Button>
+  <Button color="zinc">Zinc</Button>
   <Button color="primary">Primary</Button>
   <Button color="brand">Brand</Button>
   <Button color="success">Success</Button>
@@ -416,10 +420,13 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
   <Button color="info">Info</Button>
   <Button color="light">Light</Button>
   <Button color="dark">Dark</Button>
+  <Button color="black">Black</Button>
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-3">
                 <Button color="neutral">Neutral</Button>
+                <Button color="slate">Slate</Button>
+                <Button color="zinc">Zinc</Button>
                 <Button color="primary">Primary</Button>
                 <Button color="brand">Brand</Button>
                 <Button color="success">Success</Button>
@@ -428,6 +435,7 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
                 <Button color="info">Info</Button>
                 <Button color="light">Light</Button>
                 <Button color="dark">Dark</Button>
+                <Button color="black">Black</Button>
               </div>
             </PreviewPanel>
 
@@ -436,18 +444,23 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
               title="2. Qué familia usa cada color semántico"
               language="jsx"
               code={`// Mapeo actual de la librería
-neutral -> neutral-*
-primary -> blue-*
+neutral -> base premium curada
+slate   -> slate-*
+zinc    -> zinc-*
+primary -> sky-*
 brand   -> brand-*
 success -> emerald-*
-danger  -> red-*
+danger  -> rose-*
 warning -> amber-*
-info    -> sky-*
+info    -> cyan-*
+light   -> stone-*
+dark    -> zinc de alto contraste
+black   -> negro / contraste máximo
 
 // Resultado práctico:
-// si reemplazas blue-*, cambias color="primary"
+// si reemplazas sky-*, cambias color="primary"
 // si reemplazas brand-*, cambias color="brand"
-// si reemplazas neutral-*, cambias color="neutral"`}
+// si necesitas un neutral explícito, usa color="slate" o color="zinc"`}
             />
 
             <CodeExample
@@ -479,28 +492,30 @@ info    -> sky-*
               title="4. Si aún quieres que tu marca viva en primary"
               language="css"
               code={`:root {
-  /* primary sigue consumiendo blue-* */
-  --color-blue-300: oklch(0.86 0.19 126);
-  --color-blue-400: oklch(0.8 0.2 126);
-  --color-blue-500: oklch(0.74 0.2 126);
-  --color-blue-600: oklch(0.68 0.19 126);
-  --color-blue-700: oklch(0.62 0.18 126);
-  --color-blue-800: oklch(0.55 0.16 126);
+  /* primary consume sky-* */
+  --color-sky-300: oklch(0.86 0.19 126);
+  --color-sky-400: oklch(0.8 0.2 126);
+  --color-sky-500: oklch(0.74 0.2 126);
+  --color-sky-600: oklch(0.68 0.19 126);
+  --color-sky-700: oklch(0.62 0.18 126);
+  --color-sky-800: oklch(0.55 0.16 126);
 }`}
             />
 
             <CodeExample
               ui={ui}
-              title="5. Reemplazar neutral con tu propia escala"
+              title="5. Trabajar con neutrales explícitos"
               language="css"
               code={`:root {
-  --color-neutral-50: oklch(0.985 0.002 247);
-  --color-neutral-100: oklch(0.97 0.004 247);
-  --color-neutral-200: oklch(0.93 0.01 252);
-  --color-neutral-300: oklch(0.87 0.018 253);
-  --color-neutral-700: oklch(0.37 0.03 257);
-  --color-neutral-800: oklch(0.28 0.028 260);
-  --color-neutral-900: oklch(0.21 0.026 265);
+  /* Para color="slate" */
+  --color-slate-300: oklch(0.9 0.018 255);
+  --color-slate-400: oklch(0.82 0.025 255);
+  --color-slate-700: oklch(0.44 0.03 257);
+
+  /* Para color="zinc" */
+  --color-zinc-300: oklch(0.88 0.01 255);
+  --color-zinc-400: oklch(0.8 0.014 255);
+  --color-zinc-800: oklch(0.27 0.01 255);
 }`}
             />
 
@@ -510,10 +525,10 @@ info    -> sky-*
               language="css"
               code={`/* Si prefieres que tu marca viva en color="info" */
 :root {
-  --color-sky-600: oklch(62% 0.19 330);
-  --color-sky-700: oklch(55% 0.18 330);
-  --color-sky-300: oklch(83% 0.09 330);
-  --color-sky-100: oklch(95% 0.03 330);
+  --color-cyan-600: oklch(62% 0.19 330);
+  --color-cyan-700: oklch(55% 0.18 330);
+  --color-cyan-300: oklch(83% 0.09 330);
+  --color-cyan-100: oklch(95% 0.03 330);
 }`}
             />
 
@@ -557,13 +572,13 @@ info    -> sky-*
 // reemplaza brand-*
 
 // Quieres que primary use tu marca:
-// reemplaza blue-* si ese es tu criterio de producto
+// reemplaza sky-* si ese es tu criterio de producto
 
-// Quieres cambiar neutral en toda la librería:
-// reemplaza neutral-*
+// Quieres neutrales explícitos y fáciles de tunear:
+// usa color="slate" o color="zinc"
 
 // Quieres un slot semántico distinto para tu marca:
-// remapea sky-*, emerald-*, etc.
+// remapea cyan-*, emerald-*, etc.
 
 // Quieres crear gray-*:
 // puedes usar bg-gray-500 o text-gray-700 en className

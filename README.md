@@ -1,94 +1,77 @@
 # Quickit UI
 
-Quickit UI es una libreria de componentes para React pensada para construir interfaces consistentes, limpias y rapidas de integrar.
+Quickit UI es una librería de componentes para React enfocada en interfaces consistentes, con una API semántica, tema `light` y `dark`, documentación local y soporte TypeScript vía `.d.ts`.
 
-Incluye componentes base como `Button`, `Input`, `Modal`, `Dropdown`, `Tabs`, `Tooltip`, `Avatar`, `Badge`, `Skeleton` y mas.
-
-## Documentacion local
-
-La libreria incluye una documentacion local con ejemplos, API y fundamentos del sistema.
-
-```bash
-npm install
-npm run dev
-```
-
-Para generar la version estatica de la documentacion:
-
-```bash
-npm run build:docs
-```
-
-## Instalacion
-
-Instala el paquete junto con sus dependencias peer:
+## Instalación
 
 ```bash
 npm install quickit-ui react react-dom
 ```
 
-## Uso rapido
-
-Importa los estilos del paquete una sola vez y empieza a usar los componentes:
+Importa los estilos una sola vez:
 
 ```jsx
-import 'quickit-ui/styles.css'
-import { Button, Input, QuickitProvider } from 'quickit-ui'
+import "quickit-ui/styles.css";
+```
+
+## Uso rápido
+
+```jsx
+import "quickit-ui/styles.css";
+import { Button, Input, QuickitProvider } from "quickit-ui";
 
 export default function App() {
   return (
     <QuickitProvider theme="light">
       <main className="space-y-4 p-6">
-        <Input placeholder="Correo electronico" />
-        <Button color="neutral">Continuar</Button>
+        <Input color="neutral" placeholder="Correo electrónico" />
+        <Button color="brand">Continuar</Button>
       </main>
     </QuickitProvider>
-  )
+  );
 }
 ```
 
 ## Tema
 
-Quickit UI soporta `light` y `dark` desde `QuickitProvider`.
+Quickit UI trabaja con `light` y `dark`. El estado del tema vive en tu app; `QuickitProvider` solo lo distribuye al resto de componentes.
 
 ```jsx
-import 'quickit-ui/styles.css'
-import { Button, QuickitProvider } from 'quickit-ui'
+import "quickit-ui/styles.css";
+import { Button, QuickitProvider } from "quickit-ui";
 
 export default function App() {
   return (
     <QuickitProvider theme="dark">
-      <Button>Guardar cambios</Button>
+      <Button color="neutral">Guardar cambios</Button>
     </QuickitProvider>
-  )
+  );
 }
 ```
 
-## Personalizar colores
+## Colores semánticos
 
-La API de color es semántica: `neutral`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light` y `dark`.
-
-La lógica recomendada es esta:
-- cada color semántico usa una familia Tailwind interna
-- si reemplazas esa familia, cambias ese color en toda la librería
-- `brand` existe precisamente para tu color de marca y consume `brand-*`
-- si quieres usar tu color de marca en otro slot, reemplaza la familia que consume ese slot semántico
-- si quieres un color nuevo solo en un caso puntual, usa `className`
-- si quieres soportar un nuevo valor como `color="gray"` o `color="clientA"` en toda la librería, eso requiere ampliar la API
-
-Mapa actual:
+La API pública soporta:
 
 ```txt
-neutral -> neutral-*
-primary -> blue-*
-brand   -> brand-*
-success -> emerald-*
-danger  -> red-*
-warning -> amber-*
-info    -> sky-*
+neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black
 ```
 
-Ejemplo recomendado: si tu marca debe vivir en `brand`, reemplaza `brand-*`:
+Criterio actual:
+
+- `neutral` mantiene la base premium de la librería.
+- `slate` y `zinc` exponen neutrales explícitos.
+- `primary` usa `sky-*`.
+- `brand` usa `brand-*`.
+- `success` usa `emerald-*`.
+- `danger` usa `rose-*`.
+- `warning` usa `amber-*`.
+- `info` usa `cyan-*`.
+- `light` usa una escala clara basada en `stone-*`.
+- `dark` es una variante oscura intermedia.
+- `black` es la opción más densa y de mayor contraste.
+
+Ejemplo recomendado para conectar tu marca:
 
 ```css
 @import "quickit-ui/styles.css";
@@ -103,55 +86,11 @@ Ejemplo recomendado: si tu marca debe vivir en `brand`, reemplaza `brand-*`:
 }
 ```
 
-Si prefieres que tu marca viva en `primary`, entonces reemplaza `blue-*`.
+Si quieres que `primary` use tu marca, reemplaza `sky-*`.
 
-Si quieres cambiar `neutral`, reemplaza `neutral-*`:
+Si necesitas neutrales más explícitos y previsibles, usa `color="slate"` o `color="zinc"` en lugar de asumir que `neutral` es una escala plana.
 
-```css
-:root {
-  --color-neutral-50: oklch(0.985 0.002 247);
-  --color-neutral-100: oklch(0.97 0.004 247);
-  --color-neutral-200: oklch(0.93 0.01 252);
-  --color-neutral-300: oklch(0.87 0.018 253);
-  --color-neutral-700: oklch(0.37 0.03 257);
-  --color-neutral-800: oklch(0.28 0.028 260);
-  --color-neutral-900: oklch(0.21 0.026 265);
-}
-```
-
-También puedes reutilizar otro slot semántico como color de marca:
-
-```css
-:root {
-  /* color="info" */
-  --color-sky-600: oklch(62% 0.19 330);
-  --color-sky-700: oklch(55% 0.18 330);
-}
-```
-
-Si creas una paleta nueva como `gray-*`, podrás usarla en clases Tailwind, pero no aparece sola en la API de Quickit:
-
-```css
-@theme {
-  --color-gray-50: oklch(0.984 0.003 247.858);
-  --color-gray-100: oklch(0.968 0.007 247.896);
-  --color-gray-200: oklch(0.929 0.013 255.508);
-  --color-gray-300: oklch(0.869 0.022 252.894);
-  --color-gray-400: oklch(0.704 0.04 256.788);
-  --color-gray-500: oklch(0.554 0.046 257.417);
-  --color-gray-600: oklch(0.446 0.043 257.281);
-  --color-gray-700: oklch(0.372 0.044 257.287);
-  --color-gray-800: oklch(0.279 0.041 260.031);
-  --color-gray-900: oklch(0.208 0.042 265.755);
-  --color-gray-950: oklch(0.129 0.042 264.695);
-}
-```
-
-Eso significa:
-- sí puedes usar `bg-gray-500`, `text-gray-700`, etc. en `className`
-- no puedes usar `color="gray"` a menos que la librería amplíe su mapa de colores
-
-Si quieres un color nuevo puntual, puedes sobreescribir estilos con `className`:
+Si necesitas un color puntual fuera de la API semántica, sobrescribe con `className`:
 
 ```jsx
 <Button
@@ -162,12 +101,29 @@ Si quieres un color nuevo puntual, puedes sobreescribir estilos con `className`:
 </Button>
 ```
 
-## Ejemplos rapidos
+## Hooks y utilidades
+
+Quickit también exporta hooks y utilidades para componer tu app o tu propia documentación:
+
+```jsx
+import {
+  QUICKIT_BREAKPOINTS,
+  QUICKIT_BUTTON_SHAPES,
+  QUICKIT_CONTROL_SIZES,
+  QUICKIT_SEMANTIC_COLORS,
+  QuickitProvider,
+  useBreakpoint,
+  useMediaQuery,
+  useQuickitTheme,
+} from "quickit-ui";
+```
+
+## Ejemplos
 
 ### Button
 
 ```jsx
-import { Button } from 'quickit-ui'
+import { Button } from "quickit-ui";
 
 export function Actions() {
   return (
@@ -180,7 +136,7 @@ export function Actions() {
         Guardar
       </Button>
     </div>
-  )
+  );
 }
 ```
 
@@ -195,20 +151,21 @@ import {
   Label,
   Select,
   Textarea,
-} from 'quickit-ui'
+} from "quickit-ui";
 
 export function ContactForm() {
   return (
     <div className="space-y-4">
       <FormControl>
         <Label htmlFor="name">Nombre</Label>
-        <Input id="name" placeholder="Tu nombre" />
+        <Input id="name" color="neutral" placeholder="Tu nombre" />
       </FormControl>
 
       <FormControl>
         <Label htmlFor="topic">Tema</Label>
         <Select
           id="topic"
+          color="slate"
           defaultValue="support"
           onValueChange={(value) => console.log(value)}
         >
@@ -220,22 +177,22 @@ export function ContactForm() {
 
       <FormControl invalid>
         <Label htmlFor="message">Mensaje</Label>
-        <Textarea id="message" placeholder="Escribe tu mensaje" />
+        <Textarea id="message" color="danger" placeholder="Escribe tu mensaje" />
         <FormMessage>Este campo es obligatorio.</FormMessage>
       </FormControl>
     </div>
-  )
+  );
 }
 ```
 
-### Navegacion
+### Navegación
 
 ```jsx
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'quickit-ui'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "quickit-ui";
 
 export function SettingsTabs() {
   return (
-    <Tabs defaultValue="general" activationMode="manual">
+    <Tabs defaultValue="general" activationMode="manual" color="brand">
       <TabsList>
         <TabsTrigger value="general">General</TabsTrigger>
         <TabsTrigger value="security">Seguridad</TabsTrigger>
@@ -244,7 +201,33 @@ export function SettingsTabs() {
       <TabsContent value="general">Contenido general</TabsContent>
       <TabsContent value="security">Contenido de seguridad</TabsContent>
     </Tabs>
-  )
+  );
+}
+```
+
+### Lógica declarativa
+
+```jsx
+import { Default, For, Match, RenderSwitch, Show } from "quickit-ui";
+
+export function States({ items, status, user }) {
+  return (
+    <>
+      <Show when={user} fallback={<p>Inicia sesión</p>}>
+        {(value) => <p>Hola, {value.name}</p>}
+      </Show>
+
+      <RenderSwitch value={status}>
+        <Match when="idle">Idle</Match>
+        <Match when="loading">Loading</Match>
+        <Default>Done</Default>
+      </RenderSwitch>
+
+      <For each={items} fallback={<p>Sin resultados</p>}>
+        {(item) => <div key={item.id}>{item.label}</div>}
+      </For>
+    </>
+  );
 }
 ```
 
@@ -264,13 +247,13 @@ import {
   ModalContent,
   ModalHeader,
   ModalTitle,
-} from 'quickit-ui'
+} from "quickit-ui";
 
 export function OverlayExamples() {
   return (
     <div className="flex gap-4">
       <Dropdown>
-        <DropdownTrigger>
+        <DropdownTrigger asChild>
           <Button color="neutral" variant="outline">
             Opciones
           </Button>
@@ -284,11 +267,13 @@ export function OverlayExamples() {
       </Dropdown>
 
       <Modal>
-        <Button color="neutral">Abrir modal</Button>
+        <Modal.Trigger asChild>
+          <Button color="neutral">Abrir modal</Button>
+        </Modal.Trigger>
 
-        <ModalContent>
+        <Modal.Content>
           <ModalHeader>
-            <ModalTitle>Confirmar accion</ModalTitle>
+            <ModalTitle>Confirmar acción</ModalTitle>
           </ModalHeader>
 
           <ModalBody>Este cambio no se puede deshacer.</ModalBody>
@@ -299,17 +284,29 @@ export function OverlayExamples() {
             </ModalAction>
             <ModalAction color="danger">Eliminar</ModalAction>
           </ModalActions>
-        </ModalContent>
+        </Modal.Content>
       </Modal>
     </div>
-  )
+  );
 }
 ```
+
+## Identidad
+
+Quickit incluye primitives y compuestos de identidad:
+
+- `Avatar`
+- `AvatarGroup`
+- `AvatarPresence`
+- `Initials`
+- `UserChip`
 
 ## Componentes disponibles
 
 - `Accordion`
 - `Avatar`
+- `AvatarGroup`
+- `AvatarPresence`
 - `Badge`
 - `Breadcrumb`
 - `Button`
@@ -317,6 +314,9 @@ export function OverlayExamples() {
 - `Dropdown`
 - `EmptyState`
 - `FormControl`
+- `FormDescription`
+- `FormMessage`
+- `Initials`
 - `Input`
 - `Label`
 - `Link`
@@ -330,6 +330,25 @@ export function OverlayExamples() {
 - `Tabs`
 - `Textarea`
 - `Tooltip`
+- `UserChip`
+- `Show`
+- `RenderSwitch`
+- `Match`
+- `Default`
+- `For`
+
+## Documentación local
+
+```bash
+npm install
+npm run dev
+```
+
+Para generar la versión estática:
+
+```bash
+npm run build:docs
+```
 
 ## Requisitos
 
@@ -337,26 +356,15 @@ export function OverlayExamples() {
 - `react-dom` `^19.0.0`
 - Node.js `18` o superior
 
-## Exportaciones utiles
-
-El paquete exporta componentes, hooks y utilidades desde:
-
-```jsx
-import {
-  Button,
-  Input,
-  QuickitProvider,
-  useQuickitTheme,
-} from 'quickit-ui'
-```
-
-## Scripts utiles
+## Scripts útiles
 
 - `npm run dev`: entorno local de desarrollo.
-- `npm run build`: build de la libreria para distribucion. El paquete publicado no incluye sourcemaps para reducir el peso en npm.
-- `npm run build:docs`: build estatico de la documentacion.
-- `npm run lint`: validacion con ESLint.
-- `npm run pack:check`: vista previa del paquete que se publicaria en npm.
+- `npm run build`: build de la librería para distribución.
+- `npm run build:docs`: build estático de la documentación.
+- `npm run lint`: validación con ESLint.
+- `npm run test`: pruebas runtime.
+- `npm run test:types`: validación del consumo TypeScript.
+- `npm run pack:check`: vista previa del paquete que se publicaría en npm.
 
 ## Licencia
 
