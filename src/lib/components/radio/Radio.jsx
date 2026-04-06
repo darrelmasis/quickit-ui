@@ -64,6 +64,8 @@ const Radio = forwardRef(function Radio(
     invalid = false,
     label,
     labelClassName,
+    onChange,
+    onCheckedChange,
     required = false,
     size = "md",
     ...props
@@ -100,6 +102,10 @@ const Radio = forwardRef(function Radio(
         aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
         className="peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
+        onChange={(event) => {
+          onChange?.(event);
+          onCheckedChange?.(event.target.checked, event);
+        }}
         {...props}
       />
       <span

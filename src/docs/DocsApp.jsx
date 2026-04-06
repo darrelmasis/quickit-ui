@@ -346,6 +346,7 @@ export default function DocsApp() {
     switch (activeSectionId) {
       case "provider":
       case "theme":
+      case "use-breakpoint":
       case "colors":
       case "states":
         return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;

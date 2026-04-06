@@ -55,6 +55,13 @@ export declare const QUICKIT_LINK_UNDERLINES: readonly [
   "none",
 ];
 export declare const QUICKIT_TAB_SIZES: readonly ["xs", "sm", "md", "lg"];
+export declare const QUICKIT_BREAKPOINTS: Readonly<{
+  sm: 640;
+  md: 768;
+  lg: 1024;
+  xl: 1280;
+  "2xl": 1536;
+}>;
 export declare const QUICKIT_CONTROL_RADIUS_TOKENS: Record<string, string>;
 export declare const QUICKIT_AVATAR_RADIUS_TOKENS: Record<
   string,
@@ -81,7 +88,15 @@ export type QuickitLinkTextVariant =
 export type QuickitLinkUnderline =
   (typeof QUICKIT_LINK_UNDERLINES)[number];
 export type QuickitTabSize = (typeof QUICKIT_TAB_SIZES)[number];
+export type QuickitBreakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type QuickitFloatingColor = "default" | QuickitSemanticColor;
+export interface QuickitBreakpoints {
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  "2xl": number;
+}
 
 export declare function isQuickitTokenValue(
   collection: readonly string[],
@@ -108,6 +123,22 @@ export declare function QuickitProvider(
   props: QuickitProviderProps,
 ): React.JSX.Element;
 export declare function useQuickitTheme(): QuickitThemeMode;
+export interface UseBreakpointOptions {
+  breakpoints?: Partial<QuickitBreakpoints>;
+}
+export interface UseBreakpointResult {
+  breakpoint: QuickitBreakpoint | null;
+  breakpoints: QuickitBreakpoints;
+  height: number | null;
+  isDesktop: boolean;
+  isMobile: boolean;
+  isTablet: boolean;
+  ready: boolean;
+  width: number | null;
+}
+export declare function useBreakpoint(
+  options?: UseBreakpointOptions,
+): UseBreakpointResult;
 
 export interface QuickitFormControlContextValue {
   controlId: string;
@@ -347,6 +378,10 @@ export interface CheckboxProps extends CheckboxInputProps {
   invalid?: boolean;
   label?: React.ReactNode;
   labelClassName?: string;
+  onCheckedChange?: (
+    checked: boolean,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
   required?: boolean;
   size?: QuickitCompactControlSize;
 }
@@ -360,6 +395,10 @@ export interface RadioProps extends RadioInputProps {
   invalid?: boolean;
   label?: React.ReactNode;
   labelClassName?: string;
+  onCheckedChange?: (
+    checked: boolean,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
   required?: boolean;
   size?: QuickitCompactControlSize;
 }
@@ -369,7 +408,7 @@ export declare const Radio: React.ForwardRefExoticComponent<
 
 type SwitchButtonProps = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
-  "color" | "size" | "value"
+  "color" | "onChange" | "size" | "value"
 >;
 
 export interface SwitchProps extends SwitchButtonProps {
@@ -381,6 +420,7 @@ export interface SwitchProps extends SwitchButtonProps {
   label?: React.ReactNode;
   labelClassName?: string;
   name?: string;
+  onChange?: (event: QuickitCheckedChangeEvent) => void;
   onCheckedChange?: (checked: boolean) => void;
   required?: boolean;
   size?: QuickitCompactControlSize;
@@ -402,6 +442,25 @@ export interface QuickitSelectChangeEvent {
     id?: string;
     name?: string;
     value: string;
+  };
+  preventDefault(): void;
+  stopPropagation(): void;
+}
+
+export interface QuickitCheckedChangeEvent {
+  type: "change";
+  nativeEvent?: Event;
+  target: {
+    checked: boolean;
+    id?: string;
+    name?: string;
+    value?: string;
+  };
+  currentTarget: {
+    checked: boolean;
+    id?: string;
+    name?: string;
+    value?: string;
   };
   preventDefault(): void;
   stopPropagation(): void;

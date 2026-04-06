@@ -71,6 +71,14 @@ export const QUICKIT_TAB_SIZES = Object.freeze([
   "lg",
 ]);
 
+export const QUICKIT_BREAKPOINTS = Object.freeze({
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  "2xl": 1536,
+});
+
 export const QUICKIT_CONTROL_RADIUS_TOKENS = CONTROL_RADIUS_BY_SIZE;
 export const QUICKIT_AVATAR_RADIUS_TOKENS = AVATAR_RADIUS_BY_SIZE;
 

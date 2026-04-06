@@ -6,12 +6,14 @@ import {
   QUICKIT_CONTROL_SIZES,
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
+  useBreakpoint,
   useQuickitTheme,
 } from "@/lib";
 import {
   CodeExample,
   NotesList,
   PreviewPanel,
+  PropsTable,
   SectionCard,
   SectionHeading,
 } from "@/docs/components/DocsPrimitives";
@@ -31,6 +33,41 @@ function ThemeHookPreview() {
   );
 }
 
+function BreakpointHookPreview() {
+  const { breakpoint, isDesktop, isMobile, isTablet, ready, width } =
+    useBreakpoint();
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge color="neutral" variant="outline">
+        {ready ? `breakpoint: ${breakpoint}` : "breakpoint: pending"}
+      </Badge>
+      <Badge color={isMobile ? "brand" : "neutral"} variant="outline">
+        isMobile: {String(isMobile)}
+      </Badge>
+      <Badge color={isTablet ? "warning" : "neutral"} variant="outline">
+        isTablet: {String(isTablet)}
+      </Badge>
+      <Badge color={isDesktop ? "success" : "neutral"} variant="outline">
+        isDesktop: {String(isDesktop)}
+      </Badge>
+      <Badge color="neutral" variant="outline">
+        width: {width ?? "null"}
+      </Badge>
+    </div>
+  );
+}
+
+const foundationApis = {
+  useBreakpoint: [
+    { prop: "breakpoint", type: "xs | sm | md | lg | xl | 2xl | null", defaultValue: "null en SSR", description: "Breakpoint actual resuelto con los tokens de Quickit o con el override que pases." },
+    { prop: "isMobile / isTablet / isDesktop", type: "boolean", defaultValue: "false en SSR", description: "Flags derivados. `mobile < md`, `tablet >= md && < lg`, `desktop >= lg`." },
+    { prop: "width / height", type: "number | null", defaultValue: "null en SSR", description: "Dimensiones actuales del viewport." },
+    { prop: "ready", type: "boolean", defaultValue: "false en SSR", description: "Indica si el hook ya tiene medidas reales del navegador." },
+    { prop: "options.breakpoints", type: "Partial<{ sm, md, lg, xl, 2xl }>", defaultValue: "QUICKIT_BREAKPOINTS", description: "Permite sobreescribir el mapa de breakpoints sin salirte de la API del hook." },
+  ],
+};
+
 const foundationNotes = {
   provider: [
     "QuickitProvider expone el tema actual mediante contexto, sin acoplar la app a una solucion externa.",
@@ -41,6 +78,11 @@ const foundationNotes = {
     "La libreria trabaja con dos modos base: light y dark.",
     "Los componentes priorizan defaults neutros y dejan los colores semanticos como decision explicita del producto.",
     "useQuickitTheme te permite reaccionar al tema actual desde cualquier componente descendiente.",
+  ],
+  useBreakpoint: [
+    "useBreakpoint es seguro para SSR: en servidor devuelve `ready: false` y medidas nulas hasta que el navegador hidrata.",
+    "El criterio por defecto es pragmático y simple: mobile bajo `md`, tablet entre `md` y `lg`, desktop desde `lg`.",
+    "También exporta `QUICKIT_BREAKPOINTS` para que puedas alinear tus wrappers, layouts o ejemplos con los mismos cortes de la librería.",
   ],
   colors: [
     "La API actual sigue siendo semántica: `neutral`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light` y `dark`.",
@@ -162,6 +204,92 @@ return (
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
             <NotesList items={foundationNotes.theme} ui={ui} />
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "use-breakpoint") ? (
+        <SectionCard id="use-breakpoint" className={ui.divider}>
+          <SectionHeading
+            category="Fundamentos"
+            title="useBreakpoint"
+            description="Hook responsivo para leer el viewport actual y derivar flags útiles como `isMobile`, `isTablet` o `isDesktop` sin repetir media queries en cada app."
+            ui={ui}
+          />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Lectura básica del viewport"
+              code={`function ResponsiveState() {
+  const { breakpoint, isMobile, isTablet, isDesktop, width } = useBreakpoint();
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge variant="outline">breakpoint: {breakpoint}</Badge>
+      <Badge variant="outline">isMobile: {String(isMobile)}</Badge>
+      <Badge variant="outline">isTablet: {String(isTablet)}</Badge>
+      <Badge variant="outline">isDesktop: {String(isDesktop)}</Badge>
+      <Badge variant="outline">width: {width}</Badge>
+    </div>
+  );
+}`}
+            >
+              <BreakpointHookPreview />
+            </PreviewPanel>
+
+            <CodeExample
+              ui={ui}
+              title="Uso típico en layout"
+              code={`import { QUICKIT_BREAKPOINTS, useBreakpoint } from "quickit-ui";
+
+function SidebarLayout() {
+  const { isDesktop, ready } = useBreakpoint();
+
+  if (!ready) {
+    return null;
+  }
+
+  return isDesktop ? <DesktopSidebar /> : <MobileSheet />;
+}`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Sobrescribir breakpoints"
+              code={`const responsive = useBreakpoint({
+  breakpoints: {
+    md: 820,
+    lg: 1180,
+  },
+});
+
+responsive.isTablet;
+responsive.breakpoint;`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Tokens públicos"
+              code={`import { QUICKIT_BREAKPOINTS } from "quickit-ui";
+
+QUICKIT_BREAKPOINTS.sm;   // 640
+QUICKIT_BREAKPOINTS.md;   // 768
+QUICKIT_BREAKPOINTS.lg;   // 1024
+QUICKIT_BREAKPOINTS.xl;   // 1280
+QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
+            />
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={foundationApis.useBreakpoint} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
+              <NotesList items={foundationNotes.useBreakpoint} ui={ui} />
+            </div>
           </div>
         </SectionCard>
       ) : null}

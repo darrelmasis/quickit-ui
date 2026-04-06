@@ -6,6 +6,7 @@ import {
   AvatarPresence,
   Badge,
   Button,
+  Checkbox,
   Default,
   For,
   getInitials,
@@ -15,12 +16,16 @@ import {
   Match,
   Modal,
   QUICKIT_BUTTON_SHAPES,
+  QUICKIT_BREAKPOINTS,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
+  useBreakpoint,
+  Radio,
   RenderSwitch,
   Select,
   Show,
+  Switch,
   Tabs,
   TabsContent,
   TabsList,
@@ -29,6 +34,9 @@ import {
   UserChip,
   type ButtonProps,
   type LinkProps,
+  type QuickitBreakpoint,
+  type QuickitBreakpoints,
+  type QuickitCheckedChangeEvent,
   type QuickitPresenceStatus,
   type QuickitSemanticColor,
 } from "quickit-ui";
@@ -47,15 +55,40 @@ const linkProps: LinkProps = {
 };
 const presence: QuickitPresenceStatus = "online";
 const initials = getInitials("Elena Ruiz");
+const handleToggleChange = (event: QuickitCheckedChangeEvent) => {
+  event.target.checked;
+};
+const desktopCutoff: number = QUICKIT_BREAKPOINTS.lg;
+const customBreakpoints: Partial<QuickitBreakpoints> = { lg: desktopCutoff + 100 };
 
 export function ConsumerPreview() {
+  const responsive = useBreakpoint({ breakpoints: customBreakpoints });
+  const activeBreakpoint: QuickitBreakpoint | null = responsive.breakpoint;
+
   return (
     <QuickitProvider theme="dark">
+      <span>{activeBreakpoint}</span>
       <Button {...buttonProps}>Guardar</Button>
       <Link {...linkProps}>Ir a docs</Link>
       <Badge color="success">Activo</Badge>
       <Input color="dark" placeholder="Buscar" />
       <Textarea color="light" minRows={3} />
+      <Checkbox
+        defaultChecked
+        onCheckedChange={(checked, event) => {
+          checked;
+          event.target.checked;
+        }}
+      />
+      <Radio
+        name="privacy"
+        defaultChecked
+        onCheckedChange={(checked, event) => {
+          checked;
+          event.target.checked;
+        }}
+      />
+      <Switch onChange={handleToggleChange} onCheckedChange={(checked) => checked} />
       <Select color="brand" defaultValue="docs">
         <option value="docs">Docs</option>
         <option value="tokens">Tokens</option>

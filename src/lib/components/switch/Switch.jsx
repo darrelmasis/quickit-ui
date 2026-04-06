@@ -65,6 +65,21 @@ function resolveTheme(theme) {
   return theme === "dark" ? "dark" : "light";
 }
 
+function createCheckedChangeEvent({ checked, id, name, nativeEvent, value }) {
+  return {
+    type: "change",
+    nativeEvent,
+    target: { checked, id, name, value },
+    currentTarget: { checked, id, name, value },
+    preventDefault() {
+      nativeEvent?.preventDefault?.();
+    },
+    stopPropagation() {
+      nativeEvent?.stopPropagation?.();
+    },
+  };
+}
+
 const Switch = forwardRef(function Switch(
   {
     checked,
@@ -78,7 +93,9 @@ const Switch = forwardRef(function Switch(
     label,
     labelClassName,
     name,
+    onChange,
     onCheckedChange,
+    onClick,
     required = false,
     size = "md",
     value = "on",
@@ -120,7 +137,7 @@ const Switch = forwardRef(function Switch(
     [name, resolvedDisabled, resolvedRequired, value],
   );
 
-  const toggle = () => {
+  const toggle = (nativeEvent) => {
     if (resolvedDisabled) {
       return;
     }
@@ -132,6 +149,15 @@ const Switch = forwardRef(function Switch(
     }
 
     onCheckedChange?.(nextValue);
+    onChange?.(
+      createCheckedChangeEvent({
+        checked: nextValue,
+        id: resolvedId,
+        name,
+        nativeEvent,
+        value,
+      }),
+    );
   };
 
   const control = (
@@ -152,8 +178,14 @@ const Switch = forwardRef(function Switch(
           resolvedChecked ? ui.checked[resolvedColor] : ui.idle,
           className,
         )}
-        onClick={toggle}
         {...props}
+        onClick={(event) => {
+          onClick?.(event);
+
+          if (!event.defaultPrevented) {
+            toggle(event);
+          }
+        }}
       >
         <span
           className={cn(

@@ -15,7 +15,13 @@ describe("form field variants", () => {
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
       "border-slate-950",
     );
+    expect(screen.getByPlaceholderText("Buscar").className).toContain(
+      "focus-visible:ring-slate-800/35",
+    );
     expect(screen.getAllByRole("textbox")[1].className).toContain("bg-stone-50");
+    expect(screen.getAllByRole("textbox")[1].className).toContain(
+      "focus-visible:ring-stone-300/45",
+    );
   });
 
   it("uses the selected color on select and keeps invalid state priority", () => {
@@ -31,7 +37,7 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByRole("combobox").className).toContain(
-      "border-brand-500/35",
+      "border-brand-500/45",
     );
     expect(screen.getByDisplayValue("Error").className).toContain(
       "border-red-500/65",

@@ -19,6 +19,7 @@ export const COMPONENT_GROUPS = [
     items: [
       { href: "/fundamentos/provider", label: "QuickitProvider", id: "provider" },
       { href: "/fundamentos/theme", label: "Tema", id: "theme" },
+      { href: "/fundamentos/use-breakpoint", label: "useBreakpoint", id: "use-breakpoint" },
       { href: "/fundamentos/colores", label: "Colores", id: "colors" },
       { href: "/fundamentos/estados", label: "Estados", id: "states" },
     ],
