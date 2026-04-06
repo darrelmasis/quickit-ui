@@ -19,76 +19,116 @@ const CHECKBOX_SIZE_CLASSES = {
 
 const CHECKBOX_THEME_CLASSES = {
   light: {
-    box: "border-slate-300 bg-white",
-    focus: "peer-focus-visible:outline-slate-300",
+    box: "border-slate-500 bg-slate-200/90 shadow-[0_1px_2px_rgba(15,23,42,0.09)] peer-hover:border-slate-700 peer-hover:bg-slate-100",
+    focus: "peer-focus-visible:outline-slate-600",
     colors: {
       neutral: {
-        box: "peer-checked:border-neutral-950 peer-checked:bg-neutral-950",
+        box: "peer-checked:border-slate-800 peer-checked:bg-slate-800 peer-hover:peer-checked:border-slate-950 peer-hover:peer-checked:bg-slate-950",
+        icon: "text-white",
+      },
+      slate: {
+        box: "peer-checked:border-slate-800 peer-checked:bg-slate-800 peer-hover:peer-checked:border-slate-950 peer-hover:peer-checked:bg-slate-950",
+        icon: "text-white",
+      },
+      zinc: {
+        box: "peer-checked:border-zinc-800 peer-checked:bg-zinc-800 peer-hover:peer-checked:border-zinc-950 peer-hover:peer-checked:bg-zinc-950",
         icon: "text-white",
       },
       primary: {
-        box: "peer-checked:border-blue-700 peer-checked:bg-blue-700",
+        box: "peer-checked:border-sky-600 peer-checked:bg-sky-600 peer-hover:peer-checked:border-sky-700 peer-hover:peer-checked:bg-sky-700",
         icon: "text-white",
       },
       brand: {
-        box: "peer-checked:border-brand-700 peer-checked:bg-brand-700",
+        box: "peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-hover:peer-checked:border-brand-700 peer-hover:peer-checked:bg-brand-700",
         icon: "text-white",
       },
       success: {
-        box: "peer-checked:border-emerald-600 peer-checked:bg-emerald-600",
+        box: "peer-checked:border-emerald-600 peer-checked:bg-emerald-600 peer-hover:peer-checked:border-emerald-700 peer-hover:peer-checked:bg-emerald-700",
         icon: "text-white",
       },
       danger: {
-        box: "peer-checked:border-red-600 peer-checked:bg-red-600",
+        box: "peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
         icon: "text-white",
       },
       warning: {
-        box: "peer-checked:border-amber-400 peer-checked:bg-amber-400",
+        box: "peer-checked:border-amber-500 peer-checked:bg-amber-500 peer-hover:peer-checked:border-amber-600 peer-hover:peer-checked:bg-amber-600",
         icon: "text-slate-950",
       },
       info: {
-        box: "peer-checked:border-sky-600 peer-checked:bg-sky-600",
+        box: "peer-checked:border-cyan-600 peer-checked:bg-cyan-600 peer-hover:peer-checked:border-cyan-700 peer-hover:peer-checked:bg-cyan-700",
+        icon: "text-white",
+      },
+      light: {
+        box: "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-hover:peer-checked:border-stone-300 peer-hover:peer-checked:bg-stone-300",
+        icon: "text-stone-950",
+      },
+      dark: {
+        box: "peer-checked:border-zinc-900 peer-checked:bg-zinc-900 peer-hover:peer-checked:border-black peer-hover:peer-checked:bg-black",
+        icon: "text-white",
+      },
+      black: {
+        box: "peer-checked:border-slate-950 peer-checked:bg-slate-950 peer-hover:peer-checked:border-black peer-hover:peer-checked:bg-black",
         icon: "text-white",
       },
     },
-    invalid: "border-red-400 peer-checked:border-red-600 peer-checked:bg-red-600",
+    invalid: "border-rose-400 peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
     invalidIcon: "text-white",
   },
   dark: {
-    box: "border-zinc-700 bg-zinc-950",
-    focus: "peer-focus-visible:outline-zinc-700",
+    box: "border-zinc-700 bg-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.34)] peer-hover:border-zinc-600 peer-hover:bg-zinc-900",
+    focus: "peer-focus-visible:outline-zinc-500",
     colors: {
       neutral: {
-        box: "peer-checked:border-neutral-100 peer-checked:bg-neutral-100",
-        icon: "text-neutral-950",
+        box: "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
+        icon: "text-zinc-950",
+      },
+      slate: {
+        box: "peer-checked:border-slate-100 peer-checked:bg-slate-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
+        icon: "text-slate-950",
+      },
+      zinc: {
+        box: "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
+        icon: "text-zinc-950",
       },
       primary: {
-        box: "peer-checked:border-blue-300 peer-checked:bg-blue-300",
+        box: "peer-checked:border-sky-300 peer-checked:bg-sky-300 peer-hover:peer-checked:border-sky-200 peer-hover:peer-checked:bg-sky-200",
         icon: "text-zinc-950",
       },
       brand: {
-        box: "peer-checked:border-brand-300 peer-checked:bg-brand-300",
+        box: "peer-checked:border-brand-300 peer-checked:bg-brand-300 peer-hover:peer-checked:border-brand-200 peer-hover:peer-checked:bg-brand-200",
         icon: "text-zinc-950",
       },
       success: {
-        box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300",
+        box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-hover:peer-checked:border-emerald-200 peer-hover:peer-checked:bg-emerald-200",
         icon: "text-zinc-950",
       },
       danger: {
-        box: "peer-checked:border-red-300 peer-checked:bg-red-300",
+        box: "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
         icon: "text-zinc-950",
       },
       warning: {
-        box: "peer-checked:border-amber-300 peer-checked:bg-amber-300",
+        box: "peer-checked:border-amber-300 peer-checked:bg-amber-300 peer-hover:peer-checked:border-amber-200 peer-hover:peer-checked:bg-amber-200",
         icon: "text-zinc-950",
       },
       info: {
-        box: "peer-checked:border-sky-300 peer-checked:bg-sky-300",
+        box: "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-hover:peer-checked:border-cyan-200 peer-hover:peer-checked:bg-cyan-200",
+        icon: "text-zinc-950",
+      },
+      light: {
+        box: "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:bg-stone-100",
+        icon: "text-zinc-950",
+      },
+      dark: {
+        box: "peer-checked:border-zinc-300 peer-checked:bg-zinc-300 peer-hover:peer-checked:border-zinc-200 peer-hover:peer-checked:bg-zinc-200",
+        icon: "text-zinc-950",
+      },
+      black: {
+        box: "peer-checked:border-white peer-checked:bg-white peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:bg-stone-100",
         icon: "text-zinc-950",
       },
     },
-    invalid: "border-red-500/60 peer-checked:border-red-300 peer-checked:bg-red-300",
-    invalidIcon: "text-neutral-950",
+    invalid: "border-rose-500/70 peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
+    invalidIcon: "text-zinc-950",
   },
 };
 

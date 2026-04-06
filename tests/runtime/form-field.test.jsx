@@ -8,19 +8,26 @@ describe("form field variants", () => {
     renderWithProvider(
       <div>
         <Input color="dark" placeholder="Buscar" />
+        <Input color="black" placeholder="Consola" />
         <Textarea color="light" minRows={3} />
       </div>,
     );
 
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
-      "border-slate-950",
+      "border-zinc-800",
     );
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
-      "focus-visible:ring-slate-800/35",
+      "focus-visible:ring-zinc-700/32",
     );
-    expect(screen.getAllByRole("textbox")[1].className).toContain("bg-stone-50");
-    expect(screen.getAllByRole("textbox")[1].className).toContain(
-      "focus-visible:ring-stone-300/45",
+    expect(screen.getByPlaceholderText("Consola").className).toContain(
+      "bg-zinc-950",
+    );
+    expect(screen.getByPlaceholderText("Consola").className).toContain(
+      "focus-visible:ring-zinc-700/32",
+    );
+    expect(screen.getAllByRole("textbox")[2].className).toContain("bg-stone-100");
+    expect(screen.getAllByRole("textbox")[2].className).toContain(
+      "focus-visible:ring-stone-400/25",
     );
   });
 
@@ -37,10 +44,10 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByRole("combobox").className).toContain(
-      "border-brand-500/45",
+      "border-brand-500/55",
     );
     expect(screen.getByDisplayValue("Error").className).toContain(
-      "border-red-500/65",
+      "border-rose-500/70",
     );
   });
 });

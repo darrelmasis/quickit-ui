@@ -24,7 +24,7 @@ const apis = {
   tabs: [
     { prop: "defaultValue", type: "string", defaultValue: "undefined", description: "Tab inicial en modo no controlado." },
     { prop: "value / onValueChange", type: "string / (value) => void", defaultValue: "no controlado", description: "Modo controlado opcional." },
-    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "neutral", description: "Cambia el color del trigger activo." },
+    { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "neutral", description: "Cambia el color del trigger activo." },
     { prop: "size", type: "xs | sm | md | lg", defaultValue: "md", description: "Escala el alto del list, el padding y el min-width de cada trigger." },
     { prop: "orientation", type: "horizontal | vertical", defaultValue: "horizontal", description: "Dirección del tabs list y de la navegación por teclado." },
     { prop: "activationMode", type: "automatic | manual", defaultValue: "automatic", description: "Controla si el foco activa el tab automáticamente o si solo cambia con click / Enter / Espacio." },
@@ -49,7 +49,7 @@ const apis = {
     { prop: "count", type: "number", defaultValue: "required", description: "Total de páginas disponibles." },
     { prop: "page / defaultPage", type: "number", defaultValue: "1", description: "Modo controlado o no controlado." },
     { prop: "siblingCount", type: "number", defaultValue: "1", description: "Cantidad de páginas visibles a cada lado." },
-    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "neutral", description: "Color aplicado a la paginación." },
+    { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "neutral", description: "Color aplicado a la paginación." },
     { prop: "disabled", type: "boolean", defaultValue: "false", description: "Bloquea la navegación y los botones de cambio de página." },
   ],
 };
@@ -177,6 +177,18 @@ export function NavigationDocs({ ui, visibleIds }) {
   <Tabs defaultValue="overview" color="neutral">
     <TabsList>
       <TabsTrigger value="overview">Neutral</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="slate">
+    <TabsList>
+      <TabsTrigger value="overview">Slate</TabsTrigger>
+      <TabsTrigger value="api">API</TabsTrigger>
+    </TabsList>
+  </Tabs>
+  <Tabs defaultValue="overview" color="zinc">
+    <TabsList>
+      <TabsTrigger value="overview">Zinc</TabsTrigger>
       <TabsTrigger value="api">API</TabsTrigger>
     </TabsList>
   </Tabs>
@@ -565,6 +577,8 @@ export function NavigationDocs({ ui, visibleIds }) {
 
             <PreviewPanel ui={ui} title="Colores" code={`<div className="space-y-3">
   <Pagination count={10} defaultPage={3} color="neutral" />
+  <Pagination count={10} defaultPage={3} color="slate" />
+  <Pagination count={10} defaultPage={3} color="zinc" />
   <Pagination count={10} defaultPage={3} color="primary" />
   <Pagination count={10} defaultPage={3} color="brand" />
   <Pagination count={10} defaultPage={3} color="success" />

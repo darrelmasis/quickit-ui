@@ -10,7 +10,7 @@ import {
 
 const TEXTAREA_PRIMITIVES = {
   base: [
-    "w-full border bg-transparent px-3.5 py-3 text-sm outline-none",
+    "w-full border px-3.5 py-3 text-sm outline-none",
     "transition-[background-color,border-color,color,box-shadow] duration-200",
     "placeholder:text-current/45",
     "focus-visible:ring-4 focus-visible:ring-offset-0",

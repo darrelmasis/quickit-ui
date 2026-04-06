@@ -42,7 +42,7 @@ import {
 const SELECT_PRIMITIVES = {
   wrapper: "relative w-full",
   trigger: [
-    "flex w-full items-center justify-between gap-3 border bg-transparent px-3.5 text-sm outline-none",
+    "flex w-full items-center justify-between gap-3 border px-3.5 text-sm outline-none",
     "transition-[background-color,border-color,color,box-shadow] duration-200",
     "focus-visible:ring-4 focus-visible:ring-offset-0",
     "disabled:cursor-not-allowed disabled:opacity-60",

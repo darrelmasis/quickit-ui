@@ -19,7 +19,7 @@ const buttonColors = QUICKIT_SEMANTIC_COLORS.map((color) => ({
 
 const buttonApi = [
   { prop: "variant", type: "solid | outline | ghost", defaultValue: "solid", description: "Define el tratamiento visual base del botón." },
-  { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Aplica el color semántico dentro de la variante elegida. `brand` está pensado para la paleta de marca de tu producto y en la documentación se usa `neutral` por defecto para mantener la UI base más sobria." },
+  { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "primary", description: "Aplica el color semántico dentro de la variante elegida. `neutral` mantiene la base premium de la librería; `slate` y `zinc` exponen variantes neutras más explícitas; `black` queda como la opción más densa." },
   { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Controla altura, padding y tamaño tipográfico." },
   { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Cambia entre botón horizontal, icon button cuadrado o botón cápsula." },
   { prop: "loading", type: "boolean", defaultValue: "false", description: "Deshabilita interacción y muestra estado de carga." },
@@ -120,6 +120,8 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
           title="Colores"
           code={`<div className="flex flex-wrap items-center gap-3">
   <Button variant="outline" color="neutral">Neutral</Button>
+  <Button variant="outline" color="slate">Slate</Button>
+  <Button variant="outline" color="zinc">Zinc</Button>
   <Button variant="outline" color="primary">Primary</Button>
   <Button variant="outline" color="brand">Brand</Button>
   <Button variant="outline" color="success">Success</Button>
@@ -128,6 +130,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
   <Button variant="outline" color="info">Info</Button>
   <Button variant="outline" color="light">Light</Button>
   <Button variant="outline" color="dark">Dark</Button>
+  <Button variant="outline" color="black">Black</Button>
 </div>`}
         >
           <div className="flex flex-wrap items-center gap-3">

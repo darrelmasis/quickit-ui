@@ -20,44 +20,74 @@ const SWITCH_PRIMITIVES = {
 const SWITCH_SIZE_CLASSES = {
   sm: {
     root: "h-5 w-9",
-    thumb: "size-4",
-    checked: "translate-x-4",
+    thumb: "size-[0.875rem]",
+    checked: "translate-x-[1.125rem]",
     unchecked: "translate-x-0.5",
   },
   md: {
     root: "h-6 w-11",
-    thumb: "size-5",
-    checked: "translate-x-5",
+    thumb: "size-[1.125rem]",
+    checked: "translate-x-[1.375rem]",
     unchecked: "translate-x-0.5",
   },
 };
 
 const SWITCH_THEME_CLASSES = {
   light: {
-    idle: "border-slate-300 bg-slate-200 focus-visible:outline-slate-300",
+    idle: "border-slate-500 bg-slate-400/95 hover:border-slate-700 hover:bg-slate-500 focus-visible:outline-slate-600",
     checked: {
-      neutral: "border-neutral-950 bg-neutral-950",
-      primary: "border-blue-700 bg-blue-700",
-      brand: "border-brand-700 bg-brand-700",
+      neutral: "border-slate-800 bg-slate-800",
+      slate: "border-slate-800 bg-slate-800",
+      zinc: "border-zinc-800 bg-zinc-800",
+      primary: "border-sky-600 bg-sky-600",
+      brand: "border-brand-600 bg-brand-600",
       success: "border-emerald-600 bg-emerald-600",
-      danger: "border-red-600 bg-red-600",
+      danger: "border-rose-600 bg-rose-600",
       warning: "border-amber-500 bg-amber-500",
-      info: "border-sky-600 bg-sky-600",
+      info: "border-cyan-600 bg-cyan-600",
+      light: "border-stone-300 bg-stone-300",
+      dark: "border-zinc-900 bg-zinc-900",
+      black: "border-slate-950 bg-slate-950",
     },
-    thumb: "border-white bg-white",
+    invalid: "border-rose-400 bg-rose-100/80 focus-visible:outline-rose-400",
+    thumb: "border-white/90 bg-white shadow-[0_1px_1px_rgba(15,23,42,0.18)]",
+    thumbChecked: {
+      warning: "border-slate-950 bg-slate-950",
+      light: "border-slate-950 bg-slate-950",
+    },
   },
   dark: {
-    idle: "border-zinc-700 bg-zinc-800 focus-visible:outline-zinc-700",
+    idle: "border-zinc-700 bg-zinc-900/95 hover:border-zinc-600 hover:bg-zinc-900 focus-visible:outline-zinc-500",
     checked: {
-      neutral: "border-neutral-100 bg-neutral-100 text-neutral-950",
-      primary: "border-blue-300 bg-blue-300 text-zinc-950",
+      neutral: "border-zinc-100 bg-zinc-100 text-zinc-950",
+      slate: "border-slate-100 bg-slate-100 text-slate-950",
+      zinc: "border-zinc-100 bg-zinc-100 text-zinc-950",
+      primary: "border-sky-300 bg-sky-300 text-zinc-950",
       brand: "border-brand-300 bg-brand-300 text-zinc-950",
       success: "border-emerald-300 bg-emerald-300 text-zinc-950",
-      danger: "border-red-300 bg-red-300 text-zinc-950",
+      danger: "border-rose-300 bg-rose-300 text-zinc-950",
       warning: "border-amber-300 bg-amber-300 text-zinc-950",
-      info: "border-sky-300 bg-sky-300 text-zinc-950",
+      info: "border-cyan-300 bg-cyan-300 text-zinc-950",
+      light: "border-stone-200 bg-stone-200 text-zinc-950",
+      dark: "border-zinc-300 bg-zinc-300 text-zinc-950",
+      black: "border-zinc-950 bg-zinc-950 text-white",
     },
-    thumb: "border-zinc-950 bg-zinc-950",
+    invalid: "border-rose-500/70 bg-rose-500/18 focus-visible:outline-rose-400",
+    thumb: "border-zinc-300/70 bg-zinc-100 shadow-[0_1px_1px_rgba(0,0,0,0.32)]",
+    thumbChecked: {
+      black: "border-white bg-white",
+      neutral: "border-zinc-950 bg-zinc-950",
+      zinc: "border-zinc-950 bg-zinc-950",
+      primary: "border-zinc-950 bg-zinc-950",
+      brand: "border-zinc-950 bg-zinc-950",
+      success: "border-zinc-950 bg-zinc-950",
+      danger: "border-zinc-950 bg-zinc-950",
+      warning: "border-zinc-950 bg-zinc-950",
+      info: "border-zinc-950 bg-zinc-950",
+      light: "border-zinc-950 bg-zinc-950",
+      slate: "border-zinc-950 bg-zinc-950",
+      dark: "border-zinc-950 bg-zinc-950",
+    },
   },
 };
 
@@ -175,7 +205,11 @@ const Switch = forwardRef(function Switch(
         className={cn(
           SWITCH_PRIMITIVES.root,
           SWITCH_SIZE_CLASSES[resolvedSize].root,
-          resolvedChecked ? ui.checked[resolvedColor] : ui.idle,
+          resolvedInvalid
+            ? ui.invalid
+            : resolvedChecked
+              ? ui.checked[resolvedColor]
+              : ui.idle,
           className,
         )}
         {...props}
@@ -192,6 +226,7 @@ const Switch = forwardRef(function Switch(
             SWITCH_PRIMITIVES.thumb,
             SWITCH_SIZE_CLASSES[resolvedSize].thumb,
             ui.thumb,
+            resolvedChecked && ui.thumbChecked?.[resolvedColor],
             resolvedChecked
               ? SWITCH_SIZE_CLASSES[resolvedSize].checked
               : SWITCH_SIZE_CLASSES[resolvedSize].unchecked,

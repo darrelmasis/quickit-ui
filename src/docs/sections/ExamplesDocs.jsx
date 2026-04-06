@@ -354,12 +354,12 @@ export function ExamplesDocs({ ui, visibleIds }) {
   <div className="mt-6 space-y-4">
     <FormControl>
       <Label>Correo</Label>
-      <Input type="email" placeholder="equipo@quickit.dev" />
+      <Input type="email" color="primary" placeholder="equipo@quickit.dev" />
     </FormControl>
 
     <FormControl>
       <Label>Contraseña</Label>
-      <Input type="password" placeholder="••••••••" />
+      <Input type="password" color="brand" placeholder="••••••••" />
     </FormControl>
 
     <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -401,12 +401,12 @@ export function ExamplesDocs({ ui, visibleIds }) {
                   <div className="mt-6 space-y-4">
                     <FormControl>
                       <Label>Correo</Label>
-                      <Input type="email" placeholder="equipo@quickit.dev" />
+                      <Input type="email" color="primary" placeholder="equipo@quickit.dev" />
                     </FormControl>
 
                     <FormControl>
                       <Label>Contraseña</Label>
-                      <Input type="password" placeholder="••••••••" />
+                      <Input type="password" color="brand" placeholder="••••••••" />
                     </FormControl>
 
                     <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">

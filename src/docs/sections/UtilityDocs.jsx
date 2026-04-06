@@ -56,7 +56,7 @@ const apis = {
   link: [
     { prop: "appearance", type: "text | button", defaultValue: "text", description: "Cambia entre enlace de texto y enlace con apariencia de botón." },
     { prop: "variant", type: "default | muted | subtle | solid | outline | ghost", defaultValue: "default", description: "En `text` controla el tono del enlace. En `button` define la variante visual del botón." },
-    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info | light | dark", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`. `brand` está pensado para la paleta de marca del producto." },
+    { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "primary", description: "Color semántico disponible cuando `appearance=\"button\"`. `neutral` mantiene la base premium; `slate`, `zinc`, `dark` y `black` cubren escalas neutras más explícitas." },
     { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Tamaño del enlace cuando `appearance=\"button\"`." },
     { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Comparte la misma geometría de `Button` cuando `appearance=\"button\"`." },
     { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el enlace a `w-full` cuando usa apariencia de botón." },
@@ -66,7 +66,7 @@ const apis = {
   ],
   badge: [
     { prop: "variant", type: "soft | outline | solid", defaultValue: "soft", description: "Tratamiento visual del badge." },
-    { prop: "color", type: "neutral | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Color semántico del badge." },
+    { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info", defaultValue: "neutral", description: "Color semántico del badge." },
     { prop: "size", type: "sm | md", defaultValue: "sm", description: "Ajusta la densidad visual." },
   ],
   skeleton: [
@@ -100,6 +100,8 @@ const linkButtonColors = QUICKIT_SEMANTIC_COLORS;
 
 const badgeColors = [
   { color: "neutral", label: "Neutral" },
+  { color: "slate", label: "Slate" },
+  { color: "zinc", label: "Zinc" },
   { color: "primary", label: "Primary" },
   { color: "brand", label: "Brand" },
   { color: "success", label: "Activo" },
@@ -781,6 +783,8 @@ export function UtilityDocs({ ui, visibleIds }) {
   </div>
   <div className="flex flex-wrap items-center gap-3">
     <Link href="#" appearance="button" variant="outline" color="neutral">neutral</Link>
+    <Link href="#" appearance="button" variant="outline" color="slate">slate</Link>
+    <Link href="#" appearance="button" variant="outline" color="zinc">zinc</Link>
     <Link href="#" appearance="button" variant="outline" color="primary">primary</Link>
     <Link href="#" appearance="button" variant="outline" color="brand">brand</Link>
     <Link href="#" appearance="button" variant="outline" color="success">success</Link>
@@ -871,6 +875,8 @@ export function UtilityDocs({ ui, visibleIds }) {
               title="Colores semánticos"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Badge color="neutral">Neutral</Badge>
+  <Badge color="slate">Slate</Badge>
+  <Badge color="zinc">Zinc</Badge>
   <Badge color="primary">Primary</Badge>
   <Badge color="brand">Brand</Badge>
   <Badge color="success">Activo</Badge>

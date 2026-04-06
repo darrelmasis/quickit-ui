@@ -14,6 +14,7 @@ export const FLOATING_LIST_ITEM_PRIMITIVES = {
 export const FLOATING_LIST_SURFACE_THEME_CLASSES = {
   light: "border-slate-200 bg-white text-slate-950",
   dark: "border-zinc-800 bg-zinc-950 text-stone-100",
+  black: "border-neutral-950 bg-black text-stone-100",
 };
 
 export const FLOATING_LIST_ITEM_THEME_CLASSES = {

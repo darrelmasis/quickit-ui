@@ -2,6 +2,8 @@ import * as React from "react";
 
 export declare const QUICKIT_SEMANTIC_COLORS: readonly [
   "neutral",
+  "slate",
+  "zinc",
   "primary",
   "brand",
   "success",
@@ -10,9 +12,12 @@ export declare const QUICKIT_SEMANTIC_COLORS: readonly [
   "info",
   "light",
   "dark",
+  "black",
 ];
 export declare const QUICKIT_ACCENT_COLORS: readonly [
   "neutral",
+  "slate",
+  "zinc",
   "primary",
   "brand",
   "success",
@@ -380,7 +385,7 @@ type RadioInputProps = Omit<
 >;
 
 export interface CheckboxProps extends CheckboxInputProps {
-  color?: QuickitAccentColor;
+  color?: QuickitSemanticColor;
   containerClassName?: string;
   invalid?: boolean;
   label?: React.ReactNode;
@@ -397,7 +402,7 @@ export declare const Checkbox: React.ForwardRefExoticComponent<
 >;
 
 export interface RadioProps extends RadioInputProps {
-  color?: QuickitAccentColor;
+  color?: QuickitSemanticColor;
   containerClassName?: string;
   invalid?: boolean;
   label?: React.ReactNode;
@@ -420,7 +425,7 @@ type SwitchButtonProps = Omit<
 
 export interface SwitchProps extends SwitchButtonProps {
   checked?: boolean;
-  color?: QuickitAccentColor;
+  color?: QuickitSemanticColor;
   containerClassName?: string;
   defaultChecked?: boolean;
   invalid?: boolean;

@@ -117,7 +117,7 @@ const foundationNotes = {
     "Si tu caso es estrictamente responsive de layout, `useBreakpoint` suele ser más cómodo; si necesitas precisión, usa `useMediaQuery`.",
   ],
   colors: [
-    "La API actual sigue siendo semántica: `neutral`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light` y `dark`.",
+    "La API actual sigue siendo semántica: `neutral`, `slate`, `zinc`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light`, `dark` y `black`.",
     "Cada color semántico se apoya en una familia Tailwind interna. Si reemplazas esa familia, cambias el color semántico en toda la librería.",
     "El slot recomendado para la marca es `brand`, y por debajo consume `brand-*`. Así puedes conectar tu identidad visual sin mezclarla con `primary`.",
     "Crear una familia nueva como `gray-*` no hace que aparezca `color=\"gray\"` en la API. Para eso hace falta ampliar el mapa de colores del componente.",

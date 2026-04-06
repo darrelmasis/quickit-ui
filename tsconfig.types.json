@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "ignoreDeprecations": "6.0",
     "jsx": "react-jsx",
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["react", "react-dom"]
+    "types": ["react", "react-dom"],
+    "paths": {
+      "quickit-ui": ["./dist/quickit-ui.d.ts"],
+      "quickit-ui/styles.css": ["./dist/styles.css.d.ts"]
+    }
   },
   "include": ["tests/types/public-api.tsx"]
 }
