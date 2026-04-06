@@ -344,7 +344,44 @@ export function ExamplesDocs({ ui, visibleIds }) {
               ui={ui}
               title="Login básico"
               className="w-full !border-transparent !bg-transparent !p-0"
-              code={``}
+              code={`<div className="mx-auto max-w-md rounded-[1.5rem] border p-5 sm:p-6">
+  <Badge variant="outline" color="brand">Quickit</Badge>
+  <h3 className="mt-4 text-xl font-semibold">Inicia sesión</h3>
+  <p className="mt-2 text-sm leading-6 text-neutral-500">
+    Accede a tu panel de componentes, revisiones y documentación interna.
+  </p>
+
+  <div className="mt-6 space-y-4">
+    <FormControl>
+      <Label>Correo</Label>
+      <Input type="email" placeholder="equipo@quickit.dev" />
+    </FormControl>
+
+    <FormControl>
+      <Label>Contraseña</Label>
+      <Input type="password" placeholder="••••••••" />
+    </FormControl>
+
+    <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <Checkbox
+        id="login-remember"
+        defaultChecked
+        label="Recordarme"
+      />
+      <Link href="#" variant="muted">
+        ¿Olvidaste tu contraseña?
+      </Link>
+    </div>
+
+    <Button color="brand" fullWidth>
+      Entrar
+    </Button>
+
+    <Button color="neutral" variant="outline" fullWidth>
+      Continuar con SSO
+    </Button>
+  </div>
+</div>`}
             >
               <ExampleViewport ui={ui} defaultViewport="mobile">
                 <div
