@@ -305,6 +305,7 @@ type TextareaBaseProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 type LabelBaseProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 
 export interface InputProps extends InputBaseProps {
+  color?: QuickitSemanticColor;
   invalid?: boolean;
   required?: boolean;
   size?: "sm" | "md" | "lg";
@@ -314,6 +315,7 @@ export declare const Input: React.ForwardRefExoticComponent<
 >;
 
 export interface TextareaProps extends TextareaBaseProps {
+  color?: QuickitSemanticColor;
   invalid?: boolean;
   minRows?: number;
   required?: boolean;
@@ -408,6 +410,7 @@ export interface QuickitSelectChangeEvent {
 export interface SelectProps
   extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onChange"> {
   children?: React.ReactNode;
+  color?: QuickitSemanticColor;
   defaultValue?: string | number;
   disabled?: boolean;
   id?: string;

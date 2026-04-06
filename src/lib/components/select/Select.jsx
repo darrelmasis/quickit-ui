@@ -25,6 +25,11 @@ import { useQuickitTheme } from "@/lib/theme";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import {
+  FORM_FIELD_THEME_CLASSES,
+  resolveFormFieldColor,
+  resolveFormFieldTheme,
+} from "@/lib/components/_shared/form-field";
+import {
   FLOATING_LIST_ITEM_PRIMITIVES,
   FLOATING_LIST_ITEM_THEME_CLASSES,
   FLOATING_LIST_SURFACE_PRIMITIVES,
@@ -59,18 +64,10 @@ const SELECT_SIZE_CLASSES = {
 
 const SELECT_THEME_CLASSES = {
   light: {
-    base: "border-slate-200 bg-white text-slate-950 focus-visible:border-slate-300 focus-visible:ring-slate-200/70",
-    hover: "hover:border-slate-300",
-    invalid: "border-red-300 text-red-700 focus-visible:border-red-400 focus-visible:ring-red-200/70",
-    placeholder: "text-slate-500",
-    selectedIndicator: "text-slate-950",
+    invalid: FORM_FIELD_THEME_CLASSES.light.invalid,
   },
   dark: {
-    base: "border-zinc-800 bg-zinc-950 text-stone-50 focus-visible:border-zinc-700 focus-visible:ring-zinc-800/80",
-    hover: "hover:border-zinc-700",
-    invalid: "border-red-500/60 text-stone-50 focus-visible:border-red-400/80 focus-visible:ring-red-500/20",
-    placeholder: "text-stone-400",
-    selectedIndicator: "text-stone-50",
+    invalid: FORM_FIELD_THEME_CLASSES.dark.invalid,
   },
 };
 
@@ -177,12 +174,16 @@ const Select = forwardRef(function Select(
     size: controlSize = "md",
     usePortal = true,
     value: controlledValue,
+    color = "neutral",
     ...props
   },
   ref,
 ) {
   const theme = resolveFloatingListTheme(useQuickitTheme());
-  const ui = SELECT_THEME_CLASSES[theme];
+  const fieldTheme = resolveFormFieldTheme(useQuickitTheme());
+  const ui = SELECT_THEME_CLASSES[fieldTheme];
+  const resolvedColor = resolveFormFieldColor(color);
+  const colorUi = FORM_FIELD_THEME_CLASSES[fieldTheme][resolvedColor];
   const field = useFormControl();
   const options = useMemo(() => parseOptions(children), [children]);
   const initialValue = getInitialSelectValue({
@@ -391,7 +392,7 @@ const Select = forwardRef(function Select(
                 <svg
                   viewBox="0 0 20 20"
                   aria-hidden="true"
-                  className={cn("size-4 shrink-0 fill-current", ui.selectedIndicator)}
+                  className="size-4 shrink-0 fill-current text-current"
                 >
                   <path d="m7.75 13.1-3.4-3.4 1.06-1.06 2.34 2.34 6.84-6.84 1.06 1.06-7.9 7.9Z" />
                 </svg>
@@ -422,8 +423,8 @@ const Select = forwardRef(function Select(
           SELECT_PRIMITIVES.trigger,
           getControlRadius(controlSize),
           SELECT_SIZE_CLASSES[controlSize] ?? SELECT_SIZE_CLASSES.md,
-          resolvedInvalid ? ui.invalid : ui.base,
-          !resolvedDisabled && ui.hover,
+          resolvedInvalid ? ui.invalid : colorUi.base,
+          !resolvedDisabled && !resolvedInvalid && colorUi.hover,
           className,
         )}
         {...interactions.getReferenceProps({
@@ -444,7 +445,7 @@ const Select = forwardRef(function Select(
         <span
           className={cn(
             SELECT_PRIMITIVES.value,
-            !selectedOption && ui.placeholder,
+            !selectedOption && "text-current/55",
           )}
         >
           {triggerLabel}
