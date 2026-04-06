@@ -9,6 +9,10 @@ import {
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
   Radio,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Textarea,
   useBreakpoint,
   useQuickitFocusRing,
@@ -91,6 +95,7 @@ function FocusRingHookPreview() {
   const linkFocusRing = useQuickitFocusRing("link");
   const checkboxFocusRing = useQuickitFocusRing("checkbox");
   const radioFocusRing = useQuickitFocusRing("radio");
+  const tabsFocusRing = useQuickitFocusRing("tabs");
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -111,6 +116,9 @@ function FocusRingHookPreview() {
       </Badge>
       <Badge color={radioFocusRing ? "brand" : "neutral"} variant="outline">
         radio focus: {String(radioFocusRing)}
+      </Badge>
+      <Badge color={tabsFocusRing ? "warning" : "neutral"} variant="outline">
+        tabs focus: {String(tabsFocusRing)}
       </Badge>
     </div>
   );
@@ -189,6 +197,47 @@ function FocusRingChoiceControlsPreview({ ui }) {
   );
 }
 
+function FocusRingTabsPreview({ ui }) {
+  const tabsFocusRing = useQuickitFocusRing("tabs");
+  const buttonFocusRing = useQuickitFocusRing("button");
+
+  return (
+    <div className="space-y-4">
+      <Tabs defaultValue="overview" color="neutral">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <p className={`text-sm ${ui.body}`}>
+            Resumen general del workspace activo.
+          </p>
+        </TabsContent>
+        <TabsContent value="activity">
+          <p className={`text-sm ${ui.body}`}>
+            Actividad reciente del equipo y componentes.
+          </p>
+        </TabsContent>
+        <TabsContent value="settings">
+          <p className={`text-sm ${ui.body}`}>
+            Configuración avanzada del workspace.
+          </p>
+        </TabsContent>
+      </Tabs>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button color="neutral" variant="outline">
+          Aplicar filtros
+        </Button>
+      </div>
+      <p className={`text-sm ${ui.body}`}>
+        Aquí se desactiva el focus ring solo en tabs. tabs: {String(tabsFocusRing)}.
+        button: {String(buttonFocusRing)}.
+      </p>
+    </div>
+  );
+}
+
 const foundationApis = {
   useBreakpoint: [
     { prop: "breakpoint", type: "xs | sm | md | lg | xl | 2xl | null", defaultValue: "null en SSR", description: "Breakpoint actual resuelto con los tokens de Quickit o con el override que pases." },
@@ -256,6 +305,8 @@ const foundationNotes = {
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
 export function FoundationsDocs({ ui, visibleIds }) {
+  const previewTheme = ui.mode === "dark" ? "dark" : "light";
+
   return (
     <>
       {isVisible(visibleIds, "provider") ? (
@@ -563,11 +614,15 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
       <Badge variant="outline">
         radio focus: {String(radioFocusRing)}
       </Badge>
+      <Badge variant="outline">
+        tabs focus: {String(tabsFocusRing)}
+      </Badge>
     </div>
   );
 }`}
             >
               <QuickitProvider
+                theme={previewTheme}
                 focusRing={{ disabledComponents: ["input", "link"] }}
               >
                 <FocusRingHookPreview />
@@ -593,6 +648,7 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
               title="Caso real: toolbar de búsqueda"
               className="max-w-3xl"
               code={`<QuickitProvider
+  theme="${previewTheme}"
   focusRing={{ disabledComponents: ["input"] }}
 >
   <div className="space-y-3">
@@ -610,7 +666,10 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
   </div>
 </QuickitProvider>`}
             >
-              <QuickitProvider focusRing={{ disabledComponents: ["input"] }}>
+              <QuickitProvider
+                theme={previewTheme}
+                focusRing={{ disabledComponents: ["input"] }}
+              >
                 <FocusRingSearchToolbarPreview ui={ui} />
               </QuickitProvider>
             </PreviewPanel>
@@ -620,6 +679,7 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
               title="Caso real: panel editorial"
               className="max-w-3xl"
               code={`<QuickitProvider
+  theme="${previewTheme}"
   focusRing={{ disabledComponents: ["textarea"] }}
 >
   <div className="space-y-3">
@@ -634,7 +694,10 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
   </div>
 </QuickitProvider>`}
             >
-              <QuickitProvider focusRing={{ disabledComponents: ["textarea"] }}>
+              <QuickitProvider
+                theme={previewTheme}
+                focusRing={{ disabledComponents: ["textarea"] }}
+              >
                 <FocusRingEditorialPreview ui={ui} />
               </QuickitProvider>
             </PreviewPanel>
@@ -644,6 +707,7 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
               title="Caso real: login con enlaces y choice controls"
               className="max-w-3xl"
               code={`<QuickitProvider
+  theme="${previewTheme}"
   focusRing={{ disabledComponents: ["link", "checkbox", "radio"] }}
 >
   <div className="space-y-4">
@@ -657,11 +721,46 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
 </QuickitProvider>`}
             >
               <QuickitProvider
+                theme={previewTheme}
                 focusRing={{
                   disabledComponents: ["link", "checkbox", "radio"],
                 }}
               >
                 <FocusRingChoiceControlsPreview ui={ui} />
+              </QuickitProvider>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Caso real: navegación por tabs"
+              className="max-w-3xl"
+              code={`<QuickitProvider
+  theme="${previewTheme}"
+  focusRing={{ disabledComponents: ["tabs"] }}
+>
+  <Tabs defaultValue="overview" color="neutral">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="activity">Activity</TabsTrigger>
+      <TabsTrigger value="settings">Settings</TabsTrigger>
+    </TabsList>
+    <TabsContent value="overview">
+      Resumen general del workspace activo.
+    </TabsContent>
+    <TabsContent value="activity">
+      Actividad reciente del equipo y componentes.
+    </TabsContent>
+    <TabsContent value="settings">
+      Configuración avanzada del workspace.
+    </TabsContent>
+  </Tabs>
+</QuickitProvider>`}
+            >
+              <QuickitProvider
+                theme={previewTheme}
+                focusRing={{ disabledComponents: ["tabs"] }}
+              >
+                <FocusRingTabsPreview ui={ui} />
               </QuickitProvider>
             </PreviewPanel>
           </div>
