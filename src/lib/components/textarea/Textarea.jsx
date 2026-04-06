@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import {
@@ -32,6 +33,7 @@ const Textarea = forwardRef(function Textarea(
   ref,
 ) {
   const theme = resolveFormFieldTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("textarea");
   const ui = FORM_FIELD_THEME_CLASSES[theme];
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[theme][resolvedColor];
@@ -59,10 +61,16 @@ const Textarea = forwardRef(function Textarea(
       field-sizing="content"
       rows={minRows}
       className={cn(
-        TEXTAREA_PRIMITIVES.base,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          TEXTAREA_PRIMITIVES.base,
+        ),
         getControlRadius("md"),
         "min-h-28",
-        resolvedInvalid ? ui.invalid : colorUi.base,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          resolvedInvalid ? ui.invalid : colorUi.base,
+        ),
         !resolvedDisabled && !resolvedInvalid && colorUi.hover,
         className,
       )}

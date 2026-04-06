@@ -46,6 +46,7 @@ export const QUICKIT_BUTTON_VARIANTS = Object.freeze([
 export const QUICKIT_BUTTON_SHAPES = Object.freeze([
   "default",
   "square",
+  "circle",
   "pill",
 ]);
 

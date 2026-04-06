@@ -1,5 +1,6 @@
 import { forwardRef, useId } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import { Label } from "@/lib/components/label";
@@ -156,6 +157,7 @@ const Checkbox = forwardRef(function Checkbox(
 ) {
   const generatedId = useId();
   const theme = resolveTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("checkbox");
   const ui = CHECKBOX_THEME_CLASSES[theme];
   const field = useFormControl();
   const resolvedInvalid = invalid || field?.invalid;
@@ -198,10 +200,13 @@ const Checkbox = forwardRef(function Checkbox(
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&_svg]:opacity-100",
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            "pointer-events-none inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&_svg]:opacity-100",
+          ),
           CHECKBOX_SIZE_CLASSES[resolvedSize].box,
           ui.box,
-          ui.focus,
+          resolveQuickitFocusRingClasses(focusRingEnabled, ui.focus),
           resolvedInvalid ? ui.invalid : ui.colors[resolvedColor].box,
         )}
       >

@@ -23,7 +23,8 @@ import {
   useRole,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
   FLOATING_LIST_ITEM_PRIMITIVES,
@@ -330,6 +331,7 @@ export const DropdownItem = forwardRef(function DropdownItem(
 ) {
   const { close } = useDropdownContext("DropdownItem");
   const theme = resolveFloatingListTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("dropdown");
   const resolvedVariant = variant === "danger" ? "danger" : "default";
 
   const handleClick = (event) => {
@@ -357,8 +359,14 @@ export const DropdownItem = forwardRef(function DropdownItem(
         tabIndex={Component !== "button" && disabled ? -1 : undefined}
         type={Component === "button" ? "button" : undefined}
         className={cn(
-          FLOATING_LIST_ITEM_PRIMITIVES.base,
-          FLOATING_LIST_ITEM_THEME_CLASSES[theme][resolvedVariant],
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            FLOATING_LIST_ITEM_PRIMITIVES.base,
+          ),
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            FLOATING_LIST_ITEM_THEME_CLASSES[theme][resolvedVariant],
+          ),
           disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
           className,
         )}

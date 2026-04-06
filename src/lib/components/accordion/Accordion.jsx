@@ -1,5 +1,6 @@
 import { useId, useMemo, useState } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
   AccordionContext,
@@ -129,6 +130,7 @@ export function AccordionTrigger({ children, className, ...props }) {
   const { contentId, isOpen, triggerId, value } =
     useAccordionItemContext("AccordionTrigger");
   const theme = resolveTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("accordion");
   const ui = ACCORDION_THEME_CLASSES[theme];
 
   return (
@@ -139,8 +141,11 @@ export function AccordionTrigger({ children, className, ...props }) {
       aria-expanded={isOpen}
       data-state={isOpen ? "open" : "closed"}
       className={cn(
-        "flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-4 text-left text-sm font-medium outline-none transition-[background-color,color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-        ui.trigger,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          "flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-4 text-left text-sm font-medium outline-none transition-[background-color,color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+        ),
+        resolveQuickitFocusRingClasses(focusRingEnabled, ui.trigger),
         isOpen && ui.triggerOpen,
         className,
       )}

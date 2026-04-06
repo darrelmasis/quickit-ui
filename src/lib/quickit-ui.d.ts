@@ -41,6 +41,7 @@ export declare const QUICKIT_BUTTON_VARIANTS: readonly [
 export declare const QUICKIT_BUTTON_SHAPES: readonly [
   "default",
   "square",
+  "circle",
   "pill",
 ];
 export declare const QUICKIT_AVATAR_SHAPES: readonly [
@@ -67,6 +68,20 @@ export declare const QUICKIT_BREAKPOINTS: Readonly<{
   xl: 1280;
   "2xl": 1536;
 }>;
+export declare const QUICKIT_FOCUS_RING_COMPONENTS: readonly [
+  "button",
+  "link",
+  "input",
+  "textarea",
+  "select",
+  "checkbox",
+  "radio",
+  "switch",
+  "tabs",
+  "accordion",
+  "dropdown",
+  "modal",
+];
 export declare const QUICKIT_CONTROL_RADIUS_TOKENS: Record<string, string>;
 export declare const QUICKIT_AVATAR_RADIUS_TOKENS: Record<
   string,
@@ -95,12 +110,18 @@ export type QuickitLinkUnderline =
 export type QuickitTabSize = (typeof QUICKIT_TAB_SIZES)[number];
 export type QuickitBreakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type QuickitFloatingColor = "default" | QuickitSemanticColor;
+export type QuickitFocusRingComponent =
+  (typeof QUICKIT_FOCUS_RING_COMPONENTS)[number];
 export interface QuickitBreakpoints {
   sm: number;
   md: number;
   lg: number;
   xl: number;
   "2xl": number;
+}
+export interface QuickitFocusRingConfig {
+  disabledComponents?: QuickitFocusRingComponent[];
+  enabled?: boolean;
 }
 
 export declare function isQuickitTokenValue(
@@ -122,12 +143,20 @@ export declare function getAvatarRadius(
 
 export interface QuickitProviderProps {
   children?: React.ReactNode;
+  focusRing?: boolean | QuickitFocusRingConfig;
   theme?: QuickitThemeMode;
 }
 export declare function QuickitProvider(
   props: QuickitProviderProps,
 ): React.JSX.Element;
 export declare function useQuickitTheme(): QuickitThemeMode;
+export declare function useQuickitFocusRing(
+  component: QuickitFocusRingComponent,
+): boolean;
+export declare function useQuickitFocusRingConfig(): {
+  disabledComponents: QuickitFocusRingComponent[];
+  enabled: boolean;
+};
 export interface UseBreakpointOptions {
   breakpoints?: Partial<QuickitBreakpoints>;
 }
@@ -348,10 +377,22 @@ type TextareaBaseProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 type LabelBaseProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 
 export interface InputProps extends InputBaseProps {
+  actionShape?: "square" | "circle";
   color?: QuickitSemanticColor;
+  clearButton?: boolean;
+  clearButtonLabel?: string;
+  clearIcon?: React.ReactNode;
+  defaultPasswordVisible?: boolean;
+  hidePasswordIcon?: React.ReactNode;
+  hidePasswordLabel?: string;
   invalid?: boolean;
+  onClear?: () => void;
+  onPasswordVisibilityChange?: (visible: boolean) => void;
+  passwordToggle?: boolean;
   required?: boolean;
   size?: "sm" | "md" | "lg";
+  showPasswordIcon?: React.ReactNode;
+  showPasswordLabel?: string;
 }
 export declare const Input: React.ForwardRefExoticComponent<
   InputProps & React.RefAttributes<HTMLInputElement>

@@ -1,5 +1,6 @@
 import { useCallback, useId, useMemo, useState } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
   QUICKIT_SEMANTIC_COLORS,
@@ -220,6 +221,7 @@ export function TabsTrigger({
     value: selectedValue,
   } = useTabsContext("TabsTrigger");
   const theme = resolveTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const isSelected = selectedValue === value;
 
@@ -290,10 +292,16 @@ export function TabsTrigger({
       onClick={() => setValue(value)}
       onKeyDown={handleKeyDown}
       className={cn(
-        TABS_TRIGGER_PRIMITIVES.base,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          TABS_TRIGGER_PRIMITIVES.base,
+        ),
         TABS_SIZE_CLASSES[size].trigger,
         orientation === "vertical" && TABS_TRIGGER_PRIMITIVES.vertical,
-        isSelected ? ui.triggerActive[color] : ui.triggerIdle,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          isSelected ? ui.triggerActive[color] : ui.triggerIdle,
+        ),
         className,
       )}
     >

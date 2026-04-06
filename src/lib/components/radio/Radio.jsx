@@ -1,5 +1,6 @@
 import { forwardRef, useId } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import { Label } from "@/lib/components/label";
@@ -84,6 +85,7 @@ const Radio = forwardRef(function Radio(
 ) {
   const generatedId = useId();
   const theme = resolveTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("radio");
   const ui = RADIO_THEME_CLASSES[theme];
   const field = useFormControl();
   const resolvedInvalid = invalid || field?.invalid;
@@ -121,10 +123,13 @@ const Radio = forwardRef(function Radio(
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            "pointer-events-none inline-flex items-center justify-center rounded-full border outline-none transition-[background-color,border-color,opacity] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-checked:[&>span]:scale-100",
+          ),
           sizeUi.control,
           ui.ring,
-          ui.focus,
+          resolveQuickitFocusRingClasses(focusRingEnabled, ui.focus),
           resolvedInvalid ? ui.invalid : ui.colors[resolvedColor].ring,
         )}
       >

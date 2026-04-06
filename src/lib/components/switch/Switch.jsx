@@ -1,5 +1,6 @@
 import { forwardRef, useId, useMemo, useState } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import { Label } from "@/lib/components/label";
@@ -138,6 +139,7 @@ const Switch = forwardRef(function Switch(
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const resolvedChecked = isControlled ? checked : internalChecked;
   const theme = resolveTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("switch");
   const ui = SWITCH_THEME_CLASSES[theme];
   const field = useFormControl();
   const resolvedDisabled = disabled || field?.disabled;
@@ -203,13 +205,19 @@ const Switch = forwardRef(function Switch(
         disabled={resolvedDisabled}
         data-state={resolvedChecked ? "checked" : "unchecked"}
         className={cn(
-          SWITCH_PRIMITIVES.root,
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            SWITCH_PRIMITIVES.root,
+          ),
           SWITCH_SIZE_CLASSES[resolvedSize].root,
-          resolvedInvalid
-            ? ui.invalid
-            : resolvedChecked
-              ? ui.checked[resolvedColor]
-              : ui.idle,
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            resolvedInvalid
+              ? ui.invalid
+              : resolvedChecked
+                ? ui.checked[resolvedColor]
+                : ui.idle,
+          ),
           className,
         )}
         {...props}

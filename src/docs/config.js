@@ -21,6 +21,7 @@ export const COMPONENT_GROUPS = [
       { href: "/fundamentos/theme", label: "Tema", id: "theme" },
       { href: "/fundamentos/use-breakpoint", label: "useBreakpoint", id: "use-breakpoint" },
       { href: "/fundamentos/use-media-query", label: "useMediaQuery", id: "use-media-query" },
+      { href: "/fundamentos/use-focus-ring", label: "useQuickitFocusRing", id: "use-focus-ring" },
       { href: "/fundamentos/colores", label: "Colores", id: "colors" },
       { href: "/fundamentos/estados", label: "Estados", id: "states" },
     ],

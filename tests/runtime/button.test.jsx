@@ -42,5 +42,25 @@ describe("action controls", () => {
 
     expect(link.className).toContain("size-11");
     expect(link.className).toContain("border");
+    expect(link.className).not.toContain("active:translate-y-px");
+  });
+
+  it("disables active motion by default on square buttons", () => {
+    renderWithProvider(
+      <div>
+        <Button shape="square" color="neutral" aria-label="Abrir acciones">
+          +
+        </Button>
+        <Button shape="circle" color="neutral" aria-label="Abrir favorito">
+          +
+        </Button>
+      </div>,
+    );
+
+    const button = screen.getByRole("button", { name: "Abrir acciones" });
+    const circleButton = screen.getByRole("button", { name: "Abrir favorito" });
+
+    expect(button.className).not.toContain("active:translate-y-px");
+    expect(circleButton.className).not.toContain("active:translate-y-px");
   });
 });

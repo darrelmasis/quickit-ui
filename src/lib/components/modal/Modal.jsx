@@ -9,7 +9,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import Button from "@/lib/components/button/Button";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { ModalContext, useModalContext } from "./modal-context";
 
@@ -416,6 +417,7 @@ export function ModalContent({ children, className }) {
 export function ModalHeader({ children, className }) {
   const { close, outsideClick } = useModalContext("ModalHeader");
   const theme = resolveTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("modal");
   const ui = MODAL_THEME_CLASSES[theme];
 
   return (
@@ -425,7 +427,13 @@ export function ModalHeader({ children, className }) {
         <button
           type="button"
           onClick={close}
-          className={cn(MODAL_PRIMITIVES.closeButton, ui.closeButton)}
+          className={cn(
+            resolveQuickitFocusRingClasses(
+              focusRingEnabled,
+              MODAL_PRIMITIVES.closeButton,
+            ),
+            resolveQuickitFocusRingClasses(focusRingEnabled, ui.closeButton),
+          )}
           aria-label="Cerrar modal"
         >
           <XMark />

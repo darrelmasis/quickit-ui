@@ -21,7 +21,8 @@ import {
   useRole,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import {
@@ -181,6 +182,7 @@ const Select = forwardRef(function Select(
 ) {
   const theme = resolveFloatingListTheme(useQuickitTheme());
   const fieldTheme = resolveFormFieldTheme(useQuickitTheme());
+  const focusRingEnabled = useQuickitFocusRing("select");
   const ui = SELECT_THEME_CLASSES[fieldTheme];
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[fieldTheme][resolvedColor];
@@ -381,7 +383,14 @@ const Select = forwardRef(function Select(
               disabled={option.disabled}
               className={cn(
                 FLOATING_LIST_ITEM_PRIMITIVES.base,
-                FLOATING_LIST_ITEM_THEME_CLASSES[theme].default,
+                resolveQuickitFocusRingClasses(
+                  focusRingEnabled,
+                  FLOATING_LIST_ITEM_PRIMITIVES.base,
+                ),
+                resolveQuickitFocusRingClasses(
+                  focusRingEnabled,
+                  FLOATING_LIST_ITEM_THEME_CLASSES[theme].default,
+                ),
                 selected && FLOATING_LIST_ITEM_THEME_CLASSES[theme].selected,
                 option.disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
               )}
@@ -421,9 +430,16 @@ const Select = forwardRef(function Select(
         aria-required={resolvedRequired || undefined}
         className={cn(
           SELECT_PRIMITIVES.trigger,
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            SELECT_PRIMITIVES.trigger,
+          ),
           getControlRadius(controlSize),
           SELECT_SIZE_CLASSES[controlSize] ?? SELECT_SIZE_CLASSES.md,
-          resolvedInvalid ? ui.invalid : colorUi.base,
+          resolveQuickitFocusRingClasses(
+            focusRingEnabled,
+            resolvedInvalid ? ui.invalid : colorUi.base,
+          ),
           !resolvedDisabled && !resolvedInvalid && colorUi.hover,
           className,
         )}

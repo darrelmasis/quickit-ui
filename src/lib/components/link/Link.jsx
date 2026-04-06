@@ -1,5 +1,6 @@
 import { forwardRef, useEffect } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
   ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
@@ -34,7 +35,7 @@ const Link = forwardRef(function Link(
   {
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
-    activeMotion = true,
+    activeMotion,
     appearance = "text",
     children,
     className,
@@ -60,6 +61,10 @@ const Link = forwardRef(function Link(
   const resolvedColor = resolveActionColor(theme, resolvedButtonVariant, color);
   const resolvedShape = resolveActionShape(shape);
   const resolvedSize = resolveActionSize(size);
+  const focusRingEnabled = useQuickitFocusRing("link");
+  const resolvedActiveMotion =
+    activeMotion ??
+    (resolvedShape !== "square" && resolvedShape !== "circle");
   const underlineClasses = {
     always: "underline underline-offset-4",
     hover: "no-underline hover:underline hover:underline-offset-4",
@@ -71,7 +76,10 @@ const Link = forwardRef(function Link(
       return;
     }
 
-    if (!isButtonAppearance || resolvedShape !== "square") {
+    if (
+      !isButtonAppearance ||
+      (resolvedShape !== "square" && resolvedShape !== "circle")
+    ) {
       return;
     }
 
@@ -80,7 +88,7 @@ const Link = forwardRef(function Link(
     }
 
     console.warn(
-      'Quickit UI Link: links with appearance="button" and shape="square" should include aria-label, aria-labelledby, or title.',
+      'Quickit UI Link: links with appearance="button" and shape="square" or shape="circle" should include aria-label, aria-labelledby, or title.',
     );
   }, [ariaLabel, ariaLabelledBy, isButtonAppearance, resolvedShape, title]);
 
@@ -100,20 +108,33 @@ const Link = forwardRef(function Link(
       tabIndex={disabled ? -1 : tabIndex}
       className={cn(
         isButtonAppearance
-          ? ACTION_CONTROL_BASE_CLASSES
-          : "inline-flex items-center gap-1 text-sm font-medium outline-none transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+          ? resolveQuickitFocusRingClasses(
+              focusRingEnabled,
+              ACTION_CONTROL_BASE_CLASSES,
+            )
+          : resolveQuickitFocusRingClasses(
+              focusRingEnabled,
+              "inline-flex items-center gap-1 text-sm font-medium outline-none transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+            ),
         isButtonAppearance
           ? [
               getActionControlRadius(resolvedShape, resolvedSize),
-              activeMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
+              resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
               ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
                 ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md,
-              ACTION_CONTROL_THEME_CLASSES[theme][resolvedButtonVariant]?.[resolvedColor] ??
-                ACTION_CONTROL_THEME_CLASSES[theme].solid.primary,
+              resolveQuickitFocusRingClasses(
+                focusRingEnabled,
+                ACTION_CONTROL_THEME_CLASSES[theme][resolvedButtonVariant]?.[
+                  resolvedColor
+                ] ?? ACTION_CONTROL_THEME_CLASSES[theme].solid.primary,
+              ),
               fullWidth && "w-full",
             ]
           : [
-              ui[resolvedTextVariant],
+              resolveQuickitFocusRingClasses(
+                focusRingEnabled,
+                ui[resolvedTextVariant],
+              ),
               underlineClasses[underline] ?? underlineClasses.hover,
             ],
         disabled && "pointer-events-none opacity-60",

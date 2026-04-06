@@ -1,12 +1,15 @@
 import {
   Badge,
   Button,
+  Input,
   Link,
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
+  Textarea,
   useBreakpoint,
+  useQuickitFocusRing,
   useMediaQuery,
   useQuickitTheme,
 } from "@/lib";
@@ -80,6 +83,68 @@ function MediaQueryHookPreview() {
   );
 }
 
+function FocusRingHookPreview() {
+  const buttonFocusRing = useQuickitFocusRing("button");
+  const inputFocusRing = useQuickitFocusRing("input");
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge color={buttonFocusRing ? "success" : "neutral"} variant="outline">
+        button focus: {String(buttonFocusRing)}
+      </Badge>
+      <Badge color={inputFocusRing ? "warning" : "neutral"} variant="outline">
+        input focus: {String(inputFocusRing)}
+      </Badge>
+    </div>
+  );
+}
+
+function FocusRingSearchToolbarPreview({ ui }) {
+  const buttonFocusRing = useQuickitFocusRing("button");
+  const inputFocusRing = useQuickitFocusRing("input");
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Input
+          type="search"
+          placeholder="Buscar componente, hook o token"
+          defaultValue="focus ring"
+        />
+        <Button color="brand">Buscar</Button>
+      </div>
+      <p className={`text-sm ${ui.body}`}>
+        En este toolbar el input no muestra focus ring, pero el botón sí.
+        input: {String(inputFocusRing)}. button: {String(buttonFocusRing)}.
+      </p>
+    </div>
+  );
+}
+
+function FocusRingEditorialPreview({ ui }) {
+  const textareaFocusRing = useQuickitFocusRing("textarea");
+  const buttonFocusRing = useQuickitFocusRing("button");
+
+  return (
+    <div className="space-y-3">
+      <Textarea
+        minRows={4}
+        defaultValue="Notas de revisión para la próxima release."
+      />
+      <div className="flex flex-wrap items-center gap-3">
+        <Button color="neutral" variant="outline">
+          Cancelar
+        </Button>
+        <Button color="neutral">Guardar cambios</Button>
+      </div>
+      <p className={`text-sm ${ui.body}`}>
+        Este panel editorial desactiva el focus ring solo en campos de texto.
+        textarea: {String(textareaFocusRing)}. button: {String(buttonFocusRing)}.
+      </p>
+    </div>
+  );
+}
+
 const foundationApis = {
   useBreakpoint: [
     { prop: "breakpoint", type: "xs | sm | md | lg | xl | 2xl | null", defaultValue: "null en SSR", description: "Breakpoint actual resuelto con los tokens de Quickit o con el override que pases." },
@@ -93,6 +158,10 @@ const foundationApis = {
     { prop: "options.defaultValue", type: "boolean", defaultValue: "false", description: "Fallback usado durante SSR o cuando `matchMedia` no está disponible." },
     { prop: "return", type: "boolean", defaultValue: "-", description: "Devuelve `true` cuando la query coincide y se actualiza automáticamente al cambiar." },
   ],
+  useQuickitFocusRing: [
+    { prop: "component", type: "button | link | input | textarea | select | checkbox | radio | switch | tabs | accordion | dropdown | modal", defaultValue: "required", description: "Nombre del componente cuya política de focus ring quieres consultar." },
+    { prop: "return", type: "boolean", defaultValue: "-", description: "Devuelve `true` cuando ese componente mantiene focus ring activo según la configuración actual del provider." },
+  ],
 };
 
 const foundationNotes = {
@@ -100,6 +169,7 @@ const foundationNotes = {
     "QuickitProvider expone el tema actual mediante contexto, sin acoplar la app a una solucion externa.",
     "Si no envuelves la aplicacion, el tema por defecto es light.",
     "El proveedor es liviano: sirve para consistencia, no para manejar estado global de la app.",
+    "También centraliza la política de focus visible mediante `focusRing`, para desactivar todos los focus rings o solo componentes específicos.",
   ],
   theme: [
     "La libreria trabaja con dos modos base: light y dark.",
@@ -115,6 +185,11 @@ const foundationNotes = {
     "useMediaQuery es el nivel más bajo: sirve cuando no quieres breakpoint semántico, sino consultar una media query exacta.",
     "Es útil no solo para ancho de viewport, sino también para preferencias del usuario como `prefers-reduced-motion` o `prefers-color-scheme`.",
     "Si tu caso es estrictamente responsive de layout, `useBreakpoint` suele ser más cómodo; si necesitas precisión, usa `useMediaQuery`.",
+  ],
+  useQuickitFocusRing: [
+    "Quickit mantiene focus visible accesible por defecto en sus componentes interactivos.",
+    "Puedes apagarlo globalmente con `focusRing={false}` o solo en ciertos componentes con `focusRing={{ disabledComponents: [...] }}`.",
+    "El hook te permite leer esa política desde wrappers o shells propios sin duplicar configuración.",
   ],
   colors: [
     "La API actual sigue siendo semántica: `neutral`, `slate`, `zinc`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light`, `dark` y `black`.",
@@ -178,6 +253,17 @@ export function App() {
     </QuickitProvider>
   );
 }`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Configurar focus ring"
+              code={`<QuickitProvider
+  theme="dark"
+  focusRing={{ disabledComponents: ["input", "textarea"] }}
+>
+  <App />
+</QuickitProvider>`}
             />
           </div>
 
@@ -390,6 +476,121 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
             <div>
               <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
               <NotesList items={foundationNotes.useMediaQuery} ui={ui} />
+            </div>
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "use-focus-ring") ? (
+        <SectionCard id="use-focus-ring" className={ui.divider}>
+          <SectionHeading
+            category="Fundamentos"
+            title="useQuickitFocusRing"
+            description="Hook para consultar si un componente debe mantener su focus ring activo según la configuración actual de `QuickitProvider`."
+            ui={ui}
+          />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Lectura de la política actual"
+              code={`function FocusPolicy() {
+  const buttonFocusRing = useQuickitFocusRing("button");
+  const inputFocusRing = useQuickitFocusRing("input");
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge variant="outline">
+        button focus: {String(buttonFocusRing)}
+      </Badge>
+      <Badge variant="outline">
+        input focus: {String(inputFocusRing)}
+      </Badge>
+    </div>
+  );
+}`}
+            >
+              <QuickitProvider
+                focusRing={{ disabledComponents: ["input"] }}
+              >
+                <FocusRingHookPreview />
+              </QuickitProvider>
+            </PreviewPanel>
+
+            <CodeExample
+              ui={ui}
+              title="Uso típico"
+              code={`function CustomShell() {
+  const buttonFocusRing = useQuickitFocusRing("button");
+
+  return (
+    <div data-button-focus={buttonFocusRing ? "on" : "off"}>
+      <Toolbar />
+    </div>
+  );
+}`}
+            />
+
+            <PreviewPanel
+              ui={ui}
+              title="Caso real: toolbar de búsqueda"
+              className="max-w-3xl"
+              code={`<QuickitProvider
+  focusRing={{ disabledComponents: ["input"] }}
+>
+  <div className="space-y-3">
+    <div className="flex flex-col gap-3 sm:flex-row">
+      <Input
+        type="search"
+        placeholder="Buscar componente, hook o token"
+        defaultValue="focus ring"
+      />
+      <Button color="brand">Buscar</Button>
+    </div>
+    <p className="text-sm text-neutral-500">
+      Aquí el input pierde el focus ring, pero el botón mantiene el suyo.
+    </p>
+  </div>
+</QuickitProvider>`}
+            >
+              <QuickitProvider focusRing={{ disabledComponents: ["input"] }}>
+                <FocusRingSearchToolbarPreview ui={ui} />
+              </QuickitProvider>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Caso real: panel editorial"
+              className="max-w-3xl"
+              code={`<QuickitProvider
+  focusRing={{ disabledComponents: ["textarea"] }}
+>
+  <div className="space-y-3">
+    <Textarea
+      minRows={4}
+      defaultValue="Notas de revisión para la próxima release."
+    />
+    <div className="flex flex-wrap items-center gap-3">
+      <Button color="neutral" variant="outline">Cancelar</Button>
+      <Button color="neutral">Guardar cambios</Button>
+    </div>
+  </div>
+</QuickitProvider>`}
+            >
+              <QuickitProvider focusRing={{ disabledComponents: ["textarea"] }}>
+                <FocusRingEditorialPreview ui={ui} />
+              </QuickitProvider>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={foundationApis.useQuickitFocusRing} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
+              <NotesList items={foundationNotes.useQuickitFocusRing} ui={ui} />
             </div>
           </div>
         </SectionCard>
@@ -645,10 +846,10 @@ black   -> negro / contraste máximo
         appearance="button"
         shape={shape}
         color="neutral"
-        aria-label={shape === "square" ? "Abrir atajo" : undefined}
-        title={shape === "square" ? "Abrir atajo" : undefined}
+        aria-label={shape === "square" || shape === "circle" ? "Abrir atajo" : undefined}
+        title={shape === "square" || shape === "circle" ? "Abrir atajo" : undefined}
       >
-        {shape === "square" ? "+" : shape}
+        {shape === "square" || shape === "circle" ? "+" : shape}
       </Link>
     ))}
   </div>
@@ -671,10 +872,10 @@ black   -> negro / contraste máximo
                       appearance="button"
                       shape={shape}
                       color="neutral"
-                      aria-label={shape === "square" ? "Abrir atajo" : undefined}
-                      title={shape === "square" ? "Abrir atajo" : undefined}
+                      aria-label={shape === "square" || shape === "circle" ? "Abrir atajo" : undefined}
+                      title={shape === "square" || shape === "circle" ? "Abrir atajo" : undefined}
                     >
-                      {shape === "square" ? "+" : shape}
+                      {shape === "square" || shape === "circle" ? "+" : shape}
                     </Link>
                   ))}
                 </div>

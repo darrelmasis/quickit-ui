@@ -18,9 +18,11 @@ import {
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_BREAKPOINTS,
   QUICKIT_CONTROL_SIZES,
+  QUICKIT_FOCUS_RING_COMPONENTS,
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
   useBreakpoint,
+  useQuickitFocusRing,
   useMediaQuery,
   Radio,
   RenderSwitch,
@@ -66,15 +68,32 @@ export function ConsumerPreview() {
   const responsive = useBreakpoint({ breakpoints: customBreakpoints });
   const activeBreakpoint: QuickitBreakpoint | null = responsive.breakpoint;
   const prefersDesktop = useMediaQuery("(min-width: 1024px)");
+  const buttonFocusRing = useQuickitFocusRing(QUICKIT_FOCUS_RING_COMPONENTS[0]);
 
   return (
-    <QuickitProvider theme="dark">
+    <QuickitProvider
+      theme="dark"
+      focusRing={{ disabledComponents: ["input"] }}
+    >
       <span>{activeBreakpoint}</span>
       <span>{String(prefersDesktop)}</span>
+      <span>{String(buttonFocusRing)}</span>
       <Button {...buttonProps}>Guardar</Button>
       <Link {...linkProps}>Ir a docs</Link>
       <Badge color="success">Activo</Badge>
-      <Input color="dark" placeholder="Buscar" />
+      <Input
+        color="dark"
+        type="search"
+        defaultValue="Quickit"
+        clearButton
+        actionShape="circle"
+      />
+      <Input
+        color="brand"
+        type="password"
+        passwordToggle
+        showPasswordLabel="Ver"
+      />
       <Textarea color="light" minRows={3} />
       <Checkbox
         defaultChecked

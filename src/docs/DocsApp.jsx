@@ -348,6 +348,7 @@ export default function DocsApp() {
       case "theme":
       case "use-breakpoint":
       case "use-media-query":
+      case "use-focus-ring":
       case "colors":
       case "states":
         return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;

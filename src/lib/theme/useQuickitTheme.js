@@ -1,6 +1,6 @@
-import { useContext } from 'react'
-import { QuickitThemeContext } from './quickit-theme-context'
+import { useContext } from "react";
+import { QuickitThemeContext } from "./quickit-theme-context";
 
 export function useQuickitTheme() {
-  return useContext(QuickitThemeContext)
+  return useContext(QuickitThemeContext).theme;
 }

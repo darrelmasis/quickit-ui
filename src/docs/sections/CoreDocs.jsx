@@ -21,7 +21,7 @@ const buttonApi = [
   { prop: "variant", type: "solid | outline | ghost", defaultValue: "solid", description: "Define el tratamiento visual base del botón." },
   { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "primary", description: "Aplica el color semántico dentro de la variante elegida. `neutral` mantiene la base premium de la librería; `slate` y `zinc` exponen variantes neutras más explícitas; `black` queda como la opción más densa." },
   { prop: "size", type: "sm | md | lg | xl | 2xl", defaultValue: "md", description: "Controla altura, padding y tamaño tipográfico." },
-  { prop: "shape", type: "default | square | pill", defaultValue: "default", description: "Cambia entre botón horizontal, icon button cuadrado o botón cápsula." },
+  { prop: "shape", type: "default | square | circle | pill", defaultValue: "default", description: "Cambia entre botón horizontal, icon button cuadrado, icon button circular o botón cápsula." },
   { prop: "loading", type: "boolean", defaultValue: "false", description: "Deshabilita interacción y muestra estado de carga." },
   { prop: "loadingText", type: "string", defaultValue: "children", description: "Texto alterno que se muestra únicamente durante loading." },
   { prop: "spinner", type: "boolean", defaultValue: "true", description: "Permite ocultar el spinner aunque el botón esté en loading." },
@@ -29,8 +29,8 @@ const buttonApi = [
   { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el botón a `w-full`." },
   { prop: "active", type: "boolean", defaultValue: "false", description: "Aplica un estado visual activo persistente." },
   { prop: "pressed", type: "boolean", defaultValue: "false", description: "Marca el botón como presionado y añade `aria-pressed`." },
-  { prop: "activeMotion", type: "boolean", defaultValue: "true", description: "Permite desactivar la animación nativa de `:active` al presionar." },
-  { prop: "aria-label / aria-labelledby / title", type: "string", defaultValue: "undefined", description: "Recomendado cuando `shape=\"square\"` no tiene texto visible." },
+  { prop: "activeMotion", type: "boolean", defaultValue: "true, excepto en `shape=\"square\"` y `shape=\"circle\"`", description: "Permite controlar la animación nativa de `:active`. Los icon buttons `square` y `circle` la traen desactivada por defecto para una interacción más sobria." },
+  { prop: "aria-label / aria-labelledby / title", type: "string", defaultValue: "undefined", description: "Recomendado cuando `shape=\"square\"` o `shape=\"circle\"` no tienen texto visible." },
 ];
 
 const buttonNotes = [
@@ -38,11 +38,11 @@ const buttonNotes = [
   "En `size=\"sm\"` o `shape=\"square\"`, el estado loading muestra solo el spinner.",
   "Si `spinner={false}`, puedes mantener loading sin icono girando.",
   "El botón tiene feedback visual nativo en `:active` al presionar con puntero, además de los estados controlados `active` y `pressed`.",
-  "Si necesitas una interacción más sobria, `activeMotion={false}` desactiva ese feedback de presión.",
+  "Los icon buttons `shape=\"square\"` y `shape=\"circle\"` salen sin `activeMotion` por defecto; puedes reactivarlo explícitamente con `activeMotion={true}`.",
   "Los botones horizontales tienen un `min-width` por tamaño para mantener consistencia visual entre acciones.",
   "Si necesitas que sea `full width` solo en móvil, usa clases responsivas como `w-full sm:w-48`; `fullWidth` por sí solo siempre aplica `w-full`.",
   "`shape=\"pill\"` usa radio completo y funciona bien para acciones más promocionales o filtros tipo cápsula.",
-  "Los botones `square` deben incluir `aria-label`, `aria-labelledby` o `title`.",
+  "Los botones `square` y `circle` deben incluir `aria-label`, `aria-labelledby` o `title`.",
 ];
 
 export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }) {
@@ -60,7 +60,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
       <SectionHeading
         category="Acciones"
         title="Button"
-        description="Botón base de la librería. Soporta variantes visuales, colores, estados, tamaños y shape cuadrado sin depender de CSS custom."
+        description="Botón base de la librería. Soporta variantes visuales, colores, estados, tamaños y shapes horizontales o de icon button sin depender de CSS custom."
         ui={ui}
       />
 
@@ -186,6 +186,11 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
     <Button shape="square" size="md" color="neutral" aria-label="Más">+</Button>
     <Button shape="square" size="lg" color="neutral" aria-label="Cerrar">×</Button>
   </div>
+  <div className="flex flex-wrap items-center gap-3">
+    <Button shape="circle" size="sm" color="neutral" aria-label="Buscar">+</Button>
+    <Button shape="circle" size="md" color="neutral" aria-label="Favorito">+</Button>
+    <Button shape="circle" size="lg" color="neutral" aria-label="Notificaciones">+</Button>
+  </div>
 </div>`}
           >
             <div className="space-y-4">
@@ -206,6 +211,62 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
                 <Button shape="square" size="md" color="neutral" aria-label="Más">+</Button>
                 <Button shape="square" size="lg" color="neutral" aria-label="Cerrar">×</Button>
               </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button shape="circle" size="sm" color="neutral" aria-label="Buscar">+</Button>
+                <Button shape="circle" size="md" color="neutral" aria-label="Favorito">+</Button>
+                <Button shape="circle" size="lg" color="neutral" aria-label="Notificaciones">+</Button>
+              </div>
+            </div>
+          </PreviewPanel>
+
+          <PreviewPanel
+            ui={ui}
+            title="Icon buttons y activeMotion"
+            code={`<div className="flex flex-wrap items-center gap-3">
+  <Button shape="square" variant="outline" color="neutral" aria-label="Buscar">
+    +
+  </Button>
+  <Button
+    shape="square"
+    variant="outline"
+    color="neutral"
+    activeMotion
+    aria-label="Buscar con motion"
+  >
+    +
+  </Button>
+  <Button shape="circle" variant="outline" color="neutral" aria-label="Favorito">
+    +
+  </Button>
+</div>
+
+<p className="text-sm text-neutral-500">
+  Los botones square y circle salen sin activeMotion por defecto. Si quieres esa animación,
+  debes activarla manualmente.
+</p>`}
+          >
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <Button shape="square" variant="outline" color="neutral" aria-label="Buscar">
+                  +
+                </Button>
+                <Button
+                  shape="square"
+                  variant="outline"
+                  color="neutral"
+                  activeMotion
+                  aria-label="Buscar con motion"
+                >
+                  +
+                </Button>
+                <Button shape="circle" variant="outline" color="neutral" aria-label="Favorito">
+                  +
+                </Button>
+              </div>
+              <p className={`text-sm ${ui.body}`}>
+                Los botones <code>square</code> y <code>circle</code> salen sin <code>activeMotion</code> por defecto.
+                Si quieres ese feedback de presión, actívalo manualmente.
+              </p>
             </div>
           </PreviewPanel>
 

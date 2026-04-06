@@ -49,6 +49,35 @@ export default function App() {
 }
 ```
 
+También puedes controlar el focus ring globalmente desde el provider:
+
+```jsx
+<QuickitProvider
+  theme="dark"
+  focusRing={{ disabledComponents: ["input", "textarea"] }}
+>
+  <App />
+</QuickitProvider>
+```
+
+Reglas:
+
+- por defecto Quickit mantiene focus visible accesible en componentes interactivos
+- `focusRing={false}` lo desactiva en toda la librería
+- `focusRing={{ disabledComponents: [...] }}` lo desactiva solo en componentes específicos
+
+Si necesitas leer esa decisión desde tu app o desde wrappers propios:
+
+```jsx
+import { useQuickitFocusRing } from "quickit-ui";
+
+function Toolbar() {
+  const buttonFocusRing = useQuickitFocusRing("button");
+
+  return <span>button focus: {String(buttonFocusRing)}</span>;
+}
+```
+
 ## Colores semánticos
 
 La API pública soporta:
@@ -140,6 +169,28 @@ export function Actions() {
 }
 ```
 
+Notas rápidas de `Button`:
+
+- `shape="square"` y `shape="circle"` están pensados para icon buttons.
+- `shape="square"` y `shape="circle"` salen con `activeMotion` desactivado por defecto.
+- Si quieres esa animación en un icon button, usa `activeMotion={true}`.
+
+```jsx
+<Button shape="square" variant="outline" color="neutral" aria-label="Buscar">
+  <SearchIcon />
+</Button>
+
+<Button
+  shape="square"
+  variant="outline"
+  color="neutral"
+  activeMotion
+  aria-label="Buscar con motion"
+>
+  <SearchIcon />
+</Button>
+```
+
 ### Formularios
 
 ```jsx
@@ -173,6 +224,26 @@ export function ContactForm() {
           <option value="sales">Ventas</option>
         </Select>
         <FormDescription>Selecciona el motivo de tu consulta.</FormDescription>
+      </FormControl>
+
+      <FormControl>
+        <Label htmlFor="password">Contraseña</Label>
+        <Input
+          id="password"
+          type="password"
+          color="brand"
+          placeholder="••••••••"
+        />
+      </FormControl>
+
+      <FormControl>
+        <Label htmlFor="search">Buscar componente</Label>
+        <Input
+          id="search"
+          type="search"
+          color="neutral"
+          defaultValue="Modal"
+        />
       </FormControl>
 
       <FormControl invalid>

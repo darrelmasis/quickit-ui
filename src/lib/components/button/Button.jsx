@@ -1,5 +1,6 @@
 import { forwardRef, useEffect } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
   ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
@@ -62,7 +63,7 @@ const Button = forwardRef(function Button(
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     active = false,
-    activeMotion = true,
+    activeMotion,
     children,
     className,
     disabled = false,
@@ -91,8 +92,13 @@ const Button = forwardRef(function Button(
   const resolvedColor = resolveActionColor(resolvedTheme, resolvedVariant, color);
   const resolvedShape = resolveActionShape(shape);
   const resolvedSize = resolveActionSize(size);
+  const focusRingEnabled = useQuickitFocusRing("button");
+  const resolvedActiveMotion =
+    activeMotion ??
+    (resolvedShape !== "square" && resolvedShape !== "circle");
   const isSmall = size === "sm";
-  const showLoadingText = !isSmall && resolvedShape !== "square";
+  const showLoadingText =
+    !isSmall && resolvedShape !== "square" && resolvedShape !== "circle";
   const baseContent = children ?? loadingText;
   const loadingContent = loadingText ?? children;
   const resolvedSizeClasses =
@@ -109,7 +115,7 @@ const Button = forwardRef(function Button(
       return;
     }
 
-    if (resolvedShape !== "square") {
+    if (resolvedShape !== "square" && resolvedShape !== "circle") {
       return;
     }
 
@@ -118,7 +124,7 @@ const Button = forwardRef(function Button(
     }
 
     console.warn(
-      'Quickit UI Button: buttons with shape="square" should include aria-label, aria-labelledby, or title.',
+      'Quickit UI Button: buttons with shape="square" or shape="circle" should include aria-label, aria-labelledby, or title.',
     );
   }, [ariaLabel, ariaLabelledBy, resolvedShape, title]);
 
@@ -135,8 +141,11 @@ const Button = forwardRef(function Button(
       data-active={isActive || undefined}
       data-pressed={pressed || undefined}
       className={cn(
-        ACTION_CONTROL_BASE_CLASSES,
-        activeMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          ACTION_CONTROL_BASE_CLASSES,
+        ),
+        resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
         BUTTON_PRIMITIVES.spacing,
         BUTTON_PRIMITIVES.disabled,
         fullWidth && "w-full",
@@ -145,8 +154,12 @@ const Button = forwardRef(function Button(
         resolvedRadiusClass,
         resolvedSizeClasses,
         stateClass,
-        ACTION_CONTROL_THEME_CLASSES[resolvedTheme][resolvedVariant]?.[resolvedColor] ??
-          ACTION_CONTROL_THEME_CLASSES[resolvedTheme].solid.primary,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          ACTION_CONTROL_THEME_CLASSES[resolvedTheme][resolvedVariant]?.[
+            resolvedColor
+          ] ?? ACTION_CONTROL_THEME_CLASSES[resolvedTheme].solid.primary,
+        ),
         className,
       )}
       {...props}

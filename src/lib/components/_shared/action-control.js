@@ -31,6 +31,13 @@ export const ACTION_CONTROL_SIZE_CLASSES = {
     xl: "size-14 text-lg",
     "2xl": "size-16 text-lg",
   },
+  circle: {
+    sm: "size-9 text-sm",
+    md: "size-11 text-sm",
+    lg: "size-12 text-base",
+    xl: "size-14 text-lg",
+    "2xl": "size-16 text-lg",
+  },
   pill: {
     sm: "h-9 min-w-[5.5rem] px-3.5 text-sm",
     md: "h-11 min-w-[6.5rem] px-[1.125rem] text-sm",
@@ -248,5 +255,7 @@ export function resolveActionColor(theme, variant, color, fallback = "primary") 
 }
 
 export function getActionControlRadius(shape, size) {
-  return shape === "pill" ? "rounded-full" : getControlRadius(size);
+  return shape === "pill" || shape === "circle"
+    ? "rounded-full"
+    : getControlRadius(size);
 }
