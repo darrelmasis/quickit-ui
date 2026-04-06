@@ -1,12 +1,14 @@
 import {
   Badge,
   Button,
+  Checkbox,
   Input,
   Link,
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
+  Radio,
   Textarea,
   useBreakpoint,
   useQuickitFocusRing,
@@ -86,6 +88,9 @@ function MediaQueryHookPreview() {
 function FocusRingHookPreview() {
   const buttonFocusRing = useQuickitFocusRing("button");
   const inputFocusRing = useQuickitFocusRing("input");
+  const linkFocusRing = useQuickitFocusRing("link");
+  const checkboxFocusRing = useQuickitFocusRing("checkbox");
+  const radioFocusRing = useQuickitFocusRing("radio");
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -94,6 +99,18 @@ function FocusRingHookPreview() {
       </Badge>
       <Badge color={inputFocusRing ? "warning" : "neutral"} variant="outline">
         input focus: {String(inputFocusRing)}
+      </Badge>
+      <Badge color={linkFocusRing ? "info" : "neutral"} variant="outline">
+        link focus: {String(linkFocusRing)}
+      </Badge>
+      <Badge
+        color={checkboxFocusRing ? "success" : "neutral"}
+        variant="outline"
+      >
+        checkbox focus: {String(checkboxFocusRing)}
+      </Badge>
+      <Badge color={radioFocusRing ? "brand" : "neutral"} variant="outline">
+        radio focus: {String(radioFocusRing)}
       </Badge>
     </div>
   );
@@ -145,6 +162,33 @@ function FocusRingEditorialPreview({ ui }) {
   );
 }
 
+function FocusRingChoiceControlsPreview({ ui }) {
+  const linkFocusRing = useQuickitFocusRing("link");
+  const checkboxFocusRing = useQuickitFocusRing("checkbox");
+  const radioFocusRing = useQuickitFocusRing("radio");
+  const buttonFocusRing = useQuickitFocusRing("button");
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-4">
+        <Link href="#" variant="default">
+          Ver términos
+        </Link>
+        <Checkbox label="Recordarme" defaultChecked />
+        <Radio name="focus-ring-choice" label="Modo manual" defaultChecked />
+        <Button color="neutral" variant="outline">
+          Continuar
+        </Button>
+      </div>
+      <p className={`text-sm ${ui.body}`}>
+        Aquí se desactiva el focus ring solo en enlaces y controles de opción.
+        link: {String(linkFocusRing)}. checkbox: {String(checkboxFocusRing)}.
+        radio: {String(radioFocusRing)}. button: {String(buttonFocusRing)}.
+      </p>
+    </div>
+  );
+}
+
 const foundationApis = {
   useBreakpoint: [
     { prop: "breakpoint", type: "xs | sm | md | lg | xl | 2xl | null", defaultValue: "null en SSR", description: "Breakpoint actual resuelto con los tokens de Quickit o con el override que pases." },
@@ -189,6 +233,7 @@ const foundationNotes = {
   useQuickitFocusRing: [
     "Quickit mantiene focus visible accesible por defecto en sus componentes interactivos.",
     "Puedes apagarlo globalmente con `focusRing={false}` o solo en ciertos componentes con `focusRing={{ disabledComponents: [...] }}`.",
+    "Los nombres válidos hoy son `button`, `link`, `input`, `textarea`, `select`, `checkbox`, `radio`, `switch`, `tabs`, `accordion`, `dropdown` y `modal`.",
     "El hook te permite leer esa política desde wrappers o shells propios sin duplicar configuración.",
   ],
   colors: [
@@ -497,6 +542,9 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
               code={`function FocusPolicy() {
   const buttonFocusRing = useQuickitFocusRing("button");
   const inputFocusRing = useQuickitFocusRing("input");
+  const linkFocusRing = useQuickitFocusRing("link");
+  const checkboxFocusRing = useQuickitFocusRing("checkbox");
+  const radioFocusRing = useQuickitFocusRing("radio");
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -506,12 +554,21 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
       <Badge variant="outline">
         input focus: {String(inputFocusRing)}
       </Badge>
+      <Badge variant="outline">
+        link focus: {String(linkFocusRing)}
+      </Badge>
+      <Badge variant="outline">
+        checkbox focus: {String(checkboxFocusRing)}
+      </Badge>
+      <Badge variant="outline">
+        radio focus: {String(radioFocusRing)}
+      </Badge>
     </div>
   );
 }`}
             >
               <QuickitProvider
-                focusRing={{ disabledComponents: ["input"] }}
+                focusRing={{ disabledComponents: ["input", "link"] }}
               >
                 <FocusRingHookPreview />
               </QuickitProvider>
@@ -579,6 +636,32 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
             >
               <QuickitProvider focusRing={{ disabledComponents: ["textarea"] }}>
                 <FocusRingEditorialPreview ui={ui} />
+              </QuickitProvider>
+            </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Caso real: login con enlaces y choice controls"
+              className="max-w-3xl"
+              code={`<QuickitProvider
+  focusRing={{ disabledComponents: ["link", "checkbox", "radio"] }}
+>
+  <div className="space-y-4">
+    <div className="flex flex-wrap items-center gap-4">
+      <Link href="#">Ver términos</Link>
+      <Checkbox label="Recordarme" defaultChecked />
+      <Radio name="focus-ring-choice" label="Modo manual" defaultChecked />
+      <Button color="neutral" variant="outline">Continuar</Button>
+    </div>
+  </div>
+</QuickitProvider>`}
+            >
+              <QuickitProvider
+                focusRing={{
+                  disabledComponents: ["link", "checkbox", "radio"],
+                }}
+              >
+                <FocusRingChoiceControlsPreview ui={ui} />
               </QuickitProvider>
             </PreviewPanel>
           </div>

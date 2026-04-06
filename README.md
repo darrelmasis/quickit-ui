@@ -73,8 +73,47 @@ import { useQuickitFocusRing } from "quickit-ui";
 
 function Toolbar() {
   const buttonFocusRing = useQuickitFocusRing("button");
+  const linkFocusRing = useQuickitFocusRing("link");
+  const checkboxFocusRing = useQuickitFocusRing("checkbox");
+  const radioFocusRing = useQuickitFocusRing("radio");
 
-  return <span>button focus: {String(buttonFocusRing)}</span>;
+  return (
+    <div>
+      <span>button focus: {String(buttonFocusRing)}</span>
+      <span>link focus: {String(linkFocusRing)}</span>
+      <span>checkbox focus: {String(checkboxFocusRing)}</span>
+      <span>radio focus: {String(radioFocusRing)}</span>
+    </div>
+  );
+}
+```
+
+Caso real:
+
+```jsx
+import {
+  Button,
+  Checkbox,
+  Link,
+  QuickitProvider,
+  Radio,
+} from "quickit-ui";
+
+export function LoginOptions() {
+  return (
+    <QuickitProvider
+      focusRing={{ disabledComponents: ["link", "checkbox", "radio"] }}
+    >
+      <div className="flex flex-wrap items-center gap-4">
+        <Link href="#">Ver términos</Link>
+        <Checkbox label="Recordarme" defaultChecked />
+        <Radio name="login-mode" label="Modo manual" defaultChecked />
+        <Button color="neutral" variant="outline">
+          Continuar
+        </Button>
+      </div>
+    </QuickitProvider>
+  );
 }
 ```
 
