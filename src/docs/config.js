@@ -4,13 +4,48 @@ export const DEFAULT_COMPONENT_SECTION = "/fundamentos/provider";
 export const DEFAULT_EXAMPLES_SECTION = "/ejemplos";
 
 export const INTRO_ITEMS = [
-  { href: "/getting-started", label: "Getting started", id: "getting-started" },
+  { href: "/getting-started", label: "Primeros pasos", id: "getting-started" },
   { href: "/instalacion", label: "Instalación", id: "instalacion" },
   { href: "/compatibilidad", label: "Compatibilidad", id: "compatibilidad" },
 ];
 
-export const EXAMPLE_ITEMS = [
+export const EXAMPLE_NAV_ITEMS = [
   { href: "/ejemplos", label: "Ejemplos", id: "examples" },
+];
+
+export const EXAMPLE_GROUPS = [
+  {
+    id: "acceso",
+    label: "Acceso",
+    items: [
+      { href: "/ejemplos/login", label: "Inicio de sesión", id: "login-example" },
+      { href: "/ejemplos/registro", label: "Registro", id: "signup-example" },
+      { href: "/ejemplos/recuperacion", label: "Recuperar acceso", id: "recovery-example" },
+    ],
+  },
+  {
+    id: "formularios",
+    label: "Formularios",
+    items: [
+      { href: "/ejemplos/contacto", label: "Formulario de contacto", id: "contact-form-example" },
+      { href: "/ejemplos/perfil", label: "Configuración de perfil", id: "profile-settings-example" },
+      { href: "/ejemplos/planes", label: "Selección de plan", id: "plan-selector-example" },
+    ],
+  },
+  {
+    id: "producto",
+    label: "Producto",
+    items: [
+      { href: "/ejemplos/dashboard", label: "Panel de revisiones", id: "dashboard-example" },
+      { href: "/ejemplos/help-center", label: "Centro de ayuda", id: "help-center-example" },
+      { href: "/ejemplos/data-states", label: "Carga y estado vacío", id: "states-example" },
+    ],
+  },
+];
+
+export const EXAMPLE_ITEMS = [
+  ...EXAMPLE_NAV_ITEMS,
+  ...EXAMPLE_GROUPS.flatMap((group) => group.items),
 ];
 
 export const COMPONENT_GROUPS = [
@@ -18,10 +53,11 @@ export const COMPONENT_GROUPS = [
     label: "Fundamentos",
     items: [
       { href: "/fundamentos/provider", label: "QuickitProvider", id: "provider" },
-      { href: "/fundamentos/theme", label: "Tema", id: "theme" },
+      { href: "/fundamentos/theme", label: "useQuickitTheme", id: "theme" },
       { href: "/fundamentos/use-breakpoint", label: "useBreakpoint", id: "use-breakpoint" },
       { href: "/fundamentos/use-media-query", label: "useMediaQuery", id: "use-media-query" },
       { href: "/fundamentos/use-focus-ring", label: "useQuickitFocusRing", id: "use-focus-ring" },
+      { href: "/fundamentos/use-ripple", label: "useQuickitRipple", id: "use-ripple" },
       { href: "/fundamentos/colores", label: "Colores", id: "colors" },
       { href: "/fundamentos/estados", label: "Estados", id: "states" },
     ],

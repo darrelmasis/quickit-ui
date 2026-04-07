@@ -23,10 +23,17 @@ import {
   QUICKIT_BREAKPOINTS,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_FOCUS_RING_COMPONENTS,
+  QUICKIT_PRESS_EFFECTS,
+  QUICKIT_RIPPLE_COMPONENTS,
   QUICKIT_SEMANTIC_COLORS,
+  QUICKIT_THEME_OPTIONS,
   QuickitProvider,
+  QuickitThemeProvider,
   useBreakpoint,
   useQuickitFocusRing,
+  useQuickitPressEffect,
+  useQuickitRipple,
+  useQuickitThemeController,
   useMediaQuery,
   Radio,
   RenderSwitch,
@@ -44,8 +51,12 @@ import {
   type QuickitBreakpoint,
   type QuickitBreakpoints,
   type QuickitCheckedChangeEvent,
+  type QuickitPressEffect,
   type QuickitPresenceStatus,
+  type QuickitRippleComponent,
   type QuickitSemanticColor,
+  type QuickitThemeControllerValue,
+  type QuickitThemeOption,
 } from "quickit-ui";
 
 const color: QuickitSemanticColor = QUICKIT_SEMANTIC_COLORS[0];
@@ -67,23 +78,32 @@ const handleToggleChange = (event: QuickitCheckedChangeEvent) => {
 };
 const desktopCutoff: number = QUICKIT_BREAKPOINTS.lg;
 const customBreakpoints: Partial<QuickitBreakpoints> = { lg: desktopCutoff + 100 };
+const pressEffect: QuickitPressEffect = QUICKIT_PRESS_EFFECTS[0];
+const rippleComponent: QuickitRippleComponent = QUICKIT_RIPPLE_COMPONENTS[0];
+const controllerValue: QuickitThemeControllerValue | null = null;
+const themeOption: QuickitThemeOption = QUICKIT_THEME_OPTIONS[0];
 
-export function ConsumerPreview() {
+function ConsumerPreviewInner() {
   const responsive = useBreakpoint({ breakpoints: customBreakpoints });
   const activeBreakpoint: QuickitBreakpoint | null = responsive.breakpoint;
   const prefersDesktop = useMediaQuery("(min-width: 1024px)");
   const buttonFocusRing = useQuickitFocusRing(QUICKIT_FOCUS_RING_COMPONENTS[0]);
+  const resolvedPressEffect = useQuickitPressEffect();
+  const buttonRipple = useQuickitRipple(rippleComponent);
+  const themeController = useQuickitThemeController();
+  const themeMode = controllerValue?.resolvedTheme ?? themeController.resolvedTheme;
+  const themeSetting = controllerValue?.theme ?? themeController.theme;
 
   return (
-    <QuickitProvider
-      theme="dark"
-      focusRing={{ disabledComponents: ["input"] }}
-    >
+    <QuickitProvider theme={themeMode}>
       <span>{activeBreakpoint}</span>
       <span>{String(prefersDesktop)}</span>
       <span>{String(buttonFocusRing)}</span>
-      <Button {...buttonProps}>Guardar</Button>
-      <Link {...linkProps}>Ir a docs</Link>
+      <span>{resolvedPressEffect}</span>
+      <span>{String(buttonRipple)}</span>
+      <span>{themeSetting}</span>
+      <Button {...buttonProps} pressEffect="ripple">Guardar</Button>
+      <Link {...linkProps} ripple={false}>Ir a docs</Link>
       <Badge color="success">Activo</Badge>
       <Input
         color="dark"
@@ -175,6 +195,20 @@ export function ConsumerPreview() {
         </Modal.Trigger>
       </Modal>
     </QuickitProvider>
+  );
+}
+
+export function ConsumerPreview() {
+  return (
+    <QuickitThemeProvider
+      defaultTheme={themeOption}
+      focusRing={{ disabledComponents: ["input"] }}
+      pressEffect={pressEffect}
+      ripple={{ disabledComponents: ["link"] }}
+      storageKey="consumer-preview-theme"
+    >
+      <ConsumerPreviewInner />
+    </QuickitThemeProvider>
   );
 }
 

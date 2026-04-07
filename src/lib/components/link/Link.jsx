@@ -1,5 +1,10 @@
 import { forwardRef, useEffect } from "react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import {
+  useQuickitFocusRing,
+  useQuickitPressEffect,
+  useQuickitRipple,
+  useQuickitTheme,
+} from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
@@ -8,11 +13,17 @@ import {
   ACTION_CONTROL_SIZE_CLASSES,
   ACTION_CONTROL_THEME_CLASSES,
   getActionControlRadius,
+  resolveActionActivePseudoClasses,
   resolveActionColor,
+  resolveActionRippleStyles,
   resolveActionShape,
   resolveActionSize,
   resolveActionVariant,
 } from "@/lib/components/_shared/action-control";
+import {
+  resolveRippleStyleFromElement,
+  useRippleEffect,
+} from "@/lib/components/_shared/use-ripple-effect";
 
 const LINK_THEME_CLASSES = {
   light: {
@@ -49,8 +60,13 @@ const Link = forwardRef(function Link(
     disabled = false,
     fullWidth = false,
     onClick,
+    onKeyDown,
+    onPointerDown,
+    pressEffect,
+    ripple,
     shape = "default",
     size = "md",
+    style,
     tabIndex,
     title,
     underline = "hover",
@@ -68,14 +84,48 @@ const Link = forwardRef(function Link(
   const resolvedShape = resolveActionShape(shape);
   const resolvedSize = resolveActionSize(size);
   const focusRingEnabled = useQuickitFocusRing("link");
+  const providerPressEffect = useQuickitPressEffect();
+  const rippleEnabled = useQuickitRipple("link");
+  const resolvedPressEffect =
+    pressEffect === "ripple" || pressEffect === "transform"
+      ? pressEffect
+      : providerPressEffect;
+  const motionAllowedByShape =
+    resolvedShape !== "square" && resolvedShape !== "circle";
   const resolvedActiveMotion =
     activeMotion ??
-    (resolvedShape !== "square" && resolvedShape !== "circle");
+    (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
+  const resolvedRipple =
+    ripple ??
+    (resolvedPressEffect === "ripple" ? rippleEnabled : false);
   const underlineClasses = {
     always: "underline underline-offset-4",
     hover: "no-underline hover:underline hover:underline-offset-4",
     none: "no-underline",
   };
+  const rippleUi = resolveActionRippleStyles(
+    theme,
+    resolvedButtonVariant,
+    resolvedColor,
+  );
+  const rippleOpacity = rippleUi.opacity;
+  const rippleDuration =
+    {
+      sm: 700,
+      md: 780,
+      lg: 860,
+      xl: 940,
+      "2xl": 1020,
+    }[resolvedSize] ?? 780;
+  const {
+    handleKeyDown: handleRippleKeyDown,
+    handlePointerDown: handleRipplePointerDown,
+    rippleLayer,
+  } = useRippleEffect({
+    duration: rippleDuration,
+    enabled: isButtonAppearance && resolvedRipple && !disabled,
+    opacity: rippleOpacity,
+  });
 
   useEffect(() => {
     if (import.meta.env.PROD) {
@@ -104,6 +154,15 @@ const Link = forwardRef(function Link(
       aria-disabled={disabled || undefined}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
+      style={
+        isButtonAppearance
+          ? {
+              "--qi-ripple-color": rippleUi.color,
+              "--qi-ripple-opacity": rippleOpacity,
+              ...style,
+            }
+          : style
+      }
       onClick={
         disabled
           ? (event) => {
@@ -111,6 +170,44 @@ const Link = forwardRef(function Link(
             }
           : onClick
       }
+      onPointerDown={(event) => {
+        onPointerDown?.(event);
+
+        if (!event.defaultPrevented) {
+          const runtimeRipple = resolveRippleStyleFromElement(
+            event.currentTarget,
+            rippleUi,
+          );
+          event.currentTarget.style.setProperty(
+            "--qi-ripple-color",
+            runtimeRipple.color,
+          );
+          event.currentTarget.style.setProperty(
+            "--qi-ripple-opacity",
+            `${runtimeRipple.opacity}`,
+          );
+          handleRipplePointerDown(event);
+        }
+      }}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+
+        if (!event.defaultPrevented) {
+          const runtimeRipple = resolveRippleStyleFromElement(
+            event.currentTarget,
+            rippleUi,
+          );
+          event.currentTarget.style.setProperty(
+            "--qi-ripple-color",
+            runtimeRipple.color,
+          );
+          event.currentTarget.style.setProperty(
+            "--qi-ripple-opacity",
+            `${runtimeRipple.opacity}`,
+          );
+          handleRippleKeyDown(event);
+        }
+      }}
       tabIndex={disabled ? -1 : tabIndex}
       className={cn(
         isButtonAppearance
@@ -124,6 +221,7 @@ const Link = forwardRef(function Link(
             ),
         isButtonAppearance
           ? [
+              resolvedRipple && "qi-ripple-host isolate overflow-hidden",
               getActionControlRadius(resolvedShape, resolvedSize),
               resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
               ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
@@ -133,6 +231,11 @@ const Link = forwardRef(function Link(
                 ACTION_CONTROL_THEME_CLASSES[theme][resolvedButtonVariant]?.[
                   resolvedColor
                 ] ?? ACTION_CONTROL_THEME_CLASSES[theme].solid.primary,
+              ),
+              resolveActionActivePseudoClasses(
+                theme,
+                resolvedButtonVariant,
+                resolvedColor,
               ),
               fullWidth && "w-full",
             ]
@@ -148,7 +251,14 @@ const Link = forwardRef(function Link(
       )}
       {...props}
     >
-      {children}
+      {isButtonAppearance && resolvedRipple ? rippleLayer : null}
+      {isButtonAppearance ? (
+        <span className="relative z-[1] inline-flex items-center gap-2">
+          {children}
+        </span>
+      ) : (
+        children
+      )}
     </a>
   );
 });

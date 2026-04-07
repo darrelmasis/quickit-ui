@@ -63,4 +63,50 @@ describe("action controls", () => {
     expect(button.className).not.toContain("active:translate-y-px");
     expect(circleButton.className).not.toContain("active:translate-y-px");
   });
+
+  it("applies active color classes to button states and button-like links", () => {
+    renderWithProvider(
+      <div>
+        <Button variant="outline" color="neutral" active>
+          Activo
+        </Button>
+        <Link
+          href="#"
+          appearance="button"
+          variant="outline"
+          color="neutral"
+        >
+          Ir
+        </Link>
+      </div>,
+    );
+
+    const button = screen.getByRole("button", { name: "Activo" });
+    const link = screen.getByRole("link", { name: "Ir" });
+
+    expect(button.className).toContain("bg-neutral-300");
+    expect(button.className).toContain("border-neutral-600");
+    expect(link.className).toContain("active:bg-neutral-300");
+    expect(link.className).toContain("active:border-neutral-600");
+  });
+
+  it("switches the default press effect from transform to ripple through QuickitProvider", () => {
+    renderWithProvider(
+      <div>
+        <Button color="neutral">Guardar</Button>
+        <Link href="#" appearance="button" color="neutral">
+          Ir
+        </Link>
+      </div>,
+      { pressEffect: "ripple" },
+    );
+
+    const button = screen.getByRole("button", { name: "Guardar" });
+    const link = screen.getByRole("link", { name: "Ir" });
+
+    expect(button.className).not.toContain("active:translate-y-px");
+    expect(link.className).not.toContain("active:translate-y-px");
+    expect(button.className).toContain("qi-ripple-host");
+    expect(link.className).toContain("qi-ripple-host");
+  });
 });

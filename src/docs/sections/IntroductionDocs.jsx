@@ -87,6 +87,31 @@ export function Example() {
 }`}
           />
         </div>
+
+        <div className="mt-4">
+          <CodeExample
+            ui={ui}
+            title="Tailwind 4 y dark mode en tu app"
+            language="css"
+            code={`@import "tailwindcss";
+@import "quickit-ui/styles.css";
+
+@custom-variant dark (&:where(.dark, .dark *));`}
+          />
+        </div>
+
+        <div className="mt-4">
+          <CodeExample
+            ui={ui}
+            title="Por qué hace falta"
+            code={`Quickit puede cambiar entre light y dark, pero si también quieres usar
+clases de Tailwind como \`dark:bg-zinc-950\` o \`dark:text-white\` en tu propia app,
+debes declarar el custom variant \`dark\` en tu CSS global.
+
+QuickitThemeProvider y muchos ejemplos de la docs aplican la clase \`dark\`
+sobre \`document.documentElement\`, así que este patrón mantiene todo alineado.`}
+          />
+        </div>
       </SectionCard>
       ) : null}
 
@@ -147,6 +172,12 @@ export function Example() {
               Si necesitas detalles de instalación dentro de una app real,
               puedes partir de esta base y luego revisar componentes específicos
               en la columna principal.
+            </p>
+            <p className={`text-sm leading-6 ${ui.body}`}>
+              Si además usas utilidades propias con prefijo <code>dark:</code>,
+              declara <code>@custom-variant dark (&:where(.dark, .dark *));</code>
+              en tu CSS global para que Tailwind y Quickit respondan al mismo
+              switch de tema.
             </p>
             <Link href="#" underline="hover">
               Ir al primer componente

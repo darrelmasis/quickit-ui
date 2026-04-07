@@ -51,32 +51,32 @@ const POPOVER_THEME_CLASSES = {
       arrowStroke: "#d4d4d8",
     },
     primary: {
-      panel: "border-sky-200 bg-sky-50 text-sky-900",
+      panel: "border-sky-200 bg-sky-50 text-sky-800",
       arrowFill: "#f0f9ff",
       arrowStroke: "#bae6fd",
     },
     brand: {
-      panel: "border-brand-200 bg-brand-50 text-brand-900",
+      panel: "border-brand-200 bg-brand-50 text-brand-800",
       arrowFill: "var(--color-brand-50)",
       arrowStroke: "var(--color-brand-200)",
     },
     success: {
-      panel: "border-emerald-200 bg-emerald-50 text-emerald-900",
+      panel: "border-emerald-200 bg-emerald-50 text-emerald-800",
       arrowFill: "#ecfdf5",
       arrowStroke: "#a7f3d0",
     },
     danger: {
-      panel: "border-rose-200 bg-rose-50 text-rose-900",
+      panel: "border-rose-200 bg-rose-50 text-rose-800",
       arrowFill: "#fff1f2",
       arrowStroke: "#fecdd3",
     },
     warning: {
-      panel: "border-amber-200 bg-amber-50 text-amber-900",
+      panel: "border-amber-200 bg-amber-50 text-amber-800",
       arrowFill: "#fffbeb",
       arrowStroke: "#fde68a",
     },
     info: {
-      panel: "border-cyan-200 bg-cyan-50 text-cyan-900",
+      panel: "border-cyan-200 bg-cyan-50 text-cyan-800",
       arrowFill: "#ecfeff",
       arrowStroke: "#a5f3fc",
     },

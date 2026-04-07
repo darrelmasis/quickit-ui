@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-brand-50: oklch(0.97 0.03 281);
@@ -12,4 +12,44 @@
   --color-brand-800: oklch(0.46 0.18 281);
   --color-brand-900: oklch(0.39 0.14 281);
   --color-brand-950: oklch(0.28 0.09 281);
+}
+
+.qi-ripple-host {
+  position: relative;
+}
+
+.qi-ripple-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.qi-ripple {
+  position: absolute;
+  border-radius: 9999px;
+  background-color: var(--qi-ripple-color, currentColor);
+  pointer-events: none;
+  transform: scale(0);
+  transform-origin: center;
+  opacity: var(--qi-ripple-opacity, 0.18);
+  transition:
+    transform var(--qi-ripple-duration, 0.72s) cubic-bezier(0.2, 0, 0, 1),
+    opacity calc(var(--qi-ripple-duration, 0.72s) * 0.72) linear
+      calc(var(--qi-ripple-duration, 0.72s) * 0.16);
+  will-change: transform, opacity;
+}
+
+.qi-ripple[data-state="enter"] {
+  transform: scale(1);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qi-ripple {
+    transition-duration: 0.6ms;
+    transition-delay: 0ms;
+  }
 }

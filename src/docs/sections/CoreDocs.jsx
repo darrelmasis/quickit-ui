@@ -27,9 +27,11 @@ const buttonApi = [
   { prop: "spinner", type: "boolean", defaultValue: "true", description: "Permite ocultar el spinner aunque el botón esté en loading." },
   { prop: "disabled", type: "boolean", defaultValue: "false", description: "Desactiva interacción manualmente." },
   { prop: "fullWidth", type: "boolean", defaultValue: "false", description: "Expande el botón a `w-full`." },
-  { prop: "active", type: "boolean", defaultValue: "false", description: "Aplica un estado visual activo persistente." },
-  { prop: "pressed", type: "boolean", defaultValue: "false", description: "Marca el botón como presionado y añade `aria-pressed`." },
+  { prop: "active", type: "boolean", defaultValue: "false", description: "Aplica un estado visual activo persistente, incluyendo cambio de color además del tratamiento de presión." },
+  { prop: "pressed", type: "boolean", defaultValue: "false", description: "Marca el botón como presionado, añade `aria-pressed` y usa el mismo estado cromático activo." },
   { prop: "activeMotion", type: "boolean", defaultValue: "true, excepto en `shape=\"square\"` y `shape=\"circle\"`", description: "Permite controlar la animación nativa de `:active`. Los icon buttons `square` y `circle` la traen desactivada por defecto para una interacción más sobria." },
+  { prop: "pressEffect", type: "transform | ripple", defaultValue: "transform", description: "Elige el feedback principal de presión para esta instancia. Por defecto Quickit usa `transform`." },
+  { prop: "ripple", type: "boolean", defaultValue: "depende de `pressEffect`", description: "Override de bajo nivel para activar o desactivar solo el ripple en esta instancia." },
   { prop: "aria-label / aria-labelledby / title", type: "string", defaultValue: "undefined", description: "Recomendado cuando `shape=\"square\"` o `shape=\"circle\"` no tienen texto visible." },
 ];
 
@@ -37,7 +39,8 @@ const buttonNotes = [
   "Cuando `loading` es `true`, el botón se deshabilita automáticamente.",
   "En `size=\"sm\"` o `shape=\"square\"`, el estado loading muestra solo el spinner.",
   "Si `spinner={false}`, puedes mantener loading sin icono girando.",
-  "El botón tiene feedback visual nativo en `:active` al presionar con puntero, además de los estados controlados `active` y `pressed`.",
+  "El botón tiene feedback visual nativo en `:active` al presionar con puntero, con cambio real de color en borde/fondo/texto además de la animación de presión.",
+  "Por defecto Quickit usa `transform` como feedback de presión. Si prefieres ripple, configúralo con `pressEffect=\"ripple\"` por instancia o desde `QuickitProvider`.",
   "Los icon buttons `shape=\"square\"` y `shape=\"circle\"` salen sin `activeMotion` por defecto; puedes reactivarlo explícitamente con `activeMotion={true}`.",
   "Los botones horizontales tienen un `min-width` por tamaño para mantener consistencia visual entre acciones.",
   "Si necesitas que sea `full width` solo en móvil, usa clases responsivas como `w-full sm:w-48`; `fullWidth` por sí solo siempre aplica `w-full`.",
@@ -117,7 +120,34 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
 
         <PreviewPanel
           ui={ui}
-          title="Colores"
+          title="Colores solid"
+          code={`<div className="flex flex-wrap items-center gap-3">
+  <Button color="neutral">Neutral</Button>
+  <Button color="slate">Slate</Button>
+  <Button color="zinc">Zinc</Button>
+  <Button color="primary">Primary</Button>
+  <Button color="brand">Brand</Button>
+  <Button color="success">Success</Button>
+  <Button color="danger">Danger</Button>
+  <Button color="warning">Warning</Button>
+  <Button color="info">Info</Button>
+  <Button color="light">Light</Button>
+  <Button color="dark">Dark</Button>
+  <Button color="black">Black</Button>
+</div>`}
+        >
+          <div className="flex flex-wrap items-center gap-3">
+            {buttonColors.map((item) => (
+              <Button key={`solid-${item.color}`} color={item.color}>
+                {item.label}
+              </Button>
+            ))}
+          </div>
+        </PreviewPanel>
+
+        <PreviewPanel
+          ui={ui}
+          title="Colores outline"
           code={`<div className="flex flex-wrap items-center gap-3">
   <Button variant="outline" color="neutral">Neutral</Button>
   <Button variant="outline" color="slate">Slate</Button>

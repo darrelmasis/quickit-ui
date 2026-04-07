@@ -14,6 +14,17 @@ Importa los estilos una sola vez:
 import "quickit-ui/styles.css";
 ```
 
+Si tu app también usa utilidades propias de Tailwind con `dark:`, declara esto en tu CSS global:
+
+```css
+@import "tailwindcss";
+@import "quickit-ui/styles.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+Eso hace que tu app y Quickit reaccionen a la misma clase `dark`.
+
 ## Uso rápido
 
 ```jsx
@@ -34,7 +45,7 @@ export default function App() {
 
 ## Tema
 
-Quickit UI trabaja con `light` y `dark`. El estado del tema vive en tu app; `QuickitProvider` solo lo distribuye al resto de componentes.
+Quickit UI trabaja con `light` y `dark`. Si ya gestionas el tema en tu app, `QuickitProvider` solo lo distribuye al resto de componentes.
 
 ```jsx
 import "quickit-ui/styles.css";
@@ -49,12 +60,122 @@ export default function App() {
 }
 ```
 
-También puedes controlar el focus ring globalmente desde el provider:
+Si prefieres que Quickit gestione el toggle y la persistencia, usa `QuickitThemeProvider` con `useQuickitThemeController`:
+
+```jsx
+import "quickit-ui/styles.css";
+import {
+  Button,
+  QuickitThemeProvider,
+  useQuickitThemeController,
+} from "quickit-ui";
+
+function ThemeControls() {
+  const { resolvedTheme, setTheme, systemTheme, theme, toggleTheme } =
+    useQuickitThemeController();
+
+  return (
+    <div className="space-y-4">
+      <p>
+        Preferencia: {theme}. Sistema: {systemTheme}. Tema activo: {resolvedTheme}
+      </p>
+
+      <div className="flex flex-wrap gap-3">
+        <Button onClick={() => setTheme("system")}>Sistema</Button>
+        <Button onClick={() => setTheme("light")}>Claro</Button>
+        <Button onClick={() => setTheme("dark")}>Oscuro</Button>
+        <Button color="brand" variant="outline" onClick={toggleTheme}>
+          Alternar desde {resolvedTheme}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <QuickitThemeProvider
+      defaultTheme="system"
+      storageKey="ava-quickit-theme"
+    >
+      <ThemeControls />
+    </QuickitThemeProvider>
+  );
+}
+```
+
+Notas:
+
+- el storage key por defecto es `quickit-ui-theme`
+- `defaultTheme` ahora soporta `system | light | dark`
+- `QuickitThemeProvider` aplica la clase `dark` sobre `document.documentElement`
+- puedes sobrescribir el storage key con `storageKey`
+- `useQuickitThemeController()` expone `theme`, `resolvedTheme`, `systemTheme`, `setTheme` y `toggleTheme`
+- `theme` es la preferencia persistida; `resolvedTheme` es el modo que Quickit está aplicando realmente
+- si usas clases propias como `dark:bg-zinc-950`, añade `@custom-variant dark (&:where(.dark, .dark *));` a tu CSS global
+
+Si tu layout propio también depende del tema:
+
+```jsx
+import { useQuickitThemeController } from "quickit-ui";
+
+function Shell() {
+  const { theme, resolvedTheme } = useQuickitThemeController();
+
+  return (
+    <div className="bg-white text-zinc-950 dark:bg-zinc-950 dark:text-white">
+      <header className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+        Preferencia: {theme}. Tema efectivo: {resolvedTheme}
+      </header>
+      <main className="p-6">
+        <Dashboard />
+      </main>
+    </div>
+  );
+}
+```
+
+Patrón con `Switch`:
+
+```jsx
+import {
+  QuickitThemeProvider,
+  Switch,
+  Tooltip,
+  useQuickitThemeController,
+} from "quickit-ui";
+
+function ToggleTheme() {
+  const { resolvedTheme, theme, toggleTheme } = useQuickitThemeController();
+
+  return (
+    <Tooltip content="Alternar tema">
+      <Switch
+        color="brand"
+        checked={resolvedTheme === "dark"}
+        onCheckedChange={toggleTheme}
+      />
+    </Tooltip>
+  );
+}
+
+export function App() {
+  return (
+    <QuickitThemeProvider storageKey="ava-quickit-theme">
+      <ToggleTheme />
+    </QuickitThemeProvider>
+  );
+}
+```
+
+También puedes controlar el focus ring y el efecto de presión globalmente desde el provider:
 
 ```jsx
 <QuickitProvider
   theme="dark"
   focusRing={{ disabledComponents: ["input", "textarea"] }}
+  pressEffect="ripple"
+  ripple={{ disabledComponents: ["link"] }}
 >
   <App />
 </QuickitProvider>
@@ -65,17 +186,28 @@ Reglas:
 - por defecto Quickit mantiene focus visible accesible en componentes interactivos
 - `focusRing={false}` lo desactiva en toda la librería
 - `focusRing={{ disabledComponents: [...] }}` lo desactiva solo en componentes específicos
+- por defecto Quickit usa `pressEffect="transform"` en `Button` y en `Link` con `appearance="button"`
+- `pressEffect="ripple"` cambia esa política global para usar ripple en lugar de transform
+- `ripple={false}` lo desactiva en toda la librería cuando `pressEffect="ripple"`
+- `ripple={{ disabledComponents: [...] }}` lo desactiva solo en botones o links cuando `pressEffect="ripple"`
 
 Si necesitas leer esa decisión desde tu app o desde wrappers propios:
 
 ```jsx
-import { useQuickitFocusRing } from "quickit-ui";
+import {
+  useQuickitFocusRing,
+  useQuickitPressEffect,
+  useQuickitRipple,
+} from "quickit-ui";
 
 function Toolbar() {
   const buttonFocusRing = useQuickitFocusRing("button");
   const linkFocusRing = useQuickitFocusRing("link");
   const checkboxFocusRing = useQuickitFocusRing("checkbox");
   const radioFocusRing = useQuickitFocusRing("radio");
+  const pressEffect = useQuickitPressEffect();
+  const buttonRipple = useQuickitRipple("button");
+  const linkRipple = useQuickitRipple("link");
 
   return (
     <div>
@@ -83,6 +215,9 @@ function Toolbar() {
       <span>link focus: {String(linkFocusRing)}</span>
       <span>checkbox focus: {String(checkboxFocusRing)}</span>
       <span>radio focus: {String(radioFocusRing)}</span>
+      <span>pressEffect: {pressEffect}</span>
+      <span>button ripple: {String(buttonRipple)}</span>
+      <span>link ripple: {String(linkRipple)}</span>
     </div>
   );
 }
@@ -102,6 +237,7 @@ import {
 export function LoginOptions() {
   return (
     <QuickitProvider
+      pressEffect="ripple"
       focusRing={{ disabledComponents: ["link", "checkbox", "radio"] }}
     >
       <div className="flex flex-wrap items-center gap-4">
@@ -239,6 +375,9 @@ Notas rápidas de `Button`:
 
 - `shape="square"` y `shape="circle"` están pensados para icon buttons.
 - `shape="square"` y `shape="circle"` salen con `activeMotion` desactivado por defecto.
+- `Button` y `Link` con `appearance="button"` usan `pressEffect="transform"` por defecto.
+- Si quieres ripple, usa `pressEffect="ripple"` en esa instancia o en `QuickitProvider`.
+- Cuando `pressEffect="ripple"`, puedes apagarlo con `ripple={false}`.
 - Si quieres esa animación en un icon button, usa `activeMotion={true}`.
 
 ```jsx

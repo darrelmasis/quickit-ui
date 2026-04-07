@@ -54,12 +54,13 @@ import {
   SectionCard,
   SectionHeading,
 } from "@/docs/components/DocsPrimitives";
+import { EXAMPLE_GROUPS } from "@/docs/config";
 
 const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 const EXAMPLE_VIEWPORTS = [
-  { id: "mobile", label: "Mobile", width: 390 },
+  { id: "mobile", label: "Móvil", width: 390 },
   { id: "tablet", label: "Tablet", width: 768 },
-  { id: "desktop", label: "Desktop", width: null },
+  { id: "desktop", label: "Escritorio", width: null },
 ];
 
 function ExampleFrame({ children }) {
@@ -287,20 +288,51 @@ function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap items-center justify-end gap-3">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          {EXAMPLE_VIEWPORTS.map((viewport) => {
+            const isActive =
+              viewport.width === null
+                ? currentWidth === null
+                : currentWidth === viewport.width;
+
+            return (
+              <Button
+                key={viewport.id}
+                size="sm"
+                color="neutral"
+                variant={isActive ? "solid" : "outline"}
+                activeMotion={false}
+                onClick={() => setCurrentWidth(viewport.width)}
+              >
+                {viewport.label}
+              </Button>
+            );
+          })}
+          <Button
+            size="sm"
+            color="neutral"
+            variant={currentWidth === null ? "solid" : "outline"}
+            activeMotion={false}
+            onClick={() => setCurrentWidth(null)}
+          >
+            Fluido
+          </Button>
+        </div>
+
         <p className={`text-xs ${ui.body}`}>
           Base: {defaultViewportConfig.width ? `${defaultViewportConfig.width}px` : "100%"}.
           Actual: {renderedWidth ? `${renderedWidth}px` : "100%"}. Arrastra el
-          borde derecho para ajustar.
+          borde derecho para ajustar con precisión.
         </p>
       </div>
 
-      <div ref={viewportCanvasRef} className="w-full">
+      <div ref={viewportCanvasRef} className="w-full overflow-visible">
         <div className="flex justify-start">
           <div
             className={cn(
-              "relative rounded-[1.25rem] border border-dashed p-3 sm:p-4",
+              "relative rounded-[1.5rem] border border-dashed p-3 sm:p-4",
               !isDragging && "transition-[width] duration-150",
               ui.preview,
             )}
@@ -315,10 +347,10 @@ function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
             <button
               type="button"
               aria-label="Ajustar ancho del ejemplo"
-              className="absolute inset-y-0 -right-5 flex w-10 cursor-ew-resize touch-none items-center justify-center rounded-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+              className="absolute inset-y-0 -right-6 z-10 flex w-12 cursor-ew-resize touch-none items-center justify-center rounded-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
               onPointerDown={handlePointerDown}
             >
-              <span className="h-20 w-1.5 rounded-full border border-white/10 bg-black/55 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" />
+              <span className="h-24 w-2 rounded-full border border-white/10 bg-black/60 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" />
             </button>
           </div>
         </div>
@@ -327,14 +359,72 @@ function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
   );
 }
 
+function ExamplesOverview({ ui }) {
+  return (
+    <SectionCard id="examples" className={ui.divider}>
+      <SectionHeading
+        category="Ejemplos"
+        title="Biblioteca de ejemplos"
+        description="Colección de pantallas y organismos reales para ver cómo se combinan los componentes de Quickit en flujos completos."
+        ui={ui}
+      />
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        {EXAMPLE_GROUPS.map((group) => (
+          <div
+            key={group.label}
+            className={cn(
+              "rounded-[1.5rem] border p-5",
+              ui.panel,
+            )}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p className={`text-sm font-semibold uppercase tracking-[0.18em] ${ui.accent}`}>
+                {group.label}
+              </p>
+              <Badge color="neutral" variant="outline">
+                {group.items.length}
+              </Badge>
+            </div>
+            <p className={`mt-3 text-sm leading-6 ${ui.body}`}>
+              {group.id === "acceso"
+                ? "Patrones de inicio de sesión, registro y recuperación listos para flujos de identidad."
+                : group.id === "formularios"
+                  ? "Formularios, configuración y capturas de datos con jerarquía clara entre campos y acciones."
+                  : "Pantallas de producto con navegación, estados, planes y paneles internos listos para combinar componentes."}
+            </p>
+            <div className="mt-5 space-y-2">
+              {group.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  appearance="button"
+                  color="neutral"
+                  variant="outline"
+                  fullWidth
+                  className="justify-start"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </SectionCard>
+  );
+}
+
 export function ExamplesDocs({ ui, visibleIds }) {
   return (
     <>
+      {isVisible(visibleIds, "examples") ? <ExamplesOverview ui={ui} /> : null}
+
       {isVisible(visibleIds, "login-example") ? (
         <SectionCard id="login-example" className={ui.divider}>
           <SectionHeading
             category="Ejemplos"
-            title="Login"
+            title="Inicio de sesión"
             description="Ejemplo de organismo para autenticación con un bloque principal, acción primaria en `brand` y alternativas secundarias."
             ui={ui}
           />
@@ -342,7 +432,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
           <div className="mt-6">
             <PreviewPanel
               ui={ui}
-              title="Login básico"
+              title="Acceso básico"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="mx-auto max-w-md rounded-[1.5rem] border p-5 sm:p-6">
   <Badge variant="outline" color="brand">Quickit</Badge>
@@ -753,9 +843,9 @@ export function ExamplesDocs({ ui, visibleIds }) {
     <FormControl>
       <Label>Rol</Label>
       <Select defaultValue="engineering">
-        <option value="engineering">Engineering</option>
-        <option value="design">Design</option>
-        <option value="product">Product</option>
+        <option value="engineering">Ingeniería</option>
+        <option value="design">Diseño</option>
+        <option value="product">Producto</option>
       </Select>
     </FormControl>
   </div>
@@ -797,9 +887,9 @@ export function ExamplesDocs({ ui, visibleIds }) {
                     <FormControl>
                       <Label>Rol</Label>
                       <Select defaultValue="engineering">
-                        <option value="engineering">Engineering</option>
-                        <option value="design">Design</option>
-                        <option value="product">Product</option>
+                        <option value="engineering">Ingeniería</option>
+                        <option value="design">Diseño</option>
+                        <option value="product">Producto</option>
                       </Select>
                     </FormControl>
                   </div>
@@ -1090,7 +1180,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
         <SectionCard id="dashboard-example" className={ui.divider}>
           <SectionHeading
             category="Ejemplos"
-            title="Dashboard de revisiones"
+            title="Panel de revisiones"
             description="Patrón de panel interno que combina navegación contextual, filtros, tabs, overlays ligeros y paginación."
             ui={ui}
           />
@@ -1098,7 +1188,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
           <div className="mt-6">
             <PreviewPanel
               ui={ui}
-              title="Dashboard con navegación y filtros"
+              title="Panel con navegación y filtros"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="rounded-[1.5rem] border p-5 sm:p-6">
   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -1293,7 +1383,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
                     <TabsContent value="queue">
                       <div className="space-y-3">
                         {[
-                          "QA para dashboard de métricas",
+                          "QA para panel de métricas",
                           "Aprobación final de tabla responsive",
                         ].map((item) => (
                           <div
@@ -1369,14 +1459,14 @@ export function ExamplesDocs({ ui, visibleIds }) {
           <SectionHeading
             category="Ejemplos"
             title="Centro de ayuda"
-            description="Ejemplo de FAQ y preferencias con `Accordion`, `Switch` y un flujo de `Modal` para confirmar cambios."
+            description="Ejemplo de preguntas frecuentes y preferencias con `Accordion`, `Switch` y un flujo de `Modal` para confirmar cambios."
             ui={ui}
           />
 
           <div className="mt-6">
             <PreviewPanel
               ui={ui}
-              title="FAQ y preferencias"
+              title="Preguntas frecuentes y preferencias"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
   <div className="rounded-[1.5rem] border p-5 sm:p-6">
@@ -1456,7 +1546,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
                       </AccordionItem>
                       <AccordionItem value="item-3">
                         <AccordionTrigger>
-                          ¿Cómo comparto el dashboard?
+                          ¿Cómo comparto el panel?
                         </AccordionTrigger>
                         <AccordionContent>
                           Comparte el enlace del sprint con permisos de lectura

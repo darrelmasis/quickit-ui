@@ -8,14 +8,20 @@ import {
   QUICKIT_CONTROL_SIZES,
   QUICKIT_SEMANTIC_COLORS,
   QuickitProvider,
+  QuickitThemeProvider,
   Radio,
+  Switch,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
   Textarea,
+  Tooltip,
   useBreakpoint,
   useQuickitFocusRing,
+  useQuickitThemeController,
+  useQuickitPressEffect,
+  useQuickitRipple,
   useMediaQuery,
   useQuickitTheme,
 } from "@/lib";
@@ -39,6 +45,80 @@ function ThemeHookPreview() {
       <Button color="neutral" size="sm">
         Accion
       </Button>
+    </div>
+  );
+}
+
+function ThemeControllerPreview() {
+  const { resolvedTheme, setTheme, systemTheme, theme, toggleTheme } =
+    useQuickitThemeController();
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <Badge color="neutral" variant="outline">
+          preferencia: {theme}
+        </Badge>
+        <Badge color="neutral" variant="outline">
+          resuelto: {resolvedTheme}
+        </Badge>
+        <Badge color="neutral" variant="outline">
+          sistema: {systemTheme}
+        </Badge>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Button
+          color="neutral"
+          size="sm"
+          variant={theme === "system" ? "solid" : "outline"}
+          onClick={() => setTheme("system")}
+        >
+          Sistema
+        </Button>
+        <Button
+          color="neutral"
+          size="sm"
+          variant={theme === "light" ? "solid" : "outline"}
+          onClick={() => setTheme("light")}
+        >
+          Claro
+        </Button>
+        <Button
+          color="neutral"
+          size="sm"
+          variant={theme === "dark" ? "solid" : "outline"}
+          onClick={() => setTheme("dark")}
+        >
+          Oscuro
+        </Button>
+        <Button color="brand" variant="outline" onClick={toggleTheme}>
+          Alternar desde {resolvedTheme}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function ThemeControllerSwitchPreview() {
+  const { resolvedTheme, theme, toggleTheme } = useQuickitThemeController();
+
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Badge color="neutral" variant="outline">
+        tema: {theme}
+      </Badge>
+      <Badge color="neutral" variant="outline">
+        resuelto: {resolvedTheme}
+      </Badge>
+      <Tooltip content="Alternar tema">
+        <Switch
+          color="brand"
+          size="md"
+          checked={resolvedTheme === "dark"}
+          onCheckedChange={toggleTheme}
+        />
+      </Tooltip>
     </div>
   );
 }
@@ -238,7 +318,70 @@ function FocusRingTabsPreview({ ui }) {
   );
 }
 
+function RippleHookPreview() {
+  const pressEffect = useQuickitPressEffect();
+  const buttonRipple = useQuickitRipple("button");
+  const linkRipple = useQuickitRipple("link");
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge color="warning" variant="outline">
+        pressEffect: {pressEffect}
+      </Badge>
+      <Badge color={buttonRipple ? "success" : "neutral"} variant="outline">
+        button ripple: {String(buttonRipple)}
+      </Badge>
+      <Badge color={linkRipple ? "info" : "neutral"} variant="outline">
+        link ripple: {String(linkRipple)}
+      </Badge>
+      <Button color="brand">Ripple demo</Button>
+      <Link href="#" appearance="button" variant="outline" color="neutral">
+        Link ripple
+      </Link>
+    </div>
+  );
+}
+
+function RippleToolbarPreview({ ui }) {
+  const buttonRipple = useQuickitRipple("button");
+  const linkRipple = useQuickitRipple("link");
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <Button color="neutral">Guardar</Button>
+        <Button color="brand" variant="outline">
+          Publicar
+        </Button>
+        <Link href="#" appearance="button" color="neutral" variant="ghost">
+          Vista previa
+        </Link>
+      </div>
+      <p className={`text-sm ${ui.body}`}>
+        Aquí el ripple queda activo solo en botones. button: {String(buttonRipple)}.
+        link: {String(linkRipple)}.
+      </p>
+    </div>
+  );
+}
+
 const foundationApis = {
+  theme: [
+    { prop: "theme", type: "light | dark", defaultValue: "light", description: "Valor actual del tema cuando consumes `useQuickitTheme()` dentro de `QuickitProvider` o `QuickitThemeProvider`." },
+  ],
+  quickitThemeProvider: [
+    { prop: "defaultTheme", type: "system | light | dark", defaultValue: "system", description: "Preferencia inicial cuando no existe una persistida en `localStorage`." },
+    { prop: "storageKey", type: "string", defaultValue: "quickit-ui-theme", description: "Clave usada para persistir el tema actual." },
+    { prop: "focusRing / pressEffect / ripple", type: "mismas props de QuickitProvider", defaultValue: "defaults de Quickit", description: "Se reenvían internamente a `QuickitProvider` para que el tema gestionado y la política visual vivan en el mismo árbol." },
+    { prop: "return", type: "React provider", defaultValue: "-", description: "Envuelve a `QuickitProvider`, persiste el tema y aplica la clase `dark` al `documentElement`." },
+  ],
+  useQuickitThemeController: [
+    { prop: "theme", type: "system | light | dark", defaultValue: "-", description: "Preferencia persistida del usuario." },
+    { prop: "resolvedTheme", type: "light | dark", defaultValue: "-", description: "Tema efectivo que Quickit está aplicando realmente al árbol actual." },
+    { prop: "systemTheme", type: "light | dark", defaultValue: "-", description: "Resultado actual de `prefers-color-scheme` cuando la preferencia es `system`." },
+    { prop: "setTheme", type: "(theme) => void", defaultValue: "-", description: "Permite fijar `system`, `light` o `dark` explícitamente." },
+    { prop: "toggleTheme", type: "() => void", defaultValue: "-", description: "Alterna entre `light` y `dark`. Si estabas en `system`, sale de ese modo usando el tema resuelto actual como base." },
+  ],
   useBreakpoint: [
     { prop: "breakpoint", type: "xs | sm | md | lg | xl | 2xl | null", defaultValue: "null en SSR", description: "Breakpoint actual resuelto con los tokens de Quickit o con el override que pases." },
     { prop: "isMobile / isTablet / isDesktop", type: "boolean", defaultValue: "false en SSR", description: "Flags derivados. `mobile < md`, `tablet >= md && < lg`, `desktop >= lg`." },
@@ -255,6 +398,10 @@ const foundationApis = {
     { prop: "component", type: "button | link | input | textarea | select | checkbox | radio | switch | tabs | accordion | dropdown | modal", defaultValue: "required", description: "Nombre del componente cuya política de focus ring quieres consultar." },
     { prop: "return", type: "boolean", defaultValue: "-", description: "Devuelve `true` cuando ese componente mantiene focus ring activo según la configuración actual del provider." },
   ],
+  useQuickitRipple: [
+    { prop: "component", type: "button | link", defaultValue: "required", description: "Nombre del componente cuya política de ripple quieres consultar." },
+    { prop: "return", type: "boolean", defaultValue: "-", description: "Devuelve `true` cuando ese componente mantiene el ripple activo según la configuración actual del provider." },
+  ],
 };
 
 const foundationNotes = {
@@ -263,11 +410,19 @@ const foundationNotes = {
     "Si no envuelves la aplicacion, el tema por defecto es light.",
     "El proveedor es liviano: sirve para consistencia, no para manejar estado global de la app.",
     "También centraliza la política de focus visible mediante `focusRing`, para desactivar todos los focus rings o solo componentes específicos.",
+    "También centraliza la política de interacción de presión mediante `pressEffect`, que puede ser `transform` o `ripple`.",
+    "La política de `ripple` solo aplica cuando `pressEffect=\"ripple\"`, y permite apagarlo globalmente o por componente.",
   ],
   theme: [
     "La libreria trabaja con dos modos base: light y dark.",
     "Los componentes priorizan defaults neutros y dejan los colores semanticos como decision explicita del producto.",
     "useQuickitTheme te permite reaccionar al tema actual desde cualquier componente descendiente.",
+    "Si quieres que la librería gestione persistencia y toggle, usa `QuickitThemeProvider` junto con `useQuickitThemeController`.",
+    "El storage key por defecto es `quickit-ui-theme`, pero puedes sobrescribirlo con `storageKey`.",
+    "QuickitThemeProvider también soporta `system`, así que puede seguir `prefers-color-scheme` y exponer al mismo tiempo el tema resuelto mediante `resolvedTheme`.",
+    "`theme` representa la preferencia guardada del usuario y `resolvedTheme` el modo efectivo que realmente se aplica al árbol actual.",
+    "Si tu UI propia también cambia con el tema, consume `useQuickitThemeController` y usa `dark:` en tus layouts, cabeceras y shells, no solo en los componentes de Quickit.",
+    "Si también usas utilidades propias de Tailwind con `dark:`, agrega `@custom-variant dark (&:where(.dark, .dark *));` en tu CSS global para que tu app y Quickit lean la misma clase `dark`.",
   ],
   useBreakpoint: [
     "useBreakpoint es seguro para SSR: en servidor devuelve `ready: false` y medidas nulas hasta que el navegador hidrata.",
@@ -284,6 +439,12 @@ const foundationNotes = {
     "Puedes apagarlo globalmente con `focusRing={false}` o solo en ciertos componentes con `focusRing={{ disabledComponents: [...] }}`.",
     "Los nombres válidos hoy son `button`, `link`, `input`, `textarea`, `select`, `checkbox`, `radio`, `switch`, `tabs`, `accordion`, `dropdown` y `modal`.",
     "El hook te permite leer esa política desde wrappers o shells propios sin duplicar configuración.",
+  ],
+  useQuickitRipple: [
+    "Quickit usa `pressEffect=\"transform\"` por defecto, así que el ripple permanece apagado hasta que el provider o la instancia cambien a `pressEffect=\"ripple\"`.",
+    "Cuando `pressEffect=\"ripple\"`, puedes apagarlo globalmente con `ripple={false}` o solo en ciertos componentes con `ripple={{ disabledComponents: [...] }}`.",
+    "Los nombres válidos hoy son `button` y `link`.",
+    "A nivel de instancia, `Button` y `Link` aceptan `pressEffect=\"ripple\"` o `ripple={false}` para forzarlo o anularlo puntualmente.",
   ],
   colors: [
     "La API actual sigue siendo semántica: `neutral`, `slate`, `zinc`, `primary`, `brand`, `success`, `danger`, `warning`, `info`, `light`, `dark` y `black`.",
@@ -361,6 +522,18 @@ export function App() {
   <App />
 </QuickitProvider>`}
             />
+
+            <CodeExample
+              ui={ui}
+              title="Configurar pressEffect"
+              code={`<QuickitProvider
+  theme="dark"
+  pressEffect="ripple"
+  ripple={{ disabledComponents: ["link"] }}
+>
+  <App />
+</QuickitProvider>`}
+            />
           </div>
 
           <div className="mt-8">
@@ -375,7 +548,7 @@ export function App() {
           <SectionHeading
             category="Fundamentos"
             title="Tema"
-            description="Quickit UI parte de dos modos base y usa el mismo contexto para que botones, overlays y formularios respondan de forma consistente."
+            description="Quickit UI usa el mismo contexto para que componentes, hooks y tu propio layout respondan al tema de forma consistente, ya sea con control externo o con persistencia integrada."
             ui={ui}
           />
 
@@ -415,11 +588,168 @@ return (
                 </span>
               </div>
             </PreviewPanel>
+
+            <PreviewPanel
+              ui={ui}
+              title="Controlador persistente desde Quickit"
+              code={`function ThemeControls() {
+  const { resolvedTheme, setTheme, systemTheme, theme, toggleTheme } =
+    useQuickitThemeController();
+
+  return (
+    <div className="space-y-4">
+      <p>
+        Preferencia: {theme}. Sistema: {systemTheme}. Tema aplicado: {resolvedTheme}.
+      </p>
+
+      <div className="flex flex-wrap gap-3">
+        <Button onClick={() => setTheme("system")}>Sistema</Button>
+        <Button onClick={() => setTheme("light")}>Claro</Button>
+        <Button onClick={() => setTheme("dark")}>Oscuro</Button>
+        <Button variant="outline" color="brand" onClick={toggleTheme}>
+          Alternar desde {resolvedTheme}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+<QuickitThemeProvider
+  defaultTheme="system"
+  storageKey="ava-quickit-theme"
+>
+  <ThemeControls />
+</QuickitThemeProvider>`}
+            >
+              <QuickitThemeProvider
+                defaultTheme="system"
+                storageKey="docs-quickit-theme-preview"
+              >
+                <ThemeControllerPreview />
+              </QuickitThemeProvider>
+            </PreviewPanel>
+
+            <CodeExample
+              ui={ui}
+              title="API recomendada"
+              code={`import {
+  Button,
+  QuickitThemeProvider,
+  useQuickitThemeController,
+} from "quickit-ui";
+
+function ThemeControls() {
+  const { resolvedTheme, setTheme, systemTheme, theme, toggleTheme } =
+    useQuickitThemeController();
+
+  return (
+    <div className="space-y-4">
+      <p>
+        Preferencia: {theme}. Sistema: {systemTheme}. Tema activo: {resolvedTheme}.
+      </p>
+
+      <div className="flex flex-wrap gap-3">
+        <Button onClick={() => setTheme("system")}>Sistema</Button>
+        <Button onClick={() => setTheme("light")}>Claro</Button>
+        <Button onClick={() => setTheme("dark")}>Oscuro</Button>
+        <Button color="brand" variant="outline" onClick={toggleTheme}>
+          Alternar desde {resolvedTheme}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export function App() {
+  return (
+    <QuickitThemeProvider
+      defaultTheme="system"
+      storageKey="ava-quickit-theme"
+    >
+      <ThemeControls />
+      <Routes />
+    </QuickitThemeProvider>
+  );
+}`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Tailwind dark mode en la app consumidora"
+              language="css"
+              code={`@import "tailwindcss";
+@import "quickit-ui/styles.css";
+
+@custom-variant dark (&:where(.dark, .dark *));`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Usar el tema también fuera de Quickit"
+              code={`function Shell() {
+  const { theme, resolvedTheme } = useQuickitThemeController();
+
+  return (
+    <div className="bg-white text-zinc-950 dark:bg-zinc-950 dark:text-white">
+      <header className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+        Preferencia: {theme}. Tema efectivo: {resolvedTheme}
+      </header>
+      <main className="p-6">
+        <CardGrid />
+      </main>
+    </div>
+  );
+}`}
+            />
+
+            <PreviewPanel
+              ui={ui}
+              title="Caso real: switch de tema"
+              code={`function ToggleTheme() {
+  const { resolvedTheme, theme, toggleTheme } = useQuickitThemeController();
+
+  return (
+    <Tooltip content="Alternar tema">
+      <Switch
+        color="brand"
+        size="md"
+        checked={resolvedTheme === "dark"}
+        onCheckedChange={toggleTheme}
+      />
+    </Tooltip>
+  );
+}
+
+<QuickitThemeProvider storageKey="ava-quickit-theme">
+  <ToggleTheme />
+</QuickitThemeProvider>`}
+            >
+              <QuickitThemeProvider
+                defaultTheme="system"
+                storageKey="docs-quickit-theme-switch"
+              >
+                <ThemeControllerSwitchPreview />
+              </QuickitThemeProvider>
+            </PreviewPanel>
           </div>
 
-          <div className="mt-8">
-            <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
-            <NotesList items={foundationNotes.theme} ui={ui} />
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API de Tema</p>
+              <PropsTable rows={foundationApis.theme} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API de QuickitThemeProvider</p>
+              <PropsTable rows={foundationApis.quickitThemeProvider} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API de useQuickitThemeController</p>
+              <PropsTable rows={foundationApis.useQuickitThemeController} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
+              <NotesList items={foundationNotes.theme} ui={ui} />
+            </div>
           </div>
         </SectionCard>
       ) : null}
@@ -773,6 +1103,100 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
             <div>
               <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
               <NotesList items={foundationNotes.useQuickitFocusRing} ui={ui} />
+            </div>
+          </div>
+        </SectionCard>
+      ) : null}
+
+      {isVisible(visibleIds, "use-ripple") ? (
+        <SectionCard id="use-ripple" className={ui.divider}>
+          <SectionHeading
+            category="Fundamentos"
+            title="useQuickitRipple"
+            description="Hook para consultar si `Button` o `Link` con apariencia botón deben mantener el ripple activo según `pressEffect` y la configuración actual de `QuickitProvider`."
+            ui={ui}
+          />
+
+          <div className="mt-6 space-y-4">
+            <PreviewPanel
+              ui={ui}
+              title="Lectura de la política actual"
+              code={`function RipplePolicy() {
+  const buttonRipple = useQuickitRipple("button");
+  const linkRipple = useQuickitRipple("link");
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Badge variant="outline">
+        pressEffect: ripple
+      </Badge>
+      <Badge variant="outline">
+        button ripple: {String(buttonRipple)}
+      </Badge>
+      <Badge variant="outline">
+        link ripple: {String(linkRipple)}
+      </Badge>
+    </div>
+  );
+}`}
+            >
+              <QuickitProvider
+                theme={previewTheme}
+                pressEffect="ripple"
+                ripple={{ disabledComponents: ["link"] }}
+              >
+                <RippleHookPreview />
+              </QuickitProvider>
+            </PreviewPanel>
+
+            <CodeExample
+              ui={ui}
+              title="Uso típico"
+              code={`<QuickitProvider
+  theme="dark"
+  pressEffect="ripple"
+  ripple={{ disabledComponents: ["link"] }}
+>
+  <App />
+</QuickitProvider>`}
+            />
+
+            <PreviewPanel
+              ui={ui}
+              title="Caso real: barra de acciones"
+              className="max-w-3xl"
+              code={`<QuickitProvider
+  theme="${previewTheme}"
+  pressEffect="ripple"
+  ripple={{ disabledComponents: ["link"] }}
+>
+  <div className="flex flex-wrap items-center gap-3">
+    <Button color="neutral">Guardar</Button>
+    <Button color="brand" variant="outline">Publicar</Button>
+    <Link href="#" appearance="button" color="neutral" variant="ghost">
+      Vista previa
+    </Link>
+  </div>
+</QuickitProvider>`}
+            >
+              <QuickitProvider
+                theme={previewTheme}
+                pressEffect="ripple"
+                ripple={{ disabledComponents: ["link"] }}
+              >
+                <RippleToolbarPreview ui={ui} />
+              </QuickitProvider>
+            </PreviewPanel>
+          </div>
+
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+              <PropsTable rows={foundationApis.useQuickitRipple} ui={ui} />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${ui.title}`}>Notas</p>
+              <NotesList items={foundationNotes.useQuickitRipple} ui={ui} />
             </div>
           </div>
         </SectionCard>

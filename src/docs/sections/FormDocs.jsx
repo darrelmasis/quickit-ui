@@ -390,7 +390,7 @@ export function FormDocs({ ui, visibleIds }) {
                     </Select>
                   </InputGroupItem>
                   <Input placeholder="Busca por nombre, alias o etiqueta" />
-                  <InputGroupAction color="brand">Aplicar</InputGroupAction>
+                  <InputGroupAction color="brand" activeMotion={true}>Aplicar</InputGroupAction>
                 </InputGroup>
 
                 <InputGroup attached>

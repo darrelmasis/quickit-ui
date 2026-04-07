@@ -5,20 +5,22 @@ import {
   EmptyStateDescription,
   EmptyStateTitle,
   Input,
-  QuickitProvider,
   Link,
+  Switch,
+  useQuickitThemeController,
 } from "@/lib";
 import {
   ALL_ITEMS,
   COMPONENT_ITEMS,
   COMPONENT_GROUPS,
   DEFAULT_COMPONENT_SECTION,
+  DEFAULT_EXAMPLES_SECTION,
   DEFAULT_INTRO_SECTION,
   docsTheme,
+  EXAMPLE_GROUPS,
   EXAMPLE_ITEMS,
-  getInitialTheme,
+  EXAMPLE_NAV_ITEMS,
   INTRO_ITEMS,
-  STORAGE_KEY,
 } from "@/docs/config";
 import QuickitLogo from "@/docs/components/QuickitLogo";
 import IntroductionDocs from "@/docs/sections/IntroductionDocs";
@@ -108,7 +110,7 @@ const SIDEBAR_SCROLLBAR_CLASSES = [
 ].join(" ");
 
 export default function DocsApp() {
-  const [theme, setTheme] = useState(getInitialTheme);
+  const { resolvedTheme, toggleTheme } = useQuickitThemeController();
   const [activeSection, setActiveSection] = useState(getInitialActiveSection);
   const [componentQuery, setComponentQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -117,8 +119,8 @@ export default function DocsApp() {
     "Selecciona una acción del menú.",
   );
   const [controlledModalOpen, setControlledModalOpen] = useState(false);
-  const ui = docsTheme[theme];
-  const navUi = NAV_THEME_CLASSES[theme];
+  const ui = docsTheme[resolvedTheme];
+  const navUi = NAV_THEME_CLASSES[resolvedTheme];
 
   const filteredComponents = useMemo(() => {
     const query = componentQuery.trim().toLowerCase();
@@ -148,6 +150,8 @@ export default function DocsApp() {
     COMPONENT_ITEMS.find((item) => item.href === activeSection) ?? null;
   const activeExamplePage =
     EXAMPLE_ITEMS.find((item) => item.href === activeSection) ?? null;
+  const activeExampleOverview =
+    EXAMPLE_NAV_ITEMS.find((item) => item.href === activeSection) ?? null;
   const activeIntroItem =
     INTRO_ITEMS.find((item) => item.href === activeSection) ?? null;
   const activeSectionId =
@@ -156,11 +160,6 @@ export default function DocsApp() {
     activeComponentItem?.id ??
     "getting-started";
   const activeVisibleSet = new Set([activeSectionId]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    window.localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
 
   useEffect(() => {
     if (!mobileMenuOpen) {
@@ -340,18 +339,19 @@ export default function DocsApp() {
     }
 
     if (activeExamplePage) {
-      return <ExamplesDocs ui={ui} />;
+      return <ExamplesDocs ui={ui} visibleIds={activeVisibleSet} />;
     }
 
     switch (activeSectionId) {
       case "provider":
       case "theme":
-      case "use-breakpoint":
-      case "use-media-query":
-      case "use-focus-ring":
-      case "colors":
-      case "states":
-        return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;
+        case "use-breakpoint":
+        case "use-media-query":
+        case "use-focus-ring":
+        case "use-ripple":
+        case "colors":
+        case "states":
+          return <FoundationsDocs ui={ui} visibleIds={activeVisibleSet} />;
       case "accordion":
       case "breadcrumb":
       case "pagination":
@@ -408,8 +408,36 @@ export default function DocsApp() {
     }
   };
 
+  const renderExampleSidebar = () => (
+    <>
+      {activeExampleOverview ? (
+        <div>
+          <p
+            className={`mb-2 text-xs font-semibold uppercase tracking-[0.16em] ${navUi.sectionLabel}`}
+          >
+            Explorar
+          </p>
+          <div className="space-y-2">
+            {EXAMPLE_NAV_ITEMS.map(renderNavItem)}
+          </div>
+        </div>
+      ) : null}
+      {EXAMPLE_GROUPS.map((group) => (
+        <div key={group.label}>
+          <p
+            className={`mb-2 text-xs font-semibold uppercase tracking-[0.16em] ${navUi.sectionLabel}`}
+          >
+            {group.label}
+          </p>
+          <div className="space-y-2">
+            {group.items.map(renderNavItem)}
+          </div>
+        </div>
+      ))}
+    </>
+  );
+
   return (
-    <QuickitProvider theme={theme}>
       <main className={`min-h-screen ${ui.page}`}>
         <header
           className={`sticky top-0 z-50 border-b backdrop-blur ${ui.surface}`}
@@ -419,7 +447,7 @@ export default function DocsApp() {
               <div className="flex min-w-0 items-center gap-2 sm:gap-3">
                 <Link
                   href="/"
-                  className={`flex min-w-0 items-center gap-2 ${theme === "dark" ? "text-white" : "text-neutral-900"}`}
+                  className={`flex min-w-0 items-center gap-2 ${resolvedTheme === "dark" ? "text-white" : "text-neutral-900"}`}
                 >
                   <span className="flex h-8 items-center justify-center px-1">
                     <QuickitLogo className="h-4 w-auto sm:h-5" />
@@ -440,7 +468,7 @@ export default function DocsApp() {
                   </div>
                   <div className={`h-6 w-px shrink-0 ${ui.divider}`} />
                   <div className="flex min-w-0 items-center gap-2 overflow-x-auto">
-                    {EXAMPLE_ITEMS.map((item) =>
+                    {EXAMPLE_NAV_ITEMS.map((item) =>
                       renderHeaderNavLink({
                         href: item.href,
                         label: item.label,
@@ -458,25 +486,16 @@ export default function DocsApp() {
               </div>
 
               <div className="flex min-w-0 items-center gap-2">
-                <div className="hidden items-center gap-2 md:flex">
-                  <Button
-                    size="sm"
-                    color="neutral"
-                    variant={theme === "light" ? "solid" : "ghost"}
-                    pressed={theme === "light"}
-                    onClick={() => setTheme("light")}
-                  >
-                    Claro
-                  </Button>
-                  <Button
-                    size="sm"
-                    color="neutral"
-                    variant={theme === "dark" ? "solid" : "ghost"}
-                    pressed={theme === "dark"}
-                    onClick={() => setTheme("dark")}
-                  >
-                    Oscuro
-                  </Button>
+                <div className="hidden items-center gap-3 md:flex">
+                  <span className={`text-xs font-medium ${ui.body}`}>
+                    {resolvedTheme === "dark" ? "Oscuro" : "Claro"}
+                  </span>
+                  <Switch
+                    color="brand"
+                    checked={resolvedTheme === "dark"}
+                    onCheckedChange={toggleTheme}
+                    aria-label="Cambiar tema de la documentación"
+                  />
                 </div>
 
                 <div className="flex items-center gap-2 lg:hidden">
@@ -540,27 +559,16 @@ export default function DocsApp() {
                   >
                     Tema
                   </p>
-                  <div className="mt-3 flex gap-2">
-                    <Button
-                      size="sm"
-                      color="neutral"
-                      fullWidth
-                      variant={theme === "light" ? "solid" : "ghost"}
-                      pressed={theme === "light"}
-                      onClick={() => setTheme("light")}
-                    >
-                      Claro
-                    </Button>
-                    <Button
-                      size="sm"
-                      color="neutral"
-                      fullWidth
-                      variant={theme === "dark" ? "solid" : "ghost"}
-                      pressed={theme === "dark"}
-                      onClick={() => setTheme("dark")}
-                    >
-                      Oscuro
-                    </Button>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <span className={`text-sm ${ui.body}`}>
+                      {resolvedTheme === "dark" ? "Modo oscuro" : "Modo claro"}
+                    </span>
+                    <Switch
+                      color="brand"
+                      checked={resolvedTheme === "dark"}
+                      onCheckedChange={toggleTheme}
+                      aria-label="Cambiar tema de la documentación"
+                    />
                   </div>
                   </div>
 
@@ -592,7 +600,23 @@ export default function DocsApp() {
                       Ejemplos
                     </p>
                     <div className="mt-3 space-y-2">
-                      {EXAMPLE_ITEMS.map(renderNavItem)}
+                      {EXAMPLE_NAV_ITEMS.map(renderNavItem)}
+                    </div>
+                  </div>
+
+                  <div
+                    className={cn(
+                      "mt-4 rounded-[1.25rem] border p-4",
+                      navUi.card,
+                    )}
+                  >
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                    >
+                      Biblioteca de ejemplos
+                    </p>
+                    <div className="mt-4 space-y-4">
+                      {renderExampleSidebar()}
                     </div>
                   </div>
 
@@ -669,11 +693,11 @@ export default function DocsApp() {
         <div
           className={cn(
             "mx-auto w-full max-w-[1800px] lg:px-8",
-            activeComponentItem &&
+            (activeComponentItem || activeExamplePage) &&
               "lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8",
           )}
         >
-          {activeComponentItem ? (
+          {activeComponentItem || activeExamplePage ? (
           <aside className="hidden lg:sticky lg:top-[61px] lg:block lg:h-[calc(100vh-61px)] lg:py-8">
             <div className="h-full">
               <div
@@ -693,17 +717,19 @@ export default function DocsApp() {
                     <p
                       className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
                     >
-                      Componentes
+                      {activeComponentItem ? "Componentes" : "Ejemplos"}
                     </p>
                   </div>
-                  <div className="mt-3">
-                    <Input
-                      size="sm"
-                      value={componentQuery}
-                      onChange={(event) => setComponentQuery(event.target.value)}
-                      placeholder="Buscar componente"
-                    />
-                  </div>
+                  {activeComponentItem ? (
+                    <div className="mt-3">
+                      <Input
+                        size="sm"
+                        value={componentQuery}
+                        onChange={(event) => setComponentQuery(event.target.value)}
+                        placeholder="Buscar componente"
+                      />
+                    </div>
+                  ) : null}
                 </div>
 
                 <div
@@ -712,25 +738,29 @@ export default function DocsApp() {
                     SIDEBAR_SCROLLBAR_CLASSES,
                   )}
                 >
-                  {filteredComponentGroups.length ? (
-                    <div className="space-y-4">
-                      {filteredComponentGroups.map((group) => (
-                        <div key={group.label}>
-                          <p
-                            className={`mb-2 text-xs font-semibold uppercase tracking-[0.16em] ${navUi.sectionLabel}`}
-                          >
-                            {group.label}
-                          </p>
-                          <div className="space-y-2">
-                            {group.items.map(renderNavItem)}
+                  {activeComponentItem ? (
+                    filteredComponentGroups.length ? (
+                      <div className="space-y-4">
+                        {filteredComponentGroups.map((group) => (
+                          <div key={group.label}>
+                            <p
+                              className={`mb-2 text-xs font-semibold uppercase tracking-[0.16em] ${navUi.sectionLabel}`}
+                            >
+                              {group.label}
+                            </p>
+                            <div className="space-y-2">
+                              {group.items.map(renderNavItem)}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={`text-sm leading-6 ${navUi.helper}`}>
+                        No hay componentes que coincidan con la búsqueda.
+                      </p>
+                    )
                   ) : (
-                    <p className={`text-sm leading-6 ${navUi.helper}`}>
-                      No hay componentes que coincidan con la búsqueda.
-                    </p>
+                    <div className="space-y-4">{renderExampleSidebar()}</div>
                   )}
                 </div>
               </div>
@@ -744,7 +774,7 @@ export default function DocsApp() {
               activeComponentItem
                 ? "lg:px-0"
                 : activeExamplePage
-                  ? "mx-auto max-w-[1400px]"
+                  ? "w-full max-w-none"
                   : "mx-auto max-w-6xl",
             )}
           >
@@ -767,6 +797,5 @@ export default function DocsApp() {
           </section>
         </div>
       </main>
-    </QuickitProvider>
   );
 }

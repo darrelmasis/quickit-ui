@@ -82,6 +82,19 @@ export declare const QUICKIT_FOCUS_RING_COMPONENTS: readonly [
   "dropdown",
   "modal",
 ];
+export declare const QUICKIT_RIPPLE_COMPONENTS: readonly [
+  "button",
+  "link",
+];
+export declare const QUICKIT_PRESS_EFFECTS: readonly [
+  "transform",
+  "ripple",
+];
+export declare const QUICKIT_THEME_OPTIONS: readonly [
+  "system",
+  "light",
+  "dark",
+];
 export declare const QUICKIT_CONTROL_RADIUS_TOKENS: Record<string, string>;
 export declare const QUICKIT_AVATAR_RADIUS_TOKENS: Record<
   string,
@@ -89,6 +102,7 @@ export declare const QUICKIT_AVATAR_RADIUS_TOKENS: Record<
 >;
 
 export type QuickitThemeMode = "light" | "dark";
+export type QuickitThemeOption = (typeof QUICKIT_THEME_OPTIONS)[number];
 export type QuickitSemanticColor = (typeof QUICKIT_SEMANTIC_COLORS)[number];
 export type QuickitAccentColor = (typeof QUICKIT_ACCENT_COLORS)[number];
 export type QuickitControlSize = (typeof QUICKIT_CONTROL_SIZES)[number];
@@ -112,6 +126,10 @@ export type QuickitBreakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type QuickitFloatingColor = "default" | QuickitSemanticColor;
 export type QuickitFocusRingComponent =
   (typeof QUICKIT_FOCUS_RING_COMPONENTS)[number];
+export type QuickitRippleComponent =
+  (typeof QUICKIT_RIPPLE_COMPONENTS)[number];
+export type QuickitPressEffect =
+  (typeof QUICKIT_PRESS_EFFECTS)[number];
 export interface QuickitBreakpoints {
   sm: number;
   md: number;
@@ -122,6 +140,17 @@ export interface QuickitBreakpoints {
 export interface QuickitFocusRingConfig {
   disabledComponents?: QuickitFocusRingComponent[];
   enabled?: boolean;
+}
+export interface QuickitRippleConfig {
+  disabledComponents?: QuickitRippleComponent[];
+  enabled?: boolean;
+}
+export interface QuickitThemeControllerValue {
+  setTheme: (theme: QuickitThemeOption) => void;
+  resolvedTheme: QuickitThemeMode;
+  systemTheme: QuickitThemeMode;
+  theme: QuickitThemeOption;
+  toggleTheme: () => void;
 }
 
 export declare function isQuickitTokenValue(
@@ -144,12 +173,28 @@ export declare function getAvatarRadius(
 export interface QuickitProviderProps {
   children?: React.ReactNode;
   focusRing?: boolean | QuickitFocusRingConfig;
+  pressEffect?: QuickitPressEffect;
+  ripple?: boolean | QuickitRippleConfig;
   theme?: QuickitThemeMode;
 }
 export declare function QuickitProvider(
   props: QuickitProviderProps,
 ): React.JSX.Element;
+export declare const QUICKIT_THEME_STORAGE_KEY: "quickit-ui-theme";
+export interface QuickitThemeProviderProps {
+  children?: React.ReactNode;
+  defaultTheme?: QuickitThemeOption;
+  focusRing?: boolean | QuickitFocusRingConfig;
+  pressEffect?: QuickitPressEffect;
+  ripple?: boolean | QuickitRippleConfig;
+  storageKey?: string;
+}
+export declare function QuickitThemeProvider(
+  props: QuickitThemeProviderProps,
+): React.JSX.Element;
 export declare function useQuickitTheme(): QuickitThemeMode;
+export declare function useQuickitThemeController():
+  QuickitThemeControllerValue;
 export declare function useQuickitFocusRing(
   component: QuickitFocusRingComponent,
 ): boolean;
@@ -157,6 +202,14 @@ export declare function useQuickitFocusRingConfig(): {
   disabledComponents: QuickitFocusRingComponent[];
   enabled: boolean;
 };
+export declare function useQuickitRipple(
+  component: QuickitRippleComponent,
+): boolean;
+export declare function useQuickitRippleConfig(): {
+  disabledComponents: QuickitRippleComponent[];
+  enabled: boolean;
+};
+export declare function useQuickitPressEffect(): QuickitPressEffect;
 export interface UseBreakpointOptions {
   breakpoints?: Partial<QuickitBreakpoints>;
 }
@@ -235,7 +288,9 @@ export interface ButtonProps extends ButtonBaseProps {
   fullWidth?: boolean;
   loading?: boolean;
   loadingText?: React.ReactNode;
+  pressEffect?: QuickitPressEffect;
   pressed?: boolean;
+  ripple?: boolean;
   shape?: QuickitButtonShape;
   size?: QuickitControlSize;
   spinner?: boolean;
@@ -255,6 +310,8 @@ export interface LinkProps extends LinkBaseProps {
   appearance?: "text" | "button";
   color?: QuickitSemanticColor;
   fullWidth?: boolean;
+  pressEffect?: QuickitPressEffect;
+  ripple?: boolean;
   shape?: QuickitButtonShape;
   size?: QuickitControlSize;
   underline?: QuickitLinkUnderline;

@@ -5,5 +5,10 @@ export const QuickitThemeContext = createContext({
     disabledComponents: [],
     enabled: true,
   },
+  ripple: {
+    disabledComponents: [],
+    enabled: true,
+  },
+  pressEffect: "transform",
   theme: "light",
 });
