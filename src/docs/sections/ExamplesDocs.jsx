@@ -369,6 +369,34 @@ function ExamplesOverview({ ui }) {
         ui={ui}
       />
 
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <Link href="/getting-started" appearance="button" color="neutral" variant="outline">
+          Ver primeros pasos
+        </Link>
+        <Link href="/formularios/input" appearance="button" color="brand">
+          Ir a formularios
+        </Link>
+      </div>
+
+      <div className={`mt-6 rounded-[1.5rem] border p-5 ${ui.panel}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className={`text-sm font-semibold ${ui.title}`}>
+              Cómo leer esta biblioteca
+            </p>
+            <p className={`mt-2 text-sm leading-6 ${ui.body}`}>
+              Cada ejemplo está pensado como una pantalla real. El preview
+              responde al tema actual de la docs, el código coincide con lo que
+              ves y el viewport se puede ajustar para revisar mejor el
+              comportamiento mobile-first.
+            </p>
+          </div>
+          <Badge color="brand" variant="soft">
+            Mobile-first
+          </Badge>
+        </div>
+      </div>
+
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {EXAMPLE_GROUPS.map((group) => (
           <div
@@ -1224,7 +1252,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
         </DropdownTrigger>
         <DropdownContent>
           <DropdownItem>Filtrar aprobadas</DropdownItem>
-          <DropdownItem>Asignar reviewer</DropdownItem>
+          <DropdownItem>Asignar revisor</DropdownItem>
           <DropdownSeparator />
           <DropdownItem variant="danger">Cerrar sprint</DropdownItem>
         </DropdownContent>
@@ -1343,7 +1371,7 @@ export function ExamplesDocs({ ui, visibleIds }) {
                         </DropdownTrigger>
                         <DropdownContent>
                           <DropdownItem>Filtrar aprobadas</DropdownItem>
-                          <DropdownItem>Asignar reviewer</DropdownItem>
+                          <DropdownItem>Asignar revisor</DropdownItem>
                           <DropdownSeparator />
                           <DropdownItem variant="danger">
                             Cerrar sprint
@@ -1701,3 +1729,4 @@ export function ExamplesDocs({ ui, visibleIds }) {
 }
 
 export default ExamplesDocs;
+

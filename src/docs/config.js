@@ -2,6 +2,7 @@ export const STORAGE_KEY = "quickit-ui-docs-theme";
 export const DEFAULT_INTRO_SECTION = "/getting-started";
 export const DEFAULT_COMPONENT_SECTION = "/fundamentos/provider";
 export const DEFAULT_EXAMPLES_SECTION = "/ejemplos";
+export const DOCS_SHELL_WIDTH_CLASS = "max-w-[1600px]";
 
 export const INTRO_ITEMS = [
   { href: "/getting-started", label: "Primeros pasos", id: "getting-started" },
@@ -109,7 +110,7 @@ export const COMPONENT_GROUPS = [
     ],
   },
   {
-    label: "Logica",
+    label: "Lógica",
     items: [
       { href: "/logica/show", label: "Show", id: "show" },
       { href: "/logica/render-switch", label: "RenderSwitch", id: "render-switch" },

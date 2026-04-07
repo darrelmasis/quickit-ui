@@ -145,12 +145,12 @@ export function FormDocs({ ui, visibleIds }) {
             <PreviewPanel
               ui={ui}
               title="Tamaños"
-              code={`<div className="flex flex-wrap items-center gap-3">\n  <Input size="sm" placeholder="Small input" className="max-w-[180px]" />\n  <Input size="md" placeholder="Medium input" className="max-w-[200px]" />\n  <Input size="lg" placeholder="Large input" className="max-w-[220px]" />\n</div>`}
+              code={`<div className="flex flex-wrap items-center gap-3">\n  <Input size="sm" placeholder="Input pequeño" className="max-w-[180px]" />\n  <Input size="md" placeholder="Input mediano" className="max-w-[200px]" />\n  <Input size="lg" placeholder="Input grande" className="max-w-[220px]" />\n</div>`}
             >
               <div className="flex flex-wrap items-center gap-3">
-                <Input size="sm" placeholder="Small input" className="max-w-[180px]" />
-                <Input size="md" placeholder="Medium input" className="max-w-[200px]" />
-                <Input size="lg" placeholder="Large input" className="max-w-[220px]" />
+                <Input size="sm" placeholder="Input pequeño" className="max-w-[180px]" />
+                <Input size="md" placeholder="Input mediano" className="max-w-[200px]" />
+                <Input size="lg" placeholder="Input grande" className="max-w-[220px]" />
               </div>
             </PreviewPanel>
 
@@ -169,7 +169,7 @@ export function FormDocs({ ui, visibleIds }) {
 
             <PreviewPanel
               ui={ui}
-              title="Con FormControl e invalid"
+              title="Con FormControl e inválido"
               className="grid gap-4 md:grid-cols-2"
               code={`<FormControl>\n  <Label>Usuario</Label>\n  <Input placeholder="@quickit" />\n</FormControl>\n\n<FormControl invalid>\n  <Label>Correo</Label>\n  <Input type="email" placeholder="correo@dominio.com" />\n  <FormMessage>Ingresa un correo válido.</FormMessage>\n</FormControl>`}
             >
@@ -206,7 +206,7 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="Input type=search con clear"
               className="grid gap-4 md:grid-cols-2"
-              code={`<FormControl>\n  <Label>Buscar en la librería</Label>\n  <Input type="search" defaultValue="Modal" placeholder="Busca por nombre o categoría" />\n</FormControl>\n\n<FormControl>\n  <Label>Búsqueda con icon button</Label>\n  <Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" />\n</FormControl>`}
+              code={`<FormControl>\n  <Label>Buscar en la librería</Label>\n  <Input type="search" defaultValue="Modal" placeholder="Busca por nombre o categoría" />\n</FormControl>\n\n<FormControl>\n  <Label>Búsqueda con botón de icono</Label>\n  <Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" />\n</FormControl>`}
             >
               <FormControl>
                 <Label>Buscar en la librería</Label>
@@ -214,7 +214,7 @@ export function FormDocs({ ui, visibleIds }) {
               </FormControl>
 
               <FormControl>
-                <Label>Búsqueda con icon button</Label>
+                <Label>Búsqueda con botón de icono</Label>
                 <Input type="search" color="brand" actionShape="circle" defaultValue="Avatar" placeholder="Busca un componente" />
               </FormControl>
             </PreviewPanel>
@@ -269,7 +269,7 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="InputGroup attached: addons pasivos y botones reales"
               className="space-y-4"
-              code={`<div className="space-y-4">\n  <InputGroup attached shape="pill" color="dark">\n    <InputGroupAddon>\n      <svg viewBox="0 0 20 20" fill="none" className="size-4">\n        <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n        <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n      </svg>\n    </InputGroupAddon>\n    <Input type="search" placeholder="Buscar en AVA" />\n    <InputGroupAddon align="inline-end">12 results</InputGroupAddon>\n  </InputGroup>\n\n  <InputGroup attached color="zinc">\n    <InputGroupAddon>https://</InputGroupAddon>\n    <Input placeholder="quickit.dev" />\n    <InputGroupAction color="brand" onClick={() => console.log("ir")}>\n      Ir\n    </InputGroupAction>\n  </InputGroup>\n</div>`}
+              code={`<div className="space-y-4">\n  <InputGroup attached shape="pill" color="dark">\n    <InputGroupAddon>\n      <svg viewBox="0 0 20 20" fill="none" className="size-4">\n        <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n        <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n      </svg>\n    </InputGroupAddon>\n    <Input type="search" placeholder="Buscar en AVA" />\n    <InputGroupAddon align="inline-end">12 resultados</InputGroupAddon>\n  </InputGroup>\n\n  <InputGroup attached color="zinc">\n    <InputGroupAddon>https://</InputGroupAddon>\n    <Input placeholder="quickit.dev" />\n    <InputGroupAction color="brand" onClick={() => console.log("ir")}>\n      Ir\n    </InputGroupAction>\n  </InputGroup>\n</div>`}
             >
               <div className="space-y-4">
                 <InputGroup attached shape="pill" color="dark">
@@ -280,7 +280,7 @@ export function FormDocs({ ui, visibleIds }) {
                     </svg>
                   </InputGroupAddon>
                   <Input type="search" placeholder="Buscar en AVA" />
-                  <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+                  <InputGroupAddon align="inline-end">12 resultados</InputGroupAddon>
                 </InputGroup>
 
                 <InputGroup attached color="zinc">
@@ -297,7 +297,7 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="InputGroup: toolbar, botones y grid"
               className="space-y-4"
-              code={`<div className="space-y-4">\n  <InputGroup attached>\n    <InputGroupAction variant="outline" onClick={() => console.log("todo")}>\n      Todo\n    </InputGroupAction>\n    <Input placeholder="Filtra por nombre o etiqueta" />\n    <InputGroupAction variant="outline" onClick={() => console.log("estado")}>\n      Estado\n    </InputGroupAction>\n  </InputGroup>\n\n  <InputGroup attached layout="grid" columns={2} className="max-w-md">\n    <InputGroupItem span={2}>\n      <Input placeholder="Card number" />\n    </InputGroupItem>\n    <InputGroupItem>\n      <Input placeholder="MM / YY" />\n    </InputGroupItem>\n    <InputGroupItem>\n      <Input placeholder="CVC" />\n    </InputGroupItem>\n  </InputGroup>\n</div>`}
+              code={`<div className="space-y-4">\n  <InputGroup attached>\n    <InputGroupAction variant="outline" onClick={() => console.log("todo")}>\n      Todo\n    </InputGroupAction>\n    <Input placeholder="Filtra por nombre o etiqueta" />\n    <InputGroupAction variant="outline" onClick={() => console.log("estado")}>\n      Estado\n    </InputGroupAction>\n  </InputGroup>\n\n  <InputGroup attached layout="grid" columns={2} className="max-w-md">\n    <InputGroupItem span={2}>\n      <Input placeholder="Número de tarjeta" />\n    </InputGroupItem>\n    <InputGroupItem>\n      <Input placeholder="MM / YY" />\n    </InputGroupItem>\n    <InputGroupItem>\n      <Input placeholder="CVC" />\n    </InputGroupItem>\n  </InputGroup>\n</div>`}
             >
               <div className="space-y-4">
                 <InputGroup attached>
@@ -312,7 +312,7 @@ export function FormDocs({ ui, visibleIds }) {
 
                 <InputGroup attached layout="grid" columns={2} className="max-w-md">
                   <InputGroupItem span={2}>
-                    <Input placeholder="Card number" />
+                    <Input placeholder="Número de tarjeta" />
                   </InputGroupItem>
                   <InputGroupItem>
                     <Input placeholder="MM / YY" />
@@ -377,7 +377,7 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="InputGroup combinado con Select"
               className="space-y-4"
-              code={`<div className="space-y-4">\n  <InputGroup>\n    <InputGroupItem className="w-[220px]" grow={false}>\n      <Select defaultValue="all" usePortal={false}>\n        <option value="all">Todos los componentes</option>\n        <option value="core">Core</option>\n        <option value="forms">Formularios</option>\n        <option value="overlays">Overlays</option>\n      </Select>\n    </InputGroupItem>\n    <Input placeholder="Busca por nombre, alias o etiqueta" />\n    <InputGroupAction color="brand">Aplicar</InputGroupAction>\n  </InputGroup>\n\n  <InputGroup attached>\n    <InputGroupItem className="w-[240px]" grow={false}>\n      <Select defaultValue="all">\n        <option value="all">Todos los componentes</option>\n        <option value="core">Core</option>\n        <option value="forms">Formularios</option>\n      </Select>\n    </InputGroupItem>\n    <Input type="search" placeholder="Buscar por nombre o alias" />\n    <InputGroupAction variant="outline">Ir</InputGroupAction>\n  </InputGroup>\n\n  <InputGroup>\n    <InputGroupItem className="w-[180px]" grow={false}>\n      <Select defaultValue="recent" usePortal={false}>\n        <option value="recent">Más recientes</option>\n        <option value="name">Nombre</option>\n        <option value="usage">Uso</option>\n      </Select>\n    </InputGroupItem>\n    <InputGroupItem className="w-[180px]" grow={false}>\n      <Select defaultValue="active" color="slate" usePortal={false}>\n        <option value="active">Activo</option>\n        <option value="draft">Borrador</option>\n        <option value="archived">Archivado</option>\n      </Select>\n    </InputGroupItem>\n    <Input placeholder="Filtra por responsable o feature" />\n  </InputGroup>\n</div>`}
+              code={`<div className="space-y-4">\n  <InputGroup>\n    <InputGroupItem className="w-[220px]" grow={false}>\n      <Select defaultValue="all" usePortal={false}>\n        <option value="all">Todos los componentes</option>\n        <option value="core">Core</option>\n        <option value="forms">Formularios</option>\n        <option value="overlays">Overlays</option>\n      </Select>\n    </InputGroupItem>\n    <Input placeholder="Busca por nombre, alias o etiqueta" />\n    <InputGroupAction color="brand">Aplicar</InputGroupAction>\n  </InputGroup>\n\n  <InputGroup attached>\n    <InputGroupItem className="w-[240px]" grow={false}>\n      <Select defaultValue="all">\n        <option value="all">Todos los componentes</option>\n        <option value="core">Core</option>\n        <option value="forms">Formularios</option>\n      </Select>\n    </InputGroupItem>\n    <Input type="search" placeholder="Buscar por nombre o alias" />\n    <InputGroupAction variant="outline">Ir</InputGroupAction>\n  </InputGroup>\n\n  <InputGroup>\n    <InputGroupItem className="w-[180px]" grow={false}>\n      <Select defaultValue="recent" usePortal={false}>\n        <option value="recent">Más recientes</option>\n        <option value="name">Nombre</option>\n        <option value="usage">Uso</option>\n      </Select>\n    </InputGroupItem>\n    <InputGroupItem className="w-[180px]" grow={false}>\n      <Select defaultValue="active" color="slate" usePortal={false}>\n        <option value="active">Activo</option>\n        <option value="draft">Borrador</option>\n        <option value="archived">Archivado</option>\n      </Select>\n    </InputGroupItem>\n    <Input placeholder="Filtra por responsable o funcionalidad" />\n  </InputGroup>\n</div>`}
             >
               <div className="space-y-4">
                 <InputGroup>
@@ -390,7 +390,7 @@ export function FormDocs({ ui, visibleIds }) {
                     </Select>
                   </InputGroupItem>
                   <Input placeholder="Busca por nombre, alias o etiqueta" />
-                  <InputGroupAction color="brand" activeMotion={true}>Aplicar</InputGroupAction>
+                  <InputGroupAction color="brand">Aplicar</InputGroupAction>
                 </InputGroup>
 
                 <InputGroup attached>
@@ -420,7 +420,7 @@ export function FormDocs({ ui, visibleIds }) {
                       <option value="archived">Archivado</option>
                     </Select>
                   </InputGroupItem>
-                  <Input placeholder="Filtra por responsable o feature" />
+                  <Input placeholder="Filtra por responsable o funcionalidad" />
                 </InputGroup>
               </div>
             </PreviewPanel>
@@ -454,7 +454,7 @@ export function FormDocs({ ui, visibleIds }) {
 
             <CodeExample
               ui={ui}
-              code={`<InputGroup attached shape="pill" color="dark">\n  <InputGroupAddon>\n    <svg viewBox="0 0 20 20" fill="none" className="size-4">\n      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n      <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n    </svg>\n  </InputGroupAddon>\n  <Input type="search" placeholder="Buscar en AVA" />\n  <InputGroupAddon align="inline-end">12 results</InputGroupAddon>\n</InputGroup>\n\n<InputGroup attached>\n  <Dropdown>\n    <DropdownTrigger asChild>\n      <InputGroupAction variant="outline">Estado</InputGroupAction>\n    </DropdownTrigger>\n    <DropdownContent className="w-44">\n      <DropdownItem>Todos</DropdownItem>\n      <DropdownItem>Activo</DropdownItem>\n      <DropdownItem>Pausado</DropdownItem>\n    </DropdownContent>\n  </Dropdown>\n  <Input placeholder="Filtra por nombre o etiqueta" />\n  <Dropdown>\n    <DropdownTrigger asChild>\n      <InputGroupAction variant="outline">Ordenar</InputGroupAction>\n    </DropdownTrigger>\n    <DropdownContent className="w-44">\n      <DropdownItem>Recientes</DropdownItem>\n      <DropdownItem>Nombre</DropdownItem>\n      <DropdownItem>Uso</DropdownItem>\n    </DropdownContent>\n  </Dropdown>\n</InputGroup>\n\n<InputGroup attached>\n  <InputGroupItem className="w-[240px]" grow={false}>\n    <Select defaultValue="all">\n      <option value="all">Todos los componentes</option>\n      <option value="core">Core</option>\n      <option value="forms">Formularios</option>\n    </Select>\n  </InputGroupItem>\n  <Input type="search" placeholder="Buscar por nombre o alias" />\n  <InputGroupAction variant="outline">Ir</InputGroupAction>\n</InputGroup>\n\n<InputGroup attached layout="grid" columns={2} className="max-w-md">\n  <InputGroupItem span={2}>\n    <Input placeholder="Card number" />\n  </InputGroupItem>\n  <InputGroupItem>\n    <Input placeholder="MM / YY" />\n  </InputGroupItem>\n  <InputGroupItem>\n    <Input placeholder="CVC" />\n  </InputGroupItem>\n</InputGroup>`}
+              code={`<InputGroup attached shape="pill" color="dark">\n  <InputGroupAddon>\n    <svg viewBox="0 0 20 20" fill="none" className="size-4">\n      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />\n      <path d="M13.2 13.2 17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />\n    </svg>\n  </InputGroupAddon>\n  <Input type="search" placeholder="Buscar en AVA" />\n  <InputGroupAddon align="inline-end">12 resultados</InputGroupAddon>\n</InputGroup>\n\n<InputGroup attached>\n  <Dropdown>\n    <DropdownTrigger asChild>\n      <InputGroupAction variant="outline">Estado</InputGroupAction>\n    </DropdownTrigger>\n    <DropdownContent className="w-44">\n      <DropdownItem>Todos</DropdownItem>\n      <DropdownItem>Activo</DropdownItem>\n      <DropdownItem>Pausado</DropdownItem>\n    </DropdownContent>\n  </Dropdown>\n  <Input placeholder="Filtra por nombre o etiqueta" />\n  <Dropdown>\n    <DropdownTrigger asChild>\n      <InputGroupAction variant="outline">Ordenar</InputGroupAction>\n    </DropdownTrigger>\n    <DropdownContent className="w-44">\n      <DropdownItem>Recientes</DropdownItem>\n      <DropdownItem>Nombre</DropdownItem>\n      <DropdownItem>Uso</DropdownItem>\n    </DropdownContent>\n  </Dropdown>\n</InputGroup>\n\n<InputGroup attached>\n  <InputGroupItem className="w-[240px]" grow={false}>\n    <Select defaultValue="all">\n      <option value="all">Todos los componentes</option>\n      <option value="core">Core</option>\n      <option value="forms">Formularios</option>\n    </Select>\n  </InputGroupItem>\n  <Input type="search" placeholder="Buscar por nombre o alias" />\n  <InputGroupAction variant="outline">Ir</InputGroupAction>\n</InputGroup>\n\n<InputGroup attached layout="grid" columns={2} className="max-w-md">\n  <InputGroupItem span={2}>\n    <Input placeholder="Número de tarjeta" />\n  </InputGroupItem>\n  <InputGroupItem>\n    <Input placeholder="MM / YY" />\n  </InputGroupItem>\n  <InputGroupItem>\n    <Input placeholder="CVC" />\n  </InputGroupItem>\n</InputGroup>`}
             />
             <p className={`text-sm ${ui.body}`}>
               Cuando `InputGroup` usa `attached`, el grupo recorta su contenido para conservar el borde exterior. `Dropdown` y `Select` deben renderizar su panel en portal para salir del clipping; el trigger de `Select` sí puede fusionarse dentro del grupo porque forma parte del mismo campo.
@@ -463,9 +463,9 @@ export function FormDocs({ ui, visibleIds }) {
         </SectionCard>
       ) : null}
 
-      {isVisible(visibleIds, "textarea") ? <SectionCard id="textarea" className={ui.divider}><SectionHeading category="Formularios" title="Textarea" description="Campo multilínea para notas, descripciones y bloques de texto más largos." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Uso editorial" className="max-w-2xl" code={`<FormControl>\n  <Label>Descripción</Label>\n  <Textarea minRows={5} placeholder="Describe el objetivo de este componente o flujo." />\n  <FormDescription>Ideal para briefs, feedback o notas editoriales.</FormDescription>\n</FormControl>`}><FormControl><Label>Descripción</Label><Textarea minRows={5} placeholder="Describe el objetivo de este componente o flujo." /><FormDescription>Ideal para briefs, feedback o notas editoriales.</FormDescription></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Variantes de color" className="grid gap-3 md:grid-cols-3" code={`<div className="grid gap-3 md:grid-cols-3">\n  <Textarea color="neutral" minRows={3} defaultValue="neutral" />\n  <Textarea color="slate" minRows={3} defaultValue="slate" />\n  <Textarea color="zinc" minRows={3} defaultValue="zinc" />\n  <Textarea color="primary" minRows={3} defaultValue="primary" />\n  <Textarea color="brand" minRows={3} defaultValue="brand" />\n  <Textarea color="success" minRows={3} defaultValue="success" />\n  <Textarea color="danger" minRows={3} defaultValue="danger" />\n  <Textarea color="warning" minRows={3} defaultValue="warning" />\n  <Textarea color="info" minRows={3} defaultValue="info" />\n  <Textarea color="light" minRows={3} defaultValue="light" />\n  <Textarea color="dark" minRows={3} defaultValue="dark" />\n  <Textarea color="black" minRows={3} defaultValue="black" />\n</div>`}><div className="grid gap-3 md:grid-cols-3">{fieldColors.map((color) => <Textarea key={color} color={color} minRows={3} defaultValue={color} />)}</div></PreviewPanel><PreviewPanel ui={ui} title="Estado inválido" className="max-w-2xl" code={`<FormControl invalid>\n  <Label>Notas de publicación</Label>\n  <Textarea minRows={4} defaultValue="Pendiente de completar los casos de uso." />\n  <FormMessage>Antes de publicar, detalla el alcance del componente.</FormMessage>\n</FormControl>`}><FormControl invalid><Label>Notas de publicación</Label><Textarea minRows={4} defaultValue="Pendiente de completar los casos de uso." /><FormMessage>Antes de publicar, detalla el alcance del componente.</FormMessage></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Disabled" className="max-w-2xl" code={`<Textarea disabled placeholder="Estado disabled" />`}><Textarea disabled placeholder="Estado disabled" /></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.textarea} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Descripción</Label>\n  <Textarea minRows={5} placeholder="Describe el objetivo." />\n  <FormDescription>Ideal para briefs o notas editoriales.</FormDescription>\n</FormControl>`} /></div></SectionCard> : null}
+      {isVisible(visibleIds, "textarea") ? <SectionCard id="textarea" className={ui.divider}><SectionHeading category="Formularios" title="Textarea" description="Campo multilínea para notas, descripciones y bloques de texto más largos." ui={ui} /><div className="mt-6 space-y-4"><PreviewPanel ui={ui} title="Uso editorial" className="max-w-2xl" code={`<FormControl>\n  <Label>Descripción</Label>\n  <Textarea minRows={5} placeholder="Describe el objetivo de este componente o flujo." />\n  <FormDescription>Ideal para briefs, feedback o notas editoriales.</FormDescription>\n</FormControl>`}><FormControl><Label>Descripción</Label><Textarea minRows={5} placeholder="Describe el objetivo de este componente o flujo." /><FormDescription>Ideal para briefs, feedback o notas editoriales.</FormDescription></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Variantes de color" className="grid gap-3 md:grid-cols-3" code={`<div className="grid gap-3 md:grid-cols-3">\n  <Textarea color="neutral" minRows={3} defaultValue="neutral" />\n  <Textarea color="slate" minRows={3} defaultValue="slate" />\n  <Textarea color="zinc" minRows={3} defaultValue="zinc" />\n  <Textarea color="primary" minRows={3} defaultValue="primary" />\n  <Textarea color="brand" minRows={3} defaultValue="brand" />\n  <Textarea color="success" minRows={3} defaultValue="success" />\n  <Textarea color="danger" minRows={3} defaultValue="danger" />\n  <Textarea color="warning" minRows={3} defaultValue="warning" />\n  <Textarea color="info" minRows={3} defaultValue="info" />\n  <Textarea color="light" minRows={3} defaultValue="light" />\n  <Textarea color="dark" minRows={3} defaultValue="dark" />\n  <Textarea color="black" minRows={3} defaultValue="black" />\n</div>`}><div className="grid gap-3 md:grid-cols-3">{fieldColors.map((color) => <Textarea key={color} color={color} minRows={3} defaultValue={color} />)}</div></PreviewPanel><PreviewPanel ui={ui} title="Estado inválido" className="max-w-2xl" code={`<FormControl invalid>\n  <Label>Notas de publicación</Label>\n  <Textarea minRows={4} defaultValue="Pendiente de completar los casos de uso." />\n  <FormMessage>Antes de publicar, detalla el alcance del componente.</FormMessage>\n</FormControl>`}><FormControl invalid><Label>Notas de publicación</Label><Textarea minRows={4} defaultValue="Pendiente de completar los casos de uso." /><FormMessage>Antes de publicar, detalla el alcance del componente.</FormMessage></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Deshabilitado" className="max-w-2xl" code={`<Textarea disabled placeholder="Estado deshabilitado" />`}><Textarea disabled placeholder="Estado deshabilitado" /></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.textarea} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Descripción</Label>\n  <Textarea minRows={5} placeholder="Describe el objetivo." />\n  <FormDescription>Ideal para briefs o notas editoriales.</FormDescription>\n</FormControl>`} /></div></SectionCard> : null}
 
-      {isVisible(visibleIds, "select") ? <SectionCard id="select" className={ui.divider}><SectionHeading category="Formularios" title="Select" description="Select custom con trigger y lista desplegable personalizada. Mantiene una API simple con `<option>`, pero visualmente usa un listbox propio." ui={ui} /><div className="mt-6 space-y-4"><div className="grid gap-4 md:grid-cols-2"><PreviewPanel ui={ui} title="Uso base" code={`<FormControl>\n  <Label>Tema de documentación</Label>\n  <Select defaultValue="system">\n    <option value="system">System</option>\n    <option value="light">Light</option>\n    <option value="dark">Dark</option>\n  </Select>\n</FormControl>`}><FormControl><Label>Tema de documentación</Label><Select defaultValue="system"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></Select></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Con placeholder e invalid" code={`<FormControl invalid>\n  <Label>Estado</Label>\n  <Select placeholder="Selecciona un estado">\n    <option value="draft">Draft</option>\n    <option value="review">Review</option>\n    <option value="published">Published</option>\n  </Select>\n  <FormMessage>Debes elegir un estado.</FormMessage>\n</FormControl>`}><FormControl invalid><Label>Estado</Label><Select placeholder="Selecciona un estado"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option></Select><FormMessage>Debes elegir un estado.</FormMessage></FormControl></PreviewPanel></div><PreviewPanel ui={ui} title="Colores del trigger" code={`<div className="grid gap-4 md:grid-cols-3">\n  <Select color="neutral" defaultValue="neutral">\n    <option value="neutral">neutral</option>\n  </Select>\n  <Select color="slate" defaultValue="slate">\n    <option value="slate">slate</option>\n  </Select>\n  <Select color="zinc" defaultValue="zinc">\n    <option value="zinc">zinc</option>\n  </Select>\n  <Select color="primary" defaultValue="primary">\n    <option value="primary">primary</option>\n  </Select>\n  <Select color="brand" defaultValue="brand">\n    <option value="brand">brand</option>\n  </Select>\n  <Select color="success" defaultValue="success">\n    <option value="success">success</option>\n  </Select>\n  <Select color="danger" defaultValue="danger">\n    <option value="danger">danger</option>\n  </Select>\n  <Select color="warning" defaultValue="warning">\n    <option value="warning">warning</option>\n  </Select>\n  <Select color="info" defaultValue="info">\n    <option value="info">info</option>\n  </Select>\n  <Select color="light" defaultValue="light">\n    <option value="light">light</option>\n  </Select>\n  <Select color="dark" defaultValue="dark">\n    <option value="dark">dark</option>\n  </Select>\n  <Select color="black" defaultValue="black">\n    <option value="black">black</option>\n  </Select>\n</div>`}><div className="grid gap-4 md:grid-cols-3">{fieldColors.map((color) => <Select key={color} color={color} defaultValue={color}><option value={color}>{color}</option></Select>)}</div></PreviewPanel><PreviewPanel ui={ui} title="Tamaños" code={`<div className="grid gap-4 md:grid-cols-3">\n  <FormControl>\n    <Label>Tamaño sm</Label>\n    <Select size="sm" defaultValue="compacto">\n      <option value="compacto">Compacto</option>\n      <option value="medio">Medio</option>\n    </Select>\n  </FormControl>\n  <FormControl>\n    <Label>Tamaño md</Label>\n    <Select size="md" defaultValue="medio">\n      <option value="compacto">Compacto</option>\n      <option value="medio">Medio</option>\n    </Select>\n  </FormControl>\n  <FormControl>\n    <Label>Tamaño lg</Label>\n    <Select size="lg" defaultValue="grande">\n      <option value="medio">Medio</option>\n      <option value="grande">Grande</option>\n    </Select>\n  </FormControl>\n</div>`}><div className="grid gap-4 md:grid-cols-3"><FormControl><Label>Tamaño sm</Label><Select size="sm" defaultValue="compacto"><option value="compacto">Compacto</option><option value="medio">Medio</option></Select></FormControl><FormControl><Label>Tamaño md</Label><Select size="md" defaultValue="medio"><option value="compacto">Compacto</option><option value="medio">Medio</option></Select></FormControl><FormControl><Label>Tamaño lg</Label><Select size="lg" defaultValue="grande"><option value="medio">Medio</option><option value="grande">Grande</option></Select></FormControl></div></PreviewPanel><PreviewPanel ui={ui} title="Sin portal y con onValueChange" className="max-w-2xl" code={`<FormControl>\n  <Label>Vista</Label>\n  <Select defaultValue="list" usePortal={false} onValueChange={(value) => console.log(value)}>\n    <option value="list">List</option>\n    <option value="grid">Grid</option>\n    <option value="compact">Compact</option>\n  </Select>\n</FormControl>`}><FormControl><Label>Vista</Label><Select defaultValue="list" usePortal={false} onValueChange={() => {}}><option value="list">List</option><option value="grid">Grid</option><option value="compact">Compact</option></Select></FormControl></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.select} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Vista</Label>\n  <Select defaultValue="grid" onValueChange={(value) => console.log(value)}>\n    <option value="list">List</option>\n    <option value="grid">Grid</option>\n    <option value="compact">Compact</option>\n  </Select>\n</FormControl>`} /></div></SectionCard> : null}
+      {isVisible(visibleIds, "select") ? <SectionCard id="select" className={ui.divider}><SectionHeading category="Formularios" title="Select" description="Select custom con trigger y lista desplegable personalizada. Mantiene una API simple con `<option>`, pero visualmente usa un listbox propio." ui={ui} /><div className="mt-6 space-y-4"><div className="grid gap-4 md:grid-cols-2"><PreviewPanel ui={ui} title="Uso base" code={`<FormControl>\n  <Label>Tema de documentación</Label>\n  <Select defaultValue="system">\n    <option value="system">Sistema</option>\n    <option value="light">Claro</option>\n    <option value="dark">Oscuro</option>\n  </Select>\n</FormControl>`}><FormControl><Label>Tema de documentación</Label><Select defaultValue="system"><option value="system">Sistema</option><option value="light">Claro</option><option value="dark">Oscuro</option></Select></FormControl></PreviewPanel><PreviewPanel ui={ui} title="Con placeholder e inválido" code={`<FormControl invalid>\n  <Label>Estado</Label>\n  <Select placeholder="Selecciona un estado">\n    <option value="draft">Borrador</option>\n    <option value="review">En revisión</option>\n    <option value="published">Publicado</option>\n  </Select>\n  <FormMessage>Debes elegir un estado.</FormMessage>\n</FormControl>`}><FormControl invalid><Label>Estado</Label><Select placeholder="Selecciona un estado"><option value="draft">Borrador</option><option value="review">En revisión</option><option value="published">Publicado</option></Select><FormMessage>Debes elegir un estado.</FormMessage></FormControl></PreviewPanel></div><PreviewPanel ui={ui} title="Colores del trigger" code={`<div className="grid gap-4 md:grid-cols-3">\n  <Select color="neutral" defaultValue="neutral">\n    <option value="neutral">neutral</option>\n  </Select>\n  <Select color="slate" defaultValue="slate">\n    <option value="slate">slate</option>\n  </Select>\n  <Select color="zinc" defaultValue="zinc">\n    <option value="zinc">zinc</option>\n  </Select>\n  <Select color="primary" defaultValue="primary">\n    <option value="primary">primary</option>\n  </Select>\n  <Select color="brand" defaultValue="brand">\n    <option value="brand">brand</option>\n  </Select>\n  <Select color="success" defaultValue="success">\n    <option value="success">success</option>\n  </Select>\n  <Select color="danger" defaultValue="danger">\n    <option value="danger">danger</option>\n  </Select>\n  <Select color="warning" defaultValue="warning">\n    <option value="warning">warning</option>\n  </Select>\n  <Select color="info" defaultValue="info">\n    <option value="info">info</option>\n  </Select>\n  <Select color="light" defaultValue="light">\n    <option value="light">light</option>\n  </Select>\n  <Select color="dark" defaultValue="dark">\n    <option value="dark">dark</option>\n  </Select>\n  <Select color="black" defaultValue="black">\n    <option value="black">black</option>\n  </Select>\n</div>`}><div className="grid gap-4 md:grid-cols-3">{fieldColors.map((color) => <Select key={color} color={color} defaultValue={color}><option value={color}>{color}</option></Select>)}</div></PreviewPanel><PreviewPanel ui={ui} title="Tamaños" code={`<div className="grid gap-4 md:grid-cols-3">\n  <FormControl>\n    <Label>Tamaño sm</Label>\n    <Select size="sm" defaultValue="compacto">\n      <option value="compacto">Compacto</option>\n      <option value="medio">Medio</option>\n    </Select>\n  </FormControl>\n  <FormControl>\n    <Label>Tamaño md</Label>\n    <Select size="md" defaultValue="medio">\n      <option value="compacto">Compacto</option>\n      <option value="medio">Medio</option>\n    </Select>\n  </FormControl>\n  <FormControl>\n    <Label>Tamaño lg</Label>\n    <Select size="lg" defaultValue="grande">\n      <option value="medio">Medio</option>\n      <option value="grande">Grande</option>\n    </Select>\n  </FormControl>\n</div>`}><div className="grid gap-4 md:grid-cols-3"><FormControl><Label>Tamaño sm</Label><Select size="sm" defaultValue="compacto"><option value="compacto">Compacto</option><option value="medio">Medio</option></Select></FormControl><FormControl><Label>Tamaño md</Label><Select size="md" defaultValue="medio"><option value="compacto">Compacto</option><option value="medio">Medio</option></Select></FormControl><FormControl><Label>Tamaño lg</Label><Select size="lg" defaultValue="grande"><option value="medio">Medio</option><option value="grande">Grande</option></Select></FormControl></div></PreviewPanel><PreviewPanel ui={ui} title="Sin portal y con onValueChange" className="max-w-2xl" code={`<FormControl>\n  <Label>Vista</Label>\n  <Select defaultValue="list" usePortal={false} onValueChange={(value) => console.log(value)}>\n    <option value="list">Lista</option>\n    <option value="grid">Cuadrícula</option>\n    <option value="compact">Compacta</option>\n  </Select>\n</FormControl>`}><FormControl><Label>Vista</Label><Select defaultValue="list" usePortal={false} onValueChange={() => {}}><option value="list">Lista</option><option value="grid">Cuadrícula</option><option value="compact">Compacta</option></Select></FormControl></PreviewPanel></div><div className="mt-8 space-y-6"><div><p className={`text-sm font-semibold ${ui.title}`}>API</p><PropsTable rows={apis.select} ui={ui} /></div><CodeExample ui={ui} code={`<FormControl>\n  <Label>Vista</Label>\n  <Select defaultValue="grid" onValueChange={(value) => console.log(value)}>\n    <option value="list">Lista</option>\n    <option value="grid">Cuadrícula</option>\n    <option value="compact">Compacta</option>\n  </Select>\n</FormControl>`} /></div></SectionCard> : null}
 
       {isVisible(visibleIds, "checkbox") ? (
         <SectionCard id="checkbox" className={ui.divider}>
@@ -480,13 +480,13 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="Tamaños"
               code={`<div className="flex flex-wrap items-center gap-6">
-  <Checkbox id="checkbox-size-sm" size="sm" defaultChecked label="Small" />
-  <Checkbox id="checkbox-size-md" size="md" defaultChecked label="Medium" />
+  <Checkbox id="checkbox-size-sm" size="sm" defaultChecked label="Pequeño" />
+  <Checkbox id="checkbox-size-md" size="md" defaultChecked label="Mediano" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
-                <Checkbox id="checkbox-size-sm-preview" size="sm" defaultChecked label="Small" labelClassName={`text-sm ${ui.body}`} />
-                <Checkbox id="checkbox-size-md-preview" size="md" defaultChecked label="Medium" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-size-sm-preview" size="sm" defaultChecked label="Pequeño" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-size-md-preview" size="md" defaultChecked label="Mediano" labelClassName={`text-sm ${ui.body}`} />
               </div>
             </PreviewPanel>
             <PreviewPanel
@@ -528,14 +528,14 @@ export function FormDocs({ ui, visibleIds }) {
               title="Estados"
               code={`<div className="flex flex-wrap items-center gap-6">
   <Checkbox id="checkbox-default" label="Neutral" />
-  <Checkbox id="checkbox-invalid" invalid defaultChecked label="Invalid" />
-  <Checkbox id="checkbox-disabled" disabled defaultChecked label="Disabled" />
+  <Checkbox id="checkbox-invalid" invalid defaultChecked label="Inválido" />
+  <Checkbox id="checkbox-disabled" disabled defaultChecked label="Deshabilitado" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
                 <Checkbox id="checkbox-default-preview" label="Neutral" labelClassName={`text-sm ${ui.body}`} />
-                <Checkbox id="checkbox-invalid-preview" invalid defaultChecked label="Invalid" labelClassName={`text-sm ${ui.body}`} />
-                <Checkbox id="checkbox-disabled-preview" disabled defaultChecked label="Disabled" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-invalid-preview" invalid defaultChecked label="Inválido" labelClassName={`text-sm ${ui.body}`} />
+                <Checkbox id="checkbox-disabled-preview" disabled defaultChecked label="Deshabilitado" labelClassName={`text-sm ${ui.body}`} />
               </div>
             </PreviewPanel>
             <PreviewPanel
@@ -619,13 +619,13 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="Tamaños"
               code={`<div className="flex flex-wrap items-center gap-6">
-  <Radio id="radio-size-sm" name="radio-sizes" size="sm" defaultChecked label="Small" />
-  <Radio id="radio-size-md" name="radio-sizes" size="md" label="Medium" />
+  <Radio id="radio-size-sm" name="radio-sizes" size="sm" defaultChecked label="Pequeño" />
+  <Radio id="radio-size-md" name="radio-sizes" size="md" label="Mediano" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
-                <Radio id="radio-size-sm-preview" name="radio-sizes-preview" size="sm" defaultChecked label="Small" labelClassName={`text-sm ${ui.body}`} />
-                <Radio id="radio-size-md-preview" name="radio-sizes-preview" size="md" label="Medium" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-size-sm-preview" name="radio-sizes-preview" size="sm" defaultChecked label="Pequeño" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-size-md-preview" name="radio-sizes-preview" size="md" label="Mediano" labelClassName={`text-sm ${ui.body}`} />
               </div>
             </PreviewPanel>
             <PreviewPanel
@@ -667,15 +667,15 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="Estados"
               code={`<div className="flex flex-wrap items-center gap-6">
-  <Radio id="radio-default" name="radio-states" defaultChecked label="Default" />
-  <Radio id="radio-invalid" name="radio-states" invalid label="Invalid" />
-  <Radio id="radio-disabled" name="radio-disabled" disabled defaultChecked label="Disabled" />
+  <Radio id="radio-default" name="radio-states" defaultChecked label="Predeterminado" />
+  <Radio id="radio-invalid" name="radio-states" invalid label="Inválido" />
+  <Radio id="radio-disabled" name="radio-disabled" disabled defaultChecked label="Deshabilitado" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
-                <Radio id="radio-default-preview" name="radio-states-preview" defaultChecked label="Default" labelClassName={`text-sm ${ui.body}`} />
-                <Radio id="radio-invalid-preview" name="radio-states-preview" invalid label="Invalid" labelClassName={`text-sm ${ui.body}`} />
-                <Radio id="radio-disabled-preview" name="radio-disabled-preview" disabled defaultChecked label="Disabled" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-default-preview" name="radio-states-preview" defaultChecked label="Predeterminado" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-invalid-preview" name="radio-states-preview" invalid label="Inválido" labelClassName={`text-sm ${ui.body}`} />
+                <Radio id="radio-disabled-preview" name="radio-disabled-preview" disabled defaultChecked label="Deshabilitado" labelClassName={`text-sm ${ui.body}`} />
               </div>
             </PreviewPanel>
             <PreviewPanel
@@ -761,13 +761,13 @@ export function FormDocs({ ui, visibleIds }) {
               ui={ui}
               title="Tamaños"
               code={`<div className="flex flex-wrap items-center gap-6">
-  <Switch id="switch-size-sm" size="sm" defaultChecked label="Small" />
-  <Switch id="switch-size-md" size="md" defaultChecked label="Medium" />
+  <Switch id="switch-size-sm" size="sm" defaultChecked label="Pequeño" />
+  <Switch id="switch-size-md" size="md" defaultChecked label="Mediano" />
 </div>`}
             >
               <div className="flex flex-wrap items-center gap-6">
-                <Switch id="switch-size-sm-preview" size="sm" defaultChecked label="Small" labelClassName={`text-sm ${ui.body}`} />
-                <Switch id="switch-size-md-preview" size="md" defaultChecked label="Medium" labelClassName={`text-sm ${ui.body}`} />
+                <Switch id="switch-size-sm-preview" size="sm" defaultChecked label="Pequeño" labelClassName={`text-sm ${ui.body}`} />
+                <Switch id="switch-size-md-preview" size="md" defaultChecked label="Mediano" labelClassName={`text-sm ${ui.body}`} />
               </div>
             </PreviewPanel>
             <PreviewPanel
@@ -870,6 +870,8 @@ export function FormDocs({ ui, visibleIds }) {
 }
 
 export default FormDocs;
+
+
 
 
 

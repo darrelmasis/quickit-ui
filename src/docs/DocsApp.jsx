@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  Badge,
   Button,
   EmptyState,
   EmptyStateDescription,
@@ -14,8 +15,8 @@ import {
   COMPONENT_ITEMS,
   COMPONENT_GROUPS,
   DEFAULT_COMPONENT_SECTION,
-  DEFAULT_EXAMPLES_SECTION,
   DEFAULT_INTRO_SECTION,
+  DOCS_SHELL_WIDTH_CLASS,
   docsTheme,
   EXAMPLE_GROUPS,
   EXAMPLE_ITEMS,
@@ -176,6 +177,23 @@ export default function DocsApp() {
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return undefined;
+    }
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [mobileMenuOpen]);
 
@@ -442,9 +460,9 @@ export default function DocsApp() {
         <header
           className={`sticky top-0 z-50 border-b backdrop-blur ${ui.surface}`}
         >
-          <div className="mx-auto max-w-[1800px] px-4 py-3 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <div className={cn("mx-auto px-4 py-3 sm:px-6 lg:px-8", DOCS_SHELL_WIDTH_CLASS)}>
+            <div className="flex items-center justify-between gap-4 lg:gap-6">
+              <div className="flex min-w-0 items-center gap-3 sm:gap-4 lg:gap-5">
                 <Link
                   href="/"
                   className={`flex min-w-0 items-center gap-2 ${resolvedTheme === "dark" ? "text-white" : "text-neutral-900"}`}
@@ -454,9 +472,9 @@ export default function DocsApp() {
                   </span>
                 </Link>
 
-                <span className="text-sm font-medium text-neutral-500">{`v${packageMeta.version}`}</span>
+                <span className="shrink-0 text-sm font-medium text-neutral-500">{`v${packageMeta.version}`}</span>
 
-                <div className="hidden min-w-0 items-center gap-3 lg:flex">
+                <div className="hidden min-w-0 items-center gap-4 lg:flex">
                   <div className="flex min-w-0 items-center gap-2 overflow-x-auto">
                     {INTRO_ITEMS.map((item) =>
                       renderHeaderNavLink({
@@ -485,7 +503,7 @@ export default function DocsApp() {
                 </div>
               </div>
 
-              <div className="flex min-w-0 items-center gap-2">
+              <div className="flex min-w-0 items-center gap-3">
                 <div className="hidden items-center gap-3 md:flex">
                   <span className={`text-xs font-medium ${ui.body}`}>
                     {resolvedTheme === "dark" ? "Oscuro" : "Claro"}
@@ -515,184 +533,190 @@ export default function DocsApp() {
           </div>
         </header>
 
-        {mobileMenuOpen ? (
-          <div className="fixed inset-0 z-40 lg:hidden">
-            <button
-              type="button"
-              aria-label="Cerrar menú"
-              className="absolute inset-0 bg-black/60"
-              onClick={() => setMobileMenuOpen(false)}
-            />
+        <div
+          className={cn(
+            "fixed inset-0 z-40 lg:hidden",
+            mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",
+          )}
+        >
+          <button
+            type="button"
+            aria-label="Cerrar menú"
+            className={cn(
+              "absolute inset-0 bg-black/70 backdrop-blur-[2px] transition-opacity duration-300",
+              mobileMenuOpen ? "opacity-100" : "opacity-0",
+            )}
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          <div
+            className={cn(
+              "absolute inset-y-0 left-0 flex w-[min(92vw,24rem)] max-w-[24rem] flex-col border-r shadow-[0_28px_80px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out",
+              ui.sidebar,
+              mobileMenuOpen ? "translate-x-0" : "-translate-x-[104%]",
+            )}
+          >
+            <div className={cn("border-b px-4 pb-4 pt-3", ui.surface)}>
+              <div className="mb-4 flex justify-center">
+                <span className="h-1.5 w-14 rounded-full bg-zinc-500/35" />
+              </div>
+
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={cn(
+                        "flex h-10 items-center justify-center rounded-xl border px-3",
+                        navUi.card,
+                      )}
+                    >
+                      <QuickitLogo className="h-4 w-auto" />
+                    </span>
+                    <div>
+                      <p className={`text-sm font-semibold ${ui.title}`}>
+                        Quickit UI
+                      </p>
+                      <p className={`text-xs ${ui.body}`}>{`v${packageMeta.version}`}</p>
+                    </div>
+                  </div>
+                  <p className={`mt-4 text-xs leading-5 ${ui.body}`}>
+                    Explora guías, ejemplos y componentes desde un panel móvil
+                    más cómodo y ordenado.
+                  </p>
+                </div>
+
+                <Button
+                  size="sm"
+                  color="neutral"
+                  variant="ghost"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </div>
 
             <div
-              className={`absolute inset-y-0 left-0 flex w-full max-w-[23rem] flex-col border-r ${ui.sidebar}`}
+              className={cn(
+                "min-h-0 flex-1 space-y-4 p-4",
+                SIDEBAR_SCROLLBAR_CLASSES,
+              )}
             >
-              <div className={`border-b px-4 py-4 ${ui.surface}`}>
+              <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
                 <div className="flex items-center justify-between gap-3">
-                  <p className={`text-sm font-semibold ${ui.title}`}>
-                    Navegación
-                  </p>
-                  <Button
-                    size="sm"
-                    color="neutral"
-                    variant="ghost"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Cerrar
-                  </Button>
+                  <div>
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                    >
+                      Tema
+                    </p>
+                    <p className={`mt-2 text-sm ${ui.body}`}>
+                      {resolvedTheme === "dark" ? "Modo oscuro" : "Modo claro"}
+                    </p>
+                  </div>
+                  <Switch
+                    color="brand"
+                    checked={resolvedTheme === "dark"}
+                    onCheckedChange={toggleTheme}
+                    aria-label="Cambiar tema de la documentación"
+                  />
                 </div>
-                  <p className={`mt-2 text-xs leading-5 ${ui.body}`}>
-                    Navega entre guía, ejemplos y el área de componentes con
-                    una estructura más clara.
-                  </p>
-                </div>
+              </div>
 
-              <div
-                className={cn(
-                  "min-h-0 flex-1 p-4",
-                  SIDEBAR_SCROLLBAR_CLASSES,
-                )}
+              <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
                 >
-                  <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                  Guía
+                </p>
+                <div className="mt-3 space-y-2">{INTRO_ITEMS.map(renderNavItem)}</div>
+              </div>
+
+              <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                >
+                  Ejemplos
+                </p>
+                <div className="mt-3 space-y-2">{EXAMPLE_NAV_ITEMS.map(renderNavItem)}</div>
+              </div>
+
+              <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                >
+                  Biblioteca de ejemplos
+                </p>
+                <div className="mt-4 space-y-4">{renderExampleSidebar()}</div>
+              </div>
+
+              <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
+                >
+                  Área de componentes
+                </p>
+                <div className="mt-3 space-y-2">
+                  {renderHeaderNavLink({
+                    href: activeComponentItem?.href ?? DEFAULT_COMPONENT_SECTION,
+                    label: "Componentes",
+                    isActive: Boolean(activeComponentItem),
+                  })}
+                </div>
+              </div>
+
+              <div className={cn("rounded-[1.25rem] border p-4", navUi.card)}>
+                <div className="flex items-center justify-between gap-3">
                   <p
                     className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
                   >
-                    Tema
+                    Componentes
                   </p>
-                  <div className="mt-3 flex items-center justify-between gap-3">
-                    <span className={`text-sm ${ui.body}`}>
-                      {resolvedTheme === "dark" ? "Modo oscuro" : "Modo claro"}
-                    </span>
-                    <Switch
-                      color="brand"
-                      checked={resolvedTheme === "dark"}
-                      onCheckedChange={toggleTheme}
-                      aria-label="Cambiar tema de la documentación"
-                    />
-                  </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "mt-4 rounded-[1.25rem] border p-4",
-                      navUi.card,
-                    )}
-                  >
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                  >
-                    Guía
-                  </p>
-                    <div className="mt-3 space-y-2">
-                      {INTRO_ITEMS.map(renderNavItem)}
-                    </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "mt-4 rounded-[1.25rem] border p-4",
-                      navUi.card,
-                    )}
-                  >
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                    >
-                      Ejemplos
-                    </p>
-                    <div className="mt-3 space-y-2">
-                      {EXAMPLE_NAV_ITEMS.map(renderNavItem)}
-                    </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "mt-4 rounded-[1.25rem] border p-4",
-                      navUi.card,
-                    )}
-                  >
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                    >
-                      Biblioteca de ejemplos
-                    </p>
-                    <div className="mt-4 space-y-4">
-                      {renderExampleSidebar()}
-                    </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "mt-4 rounded-[1.25rem] border p-4",
-                      navUi.card,
-                    )}
-                  >
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                    >
-                      Área de componentes
-                    </p>
-                    <div className="mt-3 space-y-2">
-                      {renderHeaderNavLink({
-                        href: activeComponentItem?.href ?? DEFAULT_COMPONENT_SECTION,
-                        label: "Componentes",
-                        isActive: Boolean(activeComponentItem),
-                      })}
-                    </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                    "mt-4 rounded-[1.25rem] border p-4",
-                    navUi.card,
-                  )}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${ui.accent}`}
-                    >
-                      Componentes
-                    </p>
-                  </div>
-                  <div className="mt-3">
-                    <Input
-                      size="sm"
-                      value={componentQuery}
-                      onChange={(event) =>
-                        setComponentQuery(event.target.value)
-                      }
-                      placeholder="Buscar componente"
-                    />
-                  </div>
-
-                  {filteredComponentGroups.length ? (
-                    <div className="mt-4 space-y-4">
-                      {filteredComponentGroups.map((group) => (
-                        <div key={group.label}>
-                          <p
-                            className={`mb-2 text-xs font-semibold uppercase tracking-[0.16em] ${navUi.sectionLabel}`}
-                          >
-                            {group.label}
-                          </p>
-                          <div className="space-y-2">
-                            {group.items.map(renderNavItem)}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className={`mt-4 text-sm leading-6 ${navUi.helper}`}>
-                      No hay componentes que coincidan con la búsqueda.
-                    </p>
-                  )}
+                  <Badge color="neutral" variant="outline">
+                    {filteredComponents.length}
+                  </Badge>
                 </div>
+
+                <div className="mt-3">
+                  <Input
+                    size="sm"
+                    value={componentQuery}
+                    onChange={(event) =>
+                      setComponentQuery(event.target.value)
+                    }
+                    placeholder="Buscar componente"
+                  />
+                </div>
+
+                {filteredComponentGroups.length ? (
+                  <div className="mt-4 space-y-4">
+                    {filteredComponentGroups.map((group) => (
+                      <div key={group.label}>
+                        <p
+                          className={`mb-2 text-xs font-semibold uppercase tracking-[0.16em] ${navUi.sectionLabel}`}
+                        >
+                          {group.label}
+                        </p>
+                        <div className="space-y-2">
+                          {group.items.map(renderNavItem)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={`mt-4 text-sm leading-6 ${navUi.helper}`}>
+                    No hay componentes que coincidan con la búsqueda.
+                  </p>
+                )}
               </div>
             </div>
           </div>
-        ) : null}
+        </div>
 
         <div
           className={cn(
-            "mx-auto w-full max-w-[1800px] lg:px-8",
+            "mx-auto w-full lg:px-8",
+            DOCS_SHELL_WIDTH_CLASS,
             (activeComponentItem || activeExamplePage) &&
               "lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8",
           )}
@@ -771,11 +795,8 @@ export default function DocsApp() {
           <section
             className={cn(
               "min-w-0 px-4 py-6 sm:px-6 lg:py-8",
-              activeComponentItem
-                ? "lg:px-0"
-                : activeExamplePage
-                  ? "w-full max-w-none"
-                  : "mx-auto max-w-6xl",
+              "w-full max-w-none",
+              activeComponentItem ? "lg:px-0" : "mx-auto",
             )}
           >
             <div>{renderActivePage()}</div>

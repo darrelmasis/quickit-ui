@@ -44,6 +44,10 @@ const QUICKIT_EXPORTS = [
   "FormDescription",
   "FormMessage",
   "Input",
+  "InputGroup",
+  "InputGroupAction",
+  "InputGroupAddon",
+  "InputGroupItem",
   "Initials",
   "QUICKIT_BUTTON_SHAPES",
   "QUICKIT_CONTROL_SIZES",
@@ -63,6 +67,7 @@ const QUICKIT_EXPORTS = [
   "Pagination",
   "Popover",
   "QuickitProvider",
+  "QuickitThemeProvider",
   "Radio",
   "RenderSwitch",
   "Select",
@@ -76,7 +81,13 @@ const QUICKIT_EXPORTS = [
   "Textarea",
   "Tooltip",
   "UserChip",
+  "useBreakpoint",
+  "useMediaQuery",
+  "useQuickitFocusRing",
+  "useQuickitPressEffect",
+  "useQuickitRipple",
   "useQuickitTheme",
+  "useQuickitThemeController",
 ];
 
 function getQuickitImports(code) {
@@ -171,9 +182,9 @@ export function PreviewPanel({
       {title ? (
         <p className={`text-sm font-semibold ${ui.title}`}>{title}</p>
       ) : null}
-      <Tabs defaultValue="preview" size="sm" color="neutral" className="space-y-3">
+        <Tabs defaultValue="preview" size="sm" color="neutral" className="space-y-3">
         <TabsList>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="preview">Vista previa</TabsTrigger>
           <TabsTrigger value="code">Código</TabsTrigger>
         </TabsList>
         <TabsContent value="preview" className="mt-0">

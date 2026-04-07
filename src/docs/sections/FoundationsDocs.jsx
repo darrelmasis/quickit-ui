@@ -40,7 +40,7 @@ function ThemeHookPreview() {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Badge color="neutral" variant="outline">
-        theme: {theme}
+        tema: {theme}
       </Badge>
       <Button color="neutral" size="sm">
         Accion
@@ -56,14 +56,14 @@ function ThemeControllerPreview() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <Badge color="neutral" variant="outline">
-          preferencia: {theme}
+      <Badge color="neutral" variant="outline">
+        preferencia: {theme}
         </Badge>
         <Badge color="neutral" variant="outline">
           resuelto: {resolvedTheme}
         </Badge>
-        <Badge color="neutral" variant="outline">
-          sistema: {systemTheme}
+      <Badge color="neutral" variant="outline">
+        sistema: {systemTheme}
         </Badge>
       </div>
 
@@ -130,7 +130,7 @@ function BreakpointHookPreview() {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Badge color="neutral" variant="outline">
-        {ready ? `breakpoint: ${breakpoint}` : "breakpoint: pending"}
+        {ready ? `breakpoint: ${breakpoint}` : "breakpoint: pendiente"}
       </Badge>
       <Badge color={isMobile ? "brand" : "neutral"} variant="outline">
         isMobile: {String(isMobile)}
@@ -157,13 +157,13 @@ function MediaQueryHookPreview() {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Badge color={prefersDesktop ? "success" : "neutral"} variant="outline">
-        desktop query: {String(prefersDesktop)}
+        query de escritorio: {String(prefersDesktop)}
       </Badge>
       <Badge
         color={prefersReducedMotion ? "warning" : "neutral"}
         variant="outline"
       >
-        reduced motion: {String(prefersReducedMotion)}
+        menos movimiento: {String(prefersReducedMotion)}
       </Badge>
     </div>
   );
@@ -285,9 +285,9 @@ function FocusRingTabsPreview({ ui }) {
     <div className="space-y-4">
       <Tabs defaultValue="overview" color="neutral">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="activity">Activity</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="overview">Resumen</TabsTrigger>
+          <TabsTrigger value="activity">Actividad</TabsTrigger>
+          <TabsTrigger value="settings">Ajustes</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <p className={`text-sm ${ui.body}`}>
@@ -334,7 +334,7 @@ function RippleHookPreview() {
       <Badge color={linkRipple ? "info" : "neutral"} variant="outline">
         link ripple: {String(linkRipple)}
       </Badge>
-      <Button color="brand">Ripple demo</Button>
+      <Button color="brand">Demo de ripple</Button>
       <Link href="#" appearance="button" variant="outline" color="neutral">
         Link ripple
       </Link>
@@ -482,7 +482,7 @@ export function FoundationsDocs({ ui, visibleIds }) {
           <div className="mt-6 space-y-4">
             <PreviewPanel
               ui={ui}
-              title="Uso minimo"
+            title="Uso mínimo"
               code={`<QuickitProvider theme="dark">
   <Button color="neutral">Guardar cambios</Button>
 </QuickitProvider>`}
@@ -559,7 +559,7 @@ export function App() {
               code={`function ThemeBadge() {
   const theme = useQuickitTheme();
 
-  return <Badge variant="outline">theme: {theme}</Badge>;
+  return <Badge variant="outline">tema: {theme}</Badge>;
 }`}
             >
               <QuickitProvider theme="dark">
@@ -862,10 +862,10 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Badge variant="outline">
-        desktop query: {String(prefersDesktop)}
+        query de escritorio: {String(prefersDesktop)}
       </Badge>
       <Badge variant="outline">
-        reduced motion: {String(prefersReducedMotion)}
+        menos movimiento: {String(prefersReducedMotion)}
       </Badge>
     </div>
   );
@@ -1070,9 +1070,9 @@ QUICKIT_BREAKPOINTS["2xl"]; // 1536`}
 >
   <Tabs defaultValue="overview" color="neutral">
     <TabsList>
-      <TabsTrigger value="overview">Overview</TabsTrigger>
-      <TabsTrigger value="activity">Activity</TabsTrigger>
-      <TabsTrigger value="settings">Settings</TabsTrigger>
+      <TabsTrigger value="overview">Resumen</TabsTrigger>
+      <TabsTrigger value="activity">Actividad</TabsTrigger>
+      <TabsTrigger value="settings">Ajustes</TabsTrigger>
     </TabsList>
     <TabsContent value="overview">
       Resumen general del workspace activo.
