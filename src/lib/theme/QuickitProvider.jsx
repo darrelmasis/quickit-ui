@@ -11,6 +11,8 @@ export function QuickitProvider({
   ripple = true,
   theme = "light",
 }) {
+  // QuickitProvider no persiste estado; solo normaliza la política visual
+  // compartida para tema, focus ring y efectos de presión.
   const value = useMemo(
     () => ({
       focusRing: normalizeQuickitFocusRingConfig(focusRing),

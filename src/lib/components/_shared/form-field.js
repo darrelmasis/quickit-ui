@@ -6,43 +6,43 @@ import {
 export const FORM_FIELD_THEME_CLASSES = {
   light: {
     neutral: {
-      base: "border-slate-500 bg-slate-200/90 text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-visible:border-slate-700 focus-visible:ring-slate-600/22",
-      hover: "hover:border-slate-700",
+      base: "border-slate-300 bg-white text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.05)] focus-visible:border-slate-500 focus-visible:ring-slate-400/50",
+      hover: "hover:border-slate-400",
     },
     slate: {
-      base: "border-slate-600 bg-slate-300 text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-visible:border-slate-800 focus-visible:ring-slate-700/20",
-      hover: "hover:border-slate-700",
+      base: "border-slate-300 bg-slate-50 text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.05)] focus-visible:border-slate-500 focus-visible:ring-slate-400/50",
+      hover: "hover:border-slate-400",
     },
     zinc: {
-      base: "border-zinc-600 bg-zinc-300 text-zinc-950 shadow-[0_1px_2px_rgba(24,24,27,0.06)] focus-visible:border-zinc-800 focus-visible:ring-zinc-700/20",
-      hover: "hover:border-zinc-700",
+      base: "border-zinc-300 bg-zinc-50 text-zinc-950 shadow-[0_1px_2px_rgba(24,24,27,0.05)] focus-visible:border-zinc-500 focus-visible:ring-zinc-400/50",
+      hover: "hover:border-zinc-400",
     },
     primary: {
-      base: "border-sky-400/85 bg-sky-100/80 text-slate-950 shadow-[0_1px_2px_rgba(14,165,233,0.08)] focus-visible:border-sky-600 focus-visible:ring-sky-400/25",
-      hover: "hover:border-sky-500",
+      base: "border-sky-300/90 bg-sky-50/85 text-slate-950 shadow-[0_1px_2px_rgba(14,165,233,0.06)] focus-visible:border-sky-500 focus-visible:ring-sky-400/45",
+      hover: "hover:border-sky-400",
     },
     brand: {
-      base: "border-brand-400/80 bg-brand-100/75 text-slate-950 shadow-[0_1px_2px_rgba(112,56,255,0.1)] focus-visible:border-brand-600 focus-visible:ring-brand-400/25",
-      hover: "hover:border-brand-500",
+      base: "border-brand-300/90 bg-brand-50/80 text-slate-950 shadow-[0_1px_2px_rgba(112,56,255,0.08)] focus-visible:border-brand-500 focus-visible:ring-brand-400/45",
+      hover: "hover:border-brand-400",
     },
     success: {
-      base: "border-emerald-400/85 bg-emerald-100/75 text-slate-950 shadow-[0_1px_2px_rgba(16,185,129,0.08)] focus-visible:border-emerald-600 focus-visible:ring-emerald-400/25",
-      hover: "hover:border-emerald-500",
+      base: "border-emerald-300/90 bg-emerald-50/80 text-slate-950 shadow-[0_1px_2px_rgba(16,185,129,0.06)] focus-visible:border-emerald-500 focus-visible:ring-emerald-400/45",
+      hover: "hover:border-emerald-400",
     },
     danger: {
-      base: "border-rose-400/85 bg-rose-100/75 text-slate-950 shadow-[0_1px_2px_rgba(244,63,94,0.08)] focus-visible:border-rose-600 focus-visible:ring-rose-400/25",
-      hover: "hover:border-rose-500",
+      base: "border-rose-300/90 bg-rose-50/80 text-slate-950 shadow-[0_1px_2px_rgba(244,63,94,0.06)] focus-visible:border-rose-500 focus-visible:ring-rose-400/45",
+      hover: "hover:border-rose-400",
     },
     warning: {
-      base: "border-amber-400/85 bg-amber-100/80 text-slate-950 shadow-[0_1px_2px_rgba(245,158,11,0.08)] focus-visible:border-amber-600 focus-visible:ring-amber-400/25",
-      hover: "hover:border-amber-500",
+      base: "border-amber-300/90 bg-amber-50/85 text-slate-950 shadow-[0_1px_2px_rgba(245,158,11,0.06)] focus-visible:border-amber-500 focus-visible:ring-amber-400/45",
+      hover: "hover:border-amber-400",
     },
     info: {
-      base: "border-cyan-400/85 bg-cyan-100/75 text-slate-950 shadow-[0_1px_2px_rgba(6,182,212,0.08)] focus-visible:border-cyan-600 focus-visible:ring-cyan-400/25",
-      hover: "hover:border-cyan-500",
+      base: "border-cyan-300/90 bg-cyan-50/80 text-slate-950 shadow-[0_1px_2px_rgba(6,182,212,0.06)] focus-visible:border-cyan-500 focus-visible:ring-cyan-400/45",
+      hover: "hover:border-cyan-400",
     },
     light: {
-      base: "border-stone-300 bg-stone-100/90 text-stone-900 shadow-[0_1px_2px_rgba(120,113,108,0.06)] focus-visible:border-stone-500 focus-visible:ring-stone-400/25",
+      base: "border-stone-300 bg-stone-50 text-stone-900 shadow-[0_1px_2px_rgba(120,113,108,0.05)] focus-visible:border-stone-500 focus-visible:ring-stone-400/45",
       hover: "hover:border-stone-400",
     },
     dark: {
@@ -53,7 +53,7 @@ export const FORM_FIELD_THEME_CLASSES = {
       base: "border-zinc-950 bg-zinc-950 text-white shadow-[0_1px_2px_rgba(0,0,0,0.28)] focus-visible:border-zinc-700 focus-visible:ring-zinc-700/32",
       hover: "hover:border-black",
     },
-    invalid: "border-rose-400 bg-rose-100/75 text-rose-950 shadow-[0_1px_2px_rgba(239,68,68,0.1)] focus-visible:border-rose-600 focus-visible:ring-rose-300/35",
+    invalid: "border-rose-300 bg-rose-50 text-rose-950 shadow-[0_1px_2px_rgba(239,68,68,0.07)] focus-visible:border-rose-500 focus-visible:ring-rose-400/45",
   },
   dark: {
     neutral: {
@@ -108,10 +108,178 @@ export const FORM_FIELD_THEME_CLASSES = {
   },
 };
 
+const FORM_FIELD_AUTOFILL_TOKENS = {
+  light: {
+    neutral: {
+      background: "var(--color-slate-100)",
+      border: "var(--color-slate-400)",
+      text: "var(--color-slate-950)",
+    },
+    slate: {
+      background: "var(--color-slate-100)",
+      border: "var(--color-slate-500)",
+      text: "var(--color-slate-950)",
+    },
+    zinc: {
+      background: "var(--color-zinc-100)",
+      border: "var(--color-zinc-500)",
+      text: "var(--color-zinc-950)",
+    },
+    primary: {
+      background: "var(--color-sky-100)",
+      border: "var(--color-sky-400)",
+      text: "var(--color-slate-950)",
+    },
+    brand: {
+      background: "var(--color-brand-100)",
+      border: "var(--color-brand-400)",
+      text: "var(--color-slate-950)",
+    },
+    success: {
+      background: "var(--color-emerald-100)",
+      border: "var(--color-emerald-400)",
+      text: "var(--color-slate-950)",
+    },
+    danger: {
+      background: "var(--color-rose-100)",
+      border: "var(--color-rose-400)",
+      text: "var(--color-slate-950)",
+    },
+    warning: {
+      background: "var(--color-amber-100)",
+      border: "var(--color-amber-400)",
+      text: "var(--color-slate-950)",
+    },
+    info: {
+      background: "var(--color-cyan-100)",
+      border: "var(--color-cyan-400)",
+      text: "var(--color-slate-950)",
+    },
+    light: {
+      background: "var(--color-stone-100)",
+      border: "var(--color-stone-400)",
+      text: "var(--color-stone-900)",
+    },
+    dark: {
+      background: "color-mix(in oklab, var(--color-zinc-800) 88%, black)",
+      border: "var(--color-zinc-700)",
+      text: "white",
+    },
+    black: {
+      background: "color-mix(in oklab, var(--color-zinc-900) 92%, black)",
+      border: "var(--color-zinc-800)",
+      text: "white",
+    },
+    invalid: {
+      background: "var(--color-rose-100)",
+      border: "var(--color-rose-400)",
+      text: "var(--color-rose-950)",
+    },
+  },
+  dark: {
+    neutral: {
+      background: "var(--color-zinc-900)",
+      border: "var(--color-zinc-600)",
+      text: "var(--color-stone-50)",
+    },
+    slate: {
+      background: "var(--color-slate-800)",
+      border: "var(--color-slate-600)",
+      text: "var(--color-slate-50)",
+    },
+    zinc: {
+      background: "var(--color-zinc-800)",
+      border: "var(--color-zinc-600)",
+      text: "var(--color-zinc-50)",
+    },
+    primary: {
+      background:
+        "color-mix(in oklab, var(--color-sky-500) 28%, var(--color-zinc-950))",
+      border: "var(--color-sky-400)",
+      text: "var(--color-stone-50)",
+    },
+    brand: {
+      background:
+        "color-mix(in oklab, var(--color-brand-500) 28%, var(--color-zinc-950))",
+      border: "var(--color-brand-400)",
+      text: "var(--color-stone-50)",
+    },
+    success: {
+      background:
+        "color-mix(in oklab, var(--color-emerald-500) 28%, var(--color-zinc-950))",
+      border: "var(--color-emerald-400)",
+      text: "var(--color-stone-50)",
+    },
+    danger: {
+      background:
+        "color-mix(in oklab, var(--color-rose-500) 28%, var(--color-zinc-950))",
+      border: "var(--color-rose-400)",
+      text: "var(--color-stone-50)",
+    },
+    warning: {
+      background:
+        "color-mix(in oklab, var(--color-amber-500) 28%, var(--color-zinc-950))",
+      border: "var(--color-amber-400)",
+      text: "var(--color-stone-50)",
+    },
+    info: {
+      background:
+        "color-mix(in oklab, var(--color-cyan-500) 28%, var(--color-zinc-950))",
+      border: "var(--color-cyan-400)",
+      text: "var(--color-stone-50)",
+    },
+    light: {
+      background: "var(--color-stone-200)",
+      border: "var(--color-stone-400)",
+      text: "var(--color-stone-950)",
+    },
+    dark: {
+      background: "var(--color-zinc-900)",
+      border: "var(--color-zinc-600)",
+      text: "white",
+    },
+    black: {
+      background: "color-mix(in oklab, var(--color-zinc-900) 90%, black)",
+      border: "var(--color-zinc-500)",
+      text: "white",
+    },
+    invalid: {
+      background:
+        "color-mix(in oklab, var(--color-rose-500) 26%, var(--color-zinc-950))",
+      border: "var(--color-rose-400)",
+      text: "var(--color-stone-50)",
+    },
+  },
+};
+
 export function resolveFormFieldTheme(theme) {
   return theme === "dark" ? "dark" : "light";
 }
 
 export function resolveFormFieldColor(color) {
   return resolveQuickitToken(QUICKIT_SEMANTIC_COLORS, color, "neutral");
+}
+
+export function getFormFieldAutofillStyle({
+  color = "neutral",
+  invalid = false,
+  style,
+  theme = "light",
+}) {
+  const resolvedTheme = resolveFormFieldTheme(theme);
+  const resolvedColor = resolveFormFieldColor(color);
+  const autofillTokens = invalid
+    ? FORM_FIELD_AUTOFILL_TOKENS[resolvedTheme].invalid
+    : FORM_FIELD_AUTOFILL_TOKENS[resolvedTheme][resolvedColor];
+
+  // Chrome y Safari pintan autofill fuera del sistema visual del componente.
+  // Estas variables nos dejan recolorearlo según tema y variante sin duplicar
+  // reglas CSS por componente.
+  return {
+    ...style,
+    "--qi-field-autofill-bg": autofillTokens.background,
+    "--qi-field-autofill-border": autofillTokens.border,
+    "--qi-field-autofill-text": autofillTokens.text,
+    "--qi-field-autofill-caret": autofillTokens.text,
+  };
 }

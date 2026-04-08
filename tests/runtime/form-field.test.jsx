@@ -25,9 +25,9 @@ describe("form field variants", () => {
     expect(screen.getByPlaceholderText("Consola").className).toContain(
       "focus-visible:ring-zinc-700/32",
     );
-    expect(screen.getAllByRole("textbox")[2].className).toContain("bg-stone-100");
+    expect(screen.getAllByRole("textbox")[2].className).toContain("bg-stone-50");
     expect(screen.getAllByRole("textbox")[2].className).toContain(
-      "focus-visible:ring-stone-400/25",
+      "focus-visible:ring-stone-400/45",
     );
   });
 
@@ -35,7 +35,7 @@ describe("form field variants", () => {
     renderWithProvider(<Input placeholder="Neutral field" color="neutral" />);
 
     expect(screen.getByPlaceholderText("Neutral field").className).toContain(
-      "hover:border-slate-700",
+      "hover:border-slate-400",
     );
     expect(screen.getByPlaceholderText("Neutral field").className).not.toContain(
       "hover:bg-",
@@ -60,5 +60,28 @@ describe("form field variants", () => {
     expect(screen.getByDisplayValue("Error").className).toContain(
       "border-rose-500/70",
     );
+  });
+
+  it("assigns autofill tokens that follow theme and color", () => {
+    renderWithProvider(
+      <div>
+        <Input color="brand" placeholder="Correo" />
+        <Textarea color="neutral" minRows={3} placeholder="Notas" />
+      </div>,
+      { theme: "dark" },
+    );
+
+    expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
+      "--qi-field-autofill-bg",
+    )).toContain("var(--color-brand-500)");
+    expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
+      "--qi-field-autofill-border",
+    )).toBe("var(--color-brand-400)");
+    expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
+      "--qi-field-autofill-text",
+    )).toBe("var(--color-stone-50)");
+    expect(screen.getByPlaceholderText("Notas").style.getPropertyValue(
+      "--qi-field-autofill-bg",
+    )).toBe("var(--color-zinc-900)");
   });
 });

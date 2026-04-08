@@ -7,13 +7,13 @@ import { Label } from "@/lib/components/label";
 
 const RADIO_THEME_CLASSES = {
   light: {
-    ring: "border-slate-500 bg-slate-200/90 shadow-[0_1px_2px_rgba(15,23,42,0.09)] peer-hover:border-slate-700 peer-hover:bg-slate-100",
+    ring: "border-slate-300 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] peer-hover:border-slate-400 peer-hover:bg-slate-50",
     focus:
-      "peer-focus-visible:outline-slate-700 peer-focus-visible:ring-slate-400/35 peer-focus-visible:ring-offset-stone-50",
+      "peer-focus-visible:outline-slate-500 peer-focus-visible:ring-slate-400/45 peer-focus-visible:ring-offset-white",
     colors: {
-      neutral: { ring: "peer-checked:border-slate-800", dot: "bg-slate-800" },
-      slate: { ring: "peer-checked:border-slate-800", dot: "bg-slate-800" },
-      zinc: { ring: "peer-checked:border-zinc-800", dot: "bg-zinc-800" },
+      neutral: { ring: "peer-checked:border-slate-700", dot: "bg-slate-700" },
+      slate: { ring: "peer-checked:border-slate-700", dot: "bg-slate-700" },
+      zinc: { ring: "peer-checked:border-zinc-700", dot: "bg-zinc-700" },
       primary: { ring: "peer-checked:border-sky-600", dot: "bg-sky-600" },
       brand: { ring: "peer-checked:border-brand-600", dot: "bg-brand-600" },
       success: { ring: "peer-checked:border-emerald-600", dot: "bg-emerald-600" },
@@ -21,10 +21,10 @@ const RADIO_THEME_CLASSES = {
       warning: { ring: "peer-checked:border-amber-500", dot: "bg-amber-500" },
       info: { ring: "peer-checked:border-cyan-600", dot: "bg-cyan-600" },
       light: { ring: "peer-checked:border-stone-300", dot: "bg-stone-300" },
-      dark: { ring: "peer-checked:border-zinc-900", dot: "bg-zinc-900" },
+      dark: { ring: "peer-checked:border-zinc-800", dot: "bg-zinc-800" },
       black: { ring: "peer-checked:border-slate-950", dot: "bg-slate-950" },
     },
-    invalid: "border-rose-400 peer-checked:border-rose-600",
+    invalid: "border-rose-300 peer-checked:border-rose-600",
     invalidDot: "bg-rose-600",
   },
   dark: {
@@ -85,6 +85,8 @@ const Radio = forwardRef(function Radio(
   },
   ref,
 ) {
+  // Radio replica el contrato de Checkbox para que ambos controles de elección
+  // compartan handlers y estados con la misma semántica.
   const generatedId = useId();
   const theme = resolveTheme(useQuickitTheme());
   const focusRingEnabled = useQuickitFocusRing("radio");

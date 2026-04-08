@@ -41,6 +41,8 @@ export function Accordion({
   type = "single",
   value: controlledValue,
 }) {
+  // single y multiple comparten la misma API externa; openValues normaliza
+  // ambos modos para simplificar el resto del árbol.
   const generatedId = useId();
   const isMultiple = type === "multiple";
   const isControlled = controlledValue !== undefined;
@@ -158,6 +160,7 @@ export function AccordionTrigger({ children, className, ...props }) {
         className={cn(
           "transition-transform duration-200",
           ui.icon,
+          // El ícono rota en lugar de cambiar de glyph para mantener el layout estable.
           isOpen && "rotate-45",
         )}
       >

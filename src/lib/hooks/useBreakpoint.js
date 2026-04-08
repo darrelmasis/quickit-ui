@@ -5,6 +5,7 @@ const DEFAULT_BREAKPOINTS = QUICKIT_BREAKPOINTS;
 
 function getViewportSnapshot() {
   if (typeof window === "undefined") {
+    // Mantiene el hook seguro en SSR sin inventar medidas del navegador.
     return { height: null, width: null };
   }
 
@@ -78,6 +79,8 @@ export function useBreakpoint(options = {}) {
 
   const breakpoint = resolveBreakpoint(viewport.width, breakpoints);
   const ready = viewport.width != null;
+  // Estas banderas derivadas cubren el caso más común de layouts sin obligar a
+  // cada consumidor a repetir la misma lógica de cortes.
   const isMobile = ready ? viewport.width < breakpoints.md : false;
   const isTablet = ready
     ? viewport.width >= breakpoints.md && viewport.width < breakpoints.lg

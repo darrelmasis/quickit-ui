@@ -75,6 +75,8 @@ export function stripQuickitFocusRingClasses(value) {
     return value;
   }
 
+  // Cuando el provider apaga el focus ring, removemos solo las utilidades
+  // relacionadas con focus-visible y dejamos intacto el resto de la clase.
   return value
     .split(/\s+/)
     .filter(
@@ -99,4 +101,3 @@ export function useQuickitFocusRing(component) {
 
   return isQuickitFocusRingEnabled(focusRing, component);
 }
-

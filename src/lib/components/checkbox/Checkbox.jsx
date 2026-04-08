@@ -20,20 +20,20 @@ const CHECKBOX_SIZE_CLASSES = {
 
 const CHECKBOX_THEME_CLASSES = {
   light: {
-    box: "border-slate-500 bg-slate-200/90 shadow-[0_1px_2px_rgba(15,23,42,0.09)] peer-hover:border-slate-700 peer-hover:bg-slate-100",
+    box: "border-slate-300 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] peer-hover:border-slate-400 peer-hover:bg-slate-50",
     focus:
-      "peer-focus-visible:outline-slate-700 peer-focus-visible:ring-slate-400/35 peer-focus-visible:ring-offset-stone-50",
+      "peer-focus-visible:outline-slate-500 peer-focus-visible:ring-slate-400/45 peer-focus-visible:ring-offset-white",
     colors: {
       neutral: {
-        box: "peer-checked:border-slate-800 peer-checked:bg-slate-800 peer-hover:peer-checked:border-slate-950 peer-hover:peer-checked:bg-slate-950",
+        box: "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-hover:peer-checked:border-slate-800 peer-hover:peer-checked:bg-slate-800",
         icon: "text-white",
       },
       slate: {
-        box: "peer-checked:border-slate-800 peer-checked:bg-slate-800 peer-hover:peer-checked:border-slate-950 peer-hover:peer-checked:bg-slate-950",
+        box: "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-hover:peer-checked:border-slate-800 peer-hover:peer-checked:bg-slate-800",
         icon: "text-white",
       },
       zinc: {
-        box: "peer-checked:border-zinc-800 peer-checked:bg-zinc-800 peer-hover:peer-checked:border-zinc-950 peer-hover:peer-checked:bg-zinc-950",
+        box: "peer-checked:border-zinc-700 peer-checked:bg-zinc-700 peer-hover:peer-checked:border-zinc-800 peer-hover:peer-checked:bg-zinc-800",
         icon: "text-white",
       },
       primary: {
@@ -65,7 +65,7 @@ const CHECKBOX_THEME_CLASSES = {
         icon: "text-stone-950",
       },
       dark: {
-        box: "peer-checked:border-zinc-900 peer-checked:bg-zinc-900 peer-hover:peer-checked:border-black peer-hover:peer-checked:bg-black",
+        box: "peer-checked:border-zinc-800 peer-checked:bg-zinc-800 peer-hover:peer-checked:border-zinc-900 peer-hover:peer-checked:bg-zinc-900",
         icon: "text-white",
       },
       black: {
@@ -73,7 +73,7 @@ const CHECKBOX_THEME_CLASSES = {
         icon: "text-white",
       },
     },
-    invalid: "border-rose-400 peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
+    invalid: "border-rose-300 peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
     invalidIcon: "text-white",
   },
   dark: {
@@ -157,6 +157,8 @@ const Checkbox = forwardRef(function Checkbox(
   },
   ref,
 ) {
+  // Checkbox prioriza compatibilidad con formularios nativos, pero añade un
+  // callback directo con boolean para los casos donde React suele ser más cómodo.
   const generatedId = useId();
   const theme = resolveTheme(useQuickitTheme());
   const focusRingEnabled = useQuickitFocusRing("checkbox");
@@ -195,6 +197,8 @@ const Checkbox = forwardRef(function Checkbox(
         className="peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed"
         onChange={(event) => {
           onChange?.(event);
+          // onCheckedChange expone el valor ya resuelto para evitar que el
+          // consumidor tenga que leer event.target.checked cada vez.
           onCheckedChange?.(event.target.checked, event);
         }}
         {...props}

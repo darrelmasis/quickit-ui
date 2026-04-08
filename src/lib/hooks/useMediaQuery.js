@@ -40,6 +40,8 @@ export function useMediaQuery(query, options = {}) {
       };
     }
 
+    // Safari antiguo todavía expone addListener/removeListener en lugar del
+    // contrato moderno basado en addEventListener.
     mediaQuery.addListener(updateMatches);
 
     return () => {

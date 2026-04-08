@@ -64,6 +64,8 @@ export function QuickitThemeProvider({
     readStoredTheme(storageKey, defaultTheme),
   );
   const [systemTheme, setSystemTheme] = useState(getSystemTheme);
+  // theme = preferencia guardada; resolvedTheme = modo efectivo que realmente
+  // consume la librería después de resolver el caso "system".
   const resolvedTheme = theme === "system" ? systemTheme : resolveThemeMode(theme);
 
   useEffect(() => {
@@ -76,6 +78,8 @@ export function QuickitThemeProvider({
     }
 
     const mediaQuery = window.matchMedia(SYSTEM_THEME_QUERY);
+    // Escuchamos cambios del sistema solo una vez; si el usuario está en
+    // "system", resolvedTheme se actualiza sin que tenga que refrescar.
     const updateSystemTheme = (event) => {
       setSystemTheme(event.matches ? "dark" : "light");
     };
@@ -99,6 +103,8 @@ export function QuickitThemeProvider({
     applyThemeClass(resolvedTheme);
 
     if (typeof window !== "undefined") {
+      // Persistimos la preferencia original, no el tema resuelto, para que el
+      // modo "system" siga siendo reversible entre sesiones.
       window.localStorage.setItem(storageKey, theme);
     }
   }, [resolvedTheme, storageKey, theme]);

@@ -17,6 +17,7 @@ import {
   useInputFieldState,
 } from "./input.shared";
 import { useInputGroup } from "./input-group.context";
+import { getFormFieldAutofillStyle } from "@/lib/components/_shared/form-field";
 
 function ClearIcon({ className }) {
   return (
@@ -130,6 +131,8 @@ const Input = forwardRef(function Input(
   const shouldEnableClear = clearButton ?? originalType === "search";
   const shouldEnablePasswordToggle =
     passwordToggle ?? originalType === "password";
+  // search y password heredan mejoras automáticas, pero siguen permitiendo que
+  // el usuario las apague o reemplace por props explícitas.
   const [passwordVisible, setPasswordVisible] = useState(defaultPasswordVisible);
   const [uncontrolledValue, setUncontrolledValue] = useState(() =>
     normalizeInputValue(props.value ?? props.defaultValue),
@@ -171,6 +174,8 @@ const Input = forwardRef(function Input(
       ? "text"
       : "password"
     : originalType;
+  const resolvedAutoComplete =
+    props.autoComplete ?? (originalType === "password" ? "new-password" : undefined);
   const showClearButton =
     shouldEnableClear &&
     !resolvedDisabled &&
@@ -201,8 +206,18 @@ const Input = forwardRef(function Input(
       INPUT_SIDE_ELEMENT_SIZE_CLASSES.md,
     INPUT_SIDE_ELEMENT_THEME_CLASSES[theme],
   );
+  const clearInputValue = () => {
+    dispatchNativeInputValue(inputRef.current, "");
+    inputRef.current?.focus();
+    onClear?.();
+  };
   const inputStyle = {
-    ...style,
+    ...getFormFieldAutofillStyle({
+      color,
+      invalid: resolvedInvalid,
+      style,
+      theme,
+    }),
     ...(hasLeftElement
       ? {
           paddingLeft: `calc(${leftElementWidth}px + 1.75rem)`,
@@ -219,6 +234,8 @@ const Input = forwardRef(function Input(
     const leftNode = leftElementRef.current;
     const rightNode = rightClusterRef.current;
     const updateMeasurements = () => {
+      // Los side elements pueden ser texto, badges o iconos; medimos su ancho
+      // real para ajustar padding sin asumir una geometría fija.
       setLeftElementWidth(leftNode?.offsetWidth ?? 0);
       setRightClusterWidth(rightNode?.offsetWidth ?? 0);
     };
@@ -293,7 +310,32 @@ const Input = forwardRef(function Input(
         })}
         style={inputStyle}
         {...props}
+        autoComplete={resolvedAutoComplete}
         type={resolvedType}
+        onKeyDown={(event) => {
+          props.onKeyDown?.(event);
+
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          // Ctrl + Espacio funciona como escape rápido para limpiar el valor
+          // actual del campo sin depender del botón de clear ni del mouse.
+          if (
+            event.ctrlKey &&
+            !event.altKey &&
+            !event.metaKey &&
+            !event.shiftKey &&
+            !event.isComposing &&
+            !resolvedDisabled &&
+            !props.readOnly &&
+            currentValue.length > 0 &&
+            (event.code === "Space" || event.key === " ")
+          ) {
+            event.preventDefault();
+            clearInputValue();
+          }
+        }}
         onChange={(event) => {
           if (!isControlled) {
             setUncontrolledValue(event.target.value);
@@ -325,9 +367,7 @@ const Input = forwardRef(function Input(
               })}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
-                dispatchNativeInputValue(inputRef.current, "");
-                inputRef.current?.focus();
-                onClear?.();
+                clearInputValue();
               }}
             >
               {clearButtonContent}

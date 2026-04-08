@@ -5,13 +5,14 @@ import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 import {
   FORM_FIELD_THEME_CLASSES,
+  getFormFieldAutofillStyle,
   resolveFormFieldColor,
   resolveFormFieldTheme,
 } from "@/lib/components/_shared/form-field";
 
 const TEXTAREA_PRIMITIVES = {
   base: [
-    "w-full border px-3.5 py-3 text-sm outline-none",
+    "qi-form-field-autofill w-full border px-3.5 py-3 text-sm outline-none",
     "transition-[background-color,border-color,color,box-shadow] duration-200",
     "placeholder:text-current/45",
     "focus-visible:ring-4 focus-visible:ring-offset-0",
@@ -28,6 +29,7 @@ const Textarea = forwardRef(function Textarea(
     invalid = false,
     minRows = 4,
     required = false,
+    style,
     ...props
   },
   ref,
@@ -60,6 +62,12 @@ const Textarea = forwardRef(function Textarea(
       aria-describedby={describedBy}
       field-sizing="content"
       rows={minRows}
+      style={getFormFieldAutofillStyle({
+        color,
+        invalid: resolvedInvalid,
+        style,
+        theme,
+      })}
       className={cn(
         resolveQuickitFocusRingClasses(
           focusRingEnabled,

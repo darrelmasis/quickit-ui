@@ -30,6 +30,8 @@ export function FormControl({
   const generatedId = useId();
   const resolvedId = id ?? `quickit-field-${generatedId}`;
 
+  // El contexto concentra todos los ids accesibles del campo para que Input,
+  // Label, FormDescription y FormMessage no tengan que coordinarse manualmente.
   const contextValue = useMemo(
     () => ({
       controlId: resolvedId,
@@ -73,6 +75,7 @@ export function FormMessage({ children, className, id, ...props }) {
   const field = useFormControlContext("FormMessage");
 
   if (!children) {
+    // Evita renderizar un contenedor vacío y deja aria-describedby limpio.
     return null;
   }
 

@@ -65,6 +65,8 @@ export function Dropdown({
   showArrow = true,
   usePortal = true,
 }) {
+  // Dropdown soporta modo controlado y no controlado; la API pública siempre
+  // expone onOpenChange sin importar cuál de los dos esté activo.
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const [arrowElement, setArrowElement] = useState(null);
   const isControlled = controlledOpen !== undefined;
@@ -109,6 +111,8 @@ export function Dropdown({
       return;
     }
 
+    // El cierre por scroll ignora desplazamientos mínimos y también scrolls que
+    // nacen dentro del trigger o del panel flotante.
     let lastScrollPosition = window.scrollY;
 
     const handleScroll = (event) => {
@@ -208,6 +212,8 @@ export const DropdownTrigger = forwardRef(function DropdownTrigger(
           ? sharedProps
           : interactions.getReferenceProps(sharedProps))}
       >
+        {/* El span conserva la referencia de floating-ui aunque el child no
+            acepte ref o venga de otro componente de la librería. */}
         {cloneElement(child, {
           className: cn(child.props.className),
         })}
@@ -292,6 +298,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
       })}
     >
       {showArrow ? (
+        // La flecha usa los mismos colores del panel para no parecer una capa aparte.
         <FloatingArrow
           ref={setArrowElement}
           context={context}

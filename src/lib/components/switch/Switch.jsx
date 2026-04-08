@@ -35,11 +35,11 @@ const SWITCH_SIZE_CLASSES = {
 
 const SWITCH_THEME_CLASSES = {
   light: {
-    idle: "border-slate-500 bg-slate-400/95 hover:border-slate-700 hover:bg-slate-500 focus-visible:outline-slate-600",
+    idle: "border-slate-300 bg-slate-100 hover:border-slate-400 hover:bg-slate-200/90 focus-visible:outline-slate-500 focus-visible:ring-slate-400/45",
     checked: {
-      neutral: "border-slate-800 bg-slate-800",
-      slate: "border-slate-800 bg-slate-800",
-      zinc: "border-zinc-800 bg-zinc-800",
+      neutral: "border-slate-700 bg-slate-700",
+      slate: "border-slate-700 bg-slate-700",
+      zinc: "border-zinc-700 bg-zinc-700",
       primary: "border-sky-600 bg-sky-600",
       brand: "border-brand-600 bg-brand-600",
       success: "border-emerald-600 bg-emerald-600",
@@ -47,11 +47,11 @@ const SWITCH_THEME_CLASSES = {
       warning: "border-amber-500 bg-amber-500",
       info: "border-cyan-600 bg-cyan-600",
       light: "border-stone-300 bg-stone-300",
-      dark: "border-zinc-900 bg-zinc-900",
+      dark: "border-zinc-800 bg-zinc-800",
       black: "border-slate-950 bg-slate-950",
     },
-    invalid: "border-rose-400 bg-rose-100/80 focus-visible:outline-rose-400",
-    thumb: "border-white/90 bg-white shadow-[0_1px_1px_rgba(15,23,42,0.18)]",
+    invalid: "border-rose-300 bg-rose-50 focus-visible:outline-rose-400 focus-visible:ring-rose-400/45",
+    thumb: "border-slate-200 bg-white shadow-[0_1px_1px_rgba(15,23,42,0.14)]",
     thumbChecked: {
       warning: "border-slate-950 bg-slate-950",
       light: "border-slate-950 bg-slate-950",
@@ -134,6 +134,8 @@ const Switch = forwardRef(function Switch(
   },
   ref,
 ) {
+  // Switch se presenta como button para ganar control visual, pero mantiene
+  // compatibilidad con formularios mediante un input oculto cuando hay `name`.
   const generatedId = useId();
   const isControlled = checked !== undefined;
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
@@ -247,6 +249,7 @@ const Switch = forwardRef(function Switch(
           hidden
           readOnly
           checked={resolvedChecked}
+          // Este input no participa en la UI, solo en submit/serialización nativa.
           {...hiddenInputProps}
         />
       ) : null}

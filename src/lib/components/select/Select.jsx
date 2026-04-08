@@ -183,6 +183,8 @@ const Select = forwardRef(function Select(
 ) {
   const group = useInputGroup();
   const isAttached = Boolean(group?.attached);
+  // Select sigue aceptando <option> para que la API sea familiar, pero por
+  // debajo lo convertimos a un listbox propio para controlar focus y layout.
   const theme = resolveFloatingListTheme(useQuickitTheme());
   const fieldTheme = resolveFormFieldTheme(useQuickitTheme());
   const focusRingEnabled = useQuickitFocusRing("select");
@@ -300,6 +302,7 @@ const Select = forwardRef(function Select(
       setUncontrolledValue(nextValue);
     }
 
+    // Emitimos tanto el valor directo como un evento compatible con formularios.
     onValueChange?.(nextValue);
     onChange?.(
       createChangeEvent({

@@ -10,6 +10,8 @@ export function useFloatingLayer(options = {}) {
   } = options
 
   return useFloating({
+    // Entregamos una configuración razonable por defecto para overlays simples,
+    // pero permitimos inyectar middleware extra desde cada componente.
     placement,
     middleware: [
       offset(offsetValue),

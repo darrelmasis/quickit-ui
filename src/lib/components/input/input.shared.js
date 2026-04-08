@@ -14,7 +14,7 @@ import {
 
 export const INPUT_PRIMITIVES = {
   base: [
-    "w-full border text-sm outline-none",
+    "qi-form-field-autofill w-full border text-sm outline-none",
     "transition-[background-color,border-color,color,box-shadow] duration-200",
     "placeholder:text-current/45",
     "focus-visible:ring-4 focus-visible:ring-offset-0",
@@ -157,54 +157,54 @@ export const INPUT_GROUP_ALIGNMENT_CLASSES = {
 export const INPUT_GROUP_THEME_CLASSES = {
   light: {
     neutral: {
-      frame: "border-slate-500/90 shadow-[0_1px_2px_rgba(15,23,42,0.08)]",
-      separator: "bg-slate-500/90",
-      focus: "focus-within:ring-slate-600/22",
+      frame: "border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.06)]",
+      separator: "bg-slate-300",
+      focus: "focus-within:ring-slate-400/50",
     },
     slate: {
-      frame: "border-slate-600 shadow-[0_1px_2px_rgba(15,23,42,0.08)]",
-      separator: "bg-slate-600",
-      focus: "focus-within:ring-slate-700/20",
+      frame: "border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.06)]",
+      separator: "bg-slate-300",
+      focus: "focus-within:ring-slate-400/50",
     },
     zinc: {
-      frame: "border-zinc-600 shadow-[0_1px_2px_rgba(24,24,27,0.08)]",
-      separator: "bg-zinc-600",
-      focus: "focus-within:ring-zinc-700/20",
+      frame: "border-zinc-300 shadow-[0_1px_2px_rgba(24,24,27,0.06)]",
+      separator: "bg-zinc-300",
+      focus: "focus-within:ring-zinc-400/50",
     },
     primary: {
-      frame: "border-sky-400/85 shadow-[0_1px_2px_rgba(14,165,233,0.1)]",
-      separator: "bg-sky-400/85",
-      focus: "focus-within:ring-sky-400/25",
+      frame: "border-sky-300/90 shadow-[0_1px_2px_rgba(14,165,233,0.08)]",
+      separator: "bg-sky-300/90",
+      focus: "focus-within:ring-sky-400/45",
     },
     brand: {
-      frame: "border-brand-400/80 shadow-[0_1px_2px_rgba(112,56,255,0.12)]",
-      separator: "bg-brand-400/80",
-      focus: "focus-within:ring-brand-400/25",
+      frame: "border-brand-300/90 shadow-[0_1px_2px_rgba(112,56,255,0.08)]",
+      separator: "bg-brand-300/90",
+      focus: "focus-within:ring-brand-400/45",
     },
     success: {
-      frame: "border-emerald-400/85 shadow-[0_1px_2px_rgba(16,185,129,0.1)]",
-      separator: "bg-emerald-400/85",
-      focus: "focus-within:ring-emerald-400/25",
+      frame: "border-emerald-300/90 shadow-[0_1px_2px_rgba(16,185,129,0.08)]",
+      separator: "bg-emerald-300/90",
+      focus: "focus-within:ring-emerald-400/45",
     },
     danger: {
-      frame: "border-rose-400/85 shadow-[0_1px_2px_rgba(244,63,94,0.1)]",
-      separator: "bg-rose-400/85",
-      focus: "focus-within:ring-rose-400/25",
+      frame: "border-rose-300/90 shadow-[0_1px_2px_rgba(244,63,94,0.08)]",
+      separator: "bg-rose-300/90",
+      focus: "focus-within:ring-rose-400/45",
     },
     warning: {
-      frame: "border-amber-400/85 shadow-[0_1px_2px_rgba(245,158,11,0.1)]",
-      separator: "bg-amber-400/85",
-      focus: "focus-within:ring-amber-400/25",
+      frame: "border-amber-300/90 shadow-[0_1px_2px_rgba(245,158,11,0.08)]",
+      separator: "bg-amber-300/90",
+      focus: "focus-within:ring-amber-400/45",
     },
     info: {
-      frame: "border-cyan-400/85 shadow-[0_1px_2px_rgba(6,182,212,0.1)]",
-      separator: "bg-cyan-400/85",
-      focus: "focus-within:ring-cyan-400/25",
+      frame: "border-cyan-300/90 shadow-[0_1px_2px_rgba(6,182,212,0.08)]",
+      separator: "bg-cyan-300/90",
+      focus: "focus-within:ring-cyan-400/45",
     },
     light: {
-      frame: "border-stone-300 shadow-[0_1px_2px_rgba(120,113,108,0.08)]",
+      frame: "border-stone-300 shadow-[0_1px_2px_rgba(120,113,108,0.06)]",
       separator: "bg-stone-300",
-      focus: "focus-within:ring-stone-400/25",
+      focus: "focus-within:ring-stone-400/45",
     },
     dark: {
       frame: "border-zinc-800 shadow-[0_1px_2px_rgba(24,24,27,0.22)]",
@@ -394,6 +394,8 @@ const INPUT_GROUP_ATTACHED_CHILD_RADIUS_CLASSES = {
   },
 };
 
+// Los grupos attached necesitan radios distintos al wrapper exterior para que los
+// segmentos llenen la curva sin “cortarla” visualmente.
 function getInputGroupSegmentRadiusClasses(shape = "square", size = "md") {
   const resolvedShape = resolveInputShape(shape);
   const resolvedSize = INPUT_SIZE_CLASSES[size] ? size : "md";
@@ -420,6 +422,8 @@ export function useInputFieldState({
   required = false,
   ariaDescribedBy,
 }) {
+  // El input puede vivir solo o dentro de FormControl. Este hook resuelve una
+  // sola fuente de verdad para ids, aria-describedby y estados visuales.
   const theme = resolveFormFieldTheme(useQuickitTheme());
   const ui = FORM_FIELD_THEME_CLASSES[theme];
   const resolvedColor = resolveFormFieldColor(color);
@@ -588,6 +592,8 @@ export function getInputGroupAttachedChildrenClassName({
   const radius = getInputGroupSegmentRadiusClasses(shape, size);
 
   return cn(
+    // El contenedor exterior dibuja el frame general; los hijos solo reciben
+    // el radio mínimo necesario para fundirse con ese borde.
     "[&>*]:min-w-0 [&>*]:overflow-hidden",
     resolvedLayout === "inline" &&
       cn(
@@ -686,6 +692,8 @@ export function dispatchNativeInputValue(input, nextValue) {
     return;
   }
 
+  // Usamos el setter nativo para que React y cualquier form controller escuchen
+  // el cambio igual que si el usuario hubiera escrito en el campo.
   const descriptor = Object.getOwnPropertyDescriptor(
     window.HTMLInputElement.prototype,
     "value",

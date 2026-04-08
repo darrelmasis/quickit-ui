@@ -47,6 +47,24 @@
   opacity: 0;
 }
 
+.qi-form-field-autofill:-webkit-autofill,
+.qi-form-field-autofill:-webkit-autofill:hover,
+.qi-form-field-autofill:-webkit-autofill:focus,
+.qi-form-field-autofill:autofill,
+.qi-form-field-autofill:autofill:hover,
+.qi-form-field-autofill:autofill:focus {
+  -webkit-text-fill-color: var(--qi-field-autofill-text, currentColor) !important;
+  caret-color: var(--qi-field-autofill-caret, currentColor);
+  border-color: var(--qi-field-autofill-border, currentColor) !important;
+  -webkit-box-shadow:
+    0 0 0 100rem var(--qi-field-autofill-bg, transparent) inset !important;
+  box-shadow: 0 0 0 100rem var(--qi-field-autofill-bg, transparent) inset !important;
+  transition:
+    background-color 999999s ease-out 0s,
+    color 999999s ease-out 0s,
+    box-shadow 999999s ease-out 0s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .qi-ripple {
     transition-duration: 0.6ms;

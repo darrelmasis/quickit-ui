@@ -78,6 +78,8 @@ const InputGroup = forwardRef(function InputGroup(
         {...props}
       >
         {attached ? (
+          // El frame exterior conserva borde, foco y radio. La capa interior
+          // solo organiza segmentos y separadores para evitar recortes raros.
           <div
             data-slot="input-group-frame"
             className={getInputGroupFrameClassName({

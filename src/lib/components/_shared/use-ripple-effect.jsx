@@ -172,6 +172,8 @@ export function useRippleEffect({
       }
 
       const rect = currentTarget.getBoundingClientRect();
+      // El botón puede estar haciendo scale por activeMotion. Compensamos esa
+      // transformación para que el origen del ripple coincida con el click.
       const scale = getElementTransformScale(currentTarget);
       const width =
         currentTarget.offsetWidth || currentTarget.clientWidth || rect.width || 1;
@@ -206,6 +208,8 @@ export function useRippleEffect({
         },
       ]);
 
+      // El ripple entra en dos fases: primero se monta en estado idle y en el
+      // frame siguiente pasa a enter para que la transición siempre se dispare.
       const activationId = window.setTimeout(() => {
         activationIdsRef.current.delete(id);
 

@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -31,11 +31,26 @@ describe("enhanced input actions", () => {
     });
 
     expect(input.getAttribute("type")).toBe("password");
+    expect(input.getAttribute("autocomplete")).toBe("new-password");
 
     await user.click(toggle);
 
     expect(input.getAttribute("type")).toBe("text");
     expect(onPasswordVisibilityChange).toHaveBeenCalledWith(true);
+  });
+
+  it("lets password autocomplete be overridden manually", () => {
+    renderWithProvider(
+      <Input
+        type="password"
+        autoComplete="current-password"
+        placeholder="Clave actual"
+      />,
+    );
+
+    expect(screen.getByPlaceholderText("Clave actual").getAttribute("autocomplete")).toBe(
+      "current-password",
+    );
   });
 
   it("clears search content from the same Input component", async () => {
@@ -63,6 +78,31 @@ describe("enhanced input actions", () => {
     expect(input.value).toBe("");
     expect(onClear).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalled();
+  });
+
+  it("clears the current value with Ctrl + Space", async () => {
+    const onClear = vi.fn();
+
+    renderWithProvider(
+      <Input
+        defaultValue="Quickit"
+        onClear={onClear}
+        placeholder="Atajo de limpieza"
+      />,
+    );
+
+    const input = screen.getByPlaceholderText("Atajo de limpieza");
+
+    expect(input.value).toBe("Quickit");
+
+    fireEvent.keyDown(input, {
+      code: "Space",
+      ctrlKey: true,
+      key: " ",
+    });
+
+    expect(input.value).toBe("");
+    expect(onClear).toHaveBeenCalledTimes(1);
   });
 
   it("renders left and right embedded elements inside the input", () => {

@@ -75,6 +75,8 @@ const Link = forwardRef(function Link(
   },
   ref,
 ) {
+  // Link puede funcionar como texto o como botón. Esta bifurcación vive en un
+  // solo componente para no duplicar color, focus ring y press effects.
   const theme = resolveTheme(useQuickitTheme());
   const ui = LINK_THEME_CLASSES[theme];
   const isButtonAppearance = appearance === "button";
@@ -143,6 +145,7 @@ const Link = forwardRef(function Link(
       return;
     }
 
+    // Igual que Button, los icon links necesitan nombre accesible explícito.
     console.warn(
       'Quickit UI Link: links with appearance="button" and shape="square" or shape="circle" should include aria-label, aria-labelledby, or title.',
     );

@@ -17,13 +17,13 @@ import "quickit-ui/styles.css";
 Si tu app también usa utilidades propias de Tailwind con `dark:`, declara esto en tu CSS global:
 
 ```css
-@import "tailwindcss";
 @import "quickit-ui/styles.css";
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
-Eso hace que tu app y Quickit reaccionen a la misma clase `dark`.
+Con Tailwind 4, ese orden evita conflictos entre la hoja de estilos de Quickit y las utilidades de tu app. Además hace que tu app y Quickit reaccionen a la misma clase `dark`.
 
 ## Uso rápido
 
@@ -60,7 +60,32 @@ export default function App() {
 }
 ```
 
-Si prefieres que Quickit gestione el toggle y la persistencia, usa `QuickitThemeProvider` con `useQuickitThemeController`:
+`useQuickitTheme()` solo lee el tema efectivo actual (`light` o `dark`).
+
+Si prefieres que Quickit gestione el toggle, la persistencia y el modo `system`, usa `QuickitThemeProvider` con `useQuickitThemeController`. No hace falta envolver además con `QuickitProvider`, porque `QuickitThemeProvider` ya lo incluye internamente.
+
+Arranque recomendado:
+
+```jsx
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { QuickitThemeProvider } from "quickit-ui";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <QuickitThemeProvider
+      defaultTheme="system"
+      storageKey="ava-quickit-theme"
+    >
+      <App />
+    </QuickitThemeProvider>
+  </StrictMode>,
+);
+```
+
+Controlador persistente:
 
 ```jsx
 import "quickit-ui/styles.css";
@@ -104,12 +129,51 @@ export default function App() {
 }
 ```
 
+Patrón real con `Switch`:
+
+```jsx
+import {
+  QuickitThemeProvider,
+  Switch,
+  Tooltip,
+  useQuickitThemeController,
+} from "quickit-ui";
+
+function ToggleTheme() {
+  const { resolvedTheme, toggleTheme } = useQuickitThemeController();
+
+  return (
+    <Tooltip content={`Alternar tema (actual: ${resolvedTheme})`}>
+      <Switch
+        color="brand"
+        size="md"
+        checked={resolvedTheme === "dark"}
+        onCheckedChange={() => toggleTheme()}
+      />
+    </Tooltip>
+  );
+}
+
+export function App() {
+  return (
+    <QuickitThemeProvider
+      defaultTheme="system"
+      storageKey="ava-quickit-theme"
+    >
+      <ToggleTheme />
+    </QuickitThemeProvider>
+  );
+}
+```
+
 Notas:
 
 - el storage key por defecto es `quickit-ui-theme`
 - `defaultTheme` ahora soporta `system | light | dark`
 - `QuickitThemeProvider` aplica la clase `dark` sobre `document.documentElement`
+- `QuickitThemeProvider` ya envuelve a `QuickitProvider`
 - puedes sobrescribir el storage key con `storageKey`
+- `useQuickitTheme()` solo lee el tema resuelto actual
 - `useQuickitThemeController()` expone `theme`, `resolvedTheme`, `systemTheme`, `setTheme` y `toggleTheme`
 - `theme` es la preferencia persistida; `resolvedTheme` es el modo que Quickit está aplicando realmente
 - si usas clases propias como `dark:bg-zinc-950`, añade `@custom-variant dark (&:where(.dark, .dark *));` a tu CSS global
@@ -131,39 +195,6 @@ function Shell() {
         <Dashboard />
       </main>
     </div>
-  );
-}
-```
-
-Patrón con `Switch`:
-
-```jsx
-import {
-  QuickitThemeProvider,
-  Switch,
-  Tooltip,
-  useQuickitThemeController,
-} from "quickit-ui";
-
-function ToggleTheme() {
-  const { resolvedTheme, theme, toggleTheme } = useQuickitThemeController();
-
-  return (
-    <Tooltip content="Alternar tema">
-      <Switch
-        color="brand"
-        checked={resolvedTheme === "dark"}
-        onCheckedChange={toggleTheme}
-      />
-    </Tooltip>
-  );
-}
-
-export function App() {
-  return (
-    <QuickitThemeProvider storageKey="ava-quickit-theme">
-      <ToggleTheme />
-    </QuickitThemeProvider>
   );
 }
 ```

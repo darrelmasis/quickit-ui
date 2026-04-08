@@ -18,14 +18,14 @@ const isVisible = (visibleIds, id) => !visibleIds || visibleIds.has(id);
 
 const quickStartNotes = [
   "Empieza por instalar el paquete e importar `quickit-ui/styles.css` una sola vez.",
-  "Si ya gestionas el tema en tu app, usa `QuickitProvider`. Si quieres persistencia y modo `system`, usa `QuickitThemeProvider`.",
+  "Si ya gestionas el tema en tu app, usa `QuickitProvider`. Si quieres persistencia y modo `system`, usa `QuickitThemeProvider`, que ya envuelve a `QuickitProvider` por ti.",
   "Después ve directo a los componentes que necesitas: formularios, acciones, overlays o navegación.",
 ];
 
 const installNotes = [
   "Quickit está pensado para que puedas montar una pantalla útil en pocos minutos, no para obligarte a armar una infraestructura antes de usar un botón.",
   "El patrón recomendado es: importar estilos, envolver tu app con el provider y empezar por un caso real como login, búsqueda o toolbar.",
-  "Si tu app también usa utilidades `dark:` fuera de Quickit, añade `@custom-variant dark (&:where(.dark, .dark *));` para que todo responda al mismo switch.",
+  "Si tu app también usa utilidades `dark:` fuera de Quickit, importa primero `quickit-ui/styles.css`, luego `tailwindcss` y después añade `@custom-variant dark (&:where(.dark, .dark *));` para que todo responda al mismo switch.",
 ];
 
 const compatibilityNotes = [
@@ -240,8 +240,8 @@ export function App() {
               ui={ui}
               title="4. Si también usas Tailwind dark mode en tu app"
               language="css"
-              code={`@import "tailwindcss";
-@import "quickit-ui/styles.css";
+              code={`@import "quickit-ui/styles.css";
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));`}
             />

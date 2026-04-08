@@ -41,7 +41,7 @@ const apis = {
     { prop: "color", type: "neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black", defaultValue: "neutral", description: "Cambia borde, fondo y focus ring del campo. `neutral` mantiene la base premium; `slate`, `zinc`, `dark` y `black` cubren escalas neutras más explícitas." },
     { prop: "type", type: "string", defaultValue: "text", description: "Tipo nativo del input. `search` activa clear automático y `password` activa toggle de visibilidad." },
     { prop: "leftElement / rightElement", type: "ReactNode", defaultValue: "undefined", description: "Permite inyectar iconos o contenido visual en el lado izquierdo o derecho del campo sin salir del propio componente." },
-    { prop: "clearButton / onClear / clearButtonLabel", type: "boolean / () => void / string", defaultValue: "auto en search / undefined / \"Limpiar búsqueda\"", description: "Permite mostrar, controlar y etiquetar el botón interno para limpiar búsquedas." },
+    { prop: "clearButton / onClear / clearButtonLabel", type: "boolean / () => void / string", defaultValue: "auto en search / undefined / \"Limpiar búsqueda\"", description: "Permite mostrar, controlar y etiquetar el botón interno para limpiar búsquedas. Además, `Ctrl + Espacio` limpia el valor actual del campo y dispara `onClear`." },
     { prop: "passwordToggle / onPasswordVisibilityChange", type: "boolean / (visible) => void", defaultValue: "auto en password / undefined", description: "Permite mostrar u ocultar el toggle interno para contraseñas y escuchar cambios de visibilidad." },
     { prop: "actionShape", type: "square | circle", defaultValue: "circle", description: "Cambia la forma del botón interno de clear o visibility toggle. `circle` es la opción recomendada para icon buttons." },
     { prop: "clearIcon / showPasswordIcon / hidePasswordIcon", type: "ReactNode", defaultValue: "SVG interno / SVG interno / SVG interno", description: "Permite reemplazar el contenido visual del botón interno, por ejemplo con SVGs propios." },
@@ -138,7 +138,7 @@ export function FormDocs({ ui, visibleIds }) {
           <SectionHeading
             category="Formularios"
             title="Input"
-            description="Campo de texto base con tamaños, estado inválido y soporte automático para `FormControl`."
+            description="Campo de texto base con tamaños, estado inválido y soporte automático para `FormControl`. `search` activa clear, `password` activa toggle y `Ctrl + Espacio` limpia el valor actual del campo."
             ui={ui}
           />
           <div className="mt-6 space-y-4">
@@ -157,10 +157,9 @@ export function FormDocs({ ui, visibleIds }) {
             <PreviewPanel
               ui={ui}
               title="Colores y focus ring"
-              className="grid gap-3 md:grid-cols-3"
-              code={`<div className="grid gap-3 md:grid-cols-3">\n  <Input color="neutral" defaultValue="neutral" />\n  <Input color="slate" defaultValue="slate" />\n  <Input color="zinc" defaultValue="zinc" />\n  <Input color="primary" defaultValue="primary" />\n  <Input color="brand" defaultValue="brand" />\n  <Input color="success" defaultValue="success" />\n  <Input color="danger" defaultValue="danger" />\n  <Input color="warning" defaultValue="warning" />\n  <Input color="info" defaultValue="info" />\n  <Input color="light" defaultValue="light" />\n  <Input color="dark" defaultValue="dark" />\n  <Input color="black" defaultValue="black" />\n</div>`}
+              code={`<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">\n  <Input color="neutral" defaultValue="neutral" />\n  <Input color="slate" defaultValue="slate" />\n  <Input color="zinc" defaultValue="zinc" />\n  <Input color="primary" defaultValue="primary" />\n  <Input color="brand" defaultValue="brand" />\n  <Input color="success" defaultValue="success" />\n  <Input color="danger" defaultValue="danger" />\n  <Input color="warning" defaultValue="warning" />\n  <Input color="info" defaultValue="info" />\n  <Input color="light" defaultValue="light" />\n  <Input color="dark" defaultValue="dark" />\n  <Input color="black" defaultValue="black" />\n</div>`}
             >
-              <div className="grid gap-3 md:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {fieldColors.map((color) => (
                   <Input key={color} color={color} defaultValue={color} />
                 ))}

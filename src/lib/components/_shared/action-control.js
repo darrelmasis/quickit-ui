@@ -47,6 +47,8 @@ export const ACTION_CONTROL_SIZE_CLASSES = {
   },
 };
 
+// Esta matriz concentra la personalidad visual de Button y Link cuando
+// appearance="button", para que color/variant/theme no diverjan entre ellos.
 export const ACTION_CONTROL_THEME_CLASSES = {
   light: {
     solid: {
@@ -210,6 +212,8 @@ export const ACTION_CONTROL_THEME_CLASSES = {
   },
 };
 
+// El estado active reutiliza la misma semántica cromática, pero con un paso más
+// de contraste para que el press sea visible incluso cuando activeMotion está apagado.
 export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
   light: {
     solid: {

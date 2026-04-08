@@ -99,6 +99,8 @@ const Button = forwardRef(function Button(
   },
   ref,
 ) {
+  // Button junta tres políticas distintas: tema, focus ring y press effect.
+  // Por eso casi toda la resolución visual ocurre antes del return.
   const resolvedTheme = resolveActionTheme(useQuickitTheme());
   const isDisabled = disabled || loading;
   const isActive = active || pressed;
@@ -116,6 +118,7 @@ const Button = forwardRef(function Button(
     pressEffect === "ripple" || pressEffect === "transform"
       ? pressEffect
       : providerPressEffect;
+  // Los icon buttons compactos se sienten más estables sin translate/scale.
   const motionAllowedByShape =
     resolvedShape !== "square" && resolvedShape !== "circle";
   const resolvedActiveMotion =
@@ -171,6 +174,7 @@ const Button = forwardRef(function Button(
       return;
     }
 
+    // Los icon buttons sin texto necesitan un nombre accesible explícito.
     console.warn(
       'Quickit UI Button: buttons with shape="square" or shape="circle" should include aria-label, aria-labelledby, or title.',
     );
@@ -197,6 +201,8 @@ const Button = forwardRef(function Button(
         onPointerDown?.(event);
 
         if (!event.defaultPrevented) {
+          // Recalculamos el color en tiempo real para que el ripple contraste
+          // con la superficie final, incluso si el botón cambia por hover/active.
           const runtimeRipple = resolveRippleStyleFromElement(
             event.currentTarget,
             rippleUi,

@@ -53,6 +53,8 @@ function getScrollLockBackgroundColor() {
 }
 
 function lockAppScroll() {
+  // El lock es reference-counted para soportar modales anidados sin restaurar
+  // el scroll antes de tiempo.
   modalScrollLockCount += 1;
 
   if (modalScrollLockCount !== 1) {
@@ -185,6 +187,7 @@ export function Modal({
   outsideClick = true,
   zIndex: customZIndex,
 }) {
+  // visible controla el ciclo de salida; open solo representa la intención de abrir/cerrar.
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [visible, setVisible] = useState(defaultOpen);
   const [instanceZIndex, setInstanceZIndex] = useState(customZIndex ?? 50);
@@ -244,6 +247,8 @@ export function Modal({
       return undefined;
     }
 
+    // Cada modal toma su propio z-index para que los overlays anidados respeten
+    // el orden de apertura sin exigir al consumidor que lo administre.
     addModalToStack(modalId);
     lockAppScroll();
     const nextZIndex = customZIndex
@@ -277,6 +282,7 @@ export function Modal({
         return;
       }
 
+      // Solo el modal superior responde a Escape.
       close();
     };
 

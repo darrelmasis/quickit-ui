@@ -372,8 +372,8 @@ const foundationApis = {
   quickitThemeProvider: [
     { prop: "defaultTheme", type: "system | light | dark", defaultValue: "system", description: "Preferencia inicial cuando no existe una persistida en `localStorage`." },
     { prop: "storageKey", type: "string", defaultValue: "quickit-ui-theme", description: "Clave usada para persistir el tema actual." },
-    { prop: "focusRing / pressEffect / ripple", type: "mismas props de QuickitProvider", defaultValue: "defaults de Quickit", description: "Se reenvían internamente a `QuickitProvider` para que el tema gestionado y la política visual vivan en el mismo árbol." },
-    { prop: "return", type: "React provider", defaultValue: "-", description: "Envuelve a `QuickitProvider`, persiste el tema y aplica la clase `dark` al `documentElement`." },
+    { prop: "focusRing / pressEffect / ripple", type: "mismas props de QuickitProvider", defaultValue: "defaults de Quickit", description: "Se reenvían internamente a `QuickitProvider`, así que no necesitas anidar ambos providers para el caso normal." },
+    { prop: "return", type: "React provider", defaultValue: "-", description: "Envuelve a `QuickitProvider`, persiste la preferencia y aplica la clase `dark` al `documentElement` con el tema resuelto." },
   ],
   useQuickitThemeController: [
     { prop: "theme", type: "system | light | dark", defaultValue: "-", description: "Preferencia persistida del usuario." },
@@ -415,14 +415,16 @@ const foundationNotes = {
   ],
   theme: [
     "La libreria trabaja con dos modos base: light y dark.",
+    "`useQuickitTheme()` solo lee el tema efectivo actual (`light` o `dark`). No cambia el tema ni expone persistencia.",
+    "Si quieres que Quickit gestione persistencia, toggle y modo `system`, usa `QuickitThemeProvider` junto con `useQuickitThemeController()`.",
     "Los componentes priorizan defaults neutros y dejan los colores semanticos como decision explicita del producto.",
     "useQuickitTheme te permite reaccionar al tema actual desde cualquier componente descendiente.",
-    "Si quieres que la librería gestione persistencia y toggle, usa `QuickitThemeProvider` junto con `useQuickitThemeController`.",
     "El storage key por defecto es `quickit-ui-theme`, pero puedes sobrescribirlo con `storageKey`.",
     "QuickitThemeProvider también soporta `system`, así que puede seguir `prefers-color-scheme` y exponer al mismo tiempo el tema resuelto mediante `resolvedTheme`.",
     "`theme` representa la preferencia guardada del usuario y `resolvedTheme` el modo efectivo que realmente se aplica al árbol actual.",
+    "`QuickitThemeProvider` ya incluye internamente a `QuickitProvider`, así que no hace falta envolver ambos en el arranque normal.",
     "Si tu UI propia también cambia con el tema, consume `useQuickitThemeController` y usa `dark:` en tus layouts, cabeceras y shells, no solo en los componentes de Quickit.",
-    "Si también usas utilidades propias de Tailwind con `dark:`, agrega `@custom-variant dark (&:where(.dark, .dark *));` en tu CSS global para que tu app y Quickit lean la misma clase `dark`.",
+    "Si también usas utilidades propias de Tailwind con `dark:`, importa primero `quickit-ui/styles.css`, luego `tailwindcss` y después agrega `@custom-variant dark (&:where(.dark, .dark *));` para que tu app y Quickit lean la misma clase `dark`.",
   ],
   useBreakpoint: [
     "useBreakpoint es seguro para SSR: en servidor devuelve `ready: false` y medidas nulas hasta que el navegador hidrata.",
@@ -547,8 +549,8 @@ export function App() {
         <SectionCard id="theme" className={ui.divider}>
           <SectionHeading
             category="Fundamentos"
-            title="Tema"
-            description="Quickit UI usa el mismo contexto para que componentes, hooks y tu propio layout respondan al tema de forma consistente, ya sea con control externo o con persistencia integrada."
+            title="useQuickitTheme y QuickitThemeProvider"
+            description="`useQuickitTheme()` te deja leer el tema efectivo actual. Si además quieres persistencia, modo `system` y helpers para cambiar el tema, usa `QuickitThemeProvider` junto con `useQuickitThemeController()`."
             ui={ui}
           />
 
@@ -588,6 +590,27 @@ return (
                 </span>
               </div>
             </PreviewPanel>
+
+            <CodeExample
+              ui={ui}
+              title="Arranque recomendado con tema persistente"
+              code={`import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { QuickitThemeProvider } from "quickit-ui";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <QuickitThemeProvider
+      defaultTheme="system"
+      storageKey="ava-quickit-theme"
+    >
+      <App />
+    </QuickitThemeProvider>
+  </StrictMode>,
+);`}
+            />
 
             <PreviewPanel
               ui={ui}
@@ -631,7 +654,79 @@ return (
 
             <CodeExample
               ui={ui}
-              title="API recomendada"
+              title="Cuándo usar cada hook"
+              code={`// Solo leer el tema efectivo actual:
+const theme = useQuickitTheme();
+
+// Leer y cambiar la preferencia persistida:
+const {
+  theme,
+  resolvedTheme,
+  systemTheme,
+  setTheme,
+  toggleTheme,
+} = useQuickitThemeController();`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="No anides ambos providers para el caso normal"
+              code={`// Evita esto:
+<QuickitProvider theme="dark">
+  <QuickitThemeProvider storageKey="mi-tema">
+    <App />
+  </QuickitThemeProvider>
+</QuickitProvider>
+
+// Usa esto:
+<QuickitThemeProvider
+  defaultTheme="system"
+  storageKey="mi-tema"
+>
+  <App />
+</QuickitThemeProvider>`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Componente real de toggle con Switch"
+              code={`import {
+  QuickitThemeProvider,
+  Switch,
+  Tooltip,
+  useQuickitThemeController,
+} from "quickit-ui";
+
+function ToggleTheme() {
+  const { resolvedTheme, toggleTheme } = useQuickitThemeController();
+
+  return (
+    <Tooltip content={\`Alternar tema (actual: \${resolvedTheme})\`}>
+      <Switch
+        color="brand"
+        size="md"
+        checked={resolvedTheme === "dark"}
+        onCheckedChange={() => toggleTheme()}
+      />
+    </Tooltip>
+  );
+}
+
+export function App() {
+  return (
+    <QuickitThemeProvider
+      defaultTheme="system"
+      storageKey="ava-quickit-theme"
+    >
+      <ToggleTheme />
+    </QuickitThemeProvider>
+  );
+}`}
+            />
+
+            <CodeExample
+              ui={ui}
+              title="Control manual desde la app consumidora"
               code={`import {
   Button,
   QuickitThemeProvider,
@@ -677,8 +772,8 @@ export function App() {
               ui={ui}
               title="Tailwind dark mode en la app consumidora"
               language="css"
-              code={`@import "tailwindcss";
-@import "quickit-ui/styles.css";
+              code={`@import "quickit-ui/styles.css";
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));`}
             />
@@ -706,21 +801,24 @@ export function App() {
               ui={ui}
               title="Caso real: switch de tema"
               code={`function ToggleTheme() {
-  const { resolvedTheme, theme, toggleTheme } = useQuickitThemeController();
+  const { resolvedTheme, toggleTheme } = useQuickitThemeController();
 
   return (
-    <Tooltip content="Alternar tema">
+    <Tooltip content={\`Alternar tema (actual: \${resolvedTheme})\`}>
       <Switch
         color="brand"
         size="md"
         checked={resolvedTheme === "dark"}
-        onCheckedChange={toggleTheme}
+        onCheckedChange={() => toggleTheme()}
       />
     </Tooltip>
   );
 }
 
-<QuickitThemeProvider storageKey="ava-quickit-theme">
+<QuickitThemeProvider
+  defaultTheme="system"
+  storageKey="ava-quickit-theme"
+>
   <ToggleTheme />
 </QuickitThemeProvider>`}
             >

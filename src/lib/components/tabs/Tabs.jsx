@@ -119,6 +119,8 @@ export function Tabs({
   size = "md",
   value: controlledValue,
 }) {
+  // Tabs mantiene el valor seleccionado y delega la interacción fina a
+  // TabsTrigger/TabsContent a través de contexto.
   const generatedId = useId();
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -242,6 +244,7 @@ export function TabsTrigger({
     const isHorizontal = orientation === "horizontal";
     let nextIndex = currentIndex;
 
+    // La navegación por teclado ignora tabs disabled y soporta ambos ejes.
     if (
       (isHorizontal && event.key === "ArrowRight") ||
       (!isHorizontal && event.key === "ArrowDown")
