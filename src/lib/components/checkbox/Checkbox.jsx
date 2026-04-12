@@ -1,5 +1,5 @@
 import { forwardRef, useId } from "react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { CheckStrokeIcon } from "@/lib/assets/icons";
@@ -137,7 +137,7 @@ const CHECKBOX_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Checkbox = forwardRef(function Checkbox(

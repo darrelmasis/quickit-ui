@@ -99,4 +99,4 @@ export function useBreakpoint(options = {}) {
   };
 }
 
-export default useBreakpoint;
+

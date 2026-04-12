@@ -136,7 +136,7 @@ const Button = forwardRef(function Button(
     });
 
   useEffect(() => {
-    if (import.meta.env.PROD) {
+    if (process.env.NODE_ENV === "production") {
       return;
     }
 

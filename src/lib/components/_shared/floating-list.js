@@ -1,3 +1,5 @@
+import { resolveQuickitThemeMode } from "@/lib/theme/quickit-theme-context";
+
 export const FLOATING_LIST_SURFACE_PRIMITIVES = {
   layout:
     "z-50 flex min-w-[12rem] flex-col gap-1 list-none rounded-[1rem] border p-1 outline-none",
@@ -14,7 +16,6 @@ export const FLOATING_LIST_ITEM_PRIMITIVES = {
 export const FLOATING_LIST_SURFACE_THEME_CLASSES = {
   light: "border-slate-200 bg-white text-slate-950",
   dark: "border-zinc-800 bg-zinc-950 text-stone-100",
-  black: "border-neutral-950 bg-black text-stone-100",
 };
 
 export const FLOATING_LIST_ITEM_THEME_CLASSES = {
@@ -57,7 +58,7 @@ export const FLOATING_LIST_ITEM_THEME_CLASSES = {
 };
 
 export function resolveFloatingListTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 export function getFloatingPlacementOrigin(placement) {

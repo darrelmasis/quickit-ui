@@ -52,4 +52,4 @@ export function useMediaQuery(query, options = {}) {
   return matches;
 }
 
-export default useMediaQuery;
+

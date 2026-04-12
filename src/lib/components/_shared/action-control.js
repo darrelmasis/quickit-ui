@@ -1,3 +1,4 @@
+import { resolveQuickitThemeMode } from "@/lib/theme/quickit-theme-context";
 import { getControlRadius } from "@/lib/utils";
 import {
   QUICKIT_BUTTON_SHAPES,
@@ -306,7 +307,7 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
 };
 
 export function resolveActionTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 function prefixStateClasses(prefix, classes) {

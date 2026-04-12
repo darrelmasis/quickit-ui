@@ -4,6 +4,7 @@ import {
   useQuickitPressEffect,
   useQuickitRipple,
   useQuickitTheme,
+  resolveQuickitThemeMode,
 } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
@@ -45,7 +46,7 @@ const LINK_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Link = forwardRef(function Link(
@@ -130,7 +131,7 @@ const Link = forwardRef(function Link(
   });
 
   useEffect(() => {
-    if (import.meta.env.PROD) {
+    if (process.env.NODE_ENV === "production") {
       return;
     }
 

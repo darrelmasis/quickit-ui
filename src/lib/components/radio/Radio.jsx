@@ -1,5 +1,5 @@
 import { forwardRef, useId } from "react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
@@ -64,7 +64,7 @@ const RADIO_SIZE_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Radio = forwardRef(function Radio(

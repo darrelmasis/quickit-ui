@@ -1,5 +1,5 @@
 import { useId, useMemo } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { FormControlContext, useFormControlContext } from "./form-control-context";
 
@@ -15,7 +15,7 @@ const FORM_CONTROL_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 export function FormControl({

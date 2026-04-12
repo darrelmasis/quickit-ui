@@ -1,3 +1,4 @@
+import { resolveQuickitThemeMode } from "@/lib/theme/quickit-theme-context";
 import {
   QUICKIT_SEMANTIC_COLORS,
   resolveQuickitToken,
@@ -253,7 +254,7 @@ const FORM_FIELD_AUTOFILL_TOKENS = {
 };
 
 export function resolveFormFieldTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 export function resolveFormFieldColor(color) {

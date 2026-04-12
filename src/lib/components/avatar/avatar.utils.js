@@ -4,6 +4,7 @@ import {
   QUICKIT_AVATAR_SIZES,
   resolveQuickitToken,
 } from "@/lib/tokens";
+import { resolveQuickitThemeMode } from "@/lib/theme";
 import {
   AVATAR_GROUP_OVERLAP_RATIO,
   AVATAR_PRESENCE_MARKER,
@@ -16,7 +17,7 @@ import {
 } from "./avatar.constants";
 
 export function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 export function resolveAvatarShape(shape) {

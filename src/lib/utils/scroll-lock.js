@@ -60,7 +60,11 @@ export function lockAppScroll() {
 }
 
 export function unlockAppScroll() {
-  scrollLockCount = Math.max(0, scrollLockCount - 1);
+  if (scrollLockCount === 0) {
+    return;
+  }
+
+  scrollLockCount -= 1;
 
   if (scrollLockCount !== 0) {
     return;

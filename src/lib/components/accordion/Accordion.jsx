@@ -1,5 +1,5 @@
 import { useId, useMemo, useState } from "react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { PlusIcon } from "@/lib/assets/icons";
@@ -30,7 +30,7 @@ const ACCORDION_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 /** En `type="single"`, solo un valor activo: normaliza arrays o valores raros. */

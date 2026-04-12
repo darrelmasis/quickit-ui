@@ -7,7 +7,7 @@ import {
   SpinnerIcon,
 } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import {
   dismissToast,
@@ -57,7 +57,7 @@ const BUILTIN_KIND_ICONS = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 function stackAnimClasses(position, dismissing) {

@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { QUICKIT_SEMANTIC_COLORS, resolveQuickitToken } from "@/lib/tokens";
 
@@ -46,7 +46,7 @@ const PROGRESS_SIZES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Progress = forwardRef(function Progress(

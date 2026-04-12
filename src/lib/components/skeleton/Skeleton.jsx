@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 const SKELETON_THEME_CLASSES = {
@@ -14,7 +14,7 @@ const SKELETON_SHAPE_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Skeleton = forwardRef(function Skeleton(

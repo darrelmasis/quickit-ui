@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { QuickitProvider } from "./QuickitProvider";
+import { resolveQuickitThemeMode } from "./quickit-theme-context";
 
 export const QUICKIT_THEME_STORAGE_KEY = "quickit-ui-theme";
 export const QUICKIT_THEME_OPTIONS = Object.freeze([
@@ -20,7 +21,7 @@ const SYSTEM_THEME_QUERY = "(prefers-color-scheme: dark)";
 const QuickitThemeControllerContext = createContext(null);
 
 function resolveThemeMode(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 function resolveThemeOption(theme) {

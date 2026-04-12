@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn, getControlRadius } from "@/lib/utils";
 import {
   QUICKIT_ACCENT_COLORS,
@@ -90,7 +90,7 @@ const BADGE_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Badge = forwardRef(function Badge(

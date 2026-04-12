@@ -1,6 +1,7 @@
 export * from './QuickitProvider'
 export * from './focus-ring'
 export * from './press-effect'
+export * from './quickit-theme-context'
 export * from './ripple'
 export * from './theme-controller'
 export * from './useQuickitTheme'

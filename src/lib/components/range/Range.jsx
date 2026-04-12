@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { QUICKIT_SEMANTIC_COLORS, resolveQuickitToken } from "@/lib/tokens";
@@ -47,7 +47,7 @@ const RANGE_SIZES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Range = forwardRef(function Range(props, ref) {

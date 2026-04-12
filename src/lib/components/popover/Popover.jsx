@@ -17,7 +17,7 @@ import {
   useRole,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 const POPOVER_PRIMITIVES = {
@@ -166,7 +166,7 @@ const POPOVER_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 function getPlacementOrigin(placement) {

@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 
@@ -15,7 +15,7 @@ const LABEL_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 const Label = forwardRef(function Label(

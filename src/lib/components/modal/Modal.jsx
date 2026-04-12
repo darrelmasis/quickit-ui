@@ -10,7 +10,7 @@ import {
 import { createPortal } from "react-dom";
 import { CloseIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
 import { ModalContext, useModalContext } from "./modal-context";
 
@@ -75,7 +75,7 @@ const MODAL_THEME_CLASSES = {
 };
 
 function resolveTheme(theme) {
-  return theme === "dark" ? "dark" : "light";
+  return resolveQuickitThemeMode(theme);
 }
 
 export function Modal({
