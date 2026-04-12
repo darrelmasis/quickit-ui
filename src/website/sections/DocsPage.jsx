@@ -52,6 +52,13 @@ import {
   WEBSITE_COMPONENT_REVIEW_NOTES,
   WEBSITE_DOC_OVERVIEW_SECTIONS,
   WEBSITE_HOOKS,
+  WEBSITE_HOOK_EXAMPLES,
+  INSTALL_COMMAND,
+  STYLES_SNIPPET,
+  QUICKIT_PROVIDER_SNIPPET,
+  THEME_PROVIDER_SNIPPET,
+  THEME_TOGGLE_SNIPPET,
+  THEME_READ_SNIPPET,
 } from "@/website/docs-content";
 import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 import WebsiteDocsSidebar from "@/website/components/WebsiteDocsSidebar";
@@ -59,259 +66,9 @@ import WebsitePageToc from "@/website/components/WebsitePageToc";
 import WebsitePreviewTabs from "@/website/components/WebsitePreviewTabs";
 import WebsiteSection from "@/website/components/WebsiteSection";
 
-const INSTALL_COMMAND = `npm install quickit-ui`;
 
-const STYLES_SNIPPET = `@import "quickit-ui/styles.css";
-@import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));`;
 
-const QUICKIT_PROVIDER_SNIPPET = `import { QuickitProvider } from "quickit-ui";
-
-export function AppRoot({ theme }) {
-  return (
-    <QuickitProvider
-      theme={theme}
-      focusRing={{ enabled: true, disabledComponents: ["dropdown"] }}
-      ripple={{ enabled: true, disabledComponents: ["link"] }}
-      pressEffect="transform"
-    >
-      <App />
-    </QuickitProvider>
-  );
-}`;
-
-const THEME_PROVIDER_SNIPPET = `import { QuickitThemeProvider } from "quickit-ui";
-
-createRoot(document.getElementById("root")).render(
-  <QuickitThemeProvider
-    defaultTheme="system"
-    storageKey="quickit-ui-theme"
-  >
-    <App />
-  </QuickitThemeProvider>,
-);`;
-
-const THEME_TOGGLE_SNIPPET = `import { Switch, useQuickitThemeController } from "quickit-ui";
-
-function ThemeToggle() {
-  const { resolvedTheme, toggleTheme } = useQuickitThemeController();
-
-  return (
-    <Switch
-      checked={resolvedTheme === "dark"}
-      onCheckedChange={toggleTheme}
-      label={\`Tema: \${resolvedTheme}\`}
-    />
-  );
-}`;
-
-const THEME_READ_SNIPPET = `import { useQuickitTheme } from "quickit-ui";
-
-function ThemeBadge() {
-  const theme = useQuickitTheme();
-
-  return <span>Tema activo: {theme}</span>;
-}`;
-
-const HOOK_EXAMPLES = {
-  useQuickitTheme: {
-    code: THEME_READ_SNIPPET,
-  },
-  useQuickitThemeController: {
-    code: THEME_TOGGLE_SNIPPET,
-  },
-  useFormControl: {
-    code: `import { FormControl, Label, Input, useFormControl } from "quickit-ui";
-
-function FormIds() {
-  const control = useFormControl();
-
-  if (!control) {
-    return null;
-  }
-
-  return <span>Control ID: {control.controlId}</span>;
-}
-
-export function Field() {
-  return (
-    <FormControl>
-      <Label>Nombre</Label>
-      <Input placeholder="Quickit" />
-      <FormIds />
-    </FormControl>
-  );
-}`,
-  },
-  useBreakpoint: {
-    code: `import { useBreakpoint } from "quickit-ui";
-
-function ResponsiveHeader() {
-  const { isMobile, breakpoint } = useBreakpoint();
-
-  return (
-    <span>
-      {isMobile ? "Mobile" : \`Breakpoint: \${breakpoint}\`}
-    </span>
-  );
-}`,
-  },
-  useMediaQuery: {
-    code: `import { useMediaQuery } from "quickit-ui";
-
-function LayoutHint() {
-  const isWide = useMediaQuery("(min-width: 1024px)");
-
-  return <span>{isWide ? "Layout amplio" : "Layout compacto"}</span>;
-}`,
-  },
-  useTabs: {
-    code: `import { Tabs, useTabs } from "quickit-ui";
-
-function TabsMeta() {
-  const { value, size } = useTabs();
-
-  return <span>Tab activa: {value} (size {size})</span>;
-}
-
-export function TabsUsage() {
-  return (
-    <Tabs defaultValue="overview">
-      <Tabs.List>
-        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-        <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="overview"><TabsMeta /></Tabs.Content>
-      <Tabs.Content value="team">Equipo</Tabs.Content>
-    </Tabs>
-  );
-}`,
-  },
-  useDropdown: {
-    code: `import { Dropdown, useDropdown } from "quickit-ui";
-
-function DropdownState() {
-  const { open } = useDropdown();
-
-  return (
-    <Dropdown.Item as="div" disabled>
-      {open ? "Abierto" : "Cerrado"}
-    </Dropdown.Item>
-  );
-}
-
-export function DropdownUsage() {
-  return (
-    <Dropdown>
-      <Dropdown.Trigger>Opciones</Dropdown.Trigger>
-      <Dropdown.Content>
-        <Dropdown.Item>Editar</Dropdown.Item>
-        <Dropdown.Item>Eliminar</Dropdown.Item>
-        <DropdownState />
-      </Dropdown.Content>
-    </Dropdown>
-  );
-}`,
-  },
-  useModal: {
-    code: `import { Modal, Button, useModal } from "quickit-ui";
-
-function CloseAction() {
-  const { close } = useModal();
-
-  return <Button variant="outline" onClick={close}>Cerrar</Button>;
-}
-
-export function ModalUsage() {
-  return (
-    <Modal>
-      <Modal.Trigger>Abrir modal</Modal.Trigger>
-      <Modal.Content>
-        <Modal.Body>
-          <CloseAction />
-        </Modal.Body>
-      </Modal.Content>
-    </Modal>
-  );
-}`,
-  },
-  useFloatingLayer: {
-    code: `import { useFloatingLayer } from "quickit-ui";
-
-export function FloatingLayerUsage() {
-  const { refs, floatingStyles } = useFloatingLayer({ placement: "bottom-start" });
-
-  return (
-    <>
-      <button ref={refs.setReference}>Abrir</button>
-      <div ref={refs.setFloating} style={floatingStyles}>
-        Panel flotante
-      </div>
-    </>
-  );
-}`,
-  },
-  useQuickitFocusRing: {
-    code: `import { useQuickitFocusRing } from "quickit-ui";
-
-function InputShell({ children }) {
-  const showRing = useQuickitFocusRing("input");
-
-  return (
-    <div className={showRing ? "ring-2 ring-neutral-400" : ""}>
-      {children}
-    </div>
-  );
-}`,
-  },
-  useQuickitFocusRingConfig: {
-    code: `import { useQuickitFocusRingConfig } from "quickit-ui";
-
-function FocusConfig() {
-  const { enabled, disabledComponents } = useQuickitFocusRingConfig();
-
-  return (
-    <span>
-      Focus ring {enabled ? "activo" : "apagado"} (
-      {disabledComponents.length} excepciones)
-    </span>
-  );
-}`,
-  },
-  useQuickitPressEffect: {
-    code: `import { useQuickitPressEffect } from "quickit-ui";
-
-function PressEffectStatus() {
-  const pressEffect = useQuickitPressEffect();
-
-  return <span>Efecto activo: {pressEffect}</span>;
-}`,
-  },
-  useQuickitRipple: {
-    code: `import { useQuickitRipple } from "quickit-ui";
-
-function RippleStatus() {
-  const rippleOn = useQuickitRipple("button");
-
-  return <span>Ripple en botones: {rippleOn ? "on" : "off"}</span>;
-}`,
-  },
-  useQuickitRippleConfig: {
-    code: `import { useQuickitRippleConfig } from "quickit-ui";
-
-function RippleConfig() {
-  const { enabled, disabledComponents } = useQuickitRippleConfig();
-
-  return (
-    <span>
-      Ripple global {enabled ? "activo" : "apagado"} (
-      {disabledComponents.length} excepciones)
-    </span>
-  );
-}`,
-  },
-};
 
 const LINK_PREVIEW_CODE = `import { Link } from "quickit-ui";
 
@@ -710,18 +467,32 @@ function PropsTable({ props }) {
   );
 }
 
+const hookToSlug = (name) =>
+  name
+    .replace(/([A-Z])/g, "-$1")
+    .replace(/^-/, "")
+    .toLowerCase();
+
 function parseDocsRoute(pathname) {
   const segments = pathname.split("/").filter(Boolean);
 
   if (segments[0] !== "docs") {
-    return { componentSlug: null, mode: "overview" };
+    return { mode: "section", sectionId: "introduccion" };
   }
 
   if (segments[1] === "components" && segments[2]) {
-    return { componentSlug: segments[2], mode: "component" };
+    return { mode: "component", componentSlug: segments[2] };
   }
 
-  return { componentSlug: null, mode: "overview" };
+  if (segments[1] === "hooks") {
+    if (segments[2]) {
+      return { mode: "hook", hookSlug: segments[2] };
+    }
+    return { mode: "hooks-index" };
+  }
+
+  const sectionId = segments[1] || "introduccion";
+  return { mode: "section", sectionId };
 }
 
 function getComponentSections(slug) {
@@ -4051,8 +3822,113 @@ function OverviewPage() {
           </span>
         </div>
       </div>
+    </>
+  );
+}
 
-      <div className="mt-14 sm:mt-16">
+function HooksIndexPage() {
+  return (
+    <WebsiteSection
+      id="hooks"
+      title="Hooks"
+      description="La librería también expone hooks de tema, responsive y comportamiento global para no duplicar lógica en la app consumidora."
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <For each={WEBSITE_HOOKS}>
+          {(hook) => (
+            <a
+              key={hook.name}
+              href={`/docs/hooks/${hookToSlug(hook.name)}`}
+              className="rounded-2xl border border-neutral-200 p-6 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+            >
+              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                {hook.name}
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                {hook.description}
+              </p>
+            </a>
+          )}
+        </For>
+      </div>
+    </WebsiteSection>
+  );
+}
+
+function HookDetailPage({ slug }) {
+  const hook = WEBSITE_HOOKS.find((h) => hookToSlug(h.name) === slug);
+
+  if (!hook) {
+    return (
+      <div className="py-20 text-center">
+        <h2 className="text-2xl font-semibold">Hook no encontrado</h2>
+        <p className="mt-2 text-neutral-600">El hook que buscas no existe o ha sido movido.</p>
+        <a href="/docs/hooks" className="mt-4 inline-block text-brand-600 hover:underline">Volver a Hooks</a>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div id="descripcion" className="scroll-mt-28">
+        <h1 className="text-3xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50 sm:text-4xl">
+          {hook.name}
+        </h1>
+        <p className="mt-4 text-base leading-8 text-neutral-600 dark:text-neutral-400 sm:text-lg">
+          {hook.description}
+        </p>
+      </div>
+
+      <div className="space-y-10">
+        <Show when={hook.parameters}>
+          <div id="parametros" className="scroll-mt-28">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+              Parámetros
+            </h4>
+            <div className="mt-3">
+              <PropsTable props={hook.parameters} />
+            </div>
+          </div>
+        </Show>
+
+        <Show when={hook.returns}>
+          <div id="retorno" className="scroll-mt-28">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+              Valor de retorno
+            </h4>
+            {Array.isArray(hook.returns) ? (
+              <div className="mt-3">
+                <PropsTable props={hook.returns} />
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                {hook.returns}
+              </p>
+            )}
+          </div>
+        </Show>
+
+        <Show when={WEBSITE_HOOK_EXAMPLES[hook.name]}>
+          {(example) => (
+            <div id="ejemplo" className="scroll-mt-28">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                Ejemplo de uso
+              </h4>
+              <div className="mt-3">
+                <WebsiteCodeBlock code={example.code} language="jsx" />
+              </div>
+            </div>
+          )}
+        </Show>
+      </div>
+    </div>
+  );
+}
+
+function GenericSectionPage({ sectionId }) {
+  return (
+    <div className="space-y-14 sm:space-y-16">
+      <Show when={sectionId === "introduccion"}>
         <WebsiteSection
           id="introduccion"
           title="Introducción"
@@ -4096,7 +3972,9 @@ function OverviewPage() {
             </div>
           </div>
         </WebsiteSection>
+      </Show>
 
+      <Show when={sectionId === "instalacion"}>
         <WebsiteSection
           id="instalacion"
           title="Instalación"
@@ -4107,7 +3985,9 @@ function OverviewPage() {
             <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
           </div>
         </WebsiteSection>
+      </Show>
 
+      <Show when={sectionId === "tema"}>
         <WebsiteSection
           id="tema"
           title="Tema"
@@ -4163,7 +4043,9 @@ function OverviewPage() {
             </div>
           </div>
         </WebsiteSection>
+      </Show>
 
+      <Show when={sectionId === "comportamiento"}>
         <WebsiteSection
           id="comportamiento"
           title="Comportamiento"
@@ -4178,7 +4060,9 @@ function OverviewPage() {
             </div>
           </div>
         </WebsiteSection>
+      </Show>
 
+      <Show when={sectionId === "tokens"}>
         <WebsiteSection
           id="tokens"
           title="Tokens"
@@ -4271,49 +4155,13 @@ function OverviewPage() {
             </div>
           </div>
         </WebsiteSection>
+      </Show>
 
-        <WebsiteSection
-          id="hooks"
-          title="Hooks"
-          description="La librería también expone hooks de tema, responsive y comportamiento global para no duplicar lógica en la app consumidora."
-        >
-          <div className="space-y-8">
-            <For each={WEBSITE_HOOKS}>
-              {(hook) => (
-                <div
-                  key={hook.name}
-                  className="rounded-3xl border border-neutral-200 p-5 dark:border-neutral-800"
-                >
-                  <h3
-                    id={`hook-${hook.name
-                      .replace(/([A-Z])/g, "-$1")
-                      .replace(/^-/, "")
-                      .toLowerCase()}`}
-                    className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
-                  >
-                    {hook.name}
-                  </h3>
-                  <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                    {hook.description}
-                  </p>
-                  {HOOK_EXAMPLES[hook.name]?.code ? (
-                    <div className="mt-4">
-                      <WebsiteCodeBlock
-                        code={HOOK_EXAMPLES[hook.name].code}
-                        language="jsx"
-                      />
-                    </div>
-                  ) : null}
-                </div>
-              )}
-            </For>
-          </div>
-        </WebsiteSection>
-
+      <Show when={sectionId === "componentes"}>
         <WebsiteSection
           id="componentes"
           title="Componentes"
-          description="Empieza por los primitives base y después entra a cada página para ver instalación, uso, preview y API. Muchas páginas incluyen además «Notas de revisión» con hallazgos del código (uso, a11y e implementación)."
+          description="Empieza por los primitives base y después entra a cada página para ver instalación, uso, preview y API."
         >
           <div className="space-y-6">
             <For each={WEBSITE_COMPONENT_GROUPS}>
@@ -4348,8 +4196,8 @@ function OverviewPage() {
             </For>
           </div>
         </WebsiteSection>
-      </div>
-    </>
+      </Show>
+    </div>
   );
 }
 
@@ -4488,12 +4336,27 @@ function ComponentPage({ component }) {
 }
 
 export default function DocsPage({ currentPath }) {
-  const { componentSlug, mode } = parseDocsRoute(currentPath);
+  const route = parseDocsRoute(currentPath);
+  const { mode, componentSlug, sectionId, hookSlug } = route;
+
   const currentComponent =
     mode === "component" ? WEBSITE_COMPONENT_LOOKUP[componentSlug] : null;
-  const sections = currentComponent
-    ? getComponentSections(currentComponent.slug)
-    : WEBSITE_DOC_OVERVIEW_SECTIONS;
+  const currentHook =
+    mode === "hook"
+      ? WEBSITE_HOOKS.find((h) => hookToSlug(h.name) === hookSlug)
+      : null;
+
+  let tocSections = [];
+  if (currentComponent) {
+    tocSections = getComponentSections(currentComponent.slug);
+  } else if (currentHook) {
+    tocSections = [
+      { id: "descripcion", label: "Descripción" },
+      currentHook.parameters && { id: "parametros", label: "Parámetros" },
+      currentHook.returns && { id: "retorno", label: "Valor de retorno" },
+      WEBSITE_HOOK_EXAMPLES[currentHook.name] && { id: "ejemplo", label: "Ejemplo" },
+    ].filter(Boolean);
+  }
 
   return (
     <main className={`${WEBSITE_SHELL} pb-20 pt-10 sm:pt-14`}>
@@ -4501,17 +4364,29 @@ export default function DocsPage({ currentPath }) {
       <div className="grid gap-12 lg:grid-cols-[18rem_minmax(0,1fr)] xl:grid-cols-[18rem_minmax(0,1fr)_14rem] lg:gap-16 min-w-0">
         <WebsiteDocsSidebar
           currentComponentSlug={currentComponent?.slug}
-          sections={sections}
+          sections={WEBSITE_DOC_OVERVIEW_SECTIONS}
           componentGroups={WEBSITE_COMPONENT_GROUPS}
+          currentPath={currentPath}
         />
 
         <article className="min-w-0 w-full max-w-3xl justify-self-center">
-          <Show when={currentComponent} fallback={<OverviewPage />}>
-            {(component) => <ComponentPage component={component} />}
-          </Show>
+          <RenderSwitch value={mode}>
+            <Match when="component">
+              <ComponentPage component={currentComponent} />
+            </Match>
+            <Match when="hook">
+              <HookDetailPage slug={hookSlug} />
+            </Match>
+            <Match when="hooks-index">
+              <HooksIndexPage />
+            </Match>
+            <Default>
+              <GenericSectionPage sectionId={sectionId} />
+            </Default>
+          </RenderSwitch>
         </article>
 
-        <WebsitePageToc sections={sections} />
+        <WebsitePageToc sections={tocSections} />
       </div>
     </main>
   );
