@@ -71,4 +71,4 @@ La documentación es accesible en `/docs` y cuenta con una referencia de API det
 
 ## Licencia
 
-MIT © [Darrel Masis](https://github.com/darrelmasis)
+MIT © [Darel Masis](https://github.com/darrelmasis)
