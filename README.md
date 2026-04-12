@@ -1,28 +1,28 @@
 # Quickit UI
 
-Quickit UI is a primitive component library for React 19 and Tailwind CSS 4, focused on providing accessible, unstyled-first, and highly composable UI foundations.
+Quickit UI es una librería de componentes primitivos para React 19 y Tailwind CSS 4, enfocada en proporcionar cimientos de interfaz accesibles, sin estilos predefinidos restrictivos y altamente composibles.
 
-## Installation
+## Instalación
 
 ```bash
 npm install quickit-ui
 ```
 
-## Setup
+## Configuración
 
-Quickit UI requires a CSS environment compatible with Tailwind CSS 4. Add the following to your global stylesheet:
+Quickit UI requiere un entorno compatible con Tailwind CSS 4. Añade lo siguiente a tu hoja de estilos global:
 
 ```css
 @import "quickit-ui/styles.css";
 @import "tailwindcss";
 
-/* Optional: Synchronize theme-aware utilities with Quickit's dark mode */
+/* Opcional: Sincroniza las utilidades dependientes del tema con el modo oscuro de Quickit */
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
-## Basic Usage
+## Uso Básico
 
-Wrap your application with `QuickitThemeProvider` to benefit from the built-in theme management and global configuration.
+Envuelve tu aplicación con `QuickitThemeProvider` para habilitar la gestión de temas y las configuraciones globales.
 
 ```jsx
 import "quickit-ui/styles.css";
@@ -32,43 +32,43 @@ export default function App() {
   return (
     <QuickitThemeProvider defaultTheme="system">
       <div className="flex flex-col gap-4 p-8">
-        <Input placeholder="Search components..." />
-        <Button variant="solid" color="brand">Get Started</Button>
+        <Input placeholder="Buscar componentes..." />
+        <Button variant="solid" color="brand">Empezar</Button>
       </div>
     </QuickitThemeProvider>
   );
 }
 ```
 
-## Components
+## Componentes
 
-The library provides over 35 components designed as low-level primitives:
+La librería proporciona más de 35 componentes diseñados como primitivos de bajo nivel:
 
 - **Base**: `Button`, `Link`, `Badge`, `Label`, `Skeleton`, `Progress`
-- **Forms**: `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
+- **Formularios**: `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
 - **Overlays**: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`
-- **Navigation**: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`
-- **Identity**: `Avatar`, `AvatarGroup`, `UserChip`, `Initials`
-- **Logic**: `Show`, `For`, `RenderSwitch`, `Match`, `Default`
+- **Navegación**: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`
+- **Identidad**: `Avatar`, `AvatarGroup`, `UserChip`, `Initials`
+- **Lógica**: `Show`, `For`, `RenderSwitch`, `Match`, `Default`
 - **Feedback**: `EmptyState`, `FormDescription`, `FormMessage`
 
-## Documentation
+## Documentación
 
-For full documentation, architecture details, and extensive examples, run the local development server:
+Para consultar la documentación completa, detalles de arquitectura y ejemplos extensos, ejecuta el servidor de desarrollo local:
 
 ```bash
 npm install
 npm run dev
 ```
 
-The documentation is accessible at `/docs` and features a comprehensive API reference for every component and hook.
+La documentación es accesible en `/docs` y cuenta con una referencia de API detallada para cada componente y hook.
 
-## Requirements
+## Requisitos
 
-- React 19 or higher
-- Node.js 18 or higher
-- Tailwind CSS 4 environment
+- React 19 o superior
+- Node.js 18 o superior
+- Entorno Tailwind CSS 4
 
-## License
+## Licencia
 
 MIT © [Darrel Masis](https://github.com/darrelmasis)
