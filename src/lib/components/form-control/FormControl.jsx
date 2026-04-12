@@ -89,3 +89,6 @@ export function FormMessage({ children, className, id, ...props }) {
     </p>
   );
 }
+
+FormControl.Description = FormDescription;
+FormControl.Message = FormMessage;

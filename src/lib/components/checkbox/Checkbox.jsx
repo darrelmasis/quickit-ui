@@ -2,6 +2,7 @@ import { forwardRef, useId } from "react";
 import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
+import { CheckStrokeIcon } from "@/lib/assets/icons";
 import { useFormControl } from "@/lib/components/form-control";
 import { Label } from "@/lib/components/label";
 
@@ -216,23 +217,13 @@ const Checkbox = forwardRef(function Checkbox(
           resolvedInvalid ? ui.invalid : ui.colors[resolvedColor].box,
         )}
       >
-        <svg
-          viewBox="0 0 16 16"
+        <CheckStrokeIcon
           className={cn(
             "pointer-events-none opacity-0 transition-opacity duration-150",
             CHECKBOX_SIZE_CLASSES[resolvedSize].icon,
             resolvedInvalid ? ui.invalidIcon : ui.colors[resolvedColor].icon,
           )}
-          fill="none"
-        >
-          <path
-            d="M4 8.5 6.5 11 12 5.5"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        />
       </span>
     </span>
   );

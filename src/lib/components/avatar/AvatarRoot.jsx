@@ -1,6 +1,7 @@
 import { Children, forwardRef, useId, useMemo, useState } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn, getAvatarRadius } from "@/lib/utils";
+import { AvatarPresenceMaskDefs } from "@/lib/assets/vectors";
 import { AvatarContext } from "./avatar.context";
 import {
   AVATAR_PRIMITIVES,
@@ -65,29 +66,7 @@ const Avatar = forwardRef(function Avatar(
         style={rootStyle}
         {...props}
       >
-        {presenceMask ? (
-          <svg
-            aria-hidden="true"
-            className="pointer-events-none absolute h-0 w-0 overflow-hidden"
-            focusable="false"
-          >
-            <defs>
-              <mask
-                id={maskId}
-                maskContentUnits="objectBoundingBox"
-                maskUnits="objectBoundingBox"
-              >
-                <rect width="1" height="1" fill="white" />
-                <circle
-                  cx={presenceMask.cx}
-                  cy={presenceMask.cy}
-                  r={presenceMask.r}
-                  fill="black"
-                />
-              </mask>
-            </defs>
-          </svg>
-        ) : null}
+        <AvatarPresenceMaskDefs maskId={maskId} maskDefinition={presenceMask} />
 
         <span
           data-slot="avatar-shell"

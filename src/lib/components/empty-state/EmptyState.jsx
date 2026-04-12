@@ -88,5 +88,9 @@ const EmptyStateActions = forwardRef(function EmptyStateActions(
   );
 });
 
+EmptyState.Title = EmptyStateTitle;
+EmptyState.Description = EmptyStateDescription;
+EmptyState.Actions = EmptyStateActions;
+
 export { EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateTitle };
 export default EmptyState;

@@ -68,12 +68,10 @@ export function NavigationDocs({ ui, visibleIds }) {
             category="Navegación"
             title="Tabs"
             description="Navegación por paneles con orientación horizontal o vertical. La activación principal es por click y mantiene soporte de teclado integrado."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Tabs horizontales"
               code={`<Tabs defaultValue="overview">
   <TabsList>
@@ -99,7 +97,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Tamaños"
               code={`<div className="space-y-4">
   <Tabs defaultValue="overview" size="xs">
@@ -171,7 +168,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Colores"
               code={`<div className="space-y-4">
   <Tabs defaultValue="overview" color="neutral">
@@ -255,7 +251,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Edge case: manual, disabled y forceMount"
               code={`<Tabs defaultValue="design" activationMode="manual">
   <TabsList>
@@ -293,7 +288,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Orientación vertical"
               className="max-w-3xl"
               code={`<Tabs
@@ -328,7 +322,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Activación manual"
               code={`<Tabs defaultValue="usage" activationMode="manual">
   <TabsList>
@@ -356,7 +349,7 @@ export function NavigationDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.tabs} ui={ui} />
+            <PropsTable rows={apis.tabs} />
           </div>
         </SectionCard>
       ) : null}
@@ -367,12 +360,10 @@ export function NavigationDocs({ ui, visibleIds }) {
             category="Navegación"
             title="Accordion"
             description="Contenedor desplegable para FAQs, settings y contenido denso por secciones."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Single"
               className="max-w-2xl"
               code={`<Accordion defaultValue="architecture">
@@ -399,7 +390,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Multiple"
               className="max-w-2xl"
               code={`<Accordion type="multiple" defaultValue={["first", "second"]}>
@@ -420,7 +410,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="FAQ"
               className="max-w-2xl"
               code={`<Accordion defaultValue="shipping">
@@ -457,7 +446,7 @@ export function NavigationDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.accordion} ui={ui} />
+            <PropsTable rows={apis.accordion} />
           </div>
         </SectionCard>
       ) : null}
@@ -468,12 +457,10 @@ export function NavigationDocs({ ui, visibleIds }) {
             category="Navegación"
             title="Breadcrumb"
             description="Ruta jerárquica con separadores automáticos y una API más simple para enlaces y el nodo actual."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Ruta corta"
               code={`<Breadcrumb>
   <BreadcrumbList>
@@ -505,7 +492,6 @@ export function NavigationDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Ruta profunda"
               code={`<Breadcrumb>
   <BreadcrumbList separator="›">
@@ -545,7 +531,7 @@ export function NavigationDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.breadcrumb} ui={ui} />
+            <PropsTable rows={apis.breadcrumb} />
           </div>
         </SectionCard>
       ) : null}
@@ -556,26 +542,25 @@ export function NavigationDocs({ ui, visibleIds }) {
             category="Navegación"
             title="Pagination"
             description="Navegación paginada para tablas, listados y vistas de exploración."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6 space-y-4">
-            <PreviewPanel ui={ui} title="Base" code={`<Pagination count={12} defaultPage={4} />`}>
+            <PreviewPanel title="Base" code={`<Pagination count={12} defaultPage={4} />`}>
               <Pagination count={12} defaultPage={4} />
             </PreviewPanel>
 
-            <PreviewPanel ui={ui} title="Más vecinos" code={`<Pagination count={24} defaultPage={10} siblingCount={2} />`}>
+            <PreviewPanel title="Más vecinos" code={`<Pagination count={24} defaultPage={10} siblingCount={2} />`}>
               <Pagination count={24} defaultPage={10} siblingCount={2} />
             </PreviewPanel>
 
-            <PreviewPanel ui={ui} title="Compacta" code={`<Pagination count={8} defaultPage={2} siblingCount={0} />`}>
+            <PreviewPanel title="Compacta" code={`<Pagination count={8} defaultPage={2} siblingCount={0} />`}>
               <div className="space-y-3">
                 <p className={`text-sm ${ui.body}`}>Para listados cortos puedes usar menos vecinos visibles y mantener la navegación más compacta.</p>
                 <Pagination count={8} defaultPage={2} siblingCount={0} />
               </div>
             </PreviewPanel>
 
-            <PreviewPanel ui={ui} title="Colores" code={`<div className="space-y-3">
+            <PreviewPanel title="Colores" code={`<div className="space-y-3">
   <Pagination count={10} defaultPage={3} color="neutral" />
   <Pagination count={10} defaultPage={3} color="slate" />
   <Pagination count={10} defaultPage={3} color="zinc" />
@@ -598,7 +583,7 @@ export function NavigationDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.pagination} ui={ui} />
+            <PropsTable rows={apis.pagination} />
           </div>
         </SectionCard>
       ) : null}

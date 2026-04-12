@@ -1,7 +1,7 @@
 {
   "name": "quickit-ui",
   "private": false,
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Biblioteca de componentes UI reutilizables para React con soporte para light y dark mode.",
   "license": "MIT",
   "repository": {
@@ -48,7 +48,7 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build && node scripts/copy-types.mjs",
     "build:docs": "vite build --mode docs",
     "lint": "eslint .",
@@ -67,6 +67,7 @@
   "dependencies": {
     "@floating-ui/react": "^0.27.19",
     "clsx": "^2.1.1",
+    "prism-react-renderer": "^2.4.1",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
@@ -83,7 +84,6 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
     "jsdom": "^29.0.1",
-    "prism-react-renderer": "^2.4.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.2",

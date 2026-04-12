@@ -348,14 +348,14 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
 
       <div className="mt-8 space-y-6">
         <div>
-          <p className={`text-sm font-semibold ${ui.title}`}>API</p>
+          <h3 id="api" className={`text-sm font-semibold ${ui.title}`}>API</h3>
           <PropsTable rows={buttonApi} ui={ui} />
         </div>
         <div>
-          <p className={`text-sm font-semibold ${ui.title}`}>Uso base</p>
+          <h3 id="uso-base" className={`text-sm font-semibold ${ui.title}`}>Uso base</h3>
           <CodeExample
             ui={ui}
-            title="Uso base"
+            title="Ejemplo de implementación"
             code={`<Button
   variant="outline"
   color="neutral"
@@ -369,7 +369,7 @@ export function CoreDocs({ buttonLoading, onButtonLoadingStart, ui, visibleIds }
       </div>
 
       <div className="mt-8">
-        <p className={`text-sm font-semibold ${ui.title}`}>Notas de uso</p>
+        <h3 id="notas" className={`text-sm font-semibold ${ui.title}`}>Notas de uso</h3>
         <NotesList items={buttonNotes} ui={ui} />
       </div>
     </SectionCard>

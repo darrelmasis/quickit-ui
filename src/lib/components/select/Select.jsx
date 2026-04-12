@@ -24,6 +24,7 @@ import {
 import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
+import { CheckFillIcon, ChevronDownIcon } from "@/lib/assets/icons";
 import { useFormControl } from "@/lib/components/form-control";
 import { useInputGroup } from "@/lib/components/input/input-group.context";
 import {
@@ -406,13 +407,7 @@ const Select = forwardRef(function Select(
             >
               <span className="min-w-0 flex-1 truncate">{option.label}</span>
               {selected ? (
-                <svg
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
-                  className="size-4 shrink-0 fill-current text-current"
-                >
-                  <path d="m7.75 13.1-3.4-3.4 1.06-1.06 2.34 2.34 6.84-6.84 1.06 1.06-7.9 7.9Z" />
-                </svg>
+                <CheckFillIcon className="size-4 shrink-0 fill-current text-current" />
               ) : null}
             </button>
           </li>
@@ -490,9 +485,7 @@ const Select = forwardRef(function Select(
           )}
           aria-hidden="true"
         >
-          <svg viewBox="0 0 20 20" className="size-4 fill-current">
-            <path d="M5.75 7.75 10 12l4.25-4.25 1.06 1.06-5.31 5.31-5.31-5.31 1.06-1.06Z" />
-          </svg>
+          <ChevronDownIcon className="size-4 fill-current" />
         </span>
       </button>
 

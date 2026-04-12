@@ -1,5 +1,6 @@
 import { Children, cloneElement, forwardRef, isValidElement, useId } from "react";
 import { cn } from "@/lib/utils";
+import { AvatarGroupMaskDefs } from "@/lib/assets/vectors";
 import { AVATAR_PRIMITIVES } from "./avatar.constants";
 import {
   getAvatarGroupMaskDefinition,
@@ -50,46 +51,7 @@ const AvatarGroup = forwardRef(function AvatarGroup(
       className={cn(AVATAR_PRIMITIVES.group, stacked && "relative", className)}
       {...props}
     >
-      {shouldMask ? (
-        <svg
-          aria-hidden="true"
-          className="pointer-events-none absolute h-0 w-0 overflow-hidden"
-          focusable="false"
-        >
-          <defs>
-            {stackedItems.map(({ maskId, maskDefinition }) =>
-              maskId ? (
-                <mask
-                  key={maskId}
-                  id={maskId}
-                  maskContentUnits="objectBoundingBox"
-                  maskUnits="objectBoundingBox"
-                >
-                  <rect width="1" height="1" fill="white" />
-                  {maskDefinition.type === "circle" ? (
-                    <circle
-                      cx={maskDefinition.cx}
-                      cy={maskDefinition.cy}
-                      r={maskDefinition.r}
-                      fill="black"
-                    />
-                  ) : (
-                    <rect
-                      x={maskDefinition.x}
-                      y={maskDefinition.y}
-                      width={maskDefinition.width}
-                      height={maskDefinition.height}
-                      rx={maskDefinition.rx}
-                      ry={maskDefinition.ry}
-                      fill="black"
-                    />
-                  )}
-                </mask>
-              ) : null,
-            )}
-          </defs>
-        </svg>
-      ) : null}
+      {shouldMask ? <AvatarGroupMaskDefs items={stackedItems} /> : null}
       {stacked
         ? stackedItems.map(({ child, index, maskId, overlapPx }) => {
             if (!isValidElement(child)) {

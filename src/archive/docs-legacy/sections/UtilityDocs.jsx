@@ -132,11 +132,10 @@ export function UtilityDocs({ ui, visibleIds }) {
     <>
       {isVisible(visibleIds, "show") ? (
         <SectionCard id="show" className={ui.divider}>
-          <SectionHeading category="Logica" title="Show" description="Utilidad para renderizado condicional simple. Sirve para reemplazar ternarios largos y permite usar children o fallback como render functions." ui={ui} />
+          <SectionHeading category="Logica" title="Show" description="Utilidad para renderizado condicional simple. Sirve para reemplazar ternarios largos y permite usar children o fallback como render functions." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Estado simple con fallback"
               code={`<Show
   when={true}
@@ -154,7 +153,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Render function con valor"
               className="max-w-2xl"
               code={`const currentUser = {
@@ -183,7 +181,7 @@ export function UtilityDocs({ ui, visibleIds }) {
       </Avatar>
       <div className="space-y-1">
         <p className="text-sm font-semibold">{user.name}</p>
-        <p className="text-sm text-zinc-500">{user.role}</p>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">{user.role}</p>
       </div>
     </div>
   )}
@@ -218,18 +216,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.show} ui={ui} />
+            <PropsTable rows={apis.show} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "render-switch") ? (
         <SectionCard id="render-switch" className={ui.divider}>
-          <SectionHeading category="Logica" title="RenderSwitch" description="Controla varios caminos de render a partir de un valor. Se llama `RenderSwitch` para no colisionar con el `Switch` de formularios de la libreria." ui={ui} />
+          <SectionHeading category="Logica" title="RenderSwitch" description="Controla varios caminos de render a partir de un valor. Se llama `RenderSwitch` para no colisionar con el `Switch` de formularios de la libreria." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Casos por valor"
               code={`const status = "review";
 
@@ -265,7 +262,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Arrays y predicados"
               code={`const score = 17;
 
@@ -303,18 +299,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.renderSwitch} ui={ui} />
+            <PropsTable rows={apis.renderSwitch} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "for") ? (
         <SectionCard id="for" className={ui.divider}>
-          <SectionHeading category="Logica" title="For" description="Itera colecciones con una API declarativa y un fallback integrado para estados vacios." ui={ui} />
+          <SectionHeading category="Logica" title="For" description="Itera colecciones con una API declarativa y un fallback integrado para estados vacios." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Lista declarativa"
               className="space-y-3"
               code={`const releases = [
@@ -334,7 +329,7 @@ export function UtilityDocs({ ui, visibleIds }) {
           <p className="text-sm font-semibold">
             {index + 1}. {release.name}
           </p>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Owner: {release.owner}
           </p>
         </div>
@@ -367,7 +362,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Fallback vacio"
               className="max-w-2xl"
               code={`<For
@@ -408,18 +402,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.for} ui={ui} />
+            <PropsTable rows={apis.for} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "avatar") ? (
         <SectionCard id="avatar" className={ui.divider}>
-          <SectionHeading category="Identidad" title="Avatar" description="Representación compacta de usuarios, equipos o entidades con imagen, fallback y agrupación." ui={ui} />
+          <SectionHeading category="Identidad" title="Avatar" description="Representación compacta de usuarios, equipos o entidades con imagen, fallback y agrupación." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Tamaños"
               code={`<div className="flex flex-wrap items-center gap-4">
   <Avatar size="sm"><AvatarFallback>SM</AvatarFallback></Avatar>
@@ -437,7 +430,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Shapes"
               code={`<div className="flex flex-wrap items-center gap-4">
   <Avatar shape="circle"><AvatarFallback>CI</AvatarFallback></Avatar>
@@ -453,7 +445,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Group"
               code={`<AvatarGroup>
   <Avatar size="lg">
@@ -477,7 +468,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Fallback por error de imagen"
               code={`<Avatar size="lg">
   <AvatarImage src="https://example.com/avatar-no-existe.png" alt="Elena Ruiz" />
@@ -491,7 +481,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Group por shape"
               code={`<div className="flex flex-wrap items-center gap-6">
   <AvatarGroup>
@@ -537,7 +526,7 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>Avatar API</p>
-            <PropsTable rows={apis.avatar} ui={ui} />
+            <PropsTable rows={apis.avatar} />
           </div>
 
         </SectionCard>
@@ -545,11 +534,10 @@ export function UtilityDocs({ ui, visibleIds }) {
 
       {isVisible(visibleIds, "initials") ? (
         <SectionCard id="initials" className={ui.divider}>
-          <SectionHeading category="Identidad" title="Initials" description="Generador mínimo de iniciales para fallbacks de avatar, chips de equipo o entidades sin imagen." ui={ui} />
+          <SectionHeading category="Identidad" title="Initials" description="Generador mínimo de iniciales para fallbacks de avatar, chips de equipo o entidades sin imagen." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Casos base"
               code={`<div className="flex flex-wrap items-center gap-4">
   <Initials name="Elena Ruiz" />
@@ -569,18 +557,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.initials} ui={ui} />
+            <PropsTable rows={apis.initials} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "avatar-presence") ? (
         <SectionCard id="avatar-presence" className={ui.divider}>
-          <SectionHeading category="Identidad" title="AvatarPresence" description="Indicador compacto de presencia para online, away, busy u offline. Puede vivir dentro del `Avatar` y heredar su tamaño." ui={ui} />
+          <SectionHeading category="Identidad" title="AvatarPresence" description="Indicador compacto de presencia para online, away, busy u offline. Puede vivir dentro del `Avatar` y heredar su tamaño." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Estados"
               code={`<div className="flex flex-wrap items-center gap-4">
   <Avatar size="lg">
@@ -614,18 +601,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.avatarPresence} ui={ui} />
+            <PropsTable rows={apis.avatarPresence} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "user-chip") ? (
         <SectionCard id="user-chip" className={ui.divider}>
-          <SectionHeading category="Identidad" title="UserChip" description="Composición compacta de identidad con avatar, nombre, descripción, presencia y slot trailing para badges o acciones." ui={ui} />
+          <SectionHeading category="Identidad" title="UserChip" description="Composición compacta de identidad con avatar, nombre, descripción, presencia y slot trailing para badges o acciones." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Casos base"
               className="flex flex-col items-start gap-3"
               code={`<div className="flex flex-col items-start gap-3">
@@ -668,18 +654,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.userChip} ui={ui} />
+            <PropsTable rows={apis.userChip} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "link") ? (
         <SectionCard id="link" className={ui.divider}>
-          <SectionHeading category="Acciones" title="Link" description="Enlace base para navegación. Puede usarse como texto o con apariencia completa de botón cuando la acción debe seguir siendo un enlace." ui={ui} />
+          <SectionHeading category="Acciones" title="Link" description="Enlace base para navegación. Puede usarse como texto o con apariencia completa de botón cuando la acción debe seguir siendo un enlace." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Variantes"
               code={`<div className="flex flex-wrap items-center gap-4">
   <Link href="#">Default link</Link>
@@ -697,7 +682,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Como botón"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Link href="#" appearance="button" color="neutral">
@@ -737,7 +721,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Shapes compartidos con Button"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Link href="#" appearance="button" color="neutral">Default</Link>
@@ -771,7 +754,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Button sizes y colores"
               code={`<div className="space-y-4">
   <div className="flex flex-wrap items-center gap-3">
@@ -815,7 +797,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Inline"
               code={`<p>
   Puedes usar <Link href="#" underline="always">Link</Link> dentro de párrafos.
@@ -834,18 +815,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.link} ui={ui} />
+            <PropsTable rows={apis.link} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "badge") ? (
         <SectionCard id="badge" className={ui.divider}>
-          <SectionHeading category="Feedback" title="Badge" description="Etiqueta compacta para estados, categorías y pequeños metadatos." ui={ui} />
+          <SectionHeading category="Feedback" title="Badge" description="Etiqueta compacta para estados, categorías y pequeños metadatos." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Variantes neutras"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Badge color="neutral">Soft</Badge>
@@ -861,7 +841,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Tamaños"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Badge size="sm" color="neutral">Small</Badge>
@@ -875,7 +854,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Colores semánticos"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Badge color="neutral">Neutral</Badge>
@@ -897,7 +875,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Colores por variante"
               code={`<div className="flex flex-wrap items-center gap-3">
   <Badge variant="soft" color="primary">Soft</Badge>
@@ -915,18 +892,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.badge} ui={ui} />
+            <PropsTable rows={apis.badge} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "skeleton") ? (
         <SectionCard id="skeleton" className={ui.divider}>
-          <SectionHeading category="Feedback" title="Skeleton" description="Placeholder visual para cargas iniciales de listas, cards o detalle." ui={ui} />
+          <SectionHeading category="Feedback" title="Skeleton" description="Placeholder visual para cargas iniciales de listas, cards o detalle." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Shapes"
               className="max-w-xl space-y-3"
               code={`<div className="flex items-center gap-3">
@@ -949,7 +925,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Layout compuesto"
               className="space-y-4"
               code={`<div className="space-y-4">
@@ -986,18 +961,17 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.skeleton} ui={ui} />
+            <PropsTable rows={apis.skeleton} />
           </div>
         </SectionCard>
       ) : null}
 
       {isVisible(visibleIds, "empty-state") ? (
         <SectionCard id="empty-state" className={ui.divider}>
-          <SectionHeading category="Feedback" title="EmptyState" description="Estado vacío para primeros usos, resultados sin datos o vistas pendientes de configurar." ui={ui} />
+          <SectionHeading category="Feedback" title="EmptyState" description="Estado vacío para primeros usos, resultados sin datos o vistas pendientes de configurar." />
 
           <div className="mt-6 space-y-4">
             <PreviewPanel
-              ui={ui}
               title="Centered"
               className="max-w-2xl"
               code={`<EmptyState>
@@ -1024,7 +998,6 @@ export function UtilityDocs({ ui, visibleIds }) {
             </PreviewPanel>
 
             <PreviewPanel
-              ui={ui}
               title="Start aligned"
               className="max-w-2xl"
               code={`<EmptyState align="start">
@@ -1051,7 +1024,7 @@ export function UtilityDocs({ ui, visibleIds }) {
 
           <div className="mt-8">
             <p className={`text-sm font-semibold ${ui.title}`}>API</p>
-            <PropsTable rows={apis.emptyState} ui={ui} />
+            <PropsTable rows={apis.emptyState} />
           </div>
         </SectionCard>
       ) : null}

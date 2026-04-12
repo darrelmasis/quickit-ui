@@ -8,93 +8,16 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { CloseIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
-import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
-import { cn } from "@/lib/utils";
+import { useQuickitTheme } from "@/lib/theme";
+import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
 import { ModalContext, useModalContext } from "./modal-context";
 
 const ANIMATION_DURATION = 140;
 let modalIdCounter = 0;
 let modalZIndexCounter = 50;
-let modalScrollLockCount = 0;
 const modalStack = [];
-let previousBodyOverflow = "";
-let previousBodyOverscrollBehavior = "";
-let previousBodyPaddingRight = "";
-let previousBodyBackgroundColor = "";
-
-function isTransparentColor(color) {
-  return (
-    !color ||
-    color === "transparent" ||
-    color === "rgba(0, 0, 0, 0)" ||
-    color === "rgb(0 0 0 / 0)"
-  );
-}
-
-function getScrollLockBackgroundColor() {
-  const candidates = [
-    document.body,
-    document.getElementById("root"),
-    document.getElementById("root")?.firstElementChild,
-    document.documentElement,
-  ].filter(Boolean);
-
-  for (const element of candidates) {
-    const backgroundColor = window.getComputedStyle(element).backgroundColor;
-
-    if (!isTransparentColor(backgroundColor)) {
-      return backgroundColor;
-    }
-  }
-
-  return "";
-}
-
-function lockAppScroll() {
-  // El lock es reference-counted para soportar modales anidados sin restaurar
-  // el scroll antes de tiempo.
-  modalScrollLockCount += 1;
-
-  if (modalScrollLockCount !== 1) {
-    return;
-  }
-
-  const body = document.body;
-  const scrollbarWidth =
-    window.innerWidth - document.documentElement.clientWidth;
-  const computedBodyPaddingRight =
-    Number.parseFloat(window.getComputedStyle(body).paddingRight) || 0;
-
-  previousBodyOverflow = body.style.overflow;
-  previousBodyOverscrollBehavior = body.style.overscrollBehavior;
-  previousBodyPaddingRight = body.style.paddingRight;
-  previousBodyBackgroundColor = body.style.backgroundColor;
-
-  body.style.overflow = "hidden";
-  body.style.overscrollBehavior = "none";
-  body.style.backgroundColor = getScrollLockBackgroundColor();
-
-  if (scrollbarWidth > 0) {
-    body.style.paddingRight = `${computedBodyPaddingRight + scrollbarWidth}px`;
-  }
-}
-
-function unlockAppScroll() {
-  modalScrollLockCount = Math.max(0, modalScrollLockCount - 1);
-
-  if (modalScrollLockCount !== 0) {
-    return;
-  }
-
-  const body = document.body;
-
-  body.style.overflow = previousBodyOverflow;
-  body.style.overscrollBehavior = previousBodyOverscrollBehavior;
-  body.style.paddingRight = previousBodyPaddingRight;
-  body.style.backgroundColor = previousBodyBackgroundColor;
-}
 
 function addModalToStack(id) {
   if (!modalStack.includes(id)) {
@@ -134,11 +57,6 @@ const MODAL_PRIMITIVES = {
   body: "flex-1 overflow-y-auto px-5 py-4",
   actions:
     "flex w-full gap-3 border-t px-5 py-4 flex-shrink-0",
-  closeButton: [
-    "inline-flex size-10 items-center justify-center rounded-[0.875rem] border",
-    "text-base font-medium transition-colors cursor-pointer",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-  ].join(" "),
 };
 
 const MODAL_THEME_CLASSES = {
@@ -147,34 +65,17 @@ const MODAL_THEME_CLASSES = {
     muted: "text-slate-600",
     header: "border-slate-200",
     actions: "border-slate-200 bg-slate-50/70",
-    closeButton:
-      "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-slate-300",
   },
   dark: {
     dialog: "border-zinc-800 bg-zinc-950 text-stone-50",
     muted: "text-stone-300",
     header: "border-zinc-800",
     actions: "border-zinc-800 bg-zinc-900/70",
-    closeButton:
-      "border-zinc-800 text-stone-400 hover:border-zinc-700 hover:bg-zinc-900 hover:text-stone-50 focus-visible:outline-zinc-700",
   },
 };
 
 function resolveTheme(theme) {
   return theme === "dark" ? "dark" : "light";
-}
-
-function XMark() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none">
-      <path
-        d="M6 6l12 12M18 6L6 18"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  );
 }
 
 export function Modal({
@@ -423,27 +324,24 @@ export function ModalContent({ children, className }) {
 export function ModalHeader({ children, className }) {
   const { close, outsideClick } = useModalContext("ModalHeader");
   const theme = resolveTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("modal");
   const ui = MODAL_THEME_CLASSES[theme];
 
   return (
     <div className={cn(MODAL_PRIMITIVES.header, ui.header, className)}>
       <div className="min-w-0 flex-1">{children}</div>
       {outsideClick ? (
-        <button
+        <Button
           type="button"
-          onClick={close}
-          className={cn(
-            resolveQuickitFocusRingClasses(
-              focusRingEnabled,
-              MODAL_PRIMITIVES.closeButton,
-            ),
-            resolveQuickitFocusRingClasses(focusRingEnabled, ui.closeButton),
-          )}
+          variant="ghost"
+          shape="square"
+          size="md"
+          color="slate"
           aria-label="Cerrar modal"
+          onClick={close}
+          className="shrink-0"
         >
-          <XMark />
-        </button>
+          <CloseIcon className="size-4" />
+        </Button>
       ) : null}
     </div>
   );

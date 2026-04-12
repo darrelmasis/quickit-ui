@@ -154,6 +154,12 @@ const BreadcrumbCurrent = forwardRef(function BreadcrumbCurrent(
   );
 });
 
+Breadcrumb.List = BreadcrumbList;
+Breadcrumb.Item = BreadcrumbItem;
+Breadcrumb.Link = BreadcrumbLink;
+Breadcrumb.Separator = BreadcrumbSeparator;
+Breadcrumb.Current = BreadcrumbCurrent;
+
 export {
   Breadcrumb,
   BreadcrumbCurrent,

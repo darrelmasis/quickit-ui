@@ -14,6 +14,7 @@ export const QUICKIT_FOCUS_RING_COMPONENTS = Object.freeze([
   "accordion",
   "dropdown",
   "modal",
+  "drawer",
 ]);
 
 const DEFAULT_FOCUS_RING_CONFIG = Object.freeze({

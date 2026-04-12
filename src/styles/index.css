@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-50: oklch(0.97 0.03 281);
   --color-brand-100: oklch(0.93 0.05 281);
@@ -69,5 +71,111 @@
   .qi-ripple {
     transition-duration: 0.6ms;
     transition-delay: 0ms;
+  }
+}
+
+/* Toaster: solo movimiento/alpha en la superficie; el stack (scale/offset) va en el wrapper. */
+/* Alinear salida con toast-store TOAST_EXIT_MS (~300ms). */
+@keyframes qk-toast-in-b {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes qk-toast-out-b {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes qk-toast-in-t {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes qk-toast-out-t {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+.qk-toast-surface {
+  transform-origin: inherit;
+  transition:
+    box-shadow 360ms cubic-bezier(0.32, 0.72, 0, 1),
+    filter 360ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Hover / stack expandido: relieve para leer cada toast */
+.qk-toast-stack--expanded .qk-toast-surface {
+  box-shadow:
+    0 22px 50px rgba(15, 23, 42, 0.2),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
+  filter: saturate(1.02);
+}
+
+.dark .qk-toast-stack--expanded .qk-toast-surface {
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  filter: saturate(1.04);
+}
+
+.qk-toast-surface--in-b {
+  animation: qk-toast-in-b 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.qk-toast-surface--out-b {
+  animation: qk-toast-out-b 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+.qk-toast-surface--in-t {
+  animation: qk-toast-in-t 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.qk-toast-surface--out-t {
+  animation: qk-toast-out-t 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qk-toast-surface--in-b,
+  .qk-toast-surface--out-b,
+  .qk-toast-surface--in-t,
+  .qk-toast-surface--out-t {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+  }
+
+  .qk-toast-surface--in-b,
+  .qk-toast-surface--in-t {
+    opacity: 1;
+    transform: none;
+  }
+
+  .qk-toast-surface--out-b,
+  .qk-toast-surface--out-t {
+    opacity: 0;
+    transform: none;
   }
 }

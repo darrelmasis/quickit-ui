@@ -399,3 +399,10 @@ export function DropdownSeparator({ className }) {
     />
   );
 }
+
+Dropdown.Trigger = DropdownTrigger;
+Dropdown.Content = DropdownContent;
+Dropdown.Item = DropdownItem;
+Dropdown.Separator = DropdownSeparator;
+
+export default Dropdown;

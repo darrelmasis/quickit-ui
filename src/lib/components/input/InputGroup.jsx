@@ -9,6 +9,9 @@ import {
   resolveInputGroupLayout,
 } from "./input.shared";
 import { InputGroupContext } from "./input-group.context";
+import { InputGroupAction } from "./InputGroupAction";
+import { InputGroupAddon } from "./InputGroupAddon";
+import { InputGroupItem } from "./InputGroupItem";
 
 const InputGroup = forwardRef(function InputGroup(
   {
@@ -127,6 +130,10 @@ const InputGroup = forwardRef(function InputGroup(
     </InputGroupContext.Provider>
   );
 });
+
+InputGroup.Item = InputGroupItem;
+InputGroup.Addon = InputGroupAddon;
+InputGroup.Action = InputGroupAction;
 
 export { InputGroup };
 export default InputGroup;

@@ -81,6 +81,7 @@ export declare const QUICKIT_FOCUS_RING_COMPONENTS: readonly [
   "accordion",
   "dropdown",
   "modal",
+  "drawer",
 ];
 export declare const QUICKIT_RIPPLE_COMPONENTS: readonly [
   "button",
@@ -250,9 +251,10 @@ export interface FormControlProps extends React.HTMLAttributes<HTMLDivElement> {
   invalid?: boolean;
   required?: boolean;
 }
-export declare function FormControl(
-  props: FormControlProps,
-): React.JSX.Element;
+export interface FormControlComponent extends React.FC<FormControlProps> {
+  Description: typeof FormDescription;
+  Message: typeof FormMessage;
+}
 
 export interface FormDescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {
@@ -271,6 +273,8 @@ export interface FormMessageProps
 export declare function FormMessage(
   props: FormMessageProps,
 ): React.JSX.Element | null;
+
+export declare const FormControl: FormControlComponent;
 
 export declare function useFormControl():
   | QuickitFormControlContextValue
@@ -373,9 +377,6 @@ export declare function getInitials(
   name: string | number,
   options?: { fallback?: string; max?: number },
 ): string;
-export declare const Avatar: React.ForwardRefExoticComponent<
-  AvatarProps & React.RefAttributes<HTMLSpanElement>
->;
 export declare const AvatarImage: React.ForwardRefExoticComponent<
   AvatarImageProps & React.RefAttributes<HTMLImageElement>
 >;
@@ -394,6 +395,17 @@ export declare const AvatarPresence: React.ForwardRefExoticComponent<
 export declare const UserChip: React.ForwardRefExoticComponent<
   UserChipProps & React.RefAttributes<HTMLElement>
 >;
+export type AvatarComponent = React.ForwardRefExoticComponent<
+  AvatarProps & React.RefAttributes<HTMLSpanElement>
+> & {
+  Image: typeof AvatarImage;
+  Fallback: typeof AvatarFallback;
+  Group: typeof AvatarGroup;
+  Presence: typeof AvatarPresence;
+  Initials: typeof Initials;
+  UserChip: typeof UserChip;
+};
+export declare const Avatar: AvatarComponent;
 
 export interface EmptyStateProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -405,9 +417,6 @@ export interface EmptyStateDescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {}
 export interface EmptyStateActionsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
-export declare const EmptyState: React.ForwardRefExoticComponent<
-  EmptyStateProps & React.RefAttributes<HTMLDivElement>
->;
 export declare const EmptyStateTitle: React.ForwardRefExoticComponent<
   EmptyStateTitleProps & React.RefAttributes<HTMLHeadingElement>
 >;
@@ -417,6 +426,14 @@ export declare const EmptyStateDescription: React.ForwardRefExoticComponent<
 export declare const EmptyStateActions: React.ForwardRefExoticComponent<
   EmptyStateActionsProps & React.RefAttributes<HTMLDivElement>
 >;
+export type EmptyStateComponent = React.ForwardRefExoticComponent<
+  EmptyStateProps & React.RefAttributes<HTMLDivElement>
+> & {
+  Title: typeof EmptyStateTitle;
+  Description: typeof EmptyStateDescription;
+  Actions: typeof EmptyStateActions;
+};
+export declare const EmptyState: EmptyStateComponent;
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   animated?: boolean;
@@ -472,9 +489,6 @@ export interface InputGroupProps extends InputGroupBaseProps {
   shape?: "square" | "pill";
   size?: "sm" | "md" | "lg";
 }
-export declare const InputGroup: React.ForwardRefExoticComponent<
-  InputGroupProps & React.RefAttributes<HTMLDivElement>
->;
 export interface InputGroupItemProps extends InputGroupBaseProps {
   children?: React.ReactNode;
   grow?: boolean;
@@ -503,6 +517,14 @@ export interface InputGroupActionProps extends InputGroupActionBaseProps {
 export declare const InputGroupAction: React.ForwardRefExoticComponent<
   InputGroupActionProps & React.RefAttributes<HTMLButtonElement>
 >;
+export type InputGroupComponent = React.ForwardRefExoticComponent<
+  InputGroupProps & React.RefAttributes<HTMLDivElement>
+> & {
+  Item: typeof InputGroupItem;
+  Addon: typeof InputGroupAddon;
+  Action: typeof InputGroupAction;
+};
+export declare const InputGroup: InputGroupComponent;
 
 export interface TextareaProps extends TextareaBaseProps {
   color?: QuickitSemanticColor;
@@ -676,7 +698,6 @@ export interface TabsContentProps
   forceMount?: boolean;
   value: string;
 }
-export declare function Tabs(props: TabsProps): React.JSX.Element;
 export declare function TabsList(props: TabsListProps): React.JSX.Element;
 export declare function TabsTrigger(
   props: TabsTriggerProps,
@@ -684,6 +705,12 @@ export declare function TabsTrigger(
 export declare function TabsContent(
   props: TabsContentProps,
 ): React.JSX.Element | null;
+export interface TabsComponent extends React.FC<TabsProps> {
+  List: typeof TabsList;
+  Trigger: typeof TabsTrigger;
+  Content: typeof TabsContent;
+}
+export declare const Tabs: TabsComponent;
 export declare function useTabs(): TabsContextValue;
 
 export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -702,7 +729,6 @@ export interface AccordionContentProps
   extends React.HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
 }
-export declare function Accordion(props: AccordionProps): React.JSX.Element;
 export declare function AccordionItem(
   props: AccordionItemProps,
 ): React.JSX.Element;
@@ -712,6 +738,12 @@ export declare function AccordionTrigger(
 export declare function AccordionContent(
   props: AccordionContentProps,
 ): React.JSX.Element | null;
+export interface AccordionComponent extends React.FC<AccordionProps> {
+  Item: typeof AccordionItem;
+  Trigger: typeof AccordionTrigger;
+  Content: typeof AccordionContent;
+}
+export declare const Accordion: AccordionComponent;
 
 export interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {}
 export interface BreadcrumbListProps
@@ -734,9 +766,6 @@ export interface BreadcrumbSeparatorProps
   extends React.LiHTMLAttributes<HTMLLIElement> {}
 export interface BreadcrumbCurrentProps
   extends React.HTMLAttributes<HTMLSpanElement> {}
-export declare const Breadcrumb: React.ForwardRefExoticComponent<
-  BreadcrumbProps & React.RefAttributes<HTMLElement>
->;
 export declare const BreadcrumbList: React.ForwardRefExoticComponent<
   BreadcrumbListProps & React.RefAttributes<HTMLOListElement>
 >;
@@ -752,6 +781,16 @@ export declare const BreadcrumbSeparator: React.ForwardRefExoticComponent<
 export declare const BreadcrumbCurrent: React.ForwardRefExoticComponent<
   BreadcrumbCurrentProps & React.RefAttributes<HTMLSpanElement>
 >;
+export type BreadcrumbComponent = React.ForwardRefExoticComponent<
+  BreadcrumbProps & React.RefAttributes<HTMLElement>
+> & {
+  List: typeof BreadcrumbList;
+  Item: typeof BreadcrumbItem;
+  Link: typeof BreadcrumbLink;
+  Separator: typeof BreadcrumbSeparator;
+  Current: typeof BreadcrumbCurrent;
+};
+export declare const Breadcrumb: BreadcrumbComponent;
 
 export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   color?: QuickitSemanticColor;
@@ -810,7 +849,6 @@ export interface DropdownItemProps
 }
 export interface DropdownSeparatorProps
   extends React.HTMLAttributes<HTMLLIElement> {}
-export declare function Dropdown(props: DropdownProps): React.JSX.Element;
 export declare const DropdownTrigger: React.ForwardRefExoticComponent<
   DropdownTriggerProps & React.RefAttributes<HTMLButtonElement>
 >;
@@ -823,6 +861,13 @@ export declare const DropdownItem: React.ForwardRefExoticComponent<
 export declare function DropdownSeparator(
   props: DropdownSeparatorProps,
 ): React.JSX.Element;
+export interface DropdownComponent extends React.FC<DropdownProps> {
+  Trigger: typeof DropdownTrigger;
+  Content: typeof DropdownContent;
+  Item: typeof DropdownItem;
+  Separator: typeof DropdownSeparator;
+}
+export declare const Dropdown: DropdownComponent;
 export declare function useDropdown(): DropdownContextValue;
 
 export interface PopoverProps {
@@ -908,6 +953,155 @@ export declare const ModalActions: React.FC<ModalActionsProps>;
 export declare const ModalAction: React.FC<ModalActionProps>;
 export declare const Modal: ModalComponent;
 export declare function useModal(): ModalContextValue;
+
+export interface DrawerContextValue {
+  close: () => Promise<void> | void;
+  instanceZIndex: number;
+  open: boolean;
+  outsideClick: boolean;
+  placement: "right" | "left" | "bottom" | "top";
+  rendered: boolean;
+  setOpen: (open: boolean) => void;
+  size?: string;
+  visible: boolean;
+}
+export interface DrawerProps {
+  children?: React.ReactNode;
+  defaultOpen?: boolean;
+  placement?: "right" | "left" | "bottom" | "top";
+  onBeforeClose?: () => boolean | Promise<boolean | void> | void;
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+  outsideClick?: boolean;
+  size?: string;
+  zIndex?: number;
+}
+export interface DrawerTriggerProps {
+  as?: React.ElementType;
+  asChild?: boolean;
+  children?: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  [key: string]: unknown;
+}
+export interface DrawerContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface DrawerHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface DrawerTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  centered?: boolean;
+}
+export interface DrawerBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface DrawerActionsProps extends React.HTMLAttributes<HTMLDivElement> {
+  placement?: "start" | "center" | "end";
+}
+export interface DrawerActionProps extends ButtonProps {
+  closeOnClick?: boolean;
+}
+export interface DrawerComponent extends React.FC<DrawerProps> {
+  Trigger: typeof DrawerTrigger;
+  Content: typeof DrawerContent;
+  Header: typeof DrawerHeader;
+  Title: typeof DrawerTitle;
+  Body: typeof DrawerBody;
+  Actions: typeof DrawerActions;
+  Action: typeof DrawerAction;
+}
+export declare const DrawerTrigger: React.FC<DrawerTriggerProps>;
+export declare const DrawerContent: React.FC<DrawerContentProps>;
+export declare const DrawerHeader: React.FC<DrawerHeaderProps>;
+export declare const DrawerTitle: React.FC<DrawerTitleProps>;
+export declare const DrawerBody: React.FC<DrawerBodyProps>;
+export declare const DrawerActions: React.FC<DrawerActionsProps>;
+export declare const DrawerAction: React.FC<DrawerActionProps>;
+export declare const Drawer: DrawerComponent;
+
+export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
+  color?: QuickitSemanticColor;
+  max?: number;
+  min?: number;
+  size?: "sm" | "md" | "lg";
+  value?: number;
+}
+export declare const Progress: React.ForwardRefExoticComponent<
+  ProgressProps & React.RefAttributes<HTMLDivElement>
+>;
+
+export type RangeProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "type"
+> & {
+  color?: QuickitSemanticColor;
+  size?: "sm" | "md" | "lg";
+};
+
+export declare const Range: React.ForwardRefExoticComponent<
+  RangeProps & React.RefAttributes<HTMLInputElement>
+>;
+
+export type ToastKind = "default" | "loading" | "success" | "error";
+
+export interface ToastAction {
+  label: string;
+  onClick?: () => void;
+}
+export interface ToastOptions {
+  id?: string;
+  title?: string;
+  description?: React.ReactNode;
+  action?: ToastAction;
+  /** `0` o omitir: sin auto-cierre hasta actualizar o cerrar manual. */
+  duration?: number;
+  icon?: React.ReactNode;
+  kind?: ToastKind;
+}
+
+export interface ToasterGap {
+  collapsed?: number;
+  expanded?: number;
+}
+
+export interface ToasterKindIcons {
+  loading?: React.ReactNode;
+  success?: React.ReactNode;
+  error?: React.ReactNode;
+  default?: React.ReactNode;
+}
+
+export interface ToasterProps extends React.HTMLAttributes<HTMLDivElement> {
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  /** Toasts visibles con el stack colapsado (1–10). Por defecto 3. */
+  visibleToasts?: number;
+  /** Separación vertical en px, o `{ collapsed, expanded }`. */
+  gap?: number | ToasterGap;
+  /** Si es `false`, no se amplía separación/escala al hover/foco (solo pausa timers). Por defecto `true`. Siempre se muestran como máximo `visibleToasts` toasts; el resto entra al cerrar o expirar uno. */
+  expandOnHover?: boolean;
+  showCloseButton?: boolean;
+  /** Icono por defecto cuando el toast no define `icon` y `kind` es `default`. */
+  defaultIcon?: React.ReactNode;
+  /** Sustituye iconos por `kind` (loading, success, error, default). */
+  icons?: ToasterKindIcons;
+  /** Clases extra en la tarjeta de cada toast. */
+  toastClassName?: string;
+}
+
+export interface ToastPromiseMessages<T = unknown> {
+  loading: string | ToastOptions;
+  success: string | ToastOptions | ((data: T) => string | ToastOptions);
+  error: string | ToastOptions | ((error: unknown) => string | ToastOptions);
+}
+
+export interface ToastFn {
+  (input: string | ToastOptions): string;
+  promise: <T>(promise: Promise<T>, messages: ToastPromiseMessages<T>) => string;
+}
+
+export declare function Toaster(props: ToasterProps): React.JSX.Element;
+export declare const toast: ToastFn;
+export declare function dismiss(id?: string): void;
+/** Máximo en colapsado sin hover; el resto espera en cola. */
+export declare const MAX_VISIBLE_TOASTS: number;
+/** Tope de toasts en memoria (los más antiguos se descartan sin animación). */
+export declare const MAX_QUEUED_TOASTS: number;
 
 type Renderable<T> = React.ReactNode | ((value: T) => React.ReactNode);
 

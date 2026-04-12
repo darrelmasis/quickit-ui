@@ -50,6 +50,7 @@ import {
 } from "@/lib";
 import { cn } from "@/lib/utils";
 import {
+  NotesList,
   PreviewPanel,
   SectionCard,
   SectionHeading,
@@ -62,6 +63,14 @@ const EXAMPLE_VIEWPORTS = [
   { id: "tablet", label: "Tablet", width: 768 },
   { id: "desktop", label: "Escritorio", width: null },
 ];
+
+const EXAMPLES_FALLBACK_UI = {
+  panel: "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-[#09090b]",
+  preview: "border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-[#111113]",
+  body: "text-zinc-600 dark:text-zinc-400",
+  title: "text-zinc-950 dark:text-zinc-50",
+  accent: "text-zinc-500 dark:text-zinc-400",
+};
 
 function ExampleFrame({ children }) {
   const iframeRef = useRef(null);
@@ -170,7 +179,7 @@ function ExampleFrame({ children }) {
       <iframe
         ref={iframeRef}
         title="Vista previa responsive"
-        className="block w-full overflow-hidden rounded-[1.25rem] border-0 bg-transparent"
+        className="block w-full overflow-hidden rounded-[1rem] border-0 bg-transparent sm:rounded-[1.25rem]"
       />
       {mountNode ? createPortal(children, mountNode) : null}
     </>
@@ -178,6 +187,7 @@ function ExampleFrame({ children }) {
 }
 
 function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
+  const resolvedUi = ui ?? EXAMPLES_FALLBACK_UI;
   const viewportCanvasRef = useRef(null);
   const dragCleanupRef = useRef(null);
   const [availableWidth, setAvailableWidth] = useState(null);
@@ -288,9 +298,13 @@ function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
+    <div className={cn("space-y-4 rounded-[1.5rem] border p-4 sm:p-5", resolvedUi.panel)}>
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        <div className="space-y-2">
+          <p className={`text-xs font-semibold uppercase tracking-[0.16em] ${resolvedUi.accent}`}>
+            Viewport
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
           {EXAMPLE_VIEWPORTS.map((viewport) => {
             const isActive =
               viewport.width === null
@@ -320,21 +334,33 @@ function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
             Fluido
           </Button>
         </div>
+        </div>
 
-        <p className={`text-xs ${ui.body}`}>
-          Base: {defaultViewportConfig.width ? `${defaultViewportConfig.width}px` : "100%"}.
-          Actual: {renderedWidth ? `${renderedWidth}px` : "100%"}. Arrastra el
-          borde derecho para ajustar con precisión.
-        </p>
+        <div className="max-w-md">
+          <p className={`text-sm leading-6 ${resolvedUi.body}`}>
+            Base:{" "}
+            <span className={`font-medium ${resolvedUi.title}`}>
+              {defaultViewportConfig.width
+                ? `${defaultViewportConfig.width}px`
+                : "100%"}
+            </span>
+            . Actual:{" "}
+            <span className={`font-medium ${resolvedUi.title}`}>
+              {renderedWidth ? `${renderedWidth}px` : "100%"}
+            </span>
+            . Arrastra el borde derecho para comprobar mejor el
+            comportamiento mobile-first.
+          </p>
+        </div>
       </div>
 
       <div ref={viewportCanvasRef} className="w-full overflow-visible">
         <div className="flex justify-start">
           <div
             className={cn(
-              "relative rounded-[1.5rem] border border-dashed p-3 sm:p-4",
+              "relative rounded-[1.5rem] border border-dashed p-2 sm:p-3",
               !isDragging && "transition-[width] duration-150",
-              ui.preview,
+              resolvedUi.preview,
             )}
             style={{
               width: currentWidth === null ? "100%" : `${clampedWidth}px`,
@@ -347,10 +373,10 @@ function ExampleViewport({ children, ui, defaultViewport = "desktop" }) {
             <button
               type="button"
               aria-label="Ajustar ancho del ejemplo"
-              className="absolute inset-y-0 -right-6 z-10 flex w-12 cursor-ew-resize touch-none items-center justify-center rounded-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+              className="absolute inset-y-0 -right-5 z-10 flex w-10 cursor-ew-resize touch-none items-center justify-center rounded-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
               onPointerDown={handlePointerDown}
             >
-              <span className="h-24 w-2 rounded-full border border-white/10 bg-black/60 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" />
+              <span className="h-20 w-2 rounded-full border border-white/10 bg-black/60 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]" />
             </button>
           </div>
         </div>
@@ -365,26 +391,27 @@ function ExamplesOverview({ ui }) {
       <SectionHeading
         category="Ejemplos"
         title="Biblioteca de ejemplos"
-        description="Colección de pantallas y organismos reales para ver cómo se combinan los componentes de Quickit en flujos completos."
+        description="Pantallas completas y organismos listos para estudiar cómo se combinan los componentes de Quickit en flujos reales."
         ui={ui}
+        actions={
+          <>
+            <Link href="/docs/getting-started" appearance="button" color="neutral" variant="outline">
+              Ver primeros pasos
+            </Link>
+            <Link href="/docs/components/input" appearance="button" color="brand">
+              Ir a formularios
+            </Link>
+          </>
+        }
       />
 
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <Link href="/getting-started" appearance="button" color="neutral" variant="outline">
-          Ver primeros pasos
-        </Link>
-        <Link href="/formularios/input" appearance="button" color="brand">
-          Ir a formularios
-        </Link>
-      </div>
-
-      <div className={`mt-6 rounded-[1.5rem] border p-5 ${ui.panel}`}>
+      <div className={`rounded-[1.5rem] border p-5 ${ui.panel}`}>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
+          <div className="max-w-2xl">
             <p className={`text-sm font-semibold ${ui.title}`}>
               Cómo leer esta biblioteca
             </p>
-            <p className={`mt-2 text-sm leading-6 ${ui.body}`}>
+            <p className={`mt-3 text-sm leading-6 ${ui.body}`}>
               Cada ejemplo está pensado como una pantalla real. El preview
               responde al tema actual de la docs, el código coincide con lo que
               ves y el viewport se puede ajustar para revisar mejor el
@@ -397,7 +424,21 @@ function ExamplesOverview({ ui }) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+      <div className="mt-8">
+        <h2 className={`text-lg font-semibold ${ui.title}`}>
+          Qué encontrarás aquí
+        </h2>
+        <NotesList
+          ui={ui}
+          items={[
+            "Patrones completos de acceso, formularios y producto, no solo componentes aislados.",
+            "Código alineado con lo que ves en el preview para que puedas reutilizarlo con menos fricción.",
+            "Un viewport ajustable para revisar mejor decisiones responsive sin salir de la documentación.",
+          ]}
+        />
+      </div>
+
+      <div className="mt-8 grid gap-4 lg:grid-cols-3">
         {EXAMPLE_GROUPS.map((group) => (
           <div
             key={group.label}
@@ -416,12 +457,12 @@ function ExamplesOverview({ ui }) {
             </div>
             <p className={`mt-3 text-sm leading-6 ${ui.body}`}>
               {group.id === "acceso"
-                ? "Patrones de inicio de sesión, registro y recuperación listos para flujos de identidad."
+                ? "Inicio de sesión, registro y recuperación con jerarquía clara entre campos, ayudas y acciones."
                 : group.id === "formularios"
-                  ? "Formularios, configuración y capturas de datos con jerarquía clara entre campos y acciones."
-                  : "Pantallas de producto con navegación, estados, planes y paneles internos listos para combinar componentes."}
+                  ? "Formularios, configuración y captura de datos con estados, descripciones y CTAs bien marcados."
+                  : "Pantallas de producto, estados y layouts combinando navegación, feedback y acciones."}
             </p>
-            <div className="mt-5 space-y-2">
+            <div className="mt-5 flex flex-wrap gap-2">
               {group.items.map((item) => (
                 <Link
                   key={item.href}
@@ -429,8 +470,7 @@ function ExamplesOverview({ ui }) {
                   appearance="button"
                   color="neutral"
                   variant="outline"
-                  fullWidth
-                  className="justify-start"
+                  size="sm"
                 >
                   {item.label}
                 </Link>
@@ -454,12 +494,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Inicio de sesión"
             description="Ejemplo de organismo para autenticación con un bloque principal, acción primaria en `brand` y alternativas secundarias."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Acceso básico"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="mx-auto max-w-md rounded-[1.5rem] border p-5 sm:p-6">
@@ -560,12 +598,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Registro"
             description="Flujo de alta con identidad de marca, confirmación de contraseña y consentimiento antes de crear el espacio de trabajo."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Registro de cuenta"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="mx-auto max-w-lg rounded-[1.5rem] border p-5 sm:p-6">
@@ -691,12 +727,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Formulario de contacto"
             description="Ejemplo de formulario más completo con select, textarea, consentimiento y una jerarquía clara de acciones."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Contacto"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="rounded-[1.5rem] border p-5 sm:p-6">
@@ -843,12 +877,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Configuración de perfil"
             description="Pantalla de ajustes para actualizar identidad, rol y biografía sin perder jerarquía visual entre campos y acciones."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Perfil de usuario"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="rounded-[1.5rem] border p-5 sm:p-6">
@@ -958,12 +990,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Recuperar acceso"
             description="Organismo compacto para recuperación de acceso o reenvío de enlaces mágicos con una acción principal y contexto auxiliar."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Recuperación"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="mx-auto max-w-md rounded-[1.5rem] border p-5 sm:p-6">
@@ -1029,12 +1059,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Selección de plan"
             description="Organismo para pricing o upgrade con comparación breve, radios claros y una acción principal contextual."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Elegir plan"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="rounded-[1.5rem] border p-5 sm:p-6">
@@ -1210,12 +1238,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Panel de revisiones"
             description="Patrón de panel interno que combina navegación contextual, filtros, tabs, overlays ligeros y paginación."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Panel con navegación y filtros"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="rounded-[1.5rem] border p-5 sm:p-6">
@@ -1488,12 +1514,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Centro de ayuda"
             description="Ejemplo de preguntas frecuentes y preferencias con `Accordion`, `Switch` y un flujo de `Modal` para confirmar cambios."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Preguntas frecuentes y preferencias"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
@@ -1644,12 +1668,10 @@ export function ExamplesDocs({ ui, visibleIds }) {
             category="Ejemplos"
             title="Carga y estado vacío"
             description="Patrón para alternar entre loading, contenido vacío y una acción clara de recuperación o creación."
-            ui={ui}
-          />
+            />
 
           <div className="mt-6">
             <PreviewPanel
-              ui={ui}
               title="Estados de datos"
               className="w-full !border-transparent !bg-transparent !p-0"
               code={`<div className="grid gap-6 lg:grid-cols-2">
@@ -1729,4 +1751,5 @@ export function ExamplesDocs({ ui, visibleIds }) {
 }
 
 export default ExamplesDocs;
+
 

@@ -1,17 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import '@/styles/index.css'
-import { QuickitThemeProvider } from '@/lib'
-import DocsApp from '@/docs/DocsApp'
-import { STORAGE_KEY } from '@/docs/config'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "@/styles/index.css";
+import { QuickitThemeProvider } from "@/lib";
+import WebsiteApp from "@/website/WebsiteApp";
+import { WEBSITE_THEME_STORAGE_KEY } from "@/website/site-config";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QuickitThemeProvider
       defaultTheme="system"
-      storageKey={STORAGE_KEY}
+      storageKey={WEBSITE_THEME_STORAGE_KEY}
     >
-      <DocsApp />
+      <WebsiteApp />
     </QuickitThemeProvider>
   </StrictMode>,
 )

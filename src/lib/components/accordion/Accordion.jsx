@@ -2,6 +2,7 @@ import { useId, useMemo, useState } from "react";
 import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
+import { PlusIcon } from "@/lib/assets/icons";
 import {
   AccordionContext,
   AccordionItemContext,
@@ -164,9 +165,7 @@ export function AccordionTrigger({ children, className, ...props }) {
           isOpen && "rotate-45",
         )}
       >
-        <svg viewBox="0 0 20 20" className="size-4 fill-current">
-          <path d="M9.25 4.5h1.5v4.75h4.75v1.5h-4.75v4.75h-1.5v-4.75H4.5v-1.5h4.75V4.5Z" />
-        </svg>
+        <PlusIcon className="size-4 fill-current" />
       </span>
     </button>
   );
@@ -200,5 +199,9 @@ export function AccordionContent({
     </div>
   );
 }
+
+Accordion.Item = AccordionItem;
+Accordion.Trigger = AccordionTrigger;
+Accordion.Content = AccordionContent;
 
 export default Accordion;

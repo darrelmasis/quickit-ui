@@ -5,6 +5,7 @@ import {
   useQuickitRipple,
   useQuickitTheme,
 } from "@/lib/theme";
+import { SpinnerIcon } from "@/lib/assets/icons";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
@@ -42,33 +43,6 @@ const BUTTON_VISUAL_STATE_CLASSES = {
   active: "brightness-[0.93] saturate-150 contrast-[1.06]",
   pressed: "translate-y-px scale-[0.99]",
 };
-
-function LoadingSpinner() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className="size-4 animate-spin motion-reduce:animate-none"
-      fill="none"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="9"
-        className="opacity-25"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M21 12a9 9 0 0 0-9-9"
-        className="opacity-100"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-}
 
 const Button = forwardRef(function Button(
   {
@@ -287,7 +261,9 @@ const Button = forwardRef(function Button(
 
       {loading ? (
         <span className="absolute inset-0 z-10 inline-flex items-center justify-center gap-2">
-          {spinner ? <LoadingSpinner /> : null}
+            {spinner ? (
+              <SpinnerIcon className="size-4 animate-spin motion-reduce:animate-none" />
+            ) : null}
           {showLoadingText ? <span>{loadingContent}</span> : null}
         </span>
       ) : null}
