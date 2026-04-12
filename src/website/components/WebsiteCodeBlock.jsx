@@ -3,11 +3,17 @@ import { Button, useQuickitTheme, Tooltip } from "@/lib";
 import { CheckStrokeIcon, CopyIcon } from "@/lib/assets/icons";
 import useCopyToClipboard from "@/website/hooks/useCopyToClipboard";
 
-export default function WebsiteCodeBlock({ code, language = "bash" }) {
+/** `label` sustituye el texto de la cabecera (por defecto el `language`). */
+export default function WebsiteCodeBlock({
+  code,
+  language = "bash",
+  label,
+}) {
   const theme = useQuickitTheme();
   const isDark = theme === "dark";
   const codeTheme = isDark ? themes.nightOwl : themes.nightOwlLight;
   const { copied, copy } = useCopyToClipboard();
+  const headerText = label ?? language;
 
   return (
     <div
@@ -17,7 +23,7 @@ export default function WebsiteCodeBlock({ code, language = "bash" }) {
         className={`flex items-center justify-between border-b px-4 py-3 ${isDark ? "border-white/10" : "border-neutral-200"}`}
       >
         <span className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
-          {language}
+          {headerText}
         </span>
         <Tooltip content={copied ? "Código copiado" : "Copiar código"} placement="top" showArrow={false}>
           <Button
