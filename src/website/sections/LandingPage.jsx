@@ -1,13 +1,14 @@
 import { Badge, Link } from "@/lib";
 import { WEBSITE_ROUTES, WEBSITE_SHELL } from "@/website/site-config";
 import useCopyToClipboard from "../hooks/useCopyToClipboard";
-import { Button, Tooltip } from "@/lib";
+import { Button, Tooltip, useBreakpoint } from "@/lib";
 import { CheckStrokeIcon, CopyIcon } from "@/lib/assets/icons";
 
 const INSTALL_SNIPPET = "npm install quickit-ui";
 
 export default function LandingPage() {
   const { copy, copied } = useCopyToClipboard(2000);
+  const { isDesktop } = useBreakpoint();
 
   return (
     <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden pb-20 pt-10 sm:pb-28 sm:pt-16">
@@ -43,6 +44,7 @@ export default function LandingPage() {
                 appearance="button"
                 size="md"
                 color="neutral"
+                fullWidth={isDesktop ? false : true}
               >
                 Empezar en la documentación
               </Link>
@@ -52,6 +54,7 @@ export default function LandingPage() {
                 size="md"
                 color="neutral"
                 variant="outline"
+                fullWidth={isDesktop ? false : true}
               >
                 Ver ejemplos
               </Link>
@@ -70,6 +73,7 @@ export default function LandingPage() {
                   size="sm"
                   variant="ghost"
                   shape="square"
+                  aria-label="Copiar comando de instalación"
                   disabled={copied}
                   onClick={() => copy(INSTALL_SNIPPET)}
                 >

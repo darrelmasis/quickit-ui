@@ -1087,7 +1087,7 @@ export default function ExamplesPage() {
                     </Button>
                   </Popover>
                   <Modal>
-                    <Modal.Trigger>
+                    <Modal.Trigger asChild>
                       <Button color="neutral">Abrir modal</Button>
                     </Modal.Trigger>
                     <Modal.Content>
