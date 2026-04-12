@@ -1,678 +1,107 @@
-# Quickit UI
+# Quickit UI 🚀
 
-Quickit UI es una librería de componentes para React enfocada en interfaces consistentes, con una API semántica, tema `light` y `dark`, documentación local y soporte TypeScript vía `.d.ts`.
+[![NPM Version](https://img.shields.io/npm/v/quickit-ui?color=brand&labelB=111&style=flat-square)](https://www.npmjs.com/package/quickit-ui)
+[![License](https://img.shields.io/npm/l/quickit-ui?color=brand&labelB=111&style=flat-square)](https://github.com/darrelmasis/quickit-ui/blob/main/LICENSE)
+[![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 
-## Instalación
+**Quickit UI v0.2.0** es una librería de componentes de alto rendimiento para React 19, diseñada para equipos que necesitan velocidad, consistencia visual premium y una API declarativa sin la complejidad de configurar un sistema desde cero.
+
+---
+
+## ✨ Características principales
+
+- **React 19 Native**: Aprovecha las últimas capacidades de React para máxima eficiencia.
+- **Tailwind 4 Ready**: Arquitectura optimizada para la nueva generación de Tailwind CSS.
+- **Tema Dinámico**: Sistema de tematización `light`, `dark` y `system` con persistencia automática.
+- **Micro-animaciones**: Integración fluida con Framer Motion para efectos de interacción (ripple, press effects).
+- **Lógica Declarativa**: Primitives como `Show`, `For` y `RenderSwitch` para un código más limpio.
+- **Documentación Premium**: Nuevo sistema de documentación de múltiples páginas para una mejor referencia.
+
+---
+
+## 🚀 Instalación
 
 ```bash
 npm install quickit-ui react react-dom
 ```
 
-Importa los estilos una sola vez:
+### Configuración de Estilos (Tailwind 4)
 
-```jsx
-import "quickit-ui/styles.css";
-```
-
-Si tu app también usa utilidades propias de Tailwind con `dark:`, declara esto en tu CSS global:
+Importa los estilos en tu CSS global. Quickit expone una arquitectura que evita colisiones con tus utilidades locales:
 
 ```css
 @import "quickit-ui/styles.css";
 @import "tailwindcss";
 
+/* Sincroniza el modo oscuro de Quickit con tus utilidades dark: */
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
-Con Tailwind 4, ese orden evita conflictos entre la hoja de estilos de Quickit y las utilidades de tu app. Además hace que tu app y Quickit reaccionen a la misma clase `dark`.
+---
 
-## Uso rápido
+## 🛠️ Uso rápido
+
+Envuelve tu aplicación con el provider para habilitar el motor de temas y comportamientos globales:
 
 ```jsx
 import "quickit-ui/styles.css";
-import { Button, Input, QuickitProvider } from "quickit-ui";
+import { Button, Input, QuickitThemeProvider } from "quickit-ui";
 
 export default function App() {
   return (
-    <QuickitProvider theme="light">
-      <main className="space-y-4 p-6">
+    <QuickitThemeProvider storageKey="my-app-theme">
+      <main className="flex flex-col items-center gap-4 p-12">
+        <h1 className="text-2xl font-bold">Bienvenido</h1>
         <Input color="neutral" placeholder="Correo electrónico" />
-        <Button color="brand">Continuar</Button>
+        <Button color="brand" variant="solid">Continuar</Button>
       </main>
-    </QuickitProvider>
-  );
-}
-```
-
-## Tema
-
-Quickit UI trabaja con `light` y `dark`. Si ya gestionas el tema en tu app, `QuickitProvider` solo lo distribuye al resto de componentes.
-
-```jsx
-import "quickit-ui/styles.css";
-import { Button, QuickitProvider } from "quickit-ui";
-
-export default function App() {
-  return (
-    <QuickitProvider theme="dark">
-      <Button color="neutral">Guardar cambios</Button>
-    </QuickitProvider>
-  );
-}
-```
-
-`useQuickitTheme()` solo lee el tema efectivo actual (`light` o `dark`).
-
-Si prefieres que Quickit gestione el toggle, la persistencia y el modo `system`, usa `QuickitThemeProvider` con `useQuickitThemeController`. No hace falta envolver además con `QuickitProvider`, porque `QuickitThemeProvider` ya lo incluye internamente.
-
-Arranque recomendado:
-
-```jsx
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.jsx";
-import { QuickitThemeProvider } from "quickit-ui";
-
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <QuickitThemeProvider
-      defaultTheme="system"
-      storageKey="ava-quickit-theme"
-    >
-      <App />
-    </QuickitThemeProvider>
-  </StrictMode>,
-);
-```
-
-Controlador persistente:
-
-```jsx
-import "quickit-ui/styles.css";
-import {
-  Button,
-  QuickitThemeProvider,
-  useQuickitThemeController,
-} from "quickit-ui";
-
-function ThemeControls() {
-  const { resolvedTheme, setTheme, systemTheme, theme, toggleTheme } =
-    useQuickitThemeController();
-
-  return (
-    <div className="space-y-4">
-      <p>
-        Preferencia: {theme}. Sistema: {systemTheme}. Tema activo: {resolvedTheme}
-      </p>
-
-      <div className="flex flex-wrap gap-3">
-        <Button onClick={() => setTheme("system")}>Sistema</Button>
-        <Button onClick={() => setTheme("light")}>Claro</Button>
-        <Button onClick={() => setTheme("dark")}>Oscuro</Button>
-        <Button color="brand" variant="outline" onClick={toggleTheme}>
-          Alternar desde {resolvedTheme}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-export default function App() {
-  return (
-    <QuickitThemeProvider
-      defaultTheme="system"
-      storageKey="ava-quickit-theme"
-    >
-      <ThemeControls />
     </QuickitThemeProvider>
   );
 }
 ```
 
-Patrón real con `Switch`:
+---
 
-```jsx
-import {
-  QuickitThemeProvider,
-  Switch,
-  Tooltip,
-  useQuickitThemeController,
-} from "quickit-ui";
+## 🎨 Componentes Disponibles
 
-function ToggleTheme() {
-  const { resolvedTheme, toggleTheme } = useQuickitThemeController();
+Quickit ofrece una colección creciente de más de 35 primitives organizadas por categorías:
 
-  return (
-    <Tooltip content={`Alternar tema (actual: ${resolvedTheme})`}>
-      <Switch
-        color="brand"
-        size="md"
-        checked={resolvedTheme === "dark"}
-        onCheckedChange={() => toggleTheme()}
-      />
-    </Tooltip>
-  );
-}
+| Categoría | Componentes |
+|-----------|-------------|
+| **Base** | `Button`, `Link`, `Badge`, `Label`, `Skeleton`, `Progress` |
+| **Formularios** | `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl` |
+| **Overlays** | `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster` |
+| **Navegación** | `Tabs`, `Accordion`, `Breadcrumb`, `Pagination` |
+| **Identidad** | `Avatar`, `AvatarGroup`, `UserChip`, `Initials` |
+| **Lógica** | `Show`, `For`, `RenderSwitch`, `Match`, `Default` |
+| **Feedback** | `EmptyState`, `FormDescription`, `FormMessage` |
 
-export function App() {
-  return (
-    <QuickitThemeProvider
-      defaultTheme="system"
-      storageKey="ava-quickit-theme"
-    >
-      <ToggleTheme />
-    </QuickitThemeProvider>
-  );
-}
-```
+---
 
-Notas:
+## 🧠 Hooks y Controladores
 
-- el storage key por defecto es `quickit-ui-theme`
-- `defaultTheme` ahora soporta `system | light | dark`
-- `QuickitThemeProvider` aplica la clase `dark` sobre `document.documentElement`
-- `QuickitThemeProvider` ya envuelve a `QuickitProvider`
-- puedes sobrescribir el storage key con `storageKey`
-- `useQuickitTheme()` solo lee el tema resuelto actual
-- `useQuickitThemeController()` expone `theme`, `resolvedTheme`, `systemTheme`, `setTheme` y `toggleTheme`
-- `theme` es la preferencia persistida; `resolvedTheme` es el modo que Quickit está aplicando realmente
-- si usas clases propias como `dark:bg-zinc-950`, añade `@custom-variant dark (&:where(.dark, .dark *));` a tu CSS global
+Controla el comportamiento de tu app con hooks de primer nivel:
 
-Si tu layout propio también depende del tema:
+- **`useQuickitThemeController()`**: Control total sobre el tema (set, toggle, resolvedTheme).
+- **`useBreakpoint()`**: Utilidad responsiva sincronizada con los tokens de Quickit.
+- **`useMediaQuery()`**: Media queries personalizadas fáciles de usar.
+- **`useQuickitTheme()`**: Lee el tema efectivo actual en cualquier componente.
 
-```jsx
-import { useQuickitThemeController } from "quickit-ui";
+---
 
-function Shell() {
-  const { theme, resolvedTheme } = useQuickitThemeController();
+## 📖 Documentación Completa
 
-  return (
-    <div className="bg-white text-zinc-950 dark:bg-zinc-950 dark:text-white">
-      <header className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-        Preferencia: {theme}. Tema efectivo: {resolvedTheme}
-      </header>
-      <main className="p-6">
-        <Dashboard />
-      </main>
-    </div>
-  );
-}
-```
+Hemos rediseñado nuestra documentación para que cada componente y hook tenga su propio espacio dedicado:
 
-También puedes controlar el focus ring y el efecto de presión globalmente desde el provider:
+1.  Corre el entorno de desarrollo: `npm run dev`
+2.  Accede a `/docs` para ver la nueva guía multi-página con:
+    - Ejemplo de uso interactivo e instalación por componente.
+    - Tablas de Props detalladas.
+    - Documentación técnica de Hooks (Parámetros, Retornos).
 
-```jsx
-<QuickitProvider
-  theme="dark"
-  focusRing={{ disabledComponents: ["input", "textarea"] }}
-  pressEffect="ripple"
-  ripple={{ disabledComponents: ["link"] }}
->
-  <App />
-</QuickitProvider>
-```
+---
 
-Reglas:
+## 📜 Licencia
 
-- por defecto Quickit mantiene focus visible accesible en componentes interactivos
-- `focusRing={false}` lo desactiva en toda la librería
-- `focusRing={{ disabledComponents: [...] }}` lo desactiva solo en componentes específicos
-- por defecto Quickit usa `pressEffect="transform"` en `Button` y en `Link` con `appearance="button"`
-- `pressEffect="ripple"` cambia esa política global para usar ripple en lugar de transform
-- `ripple={false}` lo desactiva en toda la librería cuando `pressEffect="ripple"`
-- `ripple={{ disabledComponents: [...] }}` lo desactiva solo en botones o links cuando `pressEffect="ripple"`
-
-Si necesitas leer esa decisión desde tu app o desde wrappers propios:
-
-```jsx
-import {
-  useQuickitFocusRing,
-  useQuickitPressEffect,
-  useQuickitRipple,
-} from "quickit-ui";
-
-function Toolbar() {
-  const buttonFocusRing = useQuickitFocusRing("button");
-  const linkFocusRing = useQuickitFocusRing("link");
-  const checkboxFocusRing = useQuickitFocusRing("checkbox");
-  const radioFocusRing = useQuickitFocusRing("radio");
-  const pressEffect = useQuickitPressEffect();
-  const buttonRipple = useQuickitRipple("button");
-  const linkRipple = useQuickitRipple("link");
-
-  return (
-    <div>
-      <span>button focus: {String(buttonFocusRing)}</span>
-      <span>link focus: {String(linkFocusRing)}</span>
-      <span>checkbox focus: {String(checkboxFocusRing)}</span>
-      <span>radio focus: {String(radioFocusRing)}</span>
-      <span>pressEffect: {pressEffect}</span>
-      <span>button ripple: {String(buttonRipple)}</span>
-      <span>link ripple: {String(linkRipple)}</span>
-    </div>
-  );
-}
-```
-
-Caso real:
-
-```jsx
-import {
-  Button,
-  Checkbox,
-  Link,
-  QuickitProvider,
-  Radio,
-} from "quickit-ui";
-
-export function LoginOptions() {
-  return (
-    <QuickitProvider
-      pressEffect="ripple"
-      focusRing={{ disabledComponents: ["link", "checkbox", "radio"] }}
-    >
-      <div className="flex flex-wrap items-center gap-4">
-        <Link href="#">Ver términos</Link>
-        <Checkbox label="Recordarme" defaultChecked />
-        <Radio name="login-mode" label="Modo manual" defaultChecked />
-        <Button color="neutral" variant="outline">
-          Continuar
-        </Button>
-      </div>
-    </QuickitProvider>
-  );
-}
-```
-
-## Colores semánticos
-
-La API pública soporta:
-
-```txt
-neutral | slate | zinc | primary | brand | success | danger | warning | info | light | dark | black
-```
-
-Criterio actual:
-
-- `neutral` mantiene la base premium de la librería.
-- `slate` y `zinc` exponen neutrales explícitos.
-- `primary` usa `sky-*`.
-- `brand` usa `brand-*`.
-- `success` usa `emerald-*`.
-- `danger` usa `rose-*`.
-- `warning` usa `amber-*`.
-- `info` usa `cyan-*`.
-- `light` usa una escala clara basada en `stone-*`.
-- `dark` es una variante oscura intermedia.
-- `black` es la opción más densa y de mayor contraste.
-
-Ejemplo recomendado para conectar tu marca:
-
-```css
-@import "quickit-ui/styles.css";
-
-:root {
-  --color-brand-300: oklch(0.86 0.19 126);
-  --color-brand-400: oklch(0.8 0.2 126);
-  --color-brand-500: oklch(0.74 0.2 126);
-  --color-brand-600: oklch(0.68 0.19 126);
-  --color-brand-700: oklch(0.62 0.18 126);
-  --color-brand-800: oklch(0.55 0.16 126);
-}
-```
-
-Si quieres que `primary` use tu marca, reemplaza `sky-*`.
-
-Si necesitas neutrales más explícitos y previsibles, usa `color="slate"` o `color="zinc"` en lugar de asumir que `neutral` es una escala plana.
-
-Si necesitas un color puntual fuera de la API semántica, sobrescribe con `className`:
-
-```jsx
-<Button
-  color="neutral"
-  className="border-fuchsia-600 bg-fuchsia-600 text-white hover:border-fuchsia-700 hover:bg-fuchsia-700"
->
-  Magenta
-</Button>
-```
-
-## Hooks y utilidades
-
-Quickit también exporta hooks y utilidades para componer tu app o tu propia documentación:
-
-```jsx
-import {
-  QUICKIT_BREAKPOINTS,
-  QUICKIT_BUTTON_SHAPES,
-  QUICKIT_CONTROL_SIZES,
-  QUICKIT_SEMANTIC_COLORS,
-  QuickitProvider,
-  useBreakpoint,
-  useMediaQuery,
-  useQuickitTheme,
-} from "quickit-ui";
-```
-
-## InputGroup
-
-Usa `InputGroupAddon` para segmentos pasivos y `InputGroupAction` para segmentos interactivos.
-`InputGroupAction` reutiliza `Button` y renderiza un `<button>` real, así que soporta `type`, `onClick`, `disabled`, foco y teclado.
-
-```jsx
-import {
-  Input,
-  InputGroup,
-  InputGroupAction,
-} from "quickit-ui";
-
-export function Filters() {
-  return (
-    <InputGroup attached>
-      <InputGroupAction variant="outline" onClick={() => console.log("todo")}>
-        Todo
-      </InputGroupAction>
-      <Input placeholder="Filtra por nombre o etiqueta" />
-      <InputGroupAction variant="outline" onClick={() => console.log("estado")}>
-        Estado
-      </InputGroupAction>
-    </InputGroup>
-  );
-}
-```
-
-## Ejemplos
-
-### Button
-
-```jsx
-import { Button } from "quickit-ui";
-
-export function Actions() {
-  return (
-    <div className="flex gap-3">
-      <Button color="neutral">Neutral</Button>
-      <Button variant="outline" color="primary">
-        Outline
-      </Button>
-      <Button loading loadingText="Guardando">
-        Guardar
-      </Button>
-    </div>
-  );
-}
-```
-
-Notas rápidas de `Button`:
-
-- `shape="square"` y `shape="circle"` están pensados para icon buttons.
-- `shape="square"` y `shape="circle"` salen con `activeMotion` desactivado por defecto.
-- `Button` y `Link` con `appearance="button"` usan `pressEffect="transform"` por defecto.
-- Si quieres ripple, usa `pressEffect="ripple"` en esa instancia o en `QuickitProvider`.
-- Cuando `pressEffect="ripple"`, puedes apagarlo con `ripple={false}`.
-- Si quieres esa animación en un icon button, usa `activeMotion={true}`.
-
-```jsx
-<Button shape="square" variant="outline" color="neutral" aria-label="Buscar">
-  <SearchIcon />
-</Button>
-
-<Button
-  shape="square"
-  variant="outline"
-  color="neutral"
-  activeMotion
-  aria-label="Buscar con motion"
->
-  <SearchIcon />
-</Button>
-```
-
-### Formularios
-
-```jsx
-import {
-  FormControl,
-  FormDescription,
-  FormMessage,
-  Input,
-  Label,
-  Select,
-  Textarea,
-} from "quickit-ui";
-
-export function ContactForm() {
-  return (
-    <div className="space-y-4">
-      <FormControl>
-        <Label htmlFor="name">Nombre</Label>
-        <Input id="name" color="neutral" placeholder="Tu nombre" />
-      </FormControl>
-
-      <FormControl>
-        <Label htmlFor="topic">Tema</Label>
-        <Select
-          id="topic"
-          color="slate"
-          defaultValue="support"
-          onValueChange={(value) => console.log(value)}
-        >
-          <option value="support">Soporte</option>
-          <option value="sales">Ventas</option>
-        </Select>
-        <FormDescription>Selecciona el motivo de tu consulta.</FormDescription>
-      </FormControl>
-
-      <FormControl>
-        <Label htmlFor="password">Contraseña</Label>
-        <Input
-          id="password"
-          type="password"
-          color="brand"
-          placeholder="••••••••"
-        />
-      </FormControl>
-
-      <FormControl>
-        <Label htmlFor="search">Buscar componente</Label>
-        <Input
-          id="search"
-          type="search"
-          color="neutral"
-          defaultValue="Modal"
-        />
-      </FormControl>
-
-      <FormControl invalid>
-        <Label htmlFor="message">Mensaje</Label>
-        <Textarea id="message" color="danger" placeholder="Escribe tu mensaje" />
-        <FormMessage>Este campo es obligatorio.</FormMessage>
-      </FormControl>
-    </div>
-  );
-}
-```
-
-### Navegación
-
-```jsx
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "quickit-ui";
-
-export function SettingsTabs() {
-  return (
-    <Tabs defaultValue="general" activationMode="manual" color="brand">
-      <TabsList>
-        <TabsTrigger value="general">General</TabsTrigger>
-        <TabsTrigger value="security">Seguridad</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="general">Contenido general</TabsContent>
-      <TabsContent value="security">Contenido de seguridad</TabsContent>
-    </Tabs>
-  );
-}
-```
-
-### Lógica declarativa
-
-```jsx
-import { Default, For, Match, RenderSwitch, Show } from "quickit-ui";
-
-export function States({ items, status, user }) {
-  return (
-    <>
-      <Show when={user} fallback={<p>Inicia sesión</p>}>
-        {(value) => <p>Hola, {value.name}</p>}
-      </Show>
-
-      <RenderSwitch value={status}>
-        <Match when="idle">Idle</Match>
-        <Match when="loading">Loading</Match>
-        <Default>Done</Default>
-      </RenderSwitch>
-
-      <For each={items} fallback={<p>Sin resultados</p>}>
-        {(item) => <div key={item.id}>{item.label}</div>}
-      </For>
-    </>
-  );
-}
-```
-
-### Overlay
-
-```jsx
-import {
-  Button,
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger,
-  Modal,
-  ModalAction,
-  ModalActions,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalTitle,
-} from "quickit-ui";
-
-export function OverlayExamples() {
-  return (
-    <div className="flex gap-4">
-      <Dropdown>
-        <DropdownTrigger asChild>
-          <Button color="neutral" variant="outline">
-            Opciones
-          </Button>
-        </DropdownTrigger>
-
-        <DropdownContent>
-          <DropdownItem>Editar</DropdownItem>
-          <DropdownItem>Duplicar</DropdownItem>
-          <DropdownItem variant="danger">Eliminar</DropdownItem>
-        </DropdownContent>
-      </Dropdown>
-
-      <Modal>
-        <Modal.Trigger asChild>
-          <Button color="neutral">Abrir modal</Button>
-        </Modal.Trigger>
-
-        <Modal.Content>
-          <ModalHeader>
-            <ModalTitle>Confirmar acción</ModalTitle>
-          </ModalHeader>
-
-          <ModalBody>Este cambio no se puede deshacer.</ModalBody>
-
-          <ModalActions placement="end">
-            <ModalAction color="neutral" variant="outline">
-              Cancelar
-            </ModalAction>
-            <ModalAction color="danger">Eliminar</ModalAction>
-          </ModalActions>
-        </Modal.Content>
-      </Modal>
-    </div>
-  );
-}
-```
-
-## Identidad
-
-Quickit incluye primitives y compuestos de identidad:
-
-- `Avatar`
-- `AvatarGroup`
-- `AvatarPresence`
-- `Initials`
-- `UserChip`
-
-## Componentes disponibles
-
-- `Accordion`
-- `Avatar`
-- `AvatarGroup`
-- `AvatarPresence`
-- `Badge`
-- `Breadcrumb`
-- `Button`
-- `Checkbox`
-- `Dropdown`
-- `EmptyState`
-- `FormControl`
-- `FormDescription`
-- `FormMessage`
-- `Initials`
-- `Input`
-- `Label`
-- `Link`
-- `Modal`
-- `Pagination`
-- `Popover`
-- `Radio`
-- `Select`
-- `Skeleton`
-- `Switch`
-- `Tabs`
-- `Textarea`
-- `Tooltip`
-- `UserChip`
-- `Show`
-- `RenderSwitch`
-- `Match`
-- `Default`
-- `For`
-
-## Documentación local
-
-```bash
-npm install
-npm run dev
-```
-
-Para generar la versión estática:
-
-```bash
-npm run build:docs
-```
-
-## Requisitos
-
-- `react` `^19.0.0`
-- `react-dom` `^19.0.0`
-- Node.js `18` o superior
-
-## Scripts útiles
-
-- `npm run dev`: entorno local de desarrollo.
-- `npm run build`: build de la librería para distribución.
-- `npm run build:docs`: build estático de la documentación.
-- `npm run lint`: validación con ESLint.
-- `npm run test`: pruebas runtime.
-- `npm run test:types`: validación del consumo TypeScript.
-- `npm run pack:check`: vista previa del paquete que se publicaría en npm.
-
-## Licencia
-
-MIT
+Distribuido bajo la licencia [MIT](https://github.com/darrelmasis/quickit-ui/blob/main/LICENSE). Desarrollado por [Darrel Masis](https://github.com/darrelmasis).
