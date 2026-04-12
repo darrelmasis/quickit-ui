@@ -5,6 +5,7 @@ export default function WebsiteDocsSidebar({
   componentGroups,
   currentComponentSlug,
   sections,
+  currentPath,
 }) {
   return (
     <aside className="hidden self-start lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-3 lg:[scrollbar-width:thin] lg:[scrollbar-color:rgb(163_163_163)_transparent] lg:[&::-webkit-scrollbar]:w-2 lg:[&::-webkit-scrollbar-track]:bg-transparent lg:[&::-webkit-scrollbar-thumb]:rounded-full lg:[&::-webkit-scrollbar-thumb]:border-2 lg:[&::-webkit-scrollbar-thumb]:border-transparent lg:[&::-webkit-scrollbar-thumb]:bg-neutral-300 lg:[&::-webkit-scrollbar-thumb]:bg-clip-content lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:lg:[scrollbar-color:rgb(115_115_115)_transparent] dark:lg:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600">
@@ -15,15 +16,50 @@ export default function WebsiteDocsSidebar({
           </p>
           <nav className="mt-4 space-y-1">
             <For each={sections}>
-              {(section, index) => (
-                <a
-                  key={`${section.id}-${index}`}
-                  href={`#${section.id}`}
-                  className="block rounded-xl px-3 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-                >
-                  {section.label}
-                </a>
-              )}
+              {(section, index) => {
+                const isHooks = section.id === "hooks";
+                const baseHref = isHooks ? "/docs/hooks" : `/docs/${section.id}`;
+                
+                const isActive = currentPath === baseHref;
+                
+                return (
+                  <div key={`${section.id}-${index}`} className="space-y-1">
+                    <a
+                      href={baseHref}
+                      className={
+                        isActive 
+                          ? "block rounded-xl bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-950 dark:bg-neutral-900 dark:text-neutral-100"
+                          : "block rounded-xl px-3 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+                      }
+                    >
+                      {section.label}
+                    </a>
+                    {section.children && (
+                      <div className="ml-4 space-y-1 border-l border-neutral-100 pl-4 dark:border-neutral-800">
+                        {section.children.map((child) => {
+                          const childSlug = child.id.replace("hook-", "");
+                          const childHref = `/docs/hooks/${childSlug}`;
+                          const isChildActive = currentPath === childHref;
+
+                          return (
+                            <a
+                              key={child.id}
+                              href={childHref}
+                              className={
+                                isChildActive
+                                  ? "block py-1 text-xs font-medium text-brand-600"
+                                  : "block py-1 text-xs text-neutral-500 hover:text-neutral-950 dark:hover:text-neutral-100"
+                              }
+                            >
+                              {child.label}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              }}
             </For>
           </nav>
         </div>
