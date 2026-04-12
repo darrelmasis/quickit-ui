@@ -727,6 +727,9 @@ export interface AccordionTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 export interface AccordionContentProps
   extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Compatibilidad con versiones anteriores; el contenido permanece montado para animar la apertura/cierre.
+   */
   forceMount?: boolean;
 }
 export declare function AccordionItem(
@@ -737,7 +740,7 @@ export declare function AccordionTrigger(
 ): React.JSX.Element;
 export declare function AccordionContent(
   props: AccordionContentProps,
-): React.JSX.Element | null;
+): React.JSX.Element;
 export interface AccordionComponent extends React.FC<AccordionProps> {
   Item: typeof AccordionItem;
   Trigger: typeof AccordionTrigger;

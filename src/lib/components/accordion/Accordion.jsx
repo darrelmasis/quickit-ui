@@ -33,6 +33,25 @@ function resolveTheme(theme) {
   return theme === "dark" ? "dark" : "light";
 }
 
+/** En `type="single"`, solo un valor activo: normaliza arrays o valores raros. */
+function coerceSingleValue(raw) {
+  if (raw == null || raw === "") {
+    return null;
+  }
+  if (Array.isArray(raw)) {
+    return raw[0] ?? null;
+  }
+  return raw;
+}
+
+function deriveOpenValues(isMultiple, value) {
+  if (isMultiple) {
+    return Array.isArray(value) ? [...value] : [];
+  }
+  const single = coerceSingleValue(value);
+  return single != null ? [single] : [];
+}
+
 export function Accordion({
   children,
   className,
@@ -51,24 +70,16 @@ export function Accordion({
     if (isMultiple) {
       return Array.isArray(defaultValue) ? defaultValue : [];
     }
-
-    return defaultValue ?? null;
+    return coerceSingleValue(defaultValue);
   });
 
   const value = isControlled ? controlledValue : internalValue;
-  const openValues = isMultiple
-    ? Array.isArray(value)
-      ? value
-      : []
-    : value
-      ? [value]
-      : [];
+  const openValues = deriveOpenValues(isMultiple, value);
 
   const setValue = (nextValue) => {
     if (!isControlled) {
       setInternalValue(nextValue);
     }
-
     onValueChange?.(nextValue);
   };
 
@@ -77,7 +88,6 @@ export function Accordion({
       const nextValue = openValues.includes(itemValue)
         ? openValues.filter((valueItem) => valueItem !== itemValue)
         : [...openValues, itemValue];
-
       setValue(nextValue);
       return;
     }
@@ -86,7 +96,6 @@ export function Accordion({
       if (collapsible) {
         setValue(null);
       }
-
       return;
     }
 
@@ -174,28 +183,34 @@ export function AccordionTrigger({ children, className, ...props }) {
 export function AccordionContent({
   children,
   className,
-  forceMount = false,
+  forceMount,
   ...props
 }) {
+  void forceMount;
   const { contentId, isOpen, triggerId } =
     useAccordionItemContext("AccordionContent");
   const theme = resolveTheme(useQuickitTheme());
   const ui = ACCORDION_THEME_CLASSES[theme];
 
-  if (!forceMount && !isOpen) {
-    return null;
-  }
-
   return (
     <div
-      id={contentId}
       role="region"
+      id={contentId}
       aria-labelledby={triggerId}
-      hidden={!isOpen}
-      className={cn("px-4 pb-4 text-sm leading-6", ui.content, className)}
-      {...props}
+      data-state={isOpen ? "open" : "closed"}
+      className={cn(
+        "qk-accordion-panel grid",
+        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+      )}
     >
-      {children}
+      <div className="min-h-0 overflow-hidden" inert={!isOpen || undefined}>
+        <div
+          className={cn("px-4 pb-4 text-sm leading-6", ui.content, className)}
+          {...props}
+        >
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

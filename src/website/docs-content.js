@@ -456,11 +456,15 @@ export const WEBSITE_COMPONENT_REVIEW_NOTES = {
   accordion: [
     {
       tag: "Uso",
-      text: "`type=\"single\"` vs `multiple` cambia el tipo de `value`/`defaultValue` (string vs array). Con `collapsible={false}` en single, un ítem permanece abierto.",
+      text: "`type=\"single\"` vs `multiple` cambia el tipo de `value`/`defaultValue` (string vs array). Con `collapsible={false}` en single, un ítem permanece abierto. En single, si llega un array por error, solo cuenta el primer valor.",
     },
     {
       tag: "Accesibilidad",
-      text: "Triggers y regiones colapsables siguen un patrón de encabezado + panel; evita anidar controles interactivos complejos dentro del trigger sin probar teclado.",
+      text: "Triggers y regiones colapsables siguen un patrón de encabezado + panel; el panel usa `inert` al estar cerrado. Evita anidar controles complejos en el trigger sin probar teclado.",
+    },
+    {
+      tag: "Implementación",
+      text: "Animación de altura con CSS grid (`0fr`/`1fr`) y clase `.qk-accordion-panel`; respeta `prefers-reduced-motion`.",
     },
   ],
   breadcrumb: [

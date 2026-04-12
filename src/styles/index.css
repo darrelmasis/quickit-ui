@@ -179,3 +179,14 @@
     transform: none;
   }
 }
+
+.qk-accordion-panel {
+  transition: grid-template-rows 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qk-accordion-panel {
+    transition-duration: 1ms;
+    transition-timing-function: linear;
+  }
+}

@@ -2764,7 +2764,9 @@ export function AccordionUsage() {
       ],
       notes: [
         "Accordion.Item requiere prop value (también disponible como AccordionItem).",
-        "Accordion.Content acepta forceMount; el nombre plano AccordionContent sigue exportado.",
+        "En `type=\"single\"` solo puede haber un ítem abierto; si `value` o `defaultValue` llegan como array, solo se usa el primer elemento.",
+        "El panel anima altura con CSS grid (`0fr` → `1fr`); con `prefers-reduced-motion` la transición se acorta.",
+        "`forceMount` se mantiene por compatibilidad; el contenido queda montado para poder animar.",
       ],
     },
   ],
