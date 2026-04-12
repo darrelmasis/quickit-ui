@@ -21,7 +21,7 @@ export default function LandingPage() {
           <Link
             href={WEBSITE_ROUTES.docs}
             appearance="button"
-            size="2xl"
+            size="md"
             color="neutral"
           >
             Empezar
@@ -29,7 +29,7 @@ export default function LandingPage() {
           <Link
             href={WEBSITE_ROUTES.examples}
             appearance="button"
-            size="2xl"
+            size="md"
             color="neutral"
             variant="ghost"
           >
