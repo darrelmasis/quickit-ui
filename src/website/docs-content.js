@@ -53,6 +53,41 @@ function ThemeBadge() {
   return <span>Tema activo: {theme}</span>;
 }`;
 
+export const THEME_FOUC_VITE_SNIPPET = `<script>
+  (function() {
+    try {
+      var key = 'quickit-ui-theme'; // Tu storageKey
+      var theme = localStorage.getItem(key);
+      var supportDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (theme === 'dark' || (!theme && supportDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+</script>`;
+
+export const THEME_FOUC_NEXT_SNIPPET = `// En app/layout.tsx o app/layout.jsx
+export default function RootLayout({ children }) {
+  return (
+    <html lang=\"es\">
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: \`(function() {
+            try {
+              var theme = localStorage.getItem('quickit-ui-theme');
+              var supportDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              if (theme === 'dark' || (!theme && supportDark)) {
+                document.documentElement.classList.add('dark');
+              }
+            } catch (e) {}
+          })();\`.replace(/\\n/g, ''),
+        }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}`;
+
 export const WEBSITE_HOOK_EXAMPLES = {
   useQuickitTheme: {
     code: THEME_READ_SNIPPET,

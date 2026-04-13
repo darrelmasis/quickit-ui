@@ -59,6 +59,8 @@ import {
   THEME_PROVIDER_SNIPPET,
   THEME_TOGGLE_SNIPPET,
   THEME_READ_SNIPPET,
+  THEME_FOUC_VITE_SNIPPET,
+  THEME_FOUC_NEXT_SNIPPET,
 } from "@/website/docs-content";
 import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 import WebsiteDocsSidebar from "@/website/components/WebsiteDocsSidebar";
@@ -3944,7 +3946,10 @@ function GenericSectionPage({ sectionId }) {
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="introduccion-componentes"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Componentes de producto
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -3953,7 +3958,10 @@ function GenericSectionPage({ sectionId }) {
               </p>
             </div>
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="introduccion-tema"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Tema y comportamiento
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -3962,7 +3970,10 @@ function GenericSectionPage({ sectionId }) {
               </p>
             </div>
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800 sm:col-span-2 xl:col-span-1">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="introduccion-utilidades"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Utilidades lógicas
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -4000,7 +4011,10 @@ function GenericSectionPage({ sectionId }) {
               aplica la política visual; no persiste ni muta el tema.
             </div>
             <div>
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tema-proveedor"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Proveedor base
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -4013,7 +4027,10 @@ function GenericSectionPage({ sectionId }) {
             </div>
 
             <div>
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tema-controlador"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Controlador de tema
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -4030,7 +4047,10 @@ function GenericSectionPage({ sectionId }) {
             </div>
 
             <div>
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tema-lectura"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Lectura rápida del tema
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -4039,6 +4059,60 @@ function GenericSectionPage({ sectionId }) {
               </p>
               <div className="mt-4">
                 <WebsiteCodeBlock code={THEME_READ_SNIPPET} language="jsx" />
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="tema-fouc"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Evitar parpadeo (FOUC)
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                El "Flash of Unstyled Content" ocurre porque React hidrata el tema después del primer pintado. 
+                Para evitarlo, es necesario un script síncrono en el <code className="text-brand-500">&lt;head&gt;</code> que 
+                bloquee el renderizado hasta que se aplique la clase correcta.
+              </p>
+              
+              <div className="mt-6 space-y-6">
+                <div>
+                  <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                    Vite / SPA (index.html)
+                  </h4>
+                  <div className="mt-2">
+                    <WebsiteCodeBlock code={THEME_FOUC_VITE_SNIPPET} language="html" />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                    Next.js (Root Layout)
+                  </h4>
+                  <div className="mt-2">
+                    <WebsiteCodeBlock code={THEME_FOUC_NEXT_SNIPPET} language="jsx" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50/50 p-5 dark:border-neutral-800 dark:bg-neutral-900/50">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-950 dark:text-neutral-50">
+                  Resumen de implementación
+                </h4>
+                <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                  <li>
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Por qué?</strong> Porque React se ejecuta después de que el navegador pinta el HTML.
+                  </li>
+                  <li>
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cómo?</strong> Con un script síncrono que modifique <code className="text-brand-500">documentElement</code>.
+                  </li>
+                  <li>
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cuándo?</strong> Inmediatamente, antes de que el navegador renderice el <code className="text-brand-500">&lt;body&gt;</code>.
+                  </li>
+                  <li>
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Dónde?</strong> En lo más alto de tu <code className="text-brand-500">&lt;head&gt;</code>.
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -4070,7 +4144,10 @@ function GenericSectionPage({ sectionId }) {
         >
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tokens-semanticos"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Colores semánticos
               </h3>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -4085,7 +4162,10 @@ function GenericSectionPage({ sectionId }) {
               </div>
             </div>
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tokens-accent"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Colores accent
               </h3>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -4100,7 +4180,10 @@ function GenericSectionPage({ sectionId }) {
               </div>
             </div>
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tokens-tamaños"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Tamaños de control
               </h3>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -4115,7 +4198,10 @@ function GenericSectionPage({ sectionId }) {
               </div>
             </div>
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              <h3
+                id="tokens-shapes"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Shapes y variants
               </h3>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -4335,6 +4421,45 @@ function ComponentPage({ component }) {
   );
 }
 
+function getGenericSections(sectionId) {
+  if (sectionId === "introduccion") {
+    return [
+      { id: "introduccion", label: "Introducción" },
+      { id: "introduccion-componentes", label: "Componentes" },
+      { id: "introduccion-tema", label: "Tema y comportamiento" },
+      { id: "introduccion-utilidades", label: "Utilidades lógicas" },
+    ];
+  }
+  if (sectionId === "instalacion") {
+    return [{ id: "instalacion", label: "Instalación" }];
+  }
+  if (sectionId === "tema") {
+    return [
+      { id: "tema", label: "Tema" },
+      { id: "tema-proveedor", label: "Proveedor base" },
+      { id: "tema-controlador", label: "Controlador de tema" },
+      { id: "tema-lectura", label: "Lectura rápida" },
+      { id: "tema-fouc", label: "Evitar parpadeo (FOUC)" },
+    ];
+  }
+  if (sectionId === "comportamiento") {
+    return [{ id: "comportamiento", label: "Comportamiento" }];
+  }
+  if (sectionId === "tokens") {
+    return [
+      { id: "tokens", label: "Tokens" },
+      { id: "tokens-semanticos", label: "Colores semánticos" },
+      { id: "tokens-accent", label: "Colores accent" },
+      { id: "tokens-tamaños", label: "Tamaños de control" },
+      { id: "tokens-shapes", label: "Shapes y variants" },
+    ];
+  }
+  if (sectionId === "componentes") {
+    return [{ id: "componentes", label: "Componentes" }];
+  }
+  return [];
+}
+
 export default function DocsPage({ currentPath }) {
   const route = parseDocsRoute(currentPath);
   const { mode, componentSlug, sectionId, hookSlug } = route;
@@ -4356,6 +4481,10 @@ export default function DocsPage({ currentPath }) {
       currentHook.returns && { id: "retorno", label: "Valor de retorno" },
       WEBSITE_HOOK_EXAMPLES[currentHook.name] && { id: "ejemplo", label: "Ejemplo" },
     ].filter(Boolean);
+  } else if (mode === "section") {
+    tocSections = getGenericSections(sectionId);
+  } else if (mode === "hooks-index") {
+    tocSections = [{ id: "hooks", label: "Hooks" }];
   }
 
   return (
