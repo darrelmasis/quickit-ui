@@ -69,7 +69,7 @@ export const THEME_FOUC_VITE_SNIPPET = `<script>
 export const THEME_FOUC_NEXT_SNIPPET = `// En app/layout.tsx o app/layout.jsx
 export default function RootLayout({ children }) {
   return (
-    <html lang=\"es\">
+    <html lang="es">
       <head>
         <script dangerouslySetInnerHTML={{
           __html: \`(function() {
@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
                 document.documentElement.classList.add('dark');
               }
             } catch (e) {}
-          })();\`.replace(/\\n/g, ''),
+          })();\`.replace(/\n/g, ''),
         }} />
       </head>
       <body>{children}</body>
