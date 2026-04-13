@@ -9,6 +9,20 @@
       content="Quickit UI, librería de componentes React reutilizables con Tailwind CSS y documentación integrada."
     />
     <title>Quickit UI</title>
+    <script>
+      (function() {
+        try {
+          var key = 'quickit-ui-website-theme';
+          var theme = localStorage.getItem(key);
+          var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && systemDark) || (theme === 'system' && systemDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
