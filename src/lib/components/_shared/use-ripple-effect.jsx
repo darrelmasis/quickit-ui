@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const KEYBOARD_RIPPLE_KEYS = new Set(["Enter", " "]);
 const RIPPLE_ACTIVATION_DELAY_MS = 16;
-const RIPPLE_DIAMETER_MULTIPLIER = 1.7;
+const RIPPLE_DIAMETER_MULTIPLIER = 2.0;
 
 function getRipplePosition(event, rect, diameter, centered = false) {
   const fallbackX = rect.width / 2;
