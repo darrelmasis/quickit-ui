@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
+import { ChevronRightIcon } from "@/lib/assets/icons";
 import { Button } from "@/lib/components/button";
+import { useBreakpoint } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 
 function createPaginationItems({ count, page, siblingCount }) {
@@ -48,20 +50,24 @@ export function Pagination({
   page: controlledPage,
   siblingCount = 1,
 }) {
+  const { isMobile } = useBreakpoint();
   const isControlled = controlledPage !== undefined;
   const [internalPage, setInternalPage] = useState(defaultPage);
   const page = isControlled ? controlledPage : internalPage;
   const safeCount = Math.max(0, count ?? 0);
   const currentPage =
     safeCount === 0 ? 0 : Math.min(Math.max(page, 1), safeCount);
+  const effectiveSiblingCount = isMobile
+    ? Math.min(siblingCount, 0)
+    : siblingCount;
   const items = useMemo(
     () =>
       createPaginationItems({
         count: safeCount,
         page: currentPage,
-        siblingCount,
+        siblingCount: effectiveSiblingCount,
       }),
-    [currentPage, safeCount, siblingCount],
+    [currentPage, effectiveSiblingCount, safeCount],
   );
 
   const setPage = (nextPage) => {
@@ -83,19 +89,30 @@ export function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className={cn("flex items-center gap-2", className)}
+      className={cn(
+        "flex w-full flex-wrap items-center justify-center gap-2",
+        className,
+      )}
     >
       <Button
+        aria-label="Página anterior"
+        title="Página anterior"
+        shape="square"
         variant="outline"
         color={color}
         size="sm"
         disabled={disabled || safeCount === 0 || currentPage === 1}
         onClick={() => setPage(currentPage - 1)}
       >
-        Anterior
+        <ChevronRightIcon className="size-4 rotate-180" />
       </Button>
 
-      <div className="flex items-center gap-2">
+      <div
+        className={cn(
+          "flex min-w-0 items-center justify-center gap-2",
+          isMobile && "order-3 basis-full",
+        )}
+      >
         {items.map((item, index) =>
           typeof item === "number" ? (
             <Button
@@ -123,14 +140,23 @@ export function Pagination({
       </div>
 
       <Button
+        aria-label="Página siguiente"
+        title="Página siguiente"
+        shape="square"
         variant="outline"
         color={color}
         size="sm"
         disabled={disabled || safeCount === 0 || currentPage === safeCount}
         onClick={() => setPage(currentPage + 1)}
       >
-        Siguiente
+        <ChevronRightIcon className="size-4" />
       </Button>
+
+      {isMobile && safeCount > 0 ? (
+        <p className="basis-full text-center text-xs font-medium text-neutral-500 dark:text-neutral-400">
+          Pagina {currentPage} de {safeCount}
+        </p>
+      ) : null}
     </nav>
   );
 }

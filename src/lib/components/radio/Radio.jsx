@@ -227,9 +227,18 @@ const Radio = forwardRef(function Radio(
   }
 
   return (
-    <span className={cn("inline-flex items-center gap-3", containerClassName)}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-3",
+        resolvedDisabled && "pointer-events-none opacity-60",
+        containerClassName,
+      )}
+    >
       {control}
-      <Label htmlFor={resolvedId} className={labelClassName}>
+      <Label
+        htmlFor={resolvedId}
+        className={cn("cursor-pointer select-none", labelClassName)}
+      >
         {label}
       </Label>
     </span>

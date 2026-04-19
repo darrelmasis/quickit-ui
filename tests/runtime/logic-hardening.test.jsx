@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -8,6 +8,14 @@ import {
   Pagination,
 } from "@/lib";
 import { renderWithProvider } from "./test-utils";
+
+function setViewportWidth(width) {
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: width,
+    writable: true,
+  });
+}
 
 describe("logic hardening", () => {
   it("adds safe rel values to links that open in a new tab", () => {
@@ -84,7 +92,23 @@ describe("logic hardening", () => {
     renderWithProvider(<Pagination count={0} />);
 
     expect(screen.queryByRole("button", { name: "Ir a la página 1" })).toBeNull();
-    expect(screen.getByRole("button", { name: "Anterior" }).hasAttribute("disabled")).toBe(true);
-    expect(screen.getByRole("button", { name: "Siguiente" }).hasAttribute("disabled")).toBe(true);
+    expect(screen.getByRole("button", { name: "Página anterior" }).hasAttribute("disabled")).toBe(true);
+    expect(screen.getByRole("button", { name: "Página siguiente" }).hasAttribute("disabled")).toBe(true);
+  });
+
+  it("reduces pagination density and shows a page summary on mobile", () => {
+    setViewportWidth(375);
+
+    renderWithProvider(<Pagination count={10} page={5} onPageChange={() => {}} />);
+
+    expect(screen.getByText("Pagina 5 de 10")).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Ir a la página 4" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Ir a la página 1" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Página actual, 5" })).toBeTruthy();
+
+    act(() => {
+      setViewportWidth(1280);
+      window.dispatchEvent(new Event("resize"));
+    });
   });
 });

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3 - 19 de abril de 2026
+
+Release de parche con mejoras de interacción, responsividad y calidad visual en componentes y ejemplos del sitio.
+
 ## 1.0.2 - 19 de abril de 2026
 
 Release de parche con correcciones menores y mejoras.
