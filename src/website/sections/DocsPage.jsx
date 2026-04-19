@@ -54,6 +54,8 @@ import {
   WEBSITE_COMPONENT_LOOKUP,
   WEBSITE_COMPONENT_REVIEW_NOTES,
   WEBSITE_DOC_OVERVIEW_SECTIONS,
+  QUICKIT_V1_MIGRATION,
+  QUICKIT_V1_RELEASE,
   WEBSITE_HOOKS,
   WEBSITE_HOOK_EXAMPLES,
   INSTALL_COMMAND,
@@ -372,6 +374,125 @@ function GenericSectionPage({ sectionId }) {
           <div className="space-y-6">
             <WebsiteCodeBlock code={INSTALL_COMMAND} language="bash" />
             <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
+          </div>
+        </WebsiteSection>
+      </Show>
+
+      <Show when={sectionId === "migracion-1-0-0"}>
+        <WebsiteSection
+          id="migracion-1-0-0"
+          title="Migración a 1.0.0"
+          description={QUICKIT_V1_MIGRATION.summary}
+        >
+          <div className="space-y-8">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm leading-7 text-emerald-900 dark:border-emerald-900/60 dark:bg-emerald-950/20 dark:text-emerald-100">
+              Ruta cubierta en esta guía: <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.fromVersion}</code> →{" "}
+              <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.toVersion}</code>.
+            </div>
+
+            <div className="space-y-6">
+              <For each={QUICKIT_V1_MIGRATION.steps}>
+                {(step, index) => (
+                  <div
+                    key={step.title}
+                    id={`migracion-paso-${index + 1}`}
+                    className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="inline-flex size-8 items-center justify-center rounded-full border border-neutral-300 text-xs font-semibold text-neutral-700 dark:border-neutral-700 dark:text-neutral-200">
+                        {index + 1}
+                      </span>
+                      <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                        {step.title}
+                      </h3>
+                    </div>
+                    <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                      {step.description}
+                    </p>
+                    <div className="mt-4 grid gap-4 xl:grid-cols-2">
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                          Antes ({QUICKIT_V1_MIGRATION.fromVersion})
+                        </p>
+                        <WebsiteCodeBlock code={step.beforeCode} language={step.language} />
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
+                          Ahora ({QUICKIT_V1_MIGRATION.toVersion})
+                        </p>
+                        <WebsiteCodeBlock code={step.afterCode} language={step.language} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </For>
+            </div>
+
+            <div id="migracion-checklist" className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                Checklist final
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <For each={QUICKIT_V1_MIGRATION.checks}>
+                  {(item) => <li key={item}>• {item}</li>}
+                </For>
+              </ul>
+            </div>
+          </div>
+        </WebsiteSection>
+      </Show>
+
+      <Show when={sectionId === "changelog"}>
+        <WebsiteSection
+          id="changelog"
+          title="Changelog"
+          description={`Resumen de la release ${QUICKIT_V1_RELEASE.version} del ${QUICKIT_V1_RELEASE.date}.`}
+        >
+          <div className="space-y-8">
+            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="inline-flex rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-700 dark:border-brand-900/60 dark:bg-brand-950/30 dark:text-brand-200">
+                  v{QUICKIT_V1_RELEASE.version}
+                </span>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                  {QUICKIT_V1_RELEASE.date}
+                </span>
+              </div>
+              <p className="mt-4 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                {QUICKIT_V1_RELEASE.summary}
+              </p>
+            </div>
+
+            <div id="changelog-highlight" className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                Highlights
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <For each={QUICKIT_V1_RELEASE.highlights}>
+                  {(item) => <li key={item}>• {item}</li>}
+                </For>
+              </ul>
+            </div>
+
+            <div id="changelog-cambios" className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                Cambios destacados
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <For each={QUICKIT_V1_RELEASE.notableChanges}>
+                  {(item) => <li key={item}>• {item}</li>}
+                </For>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
+              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                Archivo completo
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                El historial completo de la release también vive en <code className="font-mono text-xs">CHANGELOG.md</code> en la raíz del repositorio.
+              </p>
+            </div>
           </div>
         </WebsiteSection>
       </Show>
@@ -810,6 +931,24 @@ function getGenericSections(sectionId) {
   }
   if (sectionId === "instalacion") {
     return [{ id: "instalacion", label: "Instalación" }];
+  }
+  if (sectionId === "migracion-1-0-0") {
+    return [
+      { id: "migracion-1-0-0", label: "Migración 1.0.0" },
+      { id: "migracion-paso-1", label: "Actualizar paquete" },
+      { id: "migracion-paso-2", label: "Revisar overlays" },
+      { id: "migracion-paso-3", label: "Alinear Breadcrumb y Link" },
+      { id: "migracion-paso-4", label: "Validar formularios" },
+      { id: "migracion-paso-5", label: "Correr verificación" },
+      { id: "migracion-checklist", label: "Checklist final" },
+    ];
+  }
+  if (sectionId === "changelog") {
+    return [
+      { id: "changelog", label: "Changelog" },
+      { id: "changelog-highlight", label: "Highlights" },
+      { id: "changelog-cambios", label: "Cambios destacados" },
+    ];
   }
   if (sectionId === "tema") {
     return [

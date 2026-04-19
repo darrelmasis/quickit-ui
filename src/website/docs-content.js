@@ -88,6 +88,171 @@ export default function RootLayout({ children }) {
   );
 }`;
 
+export const QUICKIT_V1_RELEASE = {
+  version: "1.0.0",
+  date: "18 de abril de 2026",
+  summary:
+    "Quickit UI 1.0.0 marca la primera release estable del paquete. La API pública principal queda estabilizada para uso en producto real y el sitio de documentación pasa a ser parte formal del flujo de adopción.",
+  highlights: [
+    "Nuevos primitives listos para producción: Combobox, DatePicker, CommandPalette, DataTable, Drawer, Stepper, Progress y Toaster.",
+    "Overlays endurecidos: mejor foco, restore focus, cierre más consistente y contratos públicos más alineados en Modal, Drawer, Dropdown y Popover.",
+    "Cobertura y tipos más estrictos: nuevas pruebas runtime, smoke tests de tipos más amplios y umbrales mínimos de coverage.",
+    "Compatibilidad ampliada: React 18.2+ y React 19 con sourcemaps en build de librería para depuración más sana.",
+    "Documentación más madura: buscador en header, navegación unificada y docs por componente en archivos independientes.",
+  ],
+  notableChanges: [
+    "Breadcrumb simplifica el caso común con `Breadcrumb.Item` usando `href` o `current`.",
+    "Link protege mejor `target=\"_blank\"` añadiendo `rel=\"noopener noreferrer\"` automáticamente.",
+    "DatePicker mejora apertura por teclado y ahora cubre días adyacentes, vistas de mes/año y selección más completa.",
+    "Accordion, Range, Toaster y otros primitives consolidan contratos y ejemplos de uso en la docs.",
+  ],
+};
+
+export const QUICKIT_V1_MIGRATION = {
+  fromVersion: "0.2.4",
+  toVersion: "1.0.0",
+  summary:
+    "La migración desde la línea 0.2.x a 1.0.0 es de bajo impacto para la mayoría de apps. No se introdujo una ruptura masiva de estilo framework, pero sí se estabilizaron contratos, overlays y componentes compuestos que conviene revisar antes de publicar.",
+  steps: [
+    {
+      title: "Actualiza el paquete",
+      description:
+        "Sube a `quickit-ui@1.0.0` y vuelve a instalar dependencias. La librería ahora declara soporte oficial para React 18.2+ y React 19.",
+      beforeCode: "npm install quickit-ui@0.2.4",
+      afterCode: "npm install quickit-ui@1.0.0",
+      language: "bash",
+    },
+    {
+      title: "Simplifica Breadcrumb",
+      description:
+        "En 1.0.0 la forma preferida es usar `Breadcrumb.Item` con `href` o `current`, en vez de construir el caso común con primitives más verbosas.",
+      beforeCode: `import { Breadcrumb } from "quickit-ui";
+
+export function Navigation() {
+  return (
+    <Breadcrumb>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href="#">Home</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item>
+          <Breadcrumb.Current>Productos</Breadcrumb.Current>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb>
+  );
+}`,
+      afterCode: `import { Breadcrumb } from "quickit-ui";
+
+export function Navigation() {
+  return (
+    <Breadcrumb>
+      <Breadcrumb.List>
+        <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+        <Breadcrumb.Item current>Productos</Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb>
+  );
+}`,
+      language: "jsx",
+    },
+    {
+      title: "Prefiere la API compuesta de Tabs",
+      description:
+        "Los exports planos siguen existiendo por compatibilidad, pero en 1.0.0 la documentación y el camino recomendado usan `Tabs.List`, `Tabs.Trigger` y `Tabs.Content`.",
+      beforeCode: `import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "quickit-ui";
+
+export function ProfileTabs() {
+  return (
+    <Tabs defaultValue="overview">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="team">Equipo</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">Resumen</TabsContent>
+      <TabsContent value="team">Miembros</TabsContent>
+    </Tabs>
+  );
+}`,
+      afterCode: `import { Tabs } from "quickit-ui";
+
+export function ProfileTabs() {
+  return (
+    <Tabs defaultValue="overview">
+      <Tabs.List>
+        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="overview">Resumen</Tabs.Content>
+      <Tabs.Content value="team">Miembros</Tabs.Content>
+    </Tabs>
+  );
+}`,
+      language: "jsx",
+    },
+    {
+      title: "Alinea FormControl con sus subcomponentes",
+      description:
+        "Los exports planos siguen disponibles, pero la guía de 1.0.0 prioriza `FormControl.Description` y `FormControl.Message` para mantener el árbol más claro.",
+      beforeCode: `import {
+  FormControl,
+  Label,
+  Input,
+  FormDescription,
+  FormMessage,
+} from "quickit-ui";
+
+export function EmailField() {
+  return (
+    <FormControl invalid required>
+      <Label htmlFor="email">Correo</Label>
+      <Input id="email" type="email" />
+      <FormDescription>Usa tu correo principal.</FormDescription>
+      <FormMessage>El correo es obligatorio.</FormMessage>
+    </FormControl>
+  );
+}`,
+      afterCode: `import { FormControl, Label, Input } from "quickit-ui";
+
+export function EmailField() {
+  return (
+    <FormControl invalid required>
+      <Label htmlFor="email">Correo</Label>
+      <Input id="email" type="email" />
+      <FormControl.Description>
+        Usa tu correo principal.
+      </FormControl.Description>
+      <FormControl.Message>
+        El correo es obligatorio.
+      </FormControl.Message>
+    </FormControl>
+  );
+}`,
+      language: "jsx",
+    },
+    {
+      title: "Valida el salto final",
+      description:
+        "Antes de publicar, ejecuta lint, tests, type-check y una revisión visual de componentes personalizados que dependan de paddings, tamaños o iconos internos.",
+      beforeCode: "npm run lint && npm run test",
+      afterCode:
+        "npm run lint && npm run test && npm run test:types && npm run build",
+      language: "bash",
+    },
+  ],
+  checks: [
+    "Quita dependencias de props no documentadas o internas en Dropdown y overlays.",
+    "Si montas más de una CommandPalette, revisa atajos globales para evitar colisiones.",
+    "Si tus estilos envolvían previews de docs o dependían de snippets embebidos, usa las nuevas rutas y páginas del sitio.",
+  ],
+};
+
 export const WEBSITE_HOOK_EXAMPLES = {
   useQuickitTheme: {
     code: THEME_READ_SNIPPET,
@@ -275,6 +440,8 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
+  { id: "migracion-1-0-0", label: "Migración 1.0.0" },
+  { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },
   { id: "tokens", label: "Tokens" },

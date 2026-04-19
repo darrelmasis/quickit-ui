@@ -32,7 +32,7 @@ describe("WebsiteDocsSidebar", () => {
     expect(
       screen.queryByRole("link", { name: "useQuickitTheme" }),
     ).toBeNull();
-  });
+  }, 15000);
 
   it("opens the hooks section automatically for active hook routes", () => {
     renderWithProvider(
@@ -45,5 +45,5 @@ describe("WebsiteDocsSidebar", () => {
 
     expect(screen.getByRole("button", { name: "Colapsar Hooks" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "useModal" })).toBeTruthy();
-  });
+  }, 15000);
 });

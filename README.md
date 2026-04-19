@@ -63,6 +63,10 @@ npm run dev
 
 La documentación es accesible en `/docs` y cuenta con una referencia de API detallada para cada componente y hook.
 
+## Release 1.0.0
+
+Quickit UI entra en `1.0.0` como primera release estable. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md) y la guía de migración desde `0.2.4` está disponible también dentro de `/docs` en la sección `Migración 1.0.0`.
+
 ## Requisitos
 
 - React 18 o superior

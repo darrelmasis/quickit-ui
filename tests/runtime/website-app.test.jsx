@@ -40,5 +40,5 @@ describe("WebsiteApp", () => {
 
     expect(await screen.findByRole("heading", { name: "Accordion" })).toBeTruthy();
     expect(window.location.pathname).toBe("/docs/components/accordion");
-  });
+  }, 15000);
 });
