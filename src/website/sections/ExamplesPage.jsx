@@ -1466,17 +1466,40 @@ function TeamPreviewCanvas() {
 }
 
 function PresencePreviewCanvas() {
+  const [activeTeam, setActiveTeam] = useState("support");
+
   return (
     <div className="w-full">
       <div className={EXAMPLE_CARD}>
-        <Tabs defaultValue="support" color="brand">
-          <Tabs.List>
-            <Tabs.Trigger value="support">Soporte</Tabs.Trigger>
-            <Tabs.Trigger value="ops">Ops</Tabs.Trigger>
-            <Tabs.Trigger value="success">Success</Tabs.Trigger>
-          </Tabs.List>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            color={activeTeam === "support" ? "brand" : "neutral"}
+            variant={activeTeam === "support" ? "solid" : "outline"}
+            onClick={() => setActiveTeam("support")}
+          >
+            Soporte
+          </Button>
+          <Button
+            size="sm"
+            color={activeTeam === "ops" ? "brand" : "neutral"}
+            variant={activeTeam === "ops" ? "solid" : "outline"}
+            onClick={() => setActiveTeam("ops")}
+          >
+            Ops
+          </Button>
+          <Button
+            size="sm"
+            color={activeTeam === "success" ? "brand" : "neutral"}
+            variant={activeTeam === "success" ? "solid" : "outline"}
+            onClick={() => setActiveTeam("success")}
+          >
+            Success
+          </Button>
+        </div>
 
-          <Tabs.Content value="support" className="pt-6">
+        <div className="pt-6">
+          {activeTeam === "support" ? (
             <div className="space-y-4">
               <div className={EXAMPLE_SUBCARD}>
                 <UserChip
@@ -1492,16 +1515,15 @@ function PresencePreviewCanvas() {
                 />
               </div>
 
-              <Alert color="info">
-                <Alert.Title>Tiempo de respuesta saludable</Alert.Title>
-                <Alert.Description>
-                  El equipo esta respondiendo en 6 minutos promedio.
-                </Alert.Description>
-              </Alert>
+              <Alert
+                color="info"
+                title="Tiempo de respuesta saludable"
+                description="El equipo esta respondiendo en 6 minutos promedio."
+              />
             </div>
-          </Tabs.Content>
+          ) : null}
 
-          <Tabs.Content value="ops" className="pt-6">
+          {activeTeam === "ops" ? (
             <div className="grid gap-3">
               <div className={EXAMPLE_SUBCARD}>
                 <UserChip
@@ -1517,9 +1539,9 @@ function PresencePreviewCanvas() {
                 />
               </div>
             </div>
-          </Tabs.Content>
+          ) : null}
 
-          <Tabs.Content value="success" className="pt-6">
+          {activeTeam === "success" ? (
             <div className={EXAMPLE_SUBCARD}>
               <UserChip
                 name="Ada Lovelace"
@@ -1533,8 +1555,8 @@ function PresencePreviewCanvas() {
                 }
               />
             </div>
-          </Tabs.Content>
-        </Tabs>
+          ) : null}
+        </div>
       </div>
     </div>
   );
