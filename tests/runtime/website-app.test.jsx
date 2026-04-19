@@ -41,4 +41,20 @@ describe("WebsiteApp", () => {
     expect(await screen.findByRole("heading", { name: "Accordion" })).toBeTruthy();
     expect(window.location.pathname).toBe("/docs/components/accordion");
   }, 15000);
+
+  it("normalizes legacy docs routes to english urls", async () => {
+    window.history.pushState(null, "", "/docs/instalacion");
+
+    render(
+      <QuickitThemeProvider
+        defaultTheme="light"
+        storageKey={WEBSITE_THEME_STORAGE_KEY}
+      >
+        <WebsiteApp />
+      </QuickitThemeProvider>,
+    );
+
+    expect(await screen.findByRole("heading", { name: "Instalación" })).toBeTruthy();
+    expect(window.location.pathname).toBe("/docs/installation");
+  }, 15000);
 });

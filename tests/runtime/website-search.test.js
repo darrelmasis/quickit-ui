@@ -8,7 +8,7 @@ describe("website docs search", () => {
   it("indexes guides, hooks, and components", () => {
     const entries = buildWebsiteSearchIndex();
 
-    expect(entries.some((entry) => entry.href === "/docs/introduccion")).toBe(true);
+    expect(entries.some((entry) => entry.href === "/docs")).toBe(true);
     expect(entries.some((entry) => entry.href === "/docs/hooks/use-quickit-theme")).toBe(true);
     expect(entries.some((entry) => entry.href === "/docs/components/accordion")).toBe(true);
   });

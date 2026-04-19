@@ -260,7 +260,7 @@ const Button = forwardRef(function Button(
       <span
         aria-hidden={loading || undefined}
         className={cn(
-          "relative z-[1] inline-flex items-center gap-2",
+          "relative z-[1] inline-flex items-center gap-2 flex-grow-1 justify-center",
           loading && "invisible",
         )}
       >

@@ -8,7 +8,7 @@ import {
 } from "@/lib/tokens";
 
 const BADGE_PRIMITIVES = {
-  base: "inline-flex items-center border font-medium",
+  base: "inline-flex self-center items-center border font-medium",
 };
 
 const BADGE_SIZE_CLASSES = {
@@ -94,11 +94,19 @@ function resolveTheme(theme) {
 }
 
 const Badge = forwardRef(function Badge(
-  { children, className, color = "neutral", size = "sm", variant = "soft", ...props },
+  {
+    children,
+    className,
+    color = "neutral",
+    size = "sm",
+    variant = "soft",
+    ...props
+  },
   ref,
 ) {
   const theme = resolveTheme(useQuickitTheme());
-  const palette = BADGE_THEME_CLASSES[theme][variant] ?? BADGE_THEME_CLASSES[theme].soft;
+  const palette =
+    BADGE_THEME_CLASSES[theme][variant] ?? BADGE_THEME_CLASSES[theme].soft;
   const resolvedColor = resolveQuickitToken(
     QUICKIT_ACCENT_COLORS,
     color,

@@ -98,12 +98,16 @@ export default function WebsiteHeader({ activePath }) {
               className="hidden min-w-[15rem] justify-between md:inline-flex"
               onClick={() => setSearchOpen(true)}
             >
-              <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                Buscar en docs
+              <span className="flex flex-1 items-center justify-between gap-2">
+                <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                  Buscar en docs
+                </span>
+                <Badge color="neutral" variant="soft">
+                  <kbd className="text-xs text-neutral-500 dark:text-neutral-500">
+                    Ctrl+K
+                  </kbd>
+                </Badge>
               </span>
-              <Badge color="neutral" variant="soft">
-                Ctrl+K
-              </Badge>
             </Button>
 
             <Button

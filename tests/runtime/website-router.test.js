@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getWebsiteScrollTargetId,
   normalizeWebsitePathname,
+  resolveWebsitePath,
   resolveWebsiteNavigation,
 } from "@/website/router";
 
@@ -10,6 +11,16 @@ describe("website router", () => {
     expect(normalizeWebsitePathname("")).toBe("/");
     expect(normalizeWebsitePathname("/docs/")).toBe("/docs");
     expect(normalizeWebsitePathname("/")).toBe("/");
+  });
+
+  it("maps docs routes to canonical english paths", () => {
+    expect(resolveWebsitePath("/docs")).toBe("/docs");
+    expect(resolveWebsitePath("/docs/introduccion")).toBe("/docs");
+    expect(resolveWebsitePath("/docs/introduction")).toBe("/docs");
+    expect(resolveWebsitePath("/docs/instalacion")).toBe("/docs/installation");
+    expect(resolveWebsitePath("/docs/tema")).toBe("/docs/theme");
+    expect(resolveWebsitePath("/docs/comportamiento")).toBe("/docs/behavior");
+    expect(resolveWebsitePath("/docs/componentes")).toBe("/docs/components");
   });
 
   it("resolves hash, internal, external, and ignored links", () => {

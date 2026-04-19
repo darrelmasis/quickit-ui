@@ -21,7 +21,17 @@ export default function WebsiteApp() {
 
   useEffect(() => {
     const handlePopState = () => {
-      setActivePath(resolveWebsitePath(window.location.pathname));
+      const nextPath = resolveWebsitePath(window.location.pathname);
+
+      if (nextPath !== window.location.pathname) {
+        window.history.replaceState(
+          null,
+          "",
+          `${nextPath}${window.location.hash}`,
+        );
+      }
+
+      setActivePath(nextPath);
       requestAnimationFrame(() => {
         scrollToWebsiteHash(window.location.hash, "auto");
       });

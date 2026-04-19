@@ -1,4 +1,5 @@
 import { WEBSITE_ROUTES } from "@/website/site-config";
+import { resolveWebsiteDocsPath } from "@/website/docs-navigation";
 
 export function normalizeWebsitePathname(pathname) {
   if (!pathname) {
@@ -13,7 +14,8 @@ export function normalizeWebsitePathname(pathname) {
 }
 
 export function resolveWebsitePath(pathname) {
-  return normalizeWebsitePathname(pathname);
+  const normalizedPath = normalizeWebsitePathname(pathname);
+  return resolveWebsiteDocsPath(normalizedPath);
 }
 
 export function getWebsiteScrollTargetId(hash) {

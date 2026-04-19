@@ -46,13 +46,16 @@ import {
   QUICKIT_COMPACT_CONTROL_SIZES,
   QUICKIT_ACCENT_COLORS,
 } from "@/lib/tokens";
-import { WEBSITE_ROUTES, WEBSITE_SHELL } from "@/website/site-config";
+import {
+  WEBSITE_ROUTES,
+  WEBSITE_SHELL,
+  getWebsiteComponentRoute,
+} from "@/website/site-config";
 import {
   WEBSITE_BUTTON_DOC,
   WEBSITE_COMPONENT_DOC_SECTIONS,
   WEBSITE_COMPONENT_GROUPS,
   WEBSITE_COMPONENT_LOOKUP,
-  WEBSITE_COMPONENT_REVIEW_NOTES,
   WEBSITE_DOC_OVERVIEW_SECTIONS,
   QUICKIT_V1_MIGRATION,
   QUICKIT_V1_RELEASE,
@@ -68,7 +71,11 @@ import {
   THEME_FOUC_NEXT_SNIPPET,
 } from "@/website/docs-content";
 import { COMPONENT_DOCS } from "@/website/component-docs";
-import { hookToSlug } from "@/website/docs-navigation";
+import {
+  getWebsiteDocsSectionIdFromSegment,
+  getWebsiteHookRoute,
+  hookToSlug,
+} from "@/website/docs-navigation";
 import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 import WebsiteDocsSidebar from "@/website/components/WebsiteDocsSidebar";
 import WebsitePageToc from "@/website/components/WebsitePageToc";
@@ -76,48 +83,62 @@ import WebsitePreviewTabs from "@/website/components/WebsitePreviewTabs";
 import WebsiteSection from "@/website/components/WebsiteSection";
 
 
+const DOCS_PROPS_TABLE_COLUMNS = [
+  {
+    key: "name",
+    header: "Prop",
+    headerClassName: "normal-case tracking-normal text-sm",
+    cellClassName: "align-top",
+    render: (row) => (
+      <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+        {row.name}
+      </p>
+    ),
+  },
+  {
+    key: "type",
+    header: "Tipo",
+    headerClassName: "normal-case tracking-normal text-sm",
+    cellClassName: "whitespace-normal align-top",
+    render: (row) => (
+      <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
+        {row.type ?? "—"}
+      </p>
+    ),
+  },
+  {
+    key: "defaultValue",
+    header: "Default",
+    headerClassName: "normal-case tracking-normal text-sm",
+    cellClassName: "whitespace-normal align-top",
+    render: (row) => (
+      <p className="text-xs text-neutral-500 dark:text-neutral-500">
+        {row.defaultValue ?? "—"}
+      </p>
+    ),
+  },
+  {
+    key: "description",
+    header: "Descripción",
+    headerClassName: "normal-case tracking-normal text-sm",
+    cellClassName: "min-w-[16rem] whitespace-normal align-top",
+    render: (row) => (
+      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        {row.description ?? "—"}
+      </p>
+    ),
+  },
+];
 
-
-
-function PropsTable({ props }) {
+function PropsTable({ props, caption = "Tabla de props" }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800">
-      <div className="hidden grid-cols-[minmax(0,1fr)_minmax(0,1fr)_8rem_minmax(0,1.4fr)] border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-950 md:grid dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-50">
-        <span>Prop</span>
-        <span>Tipo</span>
-        <span>Default</span>
-        <span>Descripción</span>
-      </div>
-      <For each={props}>
-        {(prop) => (
-          <div
-            key={prop.name}
-            className="grid gap-3 border-t border-neutral-200 px-4 py-4 first:border-t-0 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_8rem_minmax(0,1.4fr)] dark:border-neutral-800"
-          >
-            <div>
-              <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
-                {prop.name}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
-                {prop.type}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-neutral-500 dark:text-neutral-500">
-                {prop.defaultValue}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                {prop.description}
-              </p>
-            </div>
-          </div>
-        )}
-      </For>
-    </div>
+    <DataTable
+      caption={caption}
+      columns={DOCS_PROPS_TABLE_COLUMNS}
+      data={props}
+      rowKey={(row, index) => row.name ?? index}
+      stickyHeader={false}
+    />
   );
 }
 
@@ -128,8 +149,12 @@ function parseDocsRoute(pathname) {
     return { mode: "section", sectionId: "introduccion" };
   }
 
-  if (segments[1] === "components" && segments[2]) {
-    return { mode: "component", componentSlug: segments[2] };
+  if (segments[1] === "components") {
+    if (segments[2]) {
+      return { mode: "component", componentSlug: segments[2] };
+    }
+
+    return { mode: "section", sectionId: "componentes" };
   }
 
   if (segments[1] === "hooks") {
@@ -139,21 +164,17 @@ function parseDocsRoute(pathname) {
     return { mode: "hooks-index" };
   }
 
-  const sectionId = segments[1] || "introduccion";
+  const sectionId = getWebsiteDocsSectionIdFromSegment(
+    segments[1] || "introduccion",
+  );
   return { mode: "section", sectionId };
 }
 
 function getComponentSections(slug) {
   const doc = COMPONENT_DOCS[slug];
-  const reviewNotes = WEBSITE_COMPONENT_REVIEW_NOTES[slug];
-
-  const withReview = (sections) =>
-    reviewNotes?.length
-      ? [...sections, { id: "notas-revision", label: "Notas de revisión" }]
-      : sections;
 
   if (!doc) {
-    return withReview(WEBSITE_COMPONENT_DOC_SECTIONS);
+    return WEBSITE_COMPONENT_DOC_SECTIONS;
   }
 
   const exampleChildren =
@@ -162,7 +183,7 @@ function getComponentSections(slug) {
       label: example.title,
     })) ?? [];
 
-  return withReview([
+  return [
     { id: "ejemplo-visual", label: "Ejemplo visual y código" },
     { id: "instalacion", label: "Instalación" },
     { id: "uso", label: "Uso" },
@@ -171,10 +192,10 @@ function getComponentSections(slug) {
       label: "Ejemplos",
       children: exampleChildren,
     },
-  ]);
+  ];
 }
 
-function ButrviewPage() {
+function OverviewPage() {
   return (
     <>
       <div className="max-w-3xl">
@@ -220,7 +241,7 @@ function HooksIndexPage() {
           {(hook) => (
             <a
               key={hook.name}
-              href={`/docs/hooks/${hookToSlug(hook.name)}`}
+              href={getWebsiteHookRoute(hook.name)}
               className="rounded-2xl border border-neutral-200 p-6 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
             >
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
@@ -779,7 +800,7 @@ function GenericSectionPage({ sectionId }) {
                       {(item) => (
                         <a
                           key={item.slug}
-                          href={`/docs/components/${item.slug}`}
+                          href={getWebsiteComponentRoute(item.slug)}
                           className="rounded-2xl border border-neutral-200 p-4 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
                         >
                           <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
@@ -798,42 +819,6 @@ function GenericSectionPage({ sectionId }) {
           </div>
         </WebsiteSection>
       </Show>
-    </div>
-  );
-}
-
-function ComponentReviewSection({ slug }) {
-  const entries = WEBSITE_COMPONENT_REVIEW_NOTES[slug];
-
-  if (!entries?.length) {
-    return null;
-  }
-
-  return (
-    <div className="mt-14 sm:mt-16">
-      <WebsiteSection
-        id="notas-revision"
-        title="Notas de revisión"
-        description="Revisión del código fuente de la librería: recomendaciones de uso, accesibilidad, detalles de implementación y mejoras o correcciones relevantes (versión actual del repo)."
-      >
-        <ul className="space-y-3">
-          <For each={entries}>
-            {(entry, index) => (
-              <li
-                key={index}
-                className="rounded-2xl border border-neutral-200 px-4 py-3 dark:border-neutral-800"
-              >
-                <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-                  {entry.tag}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                  {entry.text}
-                </p>
-              </li>
-            )}
-          </For>
-        </ul>
-      </WebsiteSection>
     </div>
   );
 }
@@ -931,7 +916,6 @@ function ComponentPage({ component }) {
         </Show>
       </div>
 
-      <ComponentReviewSection slug={component.slug} />
     </>
   );
 }
