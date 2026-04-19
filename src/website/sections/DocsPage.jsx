@@ -409,19 +409,35 @@ function GenericSectionPage({ sectionId }) {
                     <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                       {step.description}
                     </p>
-                    <div className="mt-4 grid gap-4 xl:grid-cols-2">
-                      <div className="space-y-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-                          Antes ({QUICKIT_V1_MIGRATION.fromVersion})
-                        </p>
-                        <WebsiteCodeBlock code={step.beforeCode} language={step.language} />
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
-                          Ahora ({QUICKIT_V1_MIGRATION.toVersion})
-                        </p>
-                        <WebsiteCodeBlock code={step.afterCode} language={step.language} />
-                      </div>
+                    <div className="mt-4">
+                      <Tabs
+                        defaultValue={`antes-${index + 1}`}
+                        size="sm"
+                        color="neutral"
+                      >
+                        <Tabs.List>
+                          <Tabs.Trigger value={`antes-${index + 1}`}>
+                            Antes ({QUICKIT_V1_MIGRATION.fromVersion})
+                          </Tabs.Trigger>
+                          <Tabs.Trigger value={`ahora-${index + 1}`}>
+                            Ahora ({QUICKIT_V1_MIGRATION.toVersion})
+                          </Tabs.Trigger>
+                        </Tabs.List>
+                        <div className="mt-4">
+                          <Tabs.Content value={`antes-${index + 1}`}>
+                            <WebsiteCodeBlock
+                              code={step.beforeCode}
+                              language={step.language}
+                            />
+                          </Tabs.Content>
+                          <Tabs.Content value={`ahora-${index + 1}`}>
+                            <WebsiteCodeBlock
+                              code={step.afterCode}
+                              language={step.language}
+                            />
+                          </Tabs.Content>
+                        </div>
+                      </Tabs>
                     </div>
                   </div>
                 )}
@@ -936,10 +952,10 @@ function getGenericSections(sectionId) {
     return [
       { id: "migracion-1-0-0", label: "Migración 1.0.0" },
       { id: "migracion-paso-1", label: "Actualizar paquete" },
-      { id: "migracion-paso-2", label: "Revisar overlays" },
-      { id: "migracion-paso-3", label: "Alinear Breadcrumb y Link" },
-      { id: "migracion-paso-4", label: "Validar formularios" },
-      { id: "migracion-paso-5", label: "Correr verificación" },
+      { id: "migracion-paso-2", label: "Simplificar Breadcrumb" },
+      { id: "migracion-paso-3", label: "Usar Tabs compuestas" },
+      { id: "migracion-paso-4", label: "Alinear FormControl" },
+      { id: "migracion-paso-5", label: "Validar el salto final" },
       { id: "migracion-checklist", label: "Checklist final" },
     ];
   }

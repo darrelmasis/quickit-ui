@@ -92,19 +92,19 @@ export const QUICKIT_V1_RELEASE = {
   version: "1.0.0",
   date: "18 de abril de 2026",
   summary:
-    "Quickit UI 1.0.0 marca la primera release estable del paquete. La API pública principal queda estabilizada para uso en producto real y el sitio de documentación pasa a ser parte formal del flujo de adopción.",
+    "Quickit UI 1.0.0 es la primera release estable de la librería. Esta versión consolida la API principal para usarla en aplicaciones reales con una documentación más completa y una base de componentes más amplia.",
   highlights: [
-    "Nuevos primitives listos para producción: Combobox, DatePicker, CommandPalette, DataTable, Drawer, Stepper, Progress y Toaster.",
-    "Overlays endurecidos: mejor foco, restore focus, cierre más consistente y contratos públicos más alineados en Modal, Drawer, Dropdown y Popover.",
-    "Cobertura y tipos más estrictos: nuevas pruebas runtime, smoke tests de tipos más amplios y umbrales mínimos de coverage.",
-    "Compatibilidad ampliada: React 18.2+ y React 19 con sourcemaps en build de librería para depuración más sana.",
-    "Documentación más madura: buscador en header, navegación unificada y docs por componente en archivos independientes.",
+    "Nuevos componentes disponibles como parte estable de la librería: Combobox, DatePicker, CommandPalette, DataTable, Drawer, Stepper, Progress y Toaster.",
+    "Mejoras en overlays y navegación contextual para una integración más consistente en modales, drawers, dropdowns y popovers.",
+    "Compatibilidad oficial con React 18.2+ y React 19.",
+    "Documentación ampliada con buscador, changelog y guía de migración.",
+    "Cobertura de uso más completa en formularios, navegación, identidad visual y feedback.",
   ],
   notableChanges: [
-    "Breadcrumb simplifica el caso común con `Breadcrumb.Item` usando `href` o `current`.",
-    "Link protege mejor `target=\"_blank\"` añadiendo `rel=\"noopener noreferrer\"` automáticamente.",
-    "DatePicker mejora apertura por teclado y ahora cubre días adyacentes, vistas de mes/año y selección más completa.",
-    "Accordion, Range, Toaster y otros primitives consolidan contratos y ejemplos de uso en la docs.",
+    "La forma recomendada de usar `Breadcrumb` ahora prioriza `Breadcrumb.Item` con `href` o `current` para el caso común.",
+    "La documentación adopta de forma consistente las APIs compuestas como `Tabs.List`, `Tabs.Trigger` y `FormControl.Description`.",
+    "DatePicker amplía sus escenarios de uso con selección más completa y navegación por vistas.",
+    "El sitio de documentación incorpora búsqueda y referencias más claras para adopción inicial y actualización de versiones.",
   ],
 };
 
@@ -112,7 +112,7 @@ export const QUICKIT_V1_MIGRATION = {
   fromVersion: "0.2.4",
   toVersion: "1.0.0",
   summary:
-    "La migración desde la línea 0.2.x a 1.0.0 es de bajo impacto para la mayoría de apps. No se introdujo una ruptura masiva de estilo framework, pero sí se estabilizaron contratos, overlays y componentes compuestos que conviene revisar antes de publicar.",
+    "La migración desde 0.2.4 a 1.0.0 es directa en la mayoría de proyectos. El objetivo principal es alinear tu código con las APIs recomendadas que ahora quedan como base estable de la librería.",
   steps: [
     {
       title: "Actualiza el paquete",
@@ -239,7 +239,7 @@ export function EmailField() {
     {
       title: "Valida el salto final",
       description:
-        "Antes de publicar, ejecuta lint, tests, type-check y una revisión visual de componentes personalizados que dependan de paddings, tamaños o iconos internos.",
+        "Antes de cerrar la migración, ejecuta tu verificación habitual y revisa visualmente los componentes que más uses en producto.",
       beforeCode: "npm run lint && npm run test",
       afterCode:
         "npm run lint && npm run test && npm run test:types && npm run build",
@@ -247,9 +247,9 @@ export function EmailField() {
     },
   ],
   checks: [
-    "Quita dependencias de props no documentadas o internas en Dropdown y overlays.",
-    "Si montas más de una CommandPalette, revisa atajos globales para evitar colisiones.",
-    "Si tus estilos envolvían previews de docs o dependían de snippets embebidos, usa las nuevas rutas y páginas del sitio.",
+    "Verifica tus pantallas con overlays: Modal, Drawer, Dropdown, Popover y CommandPalette.",
+    "Revisa formularios que usen Select, Combobox, DatePicker, Checkbox, Radio y Switch.",
+    "Adopta las APIs compuestas recomendadas cuando quieras mantener tu código alineado con la documentación oficial.",
   ],
 };
 
