@@ -86,9 +86,9 @@ Para previsualizar la documentación construida:
 npm run preview:docs
 ```
 
-## Release 1.0.1
+## Release 1.0.2
 
-Quickit UI entra en `1.0.1` como release de parche con correcciones menores. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md).
+Quickit UI entra en `1.0.2` como release de parche con correcciones menores. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md).
 
 ## Requisitos
 

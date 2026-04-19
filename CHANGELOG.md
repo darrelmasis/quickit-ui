@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 19 de abril de 2026
+
+Release de parche con correcciones menores y mejoras.
+
 ## 1.0.1 - 19 de abril de 2026
 
 Release de parche con correcciones menores y mejoras.
