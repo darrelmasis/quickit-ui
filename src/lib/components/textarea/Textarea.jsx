@@ -26,6 +26,7 @@ const Textarea = forwardRef(function Textarea(
     disabled = false,
     id,
     invalid = false,
+    minRows,
     required = false,
     shape = "square",
     size = "md",
@@ -57,6 +58,7 @@ const Textarea = forwardRef(function Textarea(
       id={resolvedId}
       required={resolvedRequired}
       disabled={resolvedDisabled}
+      rows={minRows}
       aria-invalid={resolvedInvalid || undefined}
       aria-describedby={describedBy}
       className={cn(
