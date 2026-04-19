@@ -68,6 +68,16 @@ export function ComboboxUsage() {
       type: "string",
       defaultValue: `"Sin resultados"`,
       description: "Mensaje cuando el filtro no coincide."
+    }, {
+      name: "clearButton",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Muestra un botón para limpiar la selección actual."
+    }, {
+      name: "onClear",
+      type: "() => void",
+      defaultValue: "undefined",
+      description: "Se ejecuta cuando el usuario limpia manualmente el combobox."
     }],
     notes: ["El filtrado es por subcadena insensible a mayúsculas en `label`.", "Integración con `FormControl` para `id`, invalid y mensajes."]
   }]

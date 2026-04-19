@@ -435,6 +435,47 @@ export type EmptyStateComponent = React.ForwardRefExoticComponent<
 };
 export declare const EmptyState: EmptyStateComponent;
 
+export type AlertDismissReason = "manual" | "auto";
+export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
+  actions?: React.ReactNode;
+  autoDismiss?: number;
+  color?: QuickitSemanticColor;
+  defaultOpen?: boolean;
+  description?: React.ReactNode;
+  dismissible?: boolean;
+  dismissLabel?: string;
+  icon?: React.ReactNode;
+  onDismiss?: (reason: AlertDismissReason) => void;
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+  pauseOnHover?: boolean;
+  title?: React.ReactNode;
+  variant?: "soft" | "outline" | "solid";
+}
+export interface AlertTitleProps
+  extends React.HTMLAttributes<HTMLHeadingElement> {}
+export interface AlertDescriptionProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {}
+export interface AlertActionsProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+export declare const AlertTitle: React.ForwardRefExoticComponent<
+  AlertTitleProps & React.RefAttributes<HTMLHeadingElement>
+>;
+export declare const AlertDescription: React.ForwardRefExoticComponent<
+  AlertDescriptionProps & React.RefAttributes<HTMLParagraphElement>
+>;
+export declare const AlertActions: React.ForwardRefExoticComponent<
+  AlertActionsProps & React.RefAttributes<HTMLDivElement>
+>;
+export type AlertComponent = React.ForwardRefExoticComponent<
+  AlertProps & React.RefAttributes<HTMLDivElement>
+> & {
+  Title: typeof AlertTitle;
+  Description: typeof AlertDescription;
+  Actions: typeof AlertActions;
+};
+export declare const Alert: AlertComponent;
+
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   animated?: boolean;
   shape?: "line" | "rect" | "circle";
@@ -651,6 +692,7 @@ export interface SelectProps
   extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onChange"> {
   children?: React.ReactNode;
   color?: QuickitSemanticColor;
+  contentClassName?: string;
   defaultValue?: string | number;
   disabled?: boolean;
   id?: string;
@@ -1246,6 +1288,9 @@ export interface ComboboxProps
     React.InputHTMLAttributes<HTMLInputElement>,
     "size" | "onChange" | "value" | "defaultValue"
   > {
+  clearButton?: boolean;
+  clearButtonLabel?: string;
+  clearIcon?: React.ReactNode;
   defaultValue?: string | number;
   emptyText?: string;
   name?: string;
@@ -1257,6 +1302,7 @@ export interface ComboboxProps
     preventDefault: () => void;
     stopPropagation: () => void;
   }) => void;
+  onClear?: () => void;
   onValueChange?: (value: string) => void;
   options?: readonly ComboboxOption[];
   placeholder?: string;
@@ -1352,6 +1398,35 @@ export declare const DatePicker: React.ForwardRefExoticComponent<
     React.RefAttributes<HTMLInputElement>
 >;
 
+export interface TimePickerProps
+  extends Omit<
+    React.ComponentPropsWithoutRef<"input">,
+    | "children"
+    | "color"
+    | "defaultValue"
+    | "onChange"
+    | "size"
+    | "type"
+    | "value"
+  > {
+  clearButton?: boolean;
+  clearButtonLabel?: string;
+  color?: QuickitSemanticColor;
+  defaultValue?: Date | string | number | null;
+  hourCycle?: "12h" | "24h";
+  maxTime?: Date | string | number;
+  minTime?: Date | string | number;
+  minuteStep?: number;
+  onChange?: (value: string | null) => void;
+  size?: "sm" | "md" | "lg";
+  value?: Date | string | number | null;
+}
+
+export declare const TimePicker: React.ForwardRefExoticComponent<
+  TimePickerProps &
+    React.RefAttributes<HTMLInputElement>
+>;
+
 export type DataTableSortDir = "asc" | "desc";
 
 export interface DataTableSortState {
@@ -1361,7 +1436,10 @@ export interface DataTableSortState {
 
 export interface DataTableColumn<Row = Record<string, unknown>> {
   accessor?: (row: Row) => unknown;
+  align?: "left" | "center" | "right";
+  cellClassName?: string;
   header: React.ReactNode;
+  headerClassName?: string;
   key: string;
   render?: (row: Row, rowIndex: number) => React.ReactNode;
   sortable?: boolean;
@@ -1370,6 +1448,7 @@ export interface DataTableColumn<Row = Record<string, unknown>> {
 export interface DataTableProps<Row = Record<string, unknown>> {
   caption?: string;
   className?: string;
+  color?: QuickitSemanticColor;
   columns?: readonly DataTableColumn<Row>[];
   data?: readonly Row[];
   defaultSort?: DataTableSortState | null;

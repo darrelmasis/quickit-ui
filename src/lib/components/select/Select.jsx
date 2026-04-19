@@ -164,6 +164,7 @@ const Select = forwardRef(function Select(
   {
     children,
     className,
+    contentClassName,
     color: colorProp,
     size: controlSizeProp,
     defaultValue,
@@ -363,6 +364,7 @@ const Select = forwardRef(function Select(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
         FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
         SELECT_PRIMITIVES.content,
+        contentClassName,
       )}
       style={{
         ...floatingStyles,

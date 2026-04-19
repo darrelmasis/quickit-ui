@@ -1,6 +1,7 @@
 import { buttonDoc } from "@/website/component-docs/button.doc";
 import { linkDoc } from "@/website/component-docs/link.doc";
 import { badgeDoc } from "@/website/component-docs/badge.doc";
+import { alertDoc } from "@/website/component-docs/alert.doc";
 import { formControlDoc } from "@/website/component-docs/form-control.doc";
 import { labelDoc } from "@/website/component-docs/label.doc";
 import { inputDoc } from "@/website/component-docs/input.doc";
@@ -10,6 +11,7 @@ import { textareaDoc } from "@/website/component-docs/textarea.doc";
 import { selectDoc } from "@/website/component-docs/select.doc";
 import { comboboxDoc } from "@/website/component-docs/combobox.doc";
 import { datePickerDoc } from "@/website/component-docs/date-picker.doc";
+import { timePickerDoc } from "@/website/component-docs/time-picker.doc";
 import { stepperDoc } from "@/website/component-docs/stepper.doc";
 import { dataTableDoc } from "@/website/component-docs/data-table.doc";
 import { commandPaletteDoc } from "@/website/component-docs/command-palette.doc";
@@ -37,6 +39,7 @@ export const COMPONENT_DOCS = {
   "button": buttonDoc,
   "link": linkDoc,
   "badge": badgeDoc,
+  "alert": alertDoc,
   "form-control": formControlDoc,
   "label": labelDoc,
   "input": inputDoc,
@@ -46,6 +49,7 @@ export const COMPONENT_DOCS = {
   "select": selectDoc,
   "combobox": comboboxDoc,
   "date-picker": datePickerDoc,
+  "time-picker": timePickerDoc,
   "stepper": stepperDoc,
   "data-table": dataTableDoc,
   "command-palette": commandPaletteDoc,

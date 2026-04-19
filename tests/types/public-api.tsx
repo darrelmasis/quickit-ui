@@ -1,12 +1,15 @@
 import * as React from "react";
 import "quickit-ui/styles.css";
 import {
+  Alert,
   Avatar,
   AvatarFallback,
   AvatarPresence,
   Badge,
   Button,
   Checkbox,
+  Combobox,
+  DataTable,
   Default,
   Dropdown,
   Drawer,
@@ -47,6 +50,7 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
+  TimePicker,
   UserChip,
   useDropdown,
   type ButtonProps,
@@ -76,6 +80,7 @@ const linkProps: LinkProps = {
 };
 const presence: QuickitPresenceStatus = "online";
 const initials = getInitials("Elena Ruiz");
+type DataTablePreviewRow = { id: number; name: string; summary: string };
 const handleToggleChange = (event: QuickitCheckedChangeEvent) => {
   event.target.checked;
 };
@@ -118,6 +123,53 @@ function ConsumerPreviewInner() {
       <Button {...buttonProps} pressEffect="ripple">Guardar</Button>
       <Link {...linkProps} ripple={false}>Ir a docs</Link>
       <Badge color="success">Activo</Badge>
+      <Alert
+        color="warning"
+        dismissible
+        autoDismiss={2500}
+        title="Espacio casi lleno"
+      />
+      <Combobox
+        defaultValue="es"
+        clearButtonLabel="Limpiar idioma"
+        onClear={() => {}}
+        options={[
+          { value: "es", label: "Español" },
+          { value: "en", label: "English" },
+        ]}
+        placeholder="Idioma"
+      />
+      <DataTable<DataTablePreviewRow>
+        color="brand"
+        stickyHeader={false}
+        columns={[
+          {
+            key: "name",
+            header: "Nombre",
+            sortable: true,
+            headerClassName: "normal-case",
+          },
+          {
+            key: "summary",
+            header: "Resumen",
+            cellClassName: "whitespace-normal",
+            render: (row) => row.summary,
+          },
+        ]}
+        data={[
+          { id: 1, name: "Quickit UI", summary: "Documentación actualizada" },
+        ]}
+        rowKey={(row) => row.id}
+      />
+      <TimePicker
+        defaultValue="09:30"
+        minuteStep={15}
+        hourCycle="24h"
+        minTime="08:00"
+        maxTime="18:00"
+        clearButtonLabel="Limpiar hora"
+        onChange={(value) => value}
+      />
       <Input
         color="dark"
         type="search"

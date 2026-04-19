@@ -23,7 +23,8 @@ import {
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
-import { CheckFillIcon, ChevronDownIcon } from "@/lib/assets/icons";
+import { CheckFillIcon, ChevronDownIcon, ClearIcon } from "@/lib/assets/icons";
+import Button from "@/lib/components/button/Button";
 import { useFormControl } from "@/lib/components/form-control";
 import { useInputGroup } from "@/lib/components/input/input-group.context";
 import {
@@ -49,6 +50,10 @@ const COMBOBOX_PRIMITIVES = {
     "disabled:cursor-not-allowed disabled:opacity-60",
   ].join(" "),
   icon: "shrink-0 text-current/55",
+  actionButton:
+    "p-0 text-current/55 transition-[background-color,color,opacity] hover:bg-current/10 hover:text-current disabled:pointer-events-none disabled:opacity-40",
+  rightCluster:
+    "absolute right-2 top-1/2 inline-flex -translate-y-1/2 items-center gap-1",
   content: "max-h-72 overflow-y-auto",
 };
 
@@ -143,6 +148,9 @@ function firstEnabledIndex(list) {
 const Combobox = forwardRef(function Combobox(
   {
     className,
+    clearButton = true,
+    clearButtonLabel = "Limpiar selección",
+    clearIcon,
     color: colorProp,
     defaultValue,
     disabled = false,
@@ -151,6 +159,7 @@ const Combobox = forwardRef(function Combobox(
     invalid = false,
     name,
     onChange,
+    onClear,
     onValueChange,
     options: optionsProp = [],
     placeholder = "Buscar…",
@@ -173,10 +182,7 @@ const Combobox = forwardRef(function Combobox(
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[fieldTheme][resolvedColor];
   const field = useFormControl();
-  const options = useMemo(
-    () => normalizeOptions(optionsProp),
-    [optionsProp],
-  );
+  const options = useMemo(() => normalizeOptions(optionsProp), [optionsProp]);
   const resolvedInvalid = invalid || field?.invalid;
   const resolvedDisabled = disabled || field?.disabled;
   const resolvedRequired = required || field?.required;
@@ -184,7 +190,11 @@ const Combobox = forwardRef(function Combobox(
   const resolvedId = id ?? field?.controlId ?? generatedId;
   const listboxId = `${resolvedId}-listbox`;
   const describedBy =
-    [props["aria-describedby"], field?.descriptionId, resolvedInvalid ? field?.messageId : null]
+    [
+      props["aria-describedby"],
+      field?.descriptionId,
+      resolvedInvalid ? field?.messageId : null,
+    ]
       .filter(Boolean)
       .join(" ") || undefined;
 
@@ -192,9 +202,7 @@ const Combobox = forwardRef(function Combobox(
     defaultValue !== undefined ? String(defaultValue) : "",
   );
   const resolvedValue =
-    controlledValue !== undefined
-      ? String(controlledValue)
-      : uncontrolledValue;
+    controlledValue !== undefined ? String(controlledValue) : uncontrolledValue;
 
   const selectedOption = options.find((o) => o.value === resolvedValue);
   const [open, setOpen] = useState(false);
@@ -203,6 +211,13 @@ const Combobox = forwardRef(function Combobox(
   const listRef = useRef([]);
 
   const inputValue = open ? draftQuery : (selectedOption?.label ?? "");
+  const clearButtonContent = clearIcon ?? (
+    <ClearIcon className="size-4 fill-current" />
+  );
+  const showClearButton =
+    clearButton &&
+    !resolvedDisabled &&
+    (resolvedValue.length > 0 || draftQuery.length > 0);
 
   const filteredOptions = useMemo(
     () => filterOptionsByQuery(options, open ? draftQuery : ""),
@@ -324,6 +339,39 @@ const Combobox = forwardRef(function Combobox(
     ],
   );
 
+  const clearSelection = useCallback(
+    (nativeEvent) => {
+      if (controlledValue === undefined) {
+        setUncontrolledValue("");
+      }
+      setDraftQuery("");
+      setActiveIndex(firstEnabledIndex(options));
+      onValueChange?.("");
+      onChange?.(
+        createChangeEvent({
+          id: resolvedId,
+          name,
+          nativeEvent,
+          value: "",
+        }),
+      );
+      onClear?.();
+      handleOpenChange(false);
+      refs.reference.current?.focus?.();
+    },
+    [
+      controlledValue,
+      handleOpenChange,
+      name,
+      onChange,
+      onClear,
+      onValueChange,
+      options,
+      refs.reference,
+      resolvedId,
+    ],
+  );
+
   const getOptionProps = useCallback(
     (option, index) =>
       interactions.getItemProps({
@@ -368,10 +416,7 @@ const Combobox = forwardRef(function Combobox(
       })}
     >
       {filteredOptions.length === 0 ? (
-        <li
-          role="presentation"
-          className="px-3 py-2 text-sm text-current/50"
-        >
+        <li role="presentation" className="px-3 py-2 text-sm text-current/50">
           {emptyText}
         </li>
       ) : (
@@ -425,12 +470,7 @@ const Combobox = forwardRef(function Combobox(
       )}
     >
       {name ? <input type="hidden" name={name} value={resolvedValue} /> : null}
-      <div
-        className={cn(
-          "relative flex w-full",
-          isAttached && "h-full",
-        )}
-      >
+      <div className={cn("relative flex w-full", isAttached && "h-full")}>
         <input
           ref={referenceRef}
           id={resolvedId}
@@ -453,7 +493,8 @@ const Combobox = forwardRef(function Combobox(
               : getControlRadius(controlSize),
             isAttached
               ? null
-              : COMBOBOX_SIZE_CLASSES[controlSize] ?? COMBOBOX_SIZE_CLASSES.md,
+              : (COMBOBOX_SIZE_CLASSES[controlSize] ??
+                  COMBOBOX_SIZE_CLASSES.md),
             resolveQuickitFocusRingClasses(
               isAttached ? false : focusRingEnabled,
               resolvedInvalid ? ui.invalid : colorUi.base,
@@ -462,7 +503,7 @@ const Combobox = forwardRef(function Combobox(
               !resolvedDisabled &&
               !resolvedInvalid &&
               colorUi.hover,
-            "pr-10",
+            showClearButton ? "pr-[3.5rem]" : "pr-10",
             className,
           )}
           {...interactions.getReferenceProps({
@@ -502,24 +543,60 @@ const Combobox = forwardRef(function Combobox(
             },
           })}
         />
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-hidden="true"
-          disabled={resolvedDisabled}
-          className={cn(
-            "absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-0.5",
-            COMBOBOX_PRIMITIVES.icon,
-            open && "rotate-180",
-          )}
-          onClick={() => {
-            if (!resolvedDisabled) {
-              handleOpenChange(!open);
-            }
-          }}
-        >
-          <ChevronDownIcon className="size-4 fill-current" />
-        </button>
+        <span className={COMBOBOX_PRIMITIVES.rightCluster}>
+          {showClearButton ? (
+            <Button
+              type="button"
+              variant="ghost"
+              color="neutral"
+              shape="circle"
+              size="sm"
+              aria-label={clearButtonLabel}
+              title={clearButtonLabel}
+              disabled={resolvedDisabled}
+              className={cn(
+                COMBOBOX_PRIMITIVES.actionButton,
+                "size-7 min-w-7 p-0",
+              )}
+              onPointerDown={(event) => {
+                event.preventDefault();
+              }}
+              onClick={(event) => {
+                clearSelection(event);
+              }}
+            >
+              {clearButtonContent}
+            </Button>
+          ) : null}
+
+          <Button
+            type="button"
+            variant="ghost"
+            color="neutral"
+            shape="square"
+            size="sm"
+            tabIndex={-1}
+            title={open ? "Cerrar opciones" : "Abrir opciones"}
+            aria-hidden="true"
+            disabled={resolvedDisabled}
+            className={cn(
+              COMBOBOX_PRIMITIVES.actionButton,
+              COMBOBOX_PRIMITIVES.icon,
+              "size-7 min-w-7 p-0",
+              open && "rotate-180",
+            )}
+            onPointerDown={(event) => {
+              event.preventDefault();
+            }}
+            onClick={() => {
+              if (!resolvedDisabled) {
+                handleOpenChange(!open);
+              }
+            }}
+          >
+            <ChevronDownIcon className="size-4 fill-current" />
+          </Button>
+        </span>
       </div>
 
       {usePortal ? <FloatingPortal>{content}</FloatingPortal> : content}

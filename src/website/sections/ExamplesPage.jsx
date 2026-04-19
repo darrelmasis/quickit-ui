@@ -36,6 +36,7 @@ import {
   Switch,
   Tabs,
   Textarea,
+  TimePicker,
   Toaster,
   Tooltip,
   toast,
@@ -679,6 +680,7 @@ export function AdvancedControlsDemo() {
         placeholder="Idioma"
       />
       <DatePicker placeholder="Fecha" />
+      <TimePicker placeholder="Hora" minuteStep={15} />
       <DataTable
         rowKey={(r) => r.id}
         columns={[
@@ -1424,6 +1426,7 @@ export default function ExamplesPage() {
                       placeholder="Idioma de interfaz"
                     />
                     <DatePicker placeholder="Fecha de inicio" />
+                    <TimePicker placeholder="Hora de inicio" minuteStep={15} />
                     <DataTable
                       rowKey={(row) => row.id}
                       columns={[

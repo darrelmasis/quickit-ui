@@ -648,6 +648,12 @@ export const WEBSITE_COMPONENT_GROUPS = [
         description: "Selector de fecha con calendario en popover.",
       },
       {
+        slug: "time-picker",
+        name: "TimePicker",
+        isNew: true,
+        description: "Selector de hora con listas de horas y minutos.",
+      },
+      {
         slug: "checkbox",
         name: "Checkbox",
         description: "Control binario con label y handlers explícitos.",
@@ -746,6 +752,12 @@ export const WEBSITE_COMPONENT_GROUPS = [
   {
     title: "Estado e identidad",
     items: [
+      {
+        slug: "alert",
+        name: "Alert",
+        isNew: true,
+        description: "Mensaje inline con dismiss manual y auto-dismiss opcional.",
+      },
       {
         slug: "avatar",
         name: "Avatar",
