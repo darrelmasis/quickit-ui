@@ -573,7 +573,7 @@ export function NavigationExample() {
     <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-950">
       <Accordion type="single" collapsible>
         <Accordion.Item value="item-1">
-          <Accordion.Trigger>Que incluye</Accordion.Trigger>
+          <Accordion.Trigger>Qué incluye</Accordion.Trigger>
           <Accordion.Content>Tokens, componentes y hooks.</Accordion.Content>
         </Accordion.Item>
         <Accordion.Item value="item-2">
@@ -597,7 +597,7 @@ export function RenderSwitchExample() {
         <Match when="success">Todo correcto</Match>
         <Match when="warning">
           <div className="space-y-2">
-            <Badge color="warning">Atencion</Badge>
+            <Badge color="warning">Atención</Badge>
             <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Hay pendientes por revisar.
             </p>
@@ -640,8 +640,11 @@ const EXAMPLES_NAV = [
     ],
   },
   {
-    title: "Utilidades",
-    items: [{ id: "navegacion-utilidades", label: "Navegacion y utilidades" }],
+    title: "Organización",
+    items: [
+      { id: "layout-secciones", label: "Layout y Secciones" },
+      { id: "navegacion-utilidades", label: "Navegación y utilidades" },
+    ],
   },
 ];
 
@@ -653,6 +656,7 @@ import {
   DataTable,
   DatePicker,
   Stepper,
+  TimePicker,
 } from "quickit-ui";
 
 export function AdvancedControlsDemo() {
@@ -706,6 +710,83 @@ export function AdvancedControlsDemo() {
         ]}
       />
     </div>
+  );
+}`;
+
+const HEADER_EXAMPLE_CODE = `import { Avatar, Badge, Button, Input, Link } from "quickit-ui";
+
+export function AppHeader() {
+  return (
+    <header className="flex h-16 w-full items-center justify-between border-b bg-white px-6 dark:border-neutral-800 dark:bg-neutral-950">
+      <div className="flex items-center gap-8">
+        <div className="flex items-center gap-2 font-bold text-neutral-950 dark:text-neutral-50">
+          <div className="size-6 rounded-lg bg-sky-600" />
+          <span>Quickit</span>
+        </div>
+        
+        <nav className="hidden items-center gap-1 md:flex">
+          <Link href="#" className="px-3 py-2 text-sm font-medium">Dashboard</Link>
+          <Link href="#" variant="muted" className="px-3 py-2 text-sm font-medium">Proyectos</Link>
+          <Link href="#" variant="muted" className="px-3 py-2 text-sm font-medium">Equipo</Link>
+        </nav>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <Input className="hidden max-w-[180px] md:flex" placeholder="Buscar..." size="sm" />
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" shape="square" size="sm" color="neutral">
+            <span className="sr-only">Notificaciones</span>
+            <Badge size="xs" color="danger" className="absolute right-0.5 top-0.5" />
+          </Button>
+          <Avatar size="sm">
+            <Avatar.Fallback>AD</Avatar.Fallback>
+          </Avatar>
+        </div>
+      </div>
+    </header>
+  );
+}`;
+
+const FOOTER_EXAMPLE_CODE = `import { Button, Input, Link } from "quickit-ui";
+
+export function SiteFooter() {
+  return (
+    <footer className="w-full border-t border-neutral-200 bg-neutral-50 py-12 dark:border-neutral-800 dark:bg-neutral-950">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-4">
+            <p className="font-bold text-neutral-950 dark:text-neutral-50">Quickit UI</p>
+            <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+              Sistema de diseño moderno para construir aplicaciones web rápidas y accesibles.
+            </p>
+          </div>
+          
+          <div>
+            <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 uppercase">Docs</h4>
+            <ul className="mt-4 space-y-2">
+              <li><Link href="#" variant="muted">Componentes</Link></li>
+              <li><Link href="#" variant="muted">Ejemplos</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 uppercase">Legal</h4>
+            <ul className="mt-4 space-y-2">
+              <li><Link href="#" variant="muted">Privacidad</Link></li>
+              <li><Link href="#" variant="muted">Términos</Link></li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 uppercase">Suscríbete</h4>
+            <div className="flex gap-2">
+              <Input size="sm" placeholder="tu@correo.com" />
+              <Button size="sm">Ir</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }`;
 
@@ -1474,11 +1555,96 @@ export default function ExamplesPage() {
               </div>
             </WebsitePreviewTabs>
           </section>
+          <section id="layout-secciones" className="scroll-mt-28 space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">
+                Secciones y Layout
+              </h2>
+              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                Componentes de estructura real como cabeceras y pies de página.
+              </p>
+            </div>
+            
+            <div className="space-y-8">
+              <WebsitePreviewTabs code={HEADER_EXAMPLE_CODE}>
+                <div className="w-full">
+                  <header className="flex h-16 w-full items-center justify-between border-b border-neutral-200 bg-white px-6 dark:border-neutral-800 dark:bg-neutral-950">
+                    <div className="flex items-center gap-8">
+                      <div className="flex items-center gap-2 font-bold text-neutral-950 dark:text-neutral-50">
+                        <div className="size-6 rounded-lg bg-sky-600" />
+                        <span>Quickit</span>
+                      </div>
+                      
+                      <nav className="hidden items-center gap-1 md:flex">
+                        <Link href="#" className="px-3 py-2 text-sm font-medium">Dashboard</Link>
+                        <Link href="#" variant="muted" className="px-3 py-2 text-sm font-medium">Proyectos</Link>
+                        <Link href="#" variant="muted" className="px-3 py-2 text-sm font-medium">Equipo</Link>
+                      </nav>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <Input className="hidden max-w-[180px] md:flex" placeholder="Buscar..." size="sm" />
+                      <div className="flex items-center gap-3">
+                        <Button variant="ghost" shape="square" size="sm" color="neutral">
+                          <span className="sr-only">Notificaciones</span>
+                          <Badge size="xs" color="danger" className="absolute right-0.5 top-0.5" />
+                        </Button>
+                        <Avatar size="sm">
+                          <Avatar.Fallback>AD</Avatar.Fallback>
+                        </Avatar>
+                      </div>
+                    </div>
+                  </header>
+                </div>
+              </WebsitePreviewTabs>
+
+              <WebsitePreviewTabs code={FOOTER_EXAMPLE_CODE}>
+                <div className="w-full">
+                  <footer className="w-full rounded-2xl border border-neutral-200 bg-neutral-50 py-10 dark:border-neutral-800 dark:bg-neutral-950">
+                    <div className="mx-auto max-w-7xl px-6">
+                      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                        <div className="space-y-4">
+                          <p className="font-bold text-neutral-950 dark:text-neutral-50">Quickit UI</p>
+                          <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+                            Sistema de diseño moderno para aplicaciones rápidas y accesibles.
+                          </p>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 uppercase">Docs</h4>
+                          <ul className="mt-4 space-y-2">
+                            <li><Link href="#" variant="muted">Componentes</Link></li>
+                            <li><Link href="#" variant="muted">Ejemplos</Link></li>
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 uppercase">Legal</h4>
+                          <ul className="mt-4 space-y-2 text-sm">
+                            <li><Link href="#" variant="muted">Privacidad</Link></li>
+                            <li><Link href="#" variant="muted">Términos</Link></li>
+                          </ul>
+                        </div>
+
+                        <div className="space-y-4">
+                          <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 uppercase">Suscríbete</h4>
+                          <div className="flex gap-2">
+                            <Input size="sm" placeholder="tu@correo.com" />
+                            <Button size="sm">Ir</Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </footer>
+                </div>
+              </WebsitePreviewTabs>
+            </div>
+          </section>
 
           <section id="navegacion-utilidades" className="scroll-mt-28 space-y-6">
           <div>
             <h2 className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">
-              Navegacion y utilidades
+              Navegación y utilidades
             </h2>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
               Accordion, Pagination y RenderSwitch.
@@ -1490,7 +1656,7 @@ export default function ExamplesPage() {
                 <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-950">
                   <Accordion type="single" collapsible>
                     <Accordion.Item value="item-1">
-                      <Accordion.Trigger>Que incluye</Accordion.Trigger>
+                      <Accordion.Trigger>Qué incluye</Accordion.Trigger>
                       <Accordion.Content>
                         Tokens, componentes y hooks.
                       </Accordion.Content>
@@ -1515,7 +1681,7 @@ export default function ExamplesPage() {
                     <Match when="success">Todo correcto</Match>
                     <Match when="warning">
                       <div className="space-y-2">
-                        <Badge color="warning">Atencion</Badge>
+                        <Badge color="warning">Atención</Badge>
                         <p className="text-sm text-neutral-600 dark:text-neutral-400">
                           Hay pendientes por revisar.
                         </p>
