@@ -57,4 +57,40 @@ describe("WebsiteApp", () => {
     expect(await screen.findByRole("heading", { name: "Instalación" })).toBeTruthy();
     expect(window.location.pathname).toBe("/docs/installation");
   }, 15000);
+
+  it("renders the examples page without invalid component types", async () => {
+    window.history.pushState(null, "", "/examples");
+
+    render(
+      <QuickitThemeProvider
+        defaultTheme="light"
+        storageKey={WEBSITE_THEME_STORAGE_KEY}
+      >
+        <WebsiteApp />
+      </QuickitThemeProvider>,
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "Flujos reales con Quickit UI" }),
+    ).toBeTruthy();
+  }, 15000);
+
+  it("renders the landing page without invalid component types", async () => {
+    window.history.pushState(null, "", "/");
+
+    render(
+      <QuickitThemeProvider
+        defaultTheme="light"
+        storageKey={WEBSITE_THEME_STORAGE_KEY}
+      >
+        <WebsiteApp />
+      </QuickitThemeProvider>,
+    );
+
+    expect(
+      await screen.findByRole("heading", {
+        name: /la forma más/i,
+      }),
+    ).toBeTruthy();
+  }, 15000);
 });
