@@ -469,6 +469,18 @@ export const WEBSITE_COMPONENT_GROUPS = [
         description: "Selector composable con trigger y panel flotante.",
       },
       {
+        slug: "combobox",
+        name: "Combobox",
+        isNew: true,
+        description: "Lista filtrable con campo de búsqueda integrado.",
+      },
+      {
+        slug: "date-picker",
+        name: "DatePicker",
+        isNew: true,
+        description: "Selector de fecha con calendario en popover.",
+      },
+      {
         slug: "checkbox",
         name: "Checkbox",
         description: "Control binario con label y handlers explícitos.",
@@ -508,6 +520,12 @@ export const WEBSITE_COMPONENT_GROUPS = [
         name: "Tabs",
         description: "Navegación por paneles con teclado y modo manual.",
       },
+      {
+        slug: "stepper",
+        name: "Stepper",
+        isNew: true,
+        description: "Pasos numerados para flujos guiados.",
+      },
     ],
   },
   {
@@ -538,6 +556,23 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "modal",
         name: "Modal",
         description: "Overlay con trigger, contenido y acciones compuestas.",
+      },
+      {
+        slug: "command-palette",
+        name: "CommandPalette",
+        isNew: true,
+        description: "Paleta de comandos con búsqueda y atajo Ctrl+K.",
+      },
+    ],
+  },
+  {
+    title: "Tablas",
+    items: [
+      {
+        slug: "data-table",
+        name: "DataTable",
+        isNew: true,
+        description: "Tabla con ordenación por columnas y cabecera sticky.",
       },
     ],
   },
@@ -692,15 +727,15 @@ export const WEBSITE_COMPONENT_REVIEW_NOTES = {
   range: [
     {
       tag: "Uso",
-      text: "Es un `input type=\"range\"` estilizado: `min`, `max`, `step`, `value` / `defaultValue` numéricos y `onChange` como en el elemento nativo. `color` y `size` aplican tokens Quickit.",
+      text: "Soporta modo simple y doble (`range`) con `value/defaultValue` numérico o tuple `[inicio, fin]`. También acepta `orientation=\"vertical\"` y `allowWheel` para interacción con rueda.",
     },
     {
       tag: "Accesibilidad",
-      text: "Comportamiento estándar del range nativo. Enlaza un `Label` visible si lo necesitas.",
+      text: "Comportamiento estándar del range nativo. Enlaza un `Label` visible si lo necesitas; en modo doble, prioriza thumb en hover/activo para interacción más predecible.",
     },
     {
       tag: "Implementación",
-      text: "Track y accent siguen el tema claro/oscuro; el focus ring usa la política del token `input`.",
+      text: "Track y thumbs mantienen el mismo estilo en horizontal/vertical. `showValueTooltip` permite mostrar valor en tooltip con `tooltipFormatter` opcional.",
     },
   ],
   textarea: [

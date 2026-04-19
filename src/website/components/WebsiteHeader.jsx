@@ -1,11 +1,21 @@
-import { Button, For, Show, useQuickitThemeController } from "@/lib";
+import { useMemo, useState } from "react";
+import {
+  Badge,
+  Button,
+  CommandPalette,
+  For,
+  Show,
+  useQuickitThemeController,
+} from "@/lib";
 import { cn } from "@/lib/utils";
+import { getWebsiteSearchGroups } from "@/website/docs-search";
 import {
   WEBSITE_NAV,
   WEBSITE_ROUTES,
   WEBSITE_SHELL,
 } from "@/website/site-config";
 import WebsiteLogo from "@/website/components/WebsiteLogo";
+import { navigateWebsiteToHref } from "@/website/router";
 
 function SunIcon() {
   return (
@@ -37,7 +47,16 @@ function MoonIcon() {
 
 export default function WebsiteHeader({ activePath }) {
   const { resolvedTheme, toggleTheme } = useQuickitThemeController();
+  const [searchOpen, setSearchOpen] = useState(false);
   const isDark = resolvedTheme === "dark";
+  const searchGroups = useMemo(
+    () =>
+      getWebsiteSearchGroups((href) => {
+        navigateWebsiteToHref(href);
+        setSearchOpen(false);
+      }),
+    [],
+  );
 
   return (
     <header className="sticky top-0 z-50 bg-white/88 backdrop-blur-xl dark:bg-neutral-950/88">
@@ -73,6 +92,33 @@ export default function WebsiteHeader({ activePath }) {
           <div className="ml-auto flex items-center gap-2">
             <Button
               size="sm"
+              color="neutral"
+              variant="outline"
+              activeMotion={false}
+              className="hidden min-w-[15rem] justify-between md:inline-flex"
+              onClick={() => setSearchOpen(true)}
+            >
+              <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                Buscar en docs
+              </span>
+              <Badge color="neutral" variant="soft">
+                Ctrl+K
+              </Badge>
+            </Button>
+
+            <Button
+              size="sm"
+              color="neutral"
+              variant="outline"
+              activeMotion={false}
+              className="md:hidden"
+              onClick={() => setSearchOpen(true)}
+            >
+              Buscar
+            </Button>
+
+            <Button
+              size="sm"
               shape="circle"
               color="neutral"
               variant={isDark ? "solid" : "outline"}
@@ -87,6 +133,14 @@ export default function WebsiteHeader({ activePath }) {
           </div>
         </div>
       </div>
+
+      <CommandPalette
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        groups={searchGroups}
+        placeholder="Buscar componentes, hooks o guías…"
+        emptyText="No encontré resultados en la documentación"
+      />
     </header>
   );
 }

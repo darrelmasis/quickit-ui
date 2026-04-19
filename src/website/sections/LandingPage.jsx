@@ -21,7 +21,7 @@ export default function LandingPage() {
         <section className="mx-auto max-w-5xl text-center">
           <div className="flex flex-col items-center gap-6">
             <Badge color="neutral" variant="soft" size="sm">
-              React 19 · Tailwind CSS v4
+              React 18+ · Tailwind CSS v4
             </Badge>
             <h1 className="max-w-3xl text-balance text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl xl:text-[3.25rem] xl:leading-[1.1] dark:text-neutral-50">
               La forma más{" "}
@@ -43,20 +43,10 @@ export default function LandingPage() {
                 href={WEBSITE_ROUTES.docs}
                 appearance="button"
                 size="md"
-                color="neutral"
+                color="light"
                 fullWidth={isDesktop ? false : true}
               >
-                Empezar en la documentación
-              </Link>
-              <Link
-                href={WEBSITE_ROUTES.examples}
-                appearance="button"
-                size="md"
-                color="neutral"
-                variant="outline"
-                fullWidth={isDesktop ? false : true}
-              >
-                Ver ejemplos
+                Empezar
               </Link>
             </div>
             <div className="flex items-center gap-2 mt-2">

@@ -6,6 +6,10 @@ import {
   Breadcrumb,
   Button,
   Checkbox,
+  Combobox,
+  CommandPalette,
+  DataTable,
+  DatePicker,
   Default,
   Drawer,
   Dropdown,
@@ -28,6 +32,7 @@ import {
   Select,
   Show,
   Skeleton,
+  Stepper,
   Switch,
   Tabs,
   Textarea,
@@ -630,6 +635,7 @@ const EXAMPLES_NAV = [
       { id: "estados-carga", label: "Estados y carga" },
       { id: "progreso-rango", label: "Progreso y rango" },
       { id: "toasts-ejemplo", label: "Toasts" },
+      { id: "formularios-avanzados", label: "Combobox, fecha y datos" },
     ],
   },
   {
@@ -638,8 +644,74 @@ const EXAMPLES_NAV = [
   },
 ];
 
+const ADVANCED_CONTROLS_CODE = `import { useState } from "react";
+import {
+  Button,
+  Combobox,
+  CommandPalette,
+  DataTable,
+  DatePicker,
+  Stepper,
+} from "quickit-ui";
+
+export function AdvancedControlsDemo() {
+  const [lang, setLang] = useState("es");
+  const [step, setStep] = useState(1);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  return (
+    <div className="space-y-6">
+      <Stepper
+        activeStep={step}
+        onStepChange={setStep}
+        steps={[
+          { title: "Cuenta" },
+          { title: "Plan" },
+          { title: "Listo" },
+        ]}
+      />
+      <Combobox
+        value={lang}
+        onValueChange={setLang}
+        options={[
+          { value: "es", label: "Español" },
+          { value: "en", label: "English" },
+        ]}
+        placeholder="Idioma"
+      />
+      <DatePicker placeholder="Fecha" />
+      <DataTable
+        rowKey={(r) => r.id}
+        columns={[
+          { key: "name", header: "Nombre", sortable: true },
+          { key: "qty", header: "Cant." },
+        ]}
+        data={[
+          { id: 1, name: "Teclado", qty: 2 },
+          { id: 2, name: "Mouse", qty: 5 },
+        ]}
+      />
+      <Button type="button" onClick={() => setPaletteOpen(true)}>
+        Paleta
+      </Button>
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        groups={[
+          {
+            heading: "Demo",
+            items: [{ id: "1", label: "Cerrar", onSelect: () => {} }],
+          },
+        ]}
+      />
+    </div>
+  );
+}`;
+
 export default function ExamplesPage() {
   const [rangeLevel, setRangeLevel] = useState(45);
+  const [exampleLang, setExampleLang] = useState("es");
+  const [exampleStep, setExampleStep] = useState(1);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   return (
     <main className={`${WEBSITE_SHELL} pb-20 pt-10 sm:pt-14`}>
@@ -1314,6 +1386,88 @@ export default function ExamplesPage() {
                     </Button>
                   </div>
                 </div>
+              </div>
+            </WebsitePreviewTabs>
+          </section>
+
+          <section id="formularios-avanzados" className="scroll-mt-28 space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">
+                Combobox, fecha, tabla y paleta
+              </h2>
+              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                Componentes nuevos para formularios densos, datos tabulares y
+                atajos de productividad.
+              </p>
+            </div>
+            <WebsitePreviewTabs code={ADVANCED_CONTROLS_CODE}>
+              <div className="w-full max-w-2xl space-y-6">
+                <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-950">
+                  <Stepper
+                    activeStep={exampleStep}
+                    onStepChange={setExampleStep}
+                    steps={[
+                      { title: "Cuenta", description: "Datos básicos" },
+                      { title: "Plan", description: "Elige plan" },
+                      { title: "Listo", description: "Confirmación" },
+                    ]}
+                  />
+                  <div className="mt-6 space-y-4">
+                    <Combobox
+                      value={exampleLang}
+                      onValueChange={setExampleLang}
+                      options={[
+                        { value: "es", label: "Español" },
+                        { value: "en", label: "English" },
+                        { value: "fr", label: "Français" },
+                      ]}
+                      placeholder="Idioma de interfaz"
+                    />
+                    <DatePicker placeholder="Fecha de inicio" />
+                    <DataTable
+                      rowKey={(row) => row.id}
+                      columns={[
+                        { key: "name", header: "Producto", sortable: true },
+                        { key: "qty", header: "Cant." },
+                      ]}
+                      data={[
+                        { id: 1, name: "Teclado", qty: 2 },
+                        { id: 2, name: "Mouse", qty: 5 },
+                        { id: 3, name: "Monitor", qty: 1 },
+                      ]}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPaletteOpen(true)}
+                    >
+                      Abrir paleta de comandos
+                    </Button>
+                  </div>
+                </div>
+                <CommandPalette
+                  open={paletteOpen}
+                  onOpenChange={setPaletteOpen}
+                  groups={[
+                    {
+                      heading: "Ejemplo",
+                      items: [
+                        {
+                          id: "toast",
+                          label: "Mostrar toast de prueba",
+                          onSelect: () =>
+                            toast({ title: "Desde la paleta", kind: "success" }),
+                        },
+                        {
+                          id: "close",
+                          label: "Solo cerrar",
+                          onSelect: () => {},
+                        },
+                      ],
+                    },
+                  ]}
+                />
               </div>
             </WebsitePreviewTabs>
           </section>

@@ -2,54 +2,28 @@ import { useEffect, useState } from "react";
 import { Default, Match, RenderSwitch } from "@/lib";
 import { WEBSITE_ROUTES, getWebsiteSection } from "@/website/site-config";
 import WebsiteHeader from "@/website/components/WebsiteHeader";
+import {
+  resolveWebsiteNavigation,
+  resolveWebsitePath,
+  scrollToWebsiteHash,
+  shouldHandleWebsiteClick,
+} from "@/website/router";
 import LandingPage from "@/website/sections/LandingPage";
 import DocsPage from "@/website/sections/DocsPage";
 import ExamplesPage from "@/website/sections/ExamplesPage";
-
-function normalizePathname(pathname) {
-  if (!pathname) {
-    return WEBSITE_ROUTES.landing;
-  }
-
-  if (pathname.endsWith("/") && pathname.length > 1) {
-    return pathname.slice(0, -1);
-  }
-
-  return pathname;
-}
-
-function resolvePath(pathname) {
-  return normalizePathname(pathname);
-}
-
-function scrollToHash(hash, behavior = "smooth") {
-  if (!hash) {
-    window.scrollTo({ top: 0, left: 0, behavior });
-    return;
-  }
-
-  const element = document.getElementById(decodeURIComponent(hash.slice(1)));
-
-  if (element) {
-    element.scrollIntoView({ block: "start", behavior });
-    return;
-  }
-
-  window.scrollTo({ top: 0, left: 0, behavior });
-}
 
 export default function WebsiteApp() {
   const [activePath, setActivePath] = useState(() =>
     typeof window === "undefined"
       ? WEBSITE_ROUTES.landing
-      : resolvePath(window.location.pathname),
+      : resolveWebsitePath(window.location.pathname),
   );
 
   useEffect(() => {
     const handlePopState = () => {
-      setActivePath(resolvePath(window.location.pathname));
+      setActivePath(resolveWebsitePath(window.location.pathname));
       requestAnimationFrame(() => {
-        scrollToHash(window.location.hash, "auto");
+        scrollToWebsiteHash(window.location.hash, "auto");
       });
     };
 
@@ -60,7 +34,7 @@ export default function WebsiteApp() {
 
   useEffect(() => {
     const navigateWithinWebsite = (url) => {
-      const nextPath = resolvePath(url.pathname);
+      const nextPath = resolveWebsitePath(url.pathname);
       const nextLocation = `${nextPath}${url.hash}`;
 
       if (
@@ -73,19 +47,12 @@ export default function WebsiteApp() {
       setActivePath(nextPath);
 
       requestAnimationFrame(() => {
-        scrollToHash(url.hash);
+        scrollToWebsiteHash(url.hash);
       });
     };
 
     const handleDocumentClick = (event) => {
-      if (
-        event.defaultPrevented ||
-        event.button !== 0 ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey
-      ) {
+      if (!shouldHandleWebsiteClick(event)) {
         return;
       }
 
@@ -95,29 +62,23 @@ export default function WebsiteApp() {
         return;
       }
 
-      const href = anchor.getAttribute("href");
+      const navigation = resolveWebsiteNavigation(anchor);
 
-      if (!href || href.startsWith("mailto:") || href.startsWith("tel:")) {
+      if (navigation.type === "ignore" || navigation.type === "external") {
         return;
       }
 
-      if (href.startsWith("#")) {
+      if (navigation.type === "hash") {
         event.preventDefault();
-        const nextLocation = `${window.location.pathname}${href}`;
-        window.history.pushState(null, "", nextLocation);
+        window.history.pushState(null, "", navigation.href);
         requestAnimationFrame(() => {
-          scrollToHash(href);
+          scrollToWebsiteHash(navigation.hash);
         });
         return;
       }
 
-      const url = new URL(anchor.href, window.location.origin);
-
-      if (url.origin !== window.location.origin) {
-        return;
-      }
       event.preventDefault();
-      navigateWithinWebsite(url);
+      navigateWithinWebsite({ hash: navigation.hash, pathname: navigation.path });
     };
 
     document.addEventListener("click", handleDocumentClick);

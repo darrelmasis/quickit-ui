@@ -1,5 +1,32 @@
-import { For } from "@/lib";
+import { useState } from "react";
+import { Button, For } from "@/lib";
+import { ChevronDownIcon } from "@/lib/assets/icons";
+import { cn } from "@/lib/utils";
+import {
+  getWebsiteDocsSectionRoute,
+  getWebsiteHookRoute,
+} from "@/website/docs-navigation";
 import { getWebsiteComponentRoute } from "@/website/site-config";
+
+function getSectionState(section, currentPath) {
+  const baseHref = getWebsiteDocsSectionRoute(section.id);
+  const childEntries =
+    section.children?.map((child) => {
+      const childSlug = child.id.replace("hook-", "");
+      return {
+        ...child,
+        href: getWebsiteHookRoute(childSlug),
+      };
+    }) ?? [];
+
+  return {
+    baseHref,
+    childEntries,
+    hasChildren: childEntries.length > 0,
+    isActive: currentPath === baseHref,
+    isChildActive: childEntries.some((child) => child.href === currentPath),
+  };
+}
 
 export default function WebsiteDocsSidebar({
   componentGroups,
@@ -7,6 +34,17 @@ export default function WebsiteDocsSidebar({
   sections,
   currentPath,
 }) {
+  const [openSections, setOpenSections] = useState(() => {
+    return new Set(
+      sections
+        .filter((section) => {
+          const state = getSectionState(section, currentPath);
+          return state.isActive || state.isChildActive;
+        })
+        .map((section) => section.id),
+    );
+  });
+
   return (
     <aside className="hidden self-start lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-3 lg:[scrollbar-width:thin] lg:[scrollbar-color:rgb(163_163_163)_transparent] lg:[&::-webkit-scrollbar]:w-2 lg:[&::-webkit-scrollbar-track]:bg-transparent lg:[&::-webkit-scrollbar-thumb]:rounded-full lg:[&::-webkit-scrollbar-thumb]:border-2 lg:[&::-webkit-scrollbar-thumb]:border-transparent lg:[&::-webkit-scrollbar-thumb]:bg-neutral-300 lg:[&::-webkit-scrollbar-thumb]:bg-clip-content lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:lg:[scrollbar-color:rgb(115_115_115)_transparent] dark:lg:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600">
       <div className="space-y-8">
@@ -17,46 +55,101 @@ export default function WebsiteDocsSidebar({
           <nav className="mt-4 space-y-1">
             <For each={sections}>
               {(section, index) => {
-                const isHooks = section.id === "hooks";
-                const baseHref = isHooks ? "/docs/hooks" : `/docs/${section.id}`;
-                
-                const isActive = currentPath === baseHref;
-                
+                const {
+                  baseHref,
+                  childEntries,
+                  hasChildren,
+                  isActive,
+                  isChildActive,
+                } = getSectionState(section, currentPath);
+                const isExpanded =
+                  hasChildren &&
+                  (openSections.has(section.id) || isChildActive);
+
                 return (
                   <div key={`${section.id}-${index}`} className="space-y-1">
-                    <a
-                      href={baseHref}
-                      className={
-                        isActive 
-                          ? "block rounded-xl bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-950 dark:bg-neutral-900 dark:text-neutral-100"
-                          : "block rounded-xl px-3 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-                      }
-                    >
-                      {section.label}
-                    </a>
-                    {section.children && (
-                      <div className="ml-4 space-y-1 border-l border-neutral-100 pl-4 dark:border-neutral-800">
-                        {section.children.map((child) => {
-                          const childSlug = child.id.replace("hook-", "");
-                          const childHref = `/docs/hooks/${childSlug}`;
-                          const isChildActive = currentPath === childHref;
+                    <div className="flex items-center gap-1">
+                      <a
+                        href={baseHref}
+                        className={
+                          isActive || isChildActive
+                            ? "block min-w-0 flex-1 rounded-xl bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-950 dark:bg-neutral-900 dark:text-neutral-100"
+                            : "block min-w-0 flex-1 rounded-xl px-3 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+                        }
+                      >
+                        {section.label}
+                      </a>
 
-                          return (
-                            <a
-                              key={child.id}
-                              href={childHref}
-                              className={
-                                isChildActive
-                                  ? "block py-1 text-xs font-medium text-brand-600"
-                                  : "block py-1 text-xs text-neutral-500 hover:text-neutral-950 dark:hover:text-neutral-100"
+                      {hasChildren ? (
+                        <Button
+                          size="sm"
+                          shape="square"
+                          color="neutral"
+                          variant="ghost"
+                          activeMotion={false}
+                          aria-controls={`sidebar-section-${section.id}`}
+                          aria-expanded={isExpanded}
+                          aria-label={`${isExpanded ? "Colapsar" : "Expandir"} ${section.label}`}
+                          className="h-9 w-9 shrink-0 rounded-xl"
+                          onClick={() => {
+                            setOpenSections((previous) => {
+                              const next = new Set(previous);
+
+                              if (next.has(section.id)) {
+                                next.delete(section.id);
+                              } else {
+                                next.add(section.id);
                               }
-                            >
-                              {child.label}
-                            </a>
-                          );
-                        })}
+
+                              return next;
+                            });
+                          }}
+                        >
+                          <ChevronDownIcon
+                            className={cn(
+                              "size-3.5 transition-transform duration-200",
+                              isExpanded && "rotate-180",
+                            )}
+                          />
+                        </Button>
+                      ) : null}
+                    </div>
+
+                    {hasChildren ? (
+                      <div
+                        id={`sidebar-section-${section.id}`}
+                        aria-hidden={!isExpanded}
+                        data-state={isExpanded ? "open" : "closed"}
+                        className={cn(
+                          "ml-4 grid transition-[grid-template-rows,opacity] duration-200 ease-out",
+                          isExpanded
+                            ? "grid-rows-[1fr] opacity-100"
+                            : "grid-rows-[0fr] opacity-0",
+                        )}
+                      >
+                        <div className="min-h-0 overflow-hidden">
+                          <div className="space-y-1 border-l border-neutral-100 pl-4 pt-1 dark:border-neutral-800">
+                            {childEntries.map((child) => {
+                              const isCurrentChild = currentPath === child.href;
+
+                              return (
+                                <a
+                                  key={child.id}
+                                  href={child.href}
+                                  className={
+                                    isCurrentChild
+                                      ? "block py-1 text-xs font-medium text-brand-600"
+                                      : "block py-1 text-xs text-neutral-500 hover:text-neutral-950 dark:hover:text-neutral-100"
+                                  }
+                                >
+                                  {child.label}
+                                </a>
+                              );
+                            })}
+                          </div>
+                        </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 );
               }}
