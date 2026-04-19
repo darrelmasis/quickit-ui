@@ -22,22 +22,22 @@ Quickit UI requiere un entorno compatible con Tailwind CSS 4. Añade lo siguient
 
 ## Uso Básico
 
-Envuelve tu aplicación con `QuickitThemeProvider` para habilitar la gestión de temas y las configuraciones globales.
+Envuelve tu aplicación con `QuickitProvider` para habilitar la gestión de temas y las configuraciones globales.
 
 ```jsx
 import "quickit-ui/styles.css";
-import { QuickitThemeProvider, Button, Input } from "quickit-ui";
+import { QuickitProvider, Button, Input } from "quickit-ui";
 
 export default function App() {
   return (
-    <QuickitThemeProvider defaultTheme="system">
+    <QuickitProvider defaultTheme="system">
       <div className="flex flex-col gap-4 p-8">
         <Input placeholder="Buscar componentes..." />
         <Button variant="solid" color="brand">
           Empezar
         </Button>
       </div>
-    </QuickitThemeProvider>
+    </QuickitProvider>
   );
 }
 ```
@@ -46,13 +46,22 @@ export default function App() {
 
 La librería proporciona más de 35 componentes diseñados como primitivos de bajo nivel:
 
-- **Base**: `Button`, `Link`, `Badge`, `Label`, `Skeleton`, `Progress`
-- **Formularios**: `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
-- **Overlays**: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`
-- **Navegación**: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`
+- **Base**: `Button`, `Link`, `Badge`, `Label`, `Skeleton`, `Progress`, `Alert`
+- **Formularios**: `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`, `Combobox`
+- **Overlays**: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`, `CommandPalette`
+- **Navegación**: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
+- **Datos**: `DataTable`, `DatePicker`, `TimePicker`
 - **Identidad**: `Avatar`, `AvatarGroup`, `UserChip`, `Initials`
 - **Lógica**: `Show`, `For`, `RenderSwitch`, `Match`, `Default`
 - **Feedback**: `EmptyState`, `FormDescription`, `FormMessage`
+
+## Hooks
+
+La librería incluye hooks útiles para desarrollo:
+
+- `useBreakpoint`: Para detectar cambios en el tamaño de pantalla.
+- `useFloatingLayer`: Para gestionar capas flotantes.
+- `useMediaQuery`: Para consultas de medios personalizadas.
 
 ## Documentación
 
@@ -65,13 +74,25 @@ npm run dev
 
 La documentación es accesible en `/docs` y cuenta con una referencia de API detallada para cada componente y hook.
 
+Para construir la documentación estática:
+
+```bash
+npm run build:docs
+```
+
+Para previsualizar la documentación construida:
+
+```bash
+npm run preview:docs
+```
+
 ## Release 1.0.1
 
 Quickit UI entra en `1.0.1` como release de parche con correcciones menores. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md).
 
 ## Requisitos
 
-- React 18 o superior
+- React 18.2+ o 19+
 - Node.js 18 o superior
 - Entorno Tailwind CSS 4
 

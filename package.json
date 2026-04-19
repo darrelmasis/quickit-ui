@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/darrelmasis/quickit-ui/issues"
   },
-  "homepage": "https://github.com/darrelmasis/quickit-ui#readme",
+  "homepage": "https://quickit-ui.vercel.app",
   "keywords": [
     "react",
     "ui",
