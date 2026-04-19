@@ -3,6 +3,7 @@ import {
   Accordion,
   Alert,
   Avatar,
+  AvatarGroup,
   Badge,
   Breadcrumb,
   Button,
@@ -32,6 +33,7 @@ import {
   TimePicker,
   Toaster,
   Tooltip,
+  UserChip,
   toast,
 } from "@/lib";
 import WebsitePreviewTabs from "../components/WebsitePreviewTabs";
@@ -551,11 +553,11 @@ export function TeamExample() {
             Colaboracion diaria
           </h3>
         </div>
-        <Avatar.Group stacked>
+        <AvatarGroup stacked>
           <Avatar><Avatar.Fallback>ER</Avatar.Fallback></Avatar>
           <Avatar><Avatar.Fallback>MS</Avatar.Fallback></Avatar>
           <Avatar><Avatar.Fallback>PV</Avatar.Fallback></Avatar>
-        </Avatar.Group>
+        </AvatarGroup>
       </div>
 
       <div className="mt-8 space-y-3">
@@ -564,7 +566,7 @@ export function TeamExample() {
             key={member.id}
             className="rounded-[1.5rem] border border-neutral-200 bg-white p-4"
           >
-            <Avatar.UserChip
+            <UserChip
               name={member.name}
               description={member.role}
               initials={member.initials}
@@ -596,7 +598,7 @@ export function PresenceExample() {
 
         <Tabs.Content value="support" className="mt-6 space-y-4">
           <div className="flex items-center justify-between rounded-[1.5rem] border border-neutral-200 bg-white p-4">
-            <Avatar.UserChip
+            <UserChip
               name="Margaret Hamilton"
               description="Cubriendo conversaciones prioritarias"
               initials="MH"
@@ -1424,7 +1426,7 @@ function TeamPreviewCanvas() {
               Colaboracion diaria
             </h3>
           </div>
-          <Avatar.Group stacked>
+          <AvatarGroup stacked>
             <Avatar>
               <Avatar.Fallback>ER</Avatar.Fallback>
             </Avatar>
@@ -1434,13 +1436,13 @@ function TeamPreviewCanvas() {
             <Avatar>
               <Avatar.Fallback>PV</Avatar.Fallback>
             </Avatar>
-          </Avatar.Group>
+          </AvatarGroup>
         </div>
 
         <div className="mt-8 space-y-3">
           {TEAM_MEMBERS.map((member) => (
             <div key={member.id} className={EXAMPLE_SUBCARD}>
-              <Avatar.UserChip
+              <UserChip
                 name={member.name}
                 description={member.role}
                 initials={member.initials}
@@ -1477,7 +1479,7 @@ function PresencePreviewCanvas() {
           <Tabs.Content value="support" className="pt-6">
             <div className="space-y-4">
               <div className={EXAMPLE_SUBCARD}>
-                <Avatar.UserChip
+                <UserChip
                   name="Margaret Hamilton"
                   description="Cubriendo conversaciones prioritarias"
                   initials="MH"
@@ -1502,7 +1504,7 @@ function PresencePreviewCanvas() {
           <Tabs.Content value="ops" className="pt-6">
             <div className="grid gap-3">
               <div className={EXAMPLE_SUBCARD}>
-                <Avatar.UserChip
+                <UserChip
                   name="Grace Hopper"
                   description="Integraciones y deploy"
                   initials="GH"
@@ -1519,7 +1521,7 @@ function PresencePreviewCanvas() {
 
           <Tabs.Content value="success" className="pt-6">
             <div className={EXAMPLE_SUBCARD}>
-              <Avatar.UserChip
+              <UserChip
                 name="Ada Lovelace"
                 description="Plantillas y onboarding"
                 initials="AL"
