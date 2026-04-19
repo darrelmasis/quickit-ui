@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 - 19 de abril de 2026
+
+Release de parche con correcciones menores y mejoras.
+
 ## 1.0.0 - 18 de abril de 2026
 
 Primera release estable de Quickit UI.

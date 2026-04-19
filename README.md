@@ -33,7 +33,9 @@ export default function App() {
     <QuickitThemeProvider defaultTheme="system">
       <div className="flex flex-col gap-4 p-8">
         <Input placeholder="Buscar componentes..." />
-        <Button variant="solid" color="brand">Empezar</Button>
+        <Button variant="solid" color="brand">
+          Empezar
+        </Button>
       </div>
     </QuickitThemeProvider>
   );
@@ -63,9 +65,9 @@ npm run dev
 
 La documentación es accesible en `/docs` y cuenta con una referencia de API detallada para cada componente y hook.
 
-## Release 1.0.0
+## Release 1.0.1
 
-Quickit UI entra en `1.0.0` como primera release estable. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md) y la guía de migración desde `0.2.4` está disponible también dentro de `/docs` en la sección `Migración 1.0.0`.
+Quickit UI entra en `1.0.1` como release de parche con correcciones menores. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md).
 
 ## Requisitos
 
