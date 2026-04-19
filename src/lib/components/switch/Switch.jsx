@@ -1,5 +1,5 @@
 import { forwardRef, useId, useMemo, useState } from "react";
-import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
@@ -92,10 +92,6 @@ const SWITCH_THEME_CLASSES = {
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 function createCheckedChangeEvent({ checked, id, name, nativeEvent, value }) {
   return {
     type: "change",
@@ -134,14 +130,11 @@ const Switch = forwardRef(function Switch(
   },
   ref,
 ) {
-  // Switch se presenta como button para ganar control visual, pero mantiene
-  // compatibilidad con formularios mediante un input oculto cuando hay `name`.
   const generatedId = useId();
   const isControlled = checked !== undefined;
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const resolvedChecked = isControlled ? checked : internalChecked;
-  const theme = resolveTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("switch");
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("switch");
   const ui = SWITCH_THEME_CLASSES[theme];
   const field = useFormControl();
   const resolvedDisabled = disabled || field?.disabled;
@@ -249,7 +242,6 @@ const Switch = forwardRef(function Switch(
           hidden
           readOnly
           checked={resolvedChecked}
-          // Este input no participa en la UI, solo en submit/serialización nativa.
           {...hiddenInputProps}
         />
       ) : null}

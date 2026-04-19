@@ -1,84 +1,785 @@
-import { forwardRef } from "react";
-import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
-import { QUICKIT_SEMANTIC_COLORS, resolveQuickitToken } from "@/lib/tokens";
+import { useFormControl } from "@/lib/components/form-control";
+import Tooltip from "@/lib/components/tooltip/Tooltip";
 
-const RANGE_TRACK = {
-  light: "bg-neutral-200",
-  dark: "bg-neutral-800",
+const RANGE_PRIMITIVES = {
+  root: "relative flex w-full touch-none select-none items-center",
+  track: "relative h-2 w-full grow overflow-hidden rounded-full border",
+  range: "absolute h-full",
+  thumb: [
+    "block size-5 rounded-full border bg-white shadow-sm ring-offset-white",
+    "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    "disabled:pointer-events-none disabled:opacity-50",
+  ].join(" "),
 };
 
-const RANGE_ACCENT = {
+const RANGE_THEME_CLASSES = {
   light: {
-    neutral: "accent-neutral-900",
-    slate: "accent-slate-900",
-    zinc: "accent-zinc-900",
-    primary: "accent-sky-600",
-    brand: "accent-brand-600",
-    success: "accent-emerald-600",
-    danger: "accent-rose-600",
-    warning: "accent-amber-500",
-    info: "accent-cyan-600",
-    light: "accent-neutral-300",
-    dark: "accent-zinc-900",
-    black: "accent-black",
+    track: "bg-slate-100 border-slate-200",
+    thumb: "border-slate-300 focus-visible:ring-slate-400",
+    colors: {
+      neutral: "bg-slate-700",
+      slate: "bg-slate-700",
+      zinc: "bg-zinc-700",
+      primary: "bg-sky-600",
+      brand: "bg-brand-600",
+      success: "bg-emerald-600",
+      danger: "bg-rose-600",
+      warning: "bg-amber-500",
+      info: "bg-cyan-600",
+      light: "bg-stone-300",
+      dark: "bg-zinc-800",
+      black: "bg-slate-950",
+    },
+    invalid: "bg-rose-600",
   },
   dark: {
-    neutral: "accent-neutral-100",
-    slate: "accent-slate-100",
-    zinc: "accent-zinc-100",
-    primary: "accent-sky-300",
-    brand: "accent-brand-300",
-    success: "accent-emerald-300",
-    danger: "accent-rose-300",
-    warning: "accent-amber-300",
-    info: "accent-cyan-300",
-    light: "accent-neutral-200",
-    dark: "accent-zinc-700",
-    black: "accent-neutral-900",
+    track: "bg-zinc-900 border-zinc-700",
+    thumb: "border-zinc-700 focus-visible:ring-zinc-400",
+    colors: {
+      neutral: "bg-zinc-100",
+      slate: "bg-slate-100",
+      zinc: "bg-zinc-100",
+      primary: "bg-sky-300",
+      brand: "bg-brand-300",
+      success: "bg-emerald-300",
+      danger: "bg-rose-300",
+      warning: "bg-amber-300",
+      info: "bg-cyan-300",
+      light: "bg-stone-200",
+      dark: "bg-zinc-300",
+      black: "bg-white",
+    },
+    invalid: "bg-rose-400",
   },
 };
 
-const RANGE_SIZES = {
-  sm: "h-1.5",
-  md: "h-2.5",
-  lg: "h-3.5",
-};
-
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
+function clampRangeValue(rawValue, min, max) {
+  const parsed = Number(rawValue);
+  if (!Number.isFinite(parsed)) {
+    return min;
+  }
+  return Math.min(max, Math.max(min, parsed));
 }
 
-const Range = forwardRef(function Range(props, ref) {
-  const { className, color = "primary", size = "md", variant: _variant, ...inputProps } =
-    props;
-  const theme = resolveTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("input");
-  const resolvedColor = resolveQuickitToken(
-    QUICKIT_SEMANTIC_COLORS,
-    color,
-    "primary",
+function snapToStep(rawValue, min, max, step) {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const clamped = clampRangeValue(rawValue, min, max);
+  const snapped =
+    Math.round((clamped - min) / safeStep) * safeStep + min;
+  return clampRangeValue(snapped, min, max);
+}
+
+function normalizeRangeTuple(rawValue, min, max) {
+  if (Array.isArray(rawValue)) {
+    const start = clampRangeValue(rawValue[0] ?? min, min, max);
+    const end = clampRangeValue(rawValue[1] ?? max, min, max);
+    return start <= end ? [start, end] : [end, start];
+  }
+  const fallback = clampRangeValue(rawValue ?? min, min, max);
+  return [fallback, fallback];
+}
+
+const Range = forwardRef(function Range(
+  {
+    allowWheel = true,
+    className,
+    color = "neutral",
+    disabled = false,
+    id,
+    invalid = false,
+    max = 100,
+    min = 0,
+    onChange,
+    onValueChange,
+    orientation = "horizontal",
+    required = false,
+    range = false,
+    showValueTooltip = true,
+    step = 1,
+    tooltipOffset = 12,
+    tooltipCrossOffset = 0,
+    tooltipHideDelay = 900,
+    tooltipPlacement,
+    tooltipFormatter,
+    getAriaValueText,
+    value,
+    defaultValue,
+    ...props
+  },
+  ref,
+) {
+  const generatedId = useId();
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("range");
+  const ui = RANGE_THEME_CLASSES[theme];
+  const field = useFormControl();
+  const resolvedInvalid = invalid || field?.invalid;
+  const resolvedDisabled = disabled || field?.disabled;
+  const resolvedRequired = required || field?.required;
+  const resolvedId = id ?? field?.controlId ?? generatedId;
+  const isVertical = orientation === "vertical";
+  const numericStep = Number(step);
+  const wheelStep = Number.isFinite(numericStep) && numericStep > 0 ? numericStep : 1;
+  const rootRef = useRef(null);
+  const isDual =
+    range ||
+    Array.isArray(value) ||
+    Array.isArray(defaultValue);
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(() =>
+    isDual
+      ? normalizeRangeTuple(defaultValue ?? [min, max], min, max)
+      : clampRangeValue(defaultValue ?? min, min, max),
   );
-  const resolvedSize = RANGE_SIZES[size] ?? RANGE_SIZES.md;
+  const [activeThumb, setActiveThumb] = useState("start");
+  const [hoveredThumb, setHoveredThumb] = useState(null);
+  const [focusedThumb, setFocusedThumb] = useState(null);
+  const [draggingThumb, setDraggingThumb] = useState(null);
+  const [interactionTooltipVisible, setInteractionTooltipVisible] = useState(false);
+  const [interactionThumb, setInteractionThumb] = useState("start");
+  const activeThumbRef = useRef("start");
+  const hoveredThumbRef = useRef(null);
+  const tooltipVisibilityTimeoutRef = useRef(null);
+
+  const [startValue, endValue] = useMemo(() => {
+    if (isDual) {
+      const tuple = isControlled
+        ? normalizeRangeTuple(value, min, max)
+        : normalizeRangeTuple(internalValue, min, max);
+      return tuple;
+    }
+
+    const single = isControlled
+      ? clampRangeValue(value, min, max)
+      : clampRangeValue(internalValue, min, max);
+    return [single, single];
+  }, [internalValue, isControlled, isDual, max, min, value]);
+
+  const startPercent = useMemo(() => {
+    if (max <= min) {
+      return 0;
+    }
+    return ((startValue - min) / (max - min)) * 100;
+  }, [max, min, startValue]);
+
+  const endPercent = useMemo(() => {
+    if (max <= min) {
+      return 0;
+    }
+    return ((endValue - min) / (max - min)) * 100;
+  }, [endValue, max, min]);
+
+  const fillLeft = isDual ? startPercent : 0;
+  const fillWidth = isDual ? Math.max(0, endPercent - startPercent) : startPercent;
+  const resolvedTooltipPlacement = tooltipPlacement ?? (isVertical ? "right" : "top");
+  const tooltipFloatingOffset = useMemo(() => {
+    const mainAxis = Number.isFinite(Number(tooltipOffset))
+      ? Number(tooltipOffset)
+      : 12;
+    const crossAxis = Number.isFinite(Number(tooltipCrossOffset))
+      ? Number(tooltipCrossOffset)
+      : 0;
+    return { mainAxis, crossAxis };
+  }, [tooltipCrossOffset, tooltipOffset]);
+  const tooltipThumb =
+    draggingThumb ??
+    hoveredThumb ??
+    focusedThumb ??
+    interactionThumb ??
+    activeThumb;
+  const shouldShowTooltip =
+    showValueTooltip &&
+    (
+      hoveredThumb !== null ||
+      focusedThumb !== null ||
+      draggingThumb !== null ||
+      interactionTooltipVisible
+    );
+
+  const formatTooltipValue = (nextValue, thumb) => {
+    if (typeof tooltipFormatter === "function") {
+      return tooltipFormatter(nextValue, thumb);
+    }
+    return String(nextValue);
+  };
+
+  const formatAriaValueText = (nextValue, thumb) => {
+    if (typeof getAriaValueText === "function") {
+      return String(getAriaValueText(nextValue, thumb));
+    }
+    if (typeof tooltipFormatter === "function") {
+      const formatted = tooltipFormatter(nextValue, thumb);
+      if (typeof formatted === "string" || typeof formatted === "number") {
+        return String(formatted);
+      }
+    }
+    return String(nextValue);
+  };
+
+  const clearTooltipHideTimeout = useCallback(() => {
+    if (tooltipVisibilityTimeoutRef.current) {
+      window.clearTimeout(tooltipVisibilityTimeoutRef.current);
+      tooltipVisibilityTimeoutRef.current = null;
+    }
+  }, []);
+
+  const showTooltipForThumb = useCallback((thumb) => {
+    if (thumb === "start" || thumb === "end") {
+      setInteractionThumb(thumb);
+      setActiveThumb(thumb);
+      activeThumbRef.current = thumb;
+    }
+    setInteractionTooltipVisible(true);
+    clearTooltipHideTimeout();
+  }, [clearTooltipHideTimeout]);
+
+  const scheduleTooltipHide = useCallback(() => {
+    clearTooltipHideTimeout();
+    const parsedDelay = Number(tooltipHideDelay);
+    const safeDelay = Number.isFinite(parsedDelay) && parsedDelay >= 0
+      ? parsedDelay
+      : 900;
+    tooltipVisibilityTimeoutRef.current = window.setTimeout(() => {
+      setInteractionTooltipVisible(false);
+    }, safeDelay);
+  }, [clearTooltipHideTimeout, tooltipHideDelay]);
+
+  useEffect(() => {
+    return () => {
+      clearTooltipHideTimeout();
+    };
+  }, [clearTooltipHideTimeout]);
+
+  const inputOrientationStyle = isVertical
+    ? {
+        writingMode: "vertical-lr",
+        direction: "rtl",
+      }
+    : undefined;
+
+  const emitValue = useCallback((nextValue, thumb) => {
+    showTooltipForThumb(thumb);
+    scheduleTooltipHide();
+    if (!isControlled) {
+      setInternalValue(nextValue);
+    }
+    onValueChange?.(nextValue);
+  }, [isControlled, onValueChange, scheduleTooltipHide, showTooltipForThumb]);
+
+  const commitFromPointer = (pointerEvent, forcedThumb) => {
+    const root = rootRef.current;
+    if (!root) {
+      return;
+    }
+
+    const rect = root.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      return;
+    }
+
+    const ratio = isVertical
+      ? 1 - (pointerEvent.clientY - rect.top) / rect.height
+      : (pointerEvent.clientX - rect.left) / rect.width;
+    const rawValue = min + Math.min(1, Math.max(0, ratio)) * (max - min);
+    const nextPointerValue = snapToStep(rawValue, min, max, wheelStep);
+
+    if (isDual) {
+      const closestThumb =
+        forcedThumb ??
+        hoveredThumbRef.current ??
+        (Math.abs(nextPointerValue - startValue) <=
+        Math.abs(nextPointerValue - endValue)
+          ? "start"
+          : "end");
+      setActiveThumb(closestThumb);
+      activeThumbRef.current = closestThumb;
+
+      if (closestThumb === "start") {
+        const nextStart = Math.min(nextPointerValue, endValue);
+        emitValue([nextStart, endValue], "start");
+      } else {
+        const nextEnd = Math.max(nextPointerValue, startValue);
+        emitValue([startValue, nextEnd], "end");
+      }
+      return;
+    }
+
+    emitValue(nextPointerValue, "start");
+  };
+
+  const handleWheel = useCallback((event) => {
+    // Evita que la rueda haga scroll en la página al interactuar con el Range.
+    event.preventDefault();
+    if (!allowWheel || resolvedDisabled) {
+      return;
+    }
+    const direction = event.deltaY < 0 ? 1 : -1;
+    const delta = direction * wheelStep;
+
+    if (isDual) {
+      const targetThumb = hoveredThumbRef.current ?? activeThumbRef.current;
+      const adjustStart = targetThumb === "start";
+      const nextStart = adjustStart
+        ? clampRangeValue(startValue + delta, min, Math.min(max, endValue))
+        : startValue;
+      const nextEnd = adjustStart
+        ? endValue
+        : clampRangeValue(endValue + delta, Math.max(min, startValue), max);
+      const nextTuple = [nextStart, nextEnd];
+
+      emitValue(nextTuple, targetThumb);
+      return;
+    }
+
+    const nextValue = clampRangeValue(startValue + delta, min, max);
+    emitValue(nextValue, "start");
+  }, [
+    allowWheel,
+    resolvedDisabled,
+    isDual,
+    activeThumbRef,
+    hoveredThumbRef,
+    wheelStep,
+    startValue,
+    endValue,
+    min,
+    max,
+    emitValue,
+  ]);
+
+  const handlePointerDown = (event) => {
+    if (resolvedDisabled || max <= min) {
+      return;
+    }
+
+    event.preventDefault();
+    commitFromPointer(event.nativeEvent);
+    showTooltipForThumb(activeThumbRef.current);
+    setDraggingThumb(activeThumbRef.current);
+
+    const onMove = (moveEvent) => {
+      commitFromPointer(moveEvent, activeThumbRef.current);
+      showTooltipForThumb(activeThumbRef.current);
+    };
+    const onUp = () => {
+      setDraggingThumb(null);
+      scheduleTooltipHide();
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp, { once: true });
+  };
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) {
+      return undefined;
+    }
+
+    const handleNativeWheel = (event) => {
+      handleWheel(event);
+    };
+
+    root.addEventListener("wheel", handleNativeWheel, { passive: false });
+    return () => {
+      root.removeEventListener("wheel", handleNativeWheel);
+    };
+  }, [handleWheel]);
 
   return (
-    <input
-      ref={ref}
-      type="range"
+    <div
+      ref={rootRef}
       className={cn(
-        resolveQuickitFocusRingClasses(
-          focusRingEnabled,
-          "w-full appearance-none rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-        ),
-        resolvedSize,
-        RANGE_TRACK[theme],
-        RANGE_ACCENT[theme][resolvedColor] ?? RANGE_ACCENT[theme].primary,
+        RANGE_PRIMITIVES.root,
+        isVertical ? "h-52 w-10 justify-center" : "h-10 w-full",
+        resolvedDisabled && "opacity-60",
         className,
       )}
-      {...inputProps}
-    />
+      onPointerDown={handlePointerDown}
+    >
+      <div
+        className={cn(
+          RANGE_PRIMITIVES.track,
+          isVertical ? "h-full w-2 grow-0 shrink-0" : "h-2 w-full",
+          ui.track,
+        )}
+      >
+        <div
+          className={cn(
+            RANGE_PRIMITIVES.range,
+            resolvedInvalid ? ui.invalid : ui.colors[color] ?? ui.colors.neutral,
+          )}
+          style={
+            isVertical
+              ? { bottom: `${fillLeft}%`, height: `${fillWidth}%`, left: 0, width: "100%" }
+              : { left: `${fillLeft}%`, width: `${fillWidth}%` }
+          }
+        />
+      </div>
+      {isDual ? (
+        <>
+          <input
+            ref={ref}
+            type="range"
+            id={resolvedId}
+            min={min}
+            max={max}
+            step={step}
+            value={startValue}
+            aria-valuetext={formatAriaValueText(startValue, "start")}
+            required={resolvedRequired}
+            disabled={resolvedDisabled}
+            className={cn(
+              "pointer-events-none absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0 disabled:cursor-not-allowed",
+              activeThumb === "start" ? "z-30" : "z-20",
+              "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-5",
+              "[&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-5",
+            )}
+            style={inputOrientationStyle}
+            onPointerDown={() => {
+              setActiveThumb("start");
+              activeThumbRef.current = "start";
+              showTooltipForThumb("start");
+              setDraggingThumb("start");
+            }}
+            onMouseEnter={() => {
+              setHoveredThumb("start");
+              hoveredThumbRef.current = "start";
+              showTooltipForThumb("start");
+            }}
+            onMouseLeave={() => {
+              setHoveredThumb((current) =>
+                current === "start" ? null : current,
+              );
+              if (hoveredThumbRef.current === "start") {
+                hoveredThumbRef.current = null;
+              }
+              scheduleTooltipHide();
+            }}
+            onFocus={() => {
+              setActiveThumb("start");
+              activeThumbRef.current = "start";
+              setFocusedThumb("start");
+              showTooltipForThumb("start");
+            }}
+            onBlur={() => {
+              setFocusedThumb((current) =>
+                current === "start" ? null : current,
+              );
+              scheduleTooltipHide();
+            }}
+            onChange={(event) => {
+              const nextStart = Math.min(
+                parseFloat(event.target.value),
+                endValue,
+              );
+              const nextTuple = [nextStart, endValue];
+              showTooltipForThumb("start");
+              scheduleTooltipHide();
+
+              if (!isControlled) {
+                setInternalValue(nextTuple);
+              }
+              onChange?.(event);
+              onValueChange?.(nextTuple);
+            }}
+            {...props}
+          />
+          <input
+            type="range"
+            id={`${resolvedId}-end`}
+            min={min}
+            max={max}
+            step={step}
+            value={endValue}
+            aria-valuetext={formatAriaValueText(endValue, "end")}
+            required={resolvedRequired}
+            disabled={resolvedDisabled}
+            className={cn(
+              "pointer-events-none absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0 disabled:cursor-not-allowed",
+              activeThumb === "end" ? "z-30" : "z-20",
+              "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-5",
+              "[&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-5",
+            )}
+            style={inputOrientationStyle}
+            onPointerDown={() => {
+              setActiveThumb("end");
+              activeThumbRef.current = "end";
+              showTooltipForThumb("end");
+              setDraggingThumb("end");
+            }}
+            onMouseEnter={() => {
+              setHoveredThumb("end");
+              hoveredThumbRef.current = "end";
+              showTooltipForThumb("end");
+            }}
+            onMouseLeave={() => {
+              setHoveredThumb((current) =>
+                current === "end" ? null : current,
+              );
+              if (hoveredThumbRef.current === "end") {
+                hoveredThumbRef.current = null;
+              }
+              scheduleTooltipHide();
+            }}
+            onFocus={() => {
+              setActiveThumb("end");
+              activeThumbRef.current = "end";
+              setFocusedThumb("end");
+              showTooltipForThumb("end");
+            }}
+            onBlur={() => {
+              setFocusedThumb((current) =>
+                current === "end" ? null : current,
+              );
+              scheduleTooltipHide();
+            }}
+            onChange={(event) => {
+              const nextEnd = Math.max(
+                parseFloat(event.target.value),
+                startValue,
+              );
+              const nextTuple = [startValue, nextEnd];
+              showTooltipForThumb("end");
+              scheduleTooltipHide();
+
+              if (!isControlled) {
+                setInternalValue(nextTuple);
+              }
+              onChange?.(event);
+              onValueChange?.(nextTuple);
+            }}
+            {...props}
+          />
+          {shouldShowTooltip && tooltipThumb === "start" ? (
+            <Tooltip
+              asChild
+              content={formatTooltipValue(startValue, "start")}
+              trigger="manual"
+              open
+              placement={resolvedTooltipPlacement}
+              offset={tooltipFloatingOffset}
+            >
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute z-10",
+                  isVertical
+                    ? "left-1/2 -translate-x-1/2"
+                    : "top-1/2 -translate-y-1/2",
+                )}
+                style={
+                  isVertical
+                    ? { bottom: `calc(${startPercent}% - 10px)` }
+                    : { left: `calc(${startPercent}% - 10px)` }
+                }
+              >
+                <div
+                  className={cn(
+                    resolveQuickitFocusRingClasses(
+                      focusRingEnabled,
+                      RANGE_PRIMITIVES.thumb,
+                    ),
+                    ui.thumb,
+                    hoveredThumb === "start" && "shadow-md",
+                  )}
+                />
+              </span>
+            </Tooltip>
+          ) : (
+            <div
+              aria-hidden="true"
+              className={cn(
+                resolveQuickitFocusRingClasses(
+                  focusRingEnabled,
+                  RANGE_PRIMITIVES.thumb,
+                ),
+                ui.thumb,
+                hoveredThumb === "start" && "shadow-md",
+                "absolute z-10",
+                isVertical
+                  ? "left-1/2 -translate-x-1/2"
+                  : "top-1/2 -translate-y-1/2",
+              )}
+              style={
+                isVertical
+                  ? { bottom: `calc(${startPercent}% - 10px)` }
+                  : { left: `calc(${startPercent}% - 10px)` }
+              }
+            />
+          )}
+          {shouldShowTooltip && tooltipThumb === "end" ? (
+            <Tooltip
+              asChild
+              content={formatTooltipValue(endValue, "end")}
+              trigger="manual"
+              open
+              placement={resolvedTooltipPlacement}
+              offset={tooltipFloatingOffset}
+            >
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute z-10",
+                  isVertical
+                    ? "left-1/2 -translate-x-1/2"
+                    : "top-1/2 -translate-y-1/2",
+                )}
+                style={
+                  isVertical
+                    ? { bottom: `calc(${endPercent}% - 10px)` }
+                    : { left: `calc(${endPercent}% - 10px)` }
+                }
+              >
+                <div
+                  className={cn(
+                    resolveQuickitFocusRingClasses(
+                      focusRingEnabled,
+                      RANGE_PRIMITIVES.thumb,
+                    ),
+                    ui.thumb,
+                    hoveredThumb === "end" && "shadow-md",
+                  )}
+                />
+              </span>
+            </Tooltip>
+          ) : (
+            <div
+              aria-hidden="true"
+              className={cn(
+                resolveQuickitFocusRingClasses(
+                  focusRingEnabled,
+                  RANGE_PRIMITIVES.thumb,
+                ),
+                ui.thumb,
+                hoveredThumb === "end" && "shadow-md",
+                "absolute z-10",
+                isVertical
+                  ? "left-1/2 -translate-x-1/2"
+                  : "top-1/2 -translate-y-1/2",
+              )}
+              style={
+                isVertical
+                  ? { bottom: `calc(${endPercent}% - 10px)` }
+                  : { left: `calc(${endPercent}% - 10px)` }
+              }
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <input
+            ref={ref}
+            type="range"
+            id={resolvedId}
+            min={min}
+            max={max}
+            step={step}
+            value={startValue}
+            aria-valuetext={formatAriaValueText(startValue, "start")}
+            required={resolvedRequired}
+            disabled={resolvedDisabled}
+            className={cn(
+              "pointer-events-none absolute inset-0 z-20 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0 disabled:cursor-not-allowed",
+              "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-5",
+              "[&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-5",
+            )}
+            style={inputOrientationStyle}
+            onChange={(event) => {
+              const newValue = parseFloat(event.target.value);
+              showTooltipForThumb("start");
+              scheduleTooltipHide();
+              if (!isControlled) {
+                setInternalValue(newValue);
+              }
+              onChange?.(event);
+              onValueChange?.(newValue);
+            }}
+            {...props}
+            onFocus={(event) => {
+              setFocusedThumb("start");
+              showTooltipForThumb("start");
+              props.onFocus?.(event);
+            }}
+            onBlur={(event) => {
+              setFocusedThumb(null);
+              scheduleTooltipHide();
+              props.onBlur?.(event);
+            }}
+          />
+          {shouldShowTooltip ? (
+            <Tooltip
+              asChild
+              content={formatTooltipValue(startValue, "start")}
+              trigger="manual"
+              open
+              placement={resolvedTooltipPlacement}
+              offset={tooltipFloatingOffset}
+            >
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute z-10",
+                  isVertical
+                    ? "left-1/2 -translate-x-1/2"
+                    : "top-1/2 -translate-y-1/2",
+                )}
+                style={
+                  isVertical
+                    ? { bottom: `calc(${startPercent}% - 10px)` }
+                    : { left: `calc(${startPercent}% - 10px)` }
+                }
+              >
+                <div
+                  className={cn(
+                    resolveQuickitFocusRingClasses(
+                      focusRingEnabled,
+                      RANGE_PRIMITIVES.thumb,
+                    ),
+                    ui.thumb,
+                  )}
+                />
+              </span>
+            </Tooltip>
+          ) : (
+            <div
+              aria-hidden="true"
+              className={cn(
+                resolveQuickitFocusRingClasses(
+                  focusRingEnabled,
+                  RANGE_PRIMITIVES.thumb,
+                ),
+                ui.thumb,
+                "absolute z-10",
+                isVertical
+                  ? "left-1/2 -translate-x-1/2"
+                  : "top-1/2 -translate-y-1/2",
+              )}
+              style={
+                isVertical
+                  ? { bottom: `calc(${startPercent}% - 10px)` }
+                  : { left: `calc(${startPercent}% - 10px)` }
+              }
+            />
+          )}
+        </>
+      )}
+    </div>
   );
 });
 
+export { Range };
 export default Range;

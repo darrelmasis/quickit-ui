@@ -21,7 +21,7 @@ import {
   useRole,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { CheckFillIcon, ChevronDownIcon } from "@/lib/assets/icons";
@@ -30,7 +30,6 @@ import { useInputGroup } from "@/lib/components/input/input-group.context";
 import {
   FORM_FIELD_THEME_CLASSES,
   resolveFormFieldColor,
-  resolveFormFieldTheme,
 } from "@/lib/components/_shared/form-field";
 import {
   FLOATING_LIST_ITEM_PRIMITIVES,
@@ -184,11 +183,8 @@ const Select = forwardRef(function Select(
 ) {
   const group = useInputGroup();
   const isAttached = Boolean(group?.attached);
-  // Select sigue aceptando <option> para que la API sea familiar, pero por
-  // debajo lo convertimos a un listbox propio para controlar focus y layout.
-  const theme = resolveFloatingListTheme(useQuickitTheme());
-  const fieldTheme = resolveFormFieldTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("select");
+  const { theme: fieldTheme, focusRing: focusRingEnabled } = useQuickitControlState("select");
+  const theme = resolveFloatingListTheme(fieldTheme);
   const ui = SELECT_THEME_CLASSES[fieldTheme];
   const controlSize = controlSizeProp ?? group?.size ?? "md";
   const color = colorProp ?? group?.color ?? "neutral";
@@ -303,7 +299,6 @@ const Select = forwardRef(function Select(
       setUncontrolledValue(nextValue);
     }
 
-    // Emitimos tanto el valor directo como un evento compatible con formularios.
     onValueChange?.(nextValue);
     onChange?.(
       createChangeEvent({

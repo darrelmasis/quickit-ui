@@ -1,69 +1,127 @@
-import { Children, Fragment, forwardRef } from "react";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
-import { cn } from "@/lib/utils";
+import { Children, forwardRef, isValidElement } from "react";
 import { Link } from "@/lib/components/link";
+import { useQuickitControlState } from "@/lib/theme";
+import { cn } from "@/lib/utils";
+import { ChevronRightIcon } from "@/lib/assets/icons";
+
+const BREADCRUMB_PRIMITIVES = {
+  nav: "flex items-center",
+  list: "flex flex-wrap items-center gap-1.5 break-words text-sm",
+  item: "flex items-center gap-1.5",
+  link: "transition-colors hover:text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+  separator: "flex-shrink-0 opacity-50",
+  page: "font-semibold pointer-events-none",
+  itemContent: "inline-flex items-center gap-1.5",
+};
 
 const BREADCRUMB_THEME_CLASSES = {
   light: {
-    current: "text-slate-950",
-    separator: "text-slate-400",
+    text: "text-slate-500",
+    current: "text-slate-900",
   },
   dark: {
+    text: "text-stone-400",
     current: "text-stone-50",
-    separator: "text-stone-500",
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
+function renderBreadcrumbItemContent({
+  allowLink,
+  children,
+  contentClassName,
+  current,
+  href,
+  linkVariant,
+  title,
+  underline,
+}) {
+  if (current) {
+    return (
+      <BreadcrumbCurrent className={contentClassName} title={title}>
+        {children}
+      </BreadcrumbCurrent>
+    );
+  }
+
+  if (allowLink || href) {
+    return (
+      <BreadcrumbLink
+        href={href}
+        className={contentClassName}
+        title={title}
+        underline={underline}
+        variant={linkVariant}
+      >
+        {children}
+      </BreadcrumbLink>
+    );
+  }
+
+  return (
+    <span className={cn(BREADCRUMB_PRIMITIVES.itemContent, contentClassName)}>
+      {children}
+    </span>
+  );
 }
 
-const Breadcrumb = forwardRef(function Breadcrumb({ children, className, ...props }, ref) {
+const Breadcrumb = forwardRef(function Breadcrumb(
+  { children, className, ...props },
+  ref,
+) {
+  const hasExplicitList = Children.toArray(children).some(
+    (child) => isValidElement(child) && child.type === BreadcrumbList,
+  );
+
   return (
-    <nav ref={ref} aria-label="Breadcrumb" className={className} {...props}>
-      {children}
+    <nav
+      ref={ref}
+      aria-label="Breadcrumb"
+      className={cn(BREADCRUMB_PRIMITIVES.nav, className)}
+      {...props}
+    >
+      {hasExplicitList ? children : <BreadcrumbList>{children}</BreadcrumbList>}
     </nav>
   );
 });
 
-const BreadcrumbList = forwardRef(function BreadcrumbList(
-  { children, className, separator = "/", separatorClassName, ...props },
+export const BreadcrumbList = forwardRef(function BreadcrumbList(
+  { children, className, separator, separatorClassName, ...props },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
-  const ui = BREADCRUMB_THEME_CLASSES[theme];
   const items = Children.toArray(children);
-  const hasManualSeparators = items.some(
-    (child) =>
-      typeof child === "object" &&
-      child?.type &&
-      (child.type.displayName === "BreadcrumbSeparator" ||
-        child.type.name === "BreadcrumbSeparator"),
-  );
+  const content = items.flatMap((child, index) => {
+    const isLast = index === items.length - 1;
+    const nextChild = items[index + 1];
+    const hasExplicitSeparator =
+      isValidElement(nextChild) && nextChild.type === BreadcrumbSeparator;
+
+    if (isLast || hasExplicitSeparator) {
+      return [child];
+    }
+
+    return [
+      child,
+      <BreadcrumbSeparator
+        key={`separator-${index}`}
+        className={separatorClassName}
+      >
+        {separator}
+      </BreadcrumbSeparator>,
+    ];
+  });
 
   return (
     <ol
       ref={ref}
-      className={cn("flex flex-wrap items-center gap-2 text-sm", className)}
+      className={cn(BREADCRUMB_PRIMITIVES.list, className)}
       {...props}
     >
-      {hasManualSeparators
-        ? items
-        : items.map((child, index) => (
-        <Fragment key={child.key ?? `breadcrumb-item-${index}`}>
-          {child}
-          {index < items.length - 1 ? (
-            <BreadcrumbSeparator className={cn(ui.separator, separatorClassName)}>
-              {separator}
-            </BreadcrumbSeparator>
-          ) : null}
-        </Fragment>
-      ))}
+      {content}
     </ol>
   );
 });
 
-const BreadcrumbItem = forwardRef(function BreadcrumbItem(
+export const BreadcrumbItem = forwardRef(function BreadcrumbItem(
   {
     allowLink = false,
     children,
@@ -72,101 +130,121 @@ const BreadcrumbItem = forwardRef(function BreadcrumbItem(
     current = false,
     href,
     linkVariant = "muted",
-    rel,
-    target,
     title,
-    underline = "hover",
+    underline,
     ...props
   },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
-  const ui = BREADCRUMB_THEME_CLASSES[theme];
-  const shouldRenderLink = !current && (allowLink || Boolean(href));
-  const hasCustomChildElement = Children.toArray(children).some(
-    (child) => typeof child === "object",
-  );
-
-  return (
-    <li ref={ref} className={cn("inline-flex items-center gap-2", className)} {...props}>
-      {shouldRenderLink ? (
-        <Link
-          href={href}
-          rel={rel}
-          target={target}
-          title={title}
-          variant={linkVariant}
-          underline={underline}
-          className={contentClassName}
-        >
-          {children}
-        </Link>
-      ) : !current && hasCustomChildElement ? (
-        children
-      ) : (
-        <span
-          aria-current={current ? "page" : undefined}
-          className={cn(current && ["font-medium", ui.current], contentClassName)}
-          title={title}
-        >
-          {children}
-        </span>
-      )}
-    </li>
-  );
-});
-
-const BreadcrumbLink = forwardRef(function BreadcrumbLink(props, ref) {
-  return <Link ref={ref} variant="muted" underline="hover" {...props} />;
-});
-
-const BreadcrumbSeparator = forwardRef(function BreadcrumbSeparator(
-  { children, className, ...props },
-  ref,
-) {
-  const theme = resolveTheme(useQuickitTheme());
-  const ui = BREADCRUMB_THEME_CLASSES[theme];
-
   return (
     <li
       ref={ref}
-      aria-hidden="true"
-      className={cn("inline-flex items-center", ui.separator, className)}
+      className={cn(BREADCRUMB_PRIMITIVES.item, className)}
       {...props}
     >
-      {children ?? "/"}
+      {renderBreadcrumbItemContent({
+        allowLink,
+        children,
+        contentClassName,
+        current,
+        href,
+        linkVariant,
+        title,
+        underline,
+      })}
     </li>
   );
 });
-BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
 
-const BreadcrumbCurrent = forwardRef(function BreadcrumbCurrent(
-  { children, className, ...props },
+export const BreadcrumbLink = forwardRef(function BreadcrumbLink(
+  { className, variant = "muted", ...props },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("breadcrumb");
   const ui = BREADCRUMB_THEME_CLASSES[theme];
 
   return (
-    <span ref={ref} aria-current="page" className={cn("font-medium", ui.current, className)} {...props}>
+    <Link
+      ref={ref}
+      className={cn(BREADCRUMB_PRIMITIVES.link, ui.text, className)}
+      variant={variant}
+      {...props}
+    />
+  );
+});
+
+export const BreadcrumbCurrent = forwardRef(function BreadcrumbCurrent(
+  { children, className, ...props },
+  ref,
+) {
+  const { theme } = useQuickitControlState("breadcrumb");
+  const ui = BREADCRUMB_THEME_CLASSES[theme];
+
+  return (
+    <span
+      ref={ref}
+      aria-current="page"
+      className={cn(BREADCRUMB_PRIMITIVES.page, ui.current, className)}
+      {...props}
+    >
       {children}
     </span>
   );
 });
 
-Breadcrumb.List = BreadcrumbList;
-Breadcrumb.Item = BreadcrumbItem;
-Breadcrumb.Link = BreadcrumbLink;
-Breadcrumb.Separator = BreadcrumbSeparator;
-Breadcrumb.Current = BreadcrumbCurrent;
+export const BreadcrumbPage = BreadcrumbCurrent;
 
-export {
-  Breadcrumb,
-  BreadcrumbCurrent,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
+export const BreadcrumbSeparator = forwardRef(function BreadcrumbSeparator(
+  { children, className, ...props },
+  ref,
+) {
+  const { theme } = useQuickitControlState("breadcrumb");
+  const ui = BREADCRUMB_THEME_CLASSES[theme];
+
+  return (
+    <li
+      ref={ref}
+      role="presentation"
+      aria-hidden="true"
+      className={cn(BREADCRUMB_PRIMITIVES.separator, ui.text, className)}
+      {...props}
+    >
+      {children ?? <ChevronRightIcon className="size-3.5" />}
+    </li>
+  );
+});
+
+export const BreadcrumbEllipsis = ({
+  className,
+  ...props
+}) => {
+  const { theme } = useQuickitControlState("breadcrumb");
+  const ui = BREADCRUMB_THEME_CLASSES[theme];
+
+  return (
+    <span
+      role="presentation"
+      aria-hidden="true"
+      className={cn(
+        "flex h-9 w-9 items-center justify-center",
+        ui.text,
+        className,
+      )}
+      {...props}
+    >
+      <span className="sr-only">Más opciones</span>
+      ...
+    </span>
+  );
 };
 
+Breadcrumb.Item = BreadcrumbItem;
+Breadcrumb.List = BreadcrumbList;
+Breadcrumb.Link = BreadcrumbLink;
+Breadcrumb.Page = BreadcrumbPage;
+Breadcrumb.Current = BreadcrumbCurrent;
+Breadcrumb.Separator = BreadcrumbSeparator;
+Breadcrumb.Ellipsis = BreadcrumbEllipsis;
+
+export { Breadcrumb };
 export default Breadcrumb;

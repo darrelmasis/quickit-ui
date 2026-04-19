@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
@@ -12,18 +12,22 @@ import {
 
 const ACCORDION_THEME_CLASSES = {
   light: {
-    item: "border-slate-200",
+    item:
+      "border-slate-200 bg-white text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.05)]",
     trigger:
-      "text-slate-950 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-slate-300",
-    triggerOpen: "bg-slate-100/80 text-slate-950",
+      "text-slate-950 hover:bg-slate-50 hover:text-slate-700 focus-visible:outline-slate-300",
+    triggerOpen: "bg-slate-50/90 text-slate-950",
+    contentShell: "border-slate-200/80",
     content: "text-slate-600",
     icon: "text-slate-500",
   },
   dark: {
-    item: "border-zinc-800",
+    item:
+      "border-zinc-800 bg-zinc-950 text-stone-50 shadow-[0_1px_2px_rgba(0,0,0,0.32)]",
     trigger:
-      "text-stone-50 hover:bg-zinc-900 hover:text-stone-200 focus-visible:outline-zinc-700",
-    triggerOpen: "bg-zinc-900/80 text-stone-50",
+      "text-stone-50 hover:bg-zinc-900/80 hover:text-stone-200 focus-visible:outline-zinc-700",
+    triggerOpen: "bg-zinc-900/90 text-stone-50",
+    contentShell: "border-zinc-800/80",
     content: "text-stone-300",
     icon: "text-stone-400",
   },
@@ -55,6 +59,7 @@ function deriveOpenValues(isMultiple, value) {
 export function Accordion({
   children,
   className,
+  clickOutside = false,
   collapsible = true,
   defaultValue,
   onValueChange,
@@ -66,6 +71,7 @@ export function Accordion({
   const generatedId = useId();
   const isMultiple = type === "multiple";
   const isControlled = controlledValue !== undefined;
+  const rootRef = useRef(null);
   const [internalValue, setInternalValue] = useState(() => {
     if (isMultiple) {
       return Array.isArray(defaultValue) ? defaultValue : [];
@@ -75,13 +81,39 @@ export function Accordion({
 
   const value = isControlled ? controlledValue : internalValue;
   const openValues = deriveOpenValues(isMultiple, value);
+  const closedValue = useMemo(
+    () => (isMultiple ? [] : null),
+    [isMultiple],
+  );
 
-  const setValue = (nextValue) => {
+  const setValue = useCallback((nextValue) => {
     if (!isControlled) {
       setInternalValue(nextValue);
     }
     onValueChange?.(nextValue);
-  };
+  }, [isControlled, onValueChange]);
+
+  useEffect(() => {
+    if (!clickOutside || openValues.length === 0) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      const root = rootRef.current;
+      const target = event.target;
+
+      if (!(target instanceof Node) || !root || root.contains(target)) {
+        return;
+      }
+
+      setValue(closedValue);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [clickOutside, closedValue, openValues.length, setValue]);
 
   const toggleItem = (itemValue) => {
     if (isMultiple) {
@@ -110,7 +142,9 @@ export function Accordion({
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <div className={cn("w-full", className)}>{children}</div>
+      <div ref={rootRef} className={cn("w-full space-y-3", className)}>
+        {children}
+      </div>
     </AccordionContext.Provider>
   );
 }
@@ -132,7 +166,15 @@ export function AccordionItem({ children, className, value }) {
 
   return (
     <AccordionItemContext.Provider value={contextValue}>
-      <div className={cn("border-b", ui.item, className)}>{children}</div>
+      <div
+        className={cn(
+          "overflow-hidden rounded-[1rem] border transition-[border-color,background-color,box-shadow] duration-200",
+          ui.item,
+          className,
+        )}
+      >
+        {children}
+      </div>
     </AccordionItemContext.Provider>
   );
 }
@@ -155,7 +197,7 @@ export function AccordionTrigger({ children, className, ...props }) {
       className={cn(
         resolveQuickitFocusRingClasses(
           focusRingEnabled,
-          "flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-4 text-left text-sm font-medium outline-none transition-[background-color,color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+          "flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium outline-none transition-[background-color,color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
         ),
         resolveQuickitFocusRingClasses(focusRingEnabled, ui.trigger),
         isOpen && ui.triggerOpen,
@@ -203,9 +245,16 @@ export function AccordionContent({
         isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
       )}
     >
-      <div className="min-h-0 overflow-hidden" inert={!isOpen || undefined}>
+      <div
+        className={cn(
+          "min-h-0 overflow-hidden",
+          isOpen && "border-t",
+          isOpen && ui.contentShell,
+        )}
+        inert={!isOpen || undefined}
+      >
         <div
-          className={cn("px-4 pb-4 text-sm leading-6", ui.content, className)}
+          className={cn("px-5 pt-4 pb-5 text-sm leading-6", ui.content, className)}
           {...props}
         >
           {children}

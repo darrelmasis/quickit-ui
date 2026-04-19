@@ -7,7 +7,7 @@ import {
   SpinnerIcon,
 } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import {
   dismissToast,
@@ -17,7 +17,6 @@ import {
   subscribeToToasts,
 } from "./toast-store";
 
-/** Anclaje por esquina; `bottom-right` es el valor por defecto. */
 const POSITIONS = {
   "top-left": "top-6 left-6",
   "top-right": "top-6 right-6",
@@ -25,7 +24,6 @@ const POSITIONS = {
   "bottom-right": "bottom-6 right-6",
 };
 
-/** Por encima de modales/drawers (pila base ~50 + incrementos de 10). */
 const TOASTER_Z_INDEX = 10_000;
 
 const TOAST_ROOT_WIDTH_CLASS =
@@ -56,59 +54,68 @@ const BUILTIN_KIND_ICONS = {
   ),
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 function stackAnimClasses(position, dismissing) {
   const top = position.startsWith("top");
+
   if (dismissing) {
     return top ? "qk-toast-surface--out-t" : "qk-toast-surface--out-b";
   }
+
   return top ? "qk-toast-surface--in-t" : "qk-toast-surface--in-b";
 }
 
 function stackTransformOrigin(position) {
-  const v = position.startsWith("top") ? "top" : "bottom";
-  /** Centro horizontal: el mazo queda centrado en el ancho del Toaster al escalar. */
-  return `${v} center`;
+  const verticalOrigin = position.startsWith("top") ? "top" : "bottom";
+
+  return `${verticalOrigin} center`;
 }
 
 function clampVisibleToasts(n) {
-  const v = Number(n);
-  if (!Number.isFinite(v)) {
+  const value = Number(n);
+
+  if (!Number.isFinite(value)) {
     return MAX_VISIBLE_TOASTS;
   }
-  return Math.min(10, Math.max(1, Math.floor(v)));
+
+  return Math.min(10, Math.max(1, Math.floor(value)));
 }
 
 function resolveGap(gapProp, expanded) {
   if (gapProp == null) {
     return expanded ? DEFAULT_GAP_EXPANDED : DEFAULT_GAP_COLLAPSED;
   }
+
   if (typeof gapProp === "number") {
-    const c = Math.max(0, gapProp);
-    return expanded ? Math.max(72, Math.round(c * 6.5)) : c;
+    const collapsedGap = Math.max(0, gapProp);
+
+    return expanded ? Math.max(72, Math.round(collapsedGap * 6.5)) : collapsedGap;
   }
+
   const collapsed = gapProp.collapsed ?? DEFAULT_GAP_COLLAPSED;
-  const ex = gapProp.expanded ?? DEFAULT_GAP_EXPANDED;
-  return expanded ? ex : collapsed;
+  const expandedGap = gapProp.expanded ?? DEFAULT_GAP_EXPANDED;
+
+  return expanded ? expandedGap : collapsed;
 }
 
 function resolveToastIcon(item, { defaultIcon, icons }) {
   if (item.icon != null) {
     return item.icon;
   }
+
   const kindKey = item.kind ?? "default";
-  if (icons && icons[kindKey] != null) {
+
+  if (icons?.[kindKey] != null) {
     return icons[kindKey];
   }
+
   if (defaultIcon != null) {
     return defaultIcon;
   }
+
   if (item.kind && item.kind !== "default" && BUILTIN_KIND_ICONS[item.kind]) {
     return BUILTIN_KIND_ICONS[item.kind];
   }
+
   return null;
 }
 
@@ -125,7 +132,7 @@ export function Toaster({
   style,
   ...rootProps
 }) {
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("toaster");
   const [items, setItems] = useState([]);
   const [stackExpanded, setStackExpanded] = useState(false);
   const pointerInsideRef = useRef(false);
@@ -134,7 +141,7 @@ export function Toaster({
   const visibleCount = clampVisibleToasts(
     visibleToastsProp ?? MAX_VISIBLE_TOASTS,
   );
-  const iconOpts = { defaultIcon, icons: iconsProp };
+  const iconOptions = { defaultIcon, icons: iconsProp };
 
   useEffect(() => subscribeToToasts(setItems), []);
 
@@ -142,6 +149,7 @@ export function Toaster({
     if (expandOnHover) {
       setStackExpanded(true);
     }
+
     if (!pointerInsideRef.current) {
       pointerInsideRef.current = true;
       pauseToastStackAutoDismiss();
@@ -149,18 +157,23 @@ export function Toaster({
   };
 
   const handlePointerLeave = (event) => {
-    const next = event.relatedTarget;
-    if (next instanceof Node && rootRef.current?.contains(next)) {
+    const nextTarget = event.relatedTarget;
+
+    if (nextTarget instanceof Node && rootRef.current?.contains(nextTarget)) {
       return;
     }
+
     requestAnimationFrame(() => {
       const root = rootRef.current;
+
       if (root?.matches(":focus-within")) {
         return;
       }
+
       if (expandOnHover) {
         setStackExpanded(false);
       }
+
       pointerInsideRef.current = false;
       resumeToastStackAutoDismiss();
     });
@@ -170,6 +183,7 @@ export function Toaster({
     if (expandOnHover) {
       setStackExpanded(true);
     }
+
     if (!pointerInsideRef.current) {
       pointerInsideRef.current = true;
       pauseToastStackAutoDismiss();
@@ -179,12 +193,15 @@ export function Toaster({
   const handleBlurCapture = () => {
     requestAnimationFrame(() => {
       const root = rootRef.current;
+
       if (root?.contains(document.activeElement)) {
         return;
       }
+
       if (expandOnHover) {
         setStackExpanded(false);
       }
+
       pointerInsideRef.current = false;
       resumeToastStackAutoDismiss();
     });
@@ -196,15 +213,11 @@ export function Toaster({
 
   const resolvedPosition = POSITIONS[position] ?? POSITIONS["bottom-right"];
   const orderedItems = [...items].reverse();
-  const origin = stackTransformOrigin(position);
+  const transformOrigin = stackTransformOrigin(position);
   const isTop = position.startsWith("top");
-  /** Hover solo amplía huecos y escala; nunca se muestran más de `visibleCount` toasts. */
   const expandedLayout = expandOnHover && stackExpanded;
-
-  /** Los N más recientes; al cerrar o expirar uno, el siguiente de la cola ocupa su hueco. */
   const visibleList = orderedItems.slice(0, visibleCount);
   const layoutSlots = visibleList.length;
-
   const stackGapPx = resolveGap(gap, expandedLayout);
   const stackMinHeight =
     layoutSlots > 0
@@ -238,16 +251,13 @@ export function Toaster({
           const deckDepth = Math.min(sliceIndex, visibleCount - 1);
           const inset = sliceIndex * stackGapPx;
           const scale =
-            expandedLayout || item.dismissing
-              ? 1
-              : 1 - deckDepth * SCALE_STEP;
+            expandedLayout || item.dismissing ? 1 : 1 - deckDepth * SCALE_STEP;
           const stackOpacity =
             expandedLayout || item.dismissing
               ? 1
               : Math.max(0.38, 1 - deckDepth * OPACITY_STEP);
-
           const edgeStyle = isTop ? { top: inset } : { bottom: inset };
-          const iconNode = resolveToastIcon(item, iconOpts);
+          const iconNode = resolveToastIcon(item, iconOptions);
 
           return (
             <div
@@ -266,7 +276,7 @@ export function Toaster({
                 className="w-full min-w-0 max-w-full will-change-transform"
                 style={{
                   transform: `scale(${scale}) translateZ(0)`,
-                  transformOrigin: origin,
+                  transformOrigin,
                   transition:
                     "transform 380ms cubic-bezier(0.32, 0.72, 0, 1)",
                 }}
@@ -285,6 +295,7 @@ export function Toaster({
                         {iconNode}
                       </span>
                     ) : null}
+
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold break-words">
                         {item.title}
@@ -295,6 +306,7 @@ export function Toaster({
                         </div>
                       ) : null}
                     </div>
+
                     {showCloseButton ? (
                       <Button
                         type="button"
@@ -310,6 +322,7 @@ export function Toaster({
                       </Button>
                     ) : null}
                   </div>
+
                   {item.action ? (
                     <div className="mt-3">
                       <Button

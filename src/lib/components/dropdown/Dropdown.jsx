@@ -4,52 +4,81 @@ import {
   forwardRef,
   isValidElement,
   useCallback,
-  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
-  FloatingArrow,
   FloatingPortal,
-  arrow,
   autoUpdate,
   flip,
   offset,
+  safePolygon,
   shift,
   useClick,
   useDismiss,
   useFloating,
+  useHover,
   useInteractions,
   useRole,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
-import { cn } from "@/lib/utils";
+import { cn, useMergeRefs } from "@/lib/utils";
 import {
   FLOATING_LIST_ITEM_PRIMITIVES,
   FLOATING_LIST_ITEM_THEME_CLASSES,
   FLOATING_LIST_SURFACE_PRIMITIVES,
   FLOATING_LIST_SURFACE_THEME_CLASSES,
-  getFloatingArrowColors,
   getFloatingClosedTransform,
   getFloatingPlacementOrigin,
   resolveFloatingListTheme,
 } from "@/lib/components/_shared/floating-list";
 import { DropdownContext, useDropdownContext } from "./dropdown-context";
 
-function isTriggerDisabled(element) {
-  return Boolean(
-    element?.props?.disabled || element?.props?.["aria-disabled"] === true,
+const DROPDOWN_OPEN_DURATION = 140;
+const DROPDOWN_CLOSE_DURATION = 100;
+const DROPDOWN_ITEM_SELECTOR = '[data-qi-dropdown-item="true"]';
+
+function getDropdownItems(container) {
+  if (!container) {
+    return [];
+  }
+
+  return Array.from(container.querySelectorAll(DROPDOWN_ITEM_SELECTOR));
+}
+
+function isDropdownItemDisabled(item) {
+  return (
+    item.getAttribute("aria-disabled") === "true" || item.hasAttribute("disabled")
   );
 }
 
-function assignRef(ref, value) {
-  if (typeof ref === "function") {
-    ref(value);
-  } else if (ref && typeof ref === "object") {
-    ref.current = value;
+function getNavigableDropdownItems(container) {
+  return getDropdownItems(container).filter((item) => !isDropdownItemDisabled(item));
+}
+
+function focusDropdownItem(container, index) {
+  const items = getNavigableDropdownItems(container);
+
+  if (!items.length) {
+    return null;
   }
+
+  const normalizedIndex = ((index % items.length) + items.length) % items.length;
+  const item = items[normalizedIndex];
+
+  item?.focus();
+  return item ?? null;
+}
+
+function focusDropdownEdgeItem(container, edge = "first") {
+  const items = getNavigableDropdownItems(container);
+  const item = edge === "last" ? items.at(-1) : items[0];
+
+  item?.focus();
+  return item ?? null;
 }
 
 export function Dropdown({
@@ -61,204 +90,70 @@ export function Dropdown({
   offsetX = 0,
   onOpenChange,
   open: controlledOpen,
-  placement = "bottom-end",
-  showArrow = true,
+  placement = "bottom-start",
+  /** `click`: abre al pulsar (por defecto). `hover`: abre al pasar el puntero por el trigger. */
+  trigger = "click",
   usePortal = true,
 }) {
-  // Dropdown soporta modo controlado y no controlado; la API pública siempre
-  // expone onOpenChange sin importar cuál de los dos esté activo.
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-  const [arrowElement, setArrowElement] = useState(null);
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined;
-  const open = isControlled ? controlledOpen : uncontrolledOpen;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const contentRef = useRef(null);
 
-  const handleOpenChange = useCallback((nextOpen) => {
-    if (!isControlled) {
-      setUncontrolledOpen(nextOpen);
-    }
+  const setOpen = useCallback(
+    (nextOpen) => {
+      if (!isControlled) {
+        setInternalOpen(nextOpen);
+      }
 
-    onOpenChange?.(nextOpen);
-  }, [isControlled, onOpenChange]);
-
-  const middleware = useMemo(
-    () => [
-      offset({ mainAxis: 8, crossAxis: offsetX }),
-      flip({ padding: collisionPadding }),
-      shift({ padding: collisionPadding }),
-      ...(showArrow ? [arrow({ element: arrowElement })] : []),
-    ],
-    [arrowElement, collisionPadding, offsetX, showArrow],
+      if (nextOpen !== open) {
+        onOpenChange?.(nextOpen);
+      }
+    },
+    [isControlled, onOpenChange, open],
   );
+
+  const close = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const toggle = useCallback(() => {
+    setOpen(!open);
+  }, [open, setOpen]);
 
   const { refs, floatingStyles, context } = useFloating({
     open,
-    onOpenChange: handleOpenChange,
-    placement,
+    onOpenChange: setOpen,
     transform: false,
-    middleware,
+    placement,
+    middleware: [
+      offset({ mainAxis: 6, crossAxis: offsetX }),
+      flip({ padding: collisionPadding }),
+      shift({ padding: collisionPadding }),
+    ],
     whileElementsMounted: autoUpdate,
   });
 
-  const click = useClick(context);
+  const openOnClick = trigger === "click";
+  const openOnHover = trigger === "hover";
+
+  const click = useClick(context, { enabled: openOnClick });
+  const hover = useHover(context, {
+    enabled: openOnHover,
+    move: false,
+    delay: { open: 80, close: 220 },
+    handleClose: safePolygon(),
+  });
   const dismiss = useDismiss(context, {
+    ancestorScroll: closeOnScroll,
     outsidePress: closeOnClickOutside,
   });
   const role = useRole(context, { role: "menu" });
-  const interactions = useInteractions([click, dismiss, role]);
 
-  useEffect(() => {
-    if (!closeOnScroll || !open) {
-      return;
-    }
+  const interactions = useInteractions([click, hover, dismiss, role]);
 
-    // El cierre por scroll ignora desplazamientos mínimos y también scrolls que
-    // nacen dentro del trigger o del panel flotante.
-    let lastScrollPosition = window.scrollY;
-
-    const handleScroll = (event) => {
-      const currentScrollPosition = window.scrollY;
-
-      if (Math.abs(currentScrollPosition - lastScrollPosition) < 10) {
-        return;
-      }
-
-      lastScrollPosition = currentScrollPosition;
-
-      const target = event.target;
-      const floatingElement = refs.floating.current;
-      const referenceElement = refs.reference.current;
-
-      if (
-        target instanceof Node &&
-        (floatingElement?.contains(target) || referenceElement?.contains(target))
-      ) {
-        return;
-      }
-
-      handleOpenChange(false);
-    };
-
-    window.addEventListener("scroll", handleScroll, true);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-    };
-  }, [closeOnScroll, open, refs, handleOpenChange]);
-
-  const value = useMemo(
-    () => ({
-      open,
-      setOpen: handleOpenChange,
-      toggle: () => handleOpenChange(!open),
-      close: () => handleOpenChange(false),
-      refs,
-      context,
-      interactions,
-      floatingStyles,
-      placement,
-      setArrowElement,
-      showArrow,
-      usePortal,
-    }),
-    [
-      context,
-      floatingStyles,
-      handleOpenChange,
-      interactions,
-      open,
-      placement,
-      refs,
-      showArrow,
-      usePortal,
-    ],
-  );
-
-  return (
-    <DropdownContext.Provider value={value}>{children}</DropdownContext.Provider>
-  );
-}
-
-export const DropdownTrigger = forwardRef(function DropdownTrigger(
-  { asChild = false, children, className, ...props },
-  ref,
-) {
-  const { refs, interactions, open } = useDropdownContext("DropdownTrigger");
-  const referenceRef = useCallback(
-    (node) => {
-      refs.setReference(node);
-      assignRef(ref, node);
-    },
-    [ref, refs],
-  );
-  const sharedProps = {
-    "data-state": open ? "open" : "closed",
-    ...props,
-  };
-
-  if (asChild) {
-    const child = Children.only(children);
-
-    if (!isValidElement(child)) {
-      throw new Error(
-        "DropdownTrigger con asChild requiere un único elemento React válido.",
-      );
-    }
-
-    return (
-      <span
-        ref={referenceRef}
-        className={cn("inline-flex", className)}
-        {...(isTriggerDisabled(child)
-          ? sharedProps
-          : interactions.getReferenceProps(sharedProps))}
-      >
-        {/* El span conserva la referencia de floating-ui aunque el child no
-            acepte ref o venga de otro componente de la librería. */}
-        {cloneElement(child, {
-          className: cn(child.props.className),
-        })}
-      </span>
-    );
-  }
-
-  return (
-    <button
-      ref={referenceRef}
-      type="button"
-      className={className}
-      {...interactions.getReferenceProps(sharedProps)}
-    >
-      {children}
-    </button>
-  );
-});
-
-export const DropdownContent = forwardRef(function DropdownContent(
-  { animated = true, children, className, ...props },
-  ref,
-) {
-  const {
-    refs,
-    interactions,
-    floatingStyles,
-    context,
-    placement,
-    setArrowElement,
-    showArrow,
-    open,
-    usePortal,
-  } = useDropdownContext("DropdownContent");
-  const theme = resolveFloatingListTheme(useQuickitTheme());
-  const floatingRef = useCallback(
-    (node) => {
-      refs.setFloating(node);
-      assignRef(ref, node);
-    },
-    [ref, refs],
-  );
-  const { fill: arrowFill, stroke: arrowStroke } = getFloatingArrowColors(theme);
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: animated ? { open: 140, close: 100 } : 0,
+    duration: { open: DROPDOWN_OPEN_DURATION, close: DROPDOWN_CLOSE_DURATION },
     initial: ({ side }) => ({
       opacity: 0,
       transform: getFloatingClosedTransform(side),
@@ -276,129 +171,440 @@ export const DropdownContent = forwardRef(function DropdownContent(
     },
   });
 
+  const contextValue = useMemo(
+    () => ({
+      close,
+      floatingStyles,
+      getContentRef: () => contentRef.current,
+      getFloatingProps: interactions.getFloatingProps,
+      getItemProps: interactions.getItemProps,
+      getReferenceProps: interactions.getReferenceProps,
+      isMounted,
+      open,
+      placement,
+      refs,
+      setContentNode(node) {
+        contentRef.current = node;
+      },
+      setOpen,
+      toggle,
+      transitionStyles,
+      usePortal,
+    }),
+    [
+      close,
+      floatingStyles,
+      interactions.getFloatingProps,
+      interactions.getItemProps,
+      interactions.getReferenceProps,
+      isMounted,
+      open,
+      placement,
+      refs,
+      setOpen,
+      toggle,
+      transitionStyles,
+      usePortal,
+    ],
+  );
+
+  const childrenArray = Children.toArray(children);
+  const triggerNode = childrenArray.find(
+    (child) => isValidElement(child) && child.type === DropdownTrigger,
+  );
+  const content = childrenArray.find(
+    (child) =>
+      isValidElement(child) &&
+      (child.type === DropdownContent || child.type === DropdownContent.render),
+  );
+
+  return (
+    <DropdownContext.Provider value={contextValue}>
+      {triggerNode}
+      {usePortal ? <FloatingPortal>{content}</FloatingPortal> : content}
+    </DropdownContext.Provider>
+  );
+}
+
+export const DropdownTrigger = forwardRef(function DropdownTrigger(
+  { asChild = false, children, ...props },
+  ref,
+) {
+  const {
+    getContentRef,
+    getReferenceProps,
+    open,
+    refs,
+    setOpen,
+  } = useDropdownContext("DropdownTrigger");
+  const mergedRef = useMergeRefs(refs.setReference, ref);
+  const childRef = isValidElement(children)
+    ? (children.props?.ref ?? children.ref)
+    : null;
+  const mergedChildRef = useMergeRefs(mergedRef, childRef);
+
+  const focusEdgeItem = useCallback(
+    (edge) => {
+      window.requestAnimationFrame(() => {
+        focusDropdownEdgeItem(getContentRef(), edge);
+      });
+    },
+    [getContentRef],
+  );
+
+  const handleTriggerKeyDown = useCallback(
+    (event) => {
+      if (
+        event.key !== "ArrowDown" &&
+        event.key !== "ArrowUp" &&
+        event.key !== "Enter" &&
+        event.key !== " "
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (!open) {
+        setOpen(true);
+      }
+
+      focusEdgeItem(event.key === "ArrowUp" ? "last" : "first");
+    },
+    [focusEdgeItem, open, setOpen],
+  );
+
+  if (asChild && isValidElement(children)) {
+    return Children.only(
+      cloneElement(children, {
+        ...getReferenceProps({
+          ...props,
+          ...children.props,
+          "aria-expanded": open,
+          "aria-haspopup": "menu",
+          onKeyDown(event) {
+            children.props.onKeyDown?.(event);
+            props.onKeyDown?.(event);
+
+            if (!event.defaultPrevented) {
+              handleTriggerKeyDown(event);
+            }
+          },
+          ref: mergedChildRef,
+        }),
+      }),
+    );
+  }
+
+  return (
+    <button
+      ref={mergedRef}
+      type="button"
+      {...getReferenceProps({
+        ...props,
+        "aria-expanded": open,
+        "aria-haspopup": "menu",
+        onKeyDown(event) {
+          props.onKeyDown?.(event);
+
+          if (!event.defaultPrevented) {
+            handleTriggerKeyDown(event);
+          }
+        },
+      })}
+    >
+      {children}
+    </button>
+  );
+});
+
+export const DropdownContent = forwardRef(function DropdownContent(
+  { children, className, style, ...props },
+  ref,
+) {
+  const {
+    getContentRef,
+    getFloatingProps,
+    isMounted,
+    placement,
+    refs,
+    floatingStyles,
+    setContentNode,
+    transitionStyles,
+  } = useDropdownContext("DropdownContent");
+  const { theme: effectiveTheme } = useQuickitControlState("dropdown");
+  const theme = resolveFloatingListTheme(effectiveTheme);
+  const mergedRef = useMergeRefs(ref, refs.setFloating, setContentNode);
+  const typeaheadRef = useRef({ buffer: "", timeoutId: null });
+
   if (!isMounted) {
     return null;
   }
 
-  const content = (
-    <ul
-      ref={floatingRef}
+  const floatingProps = getFloatingProps(props);
+
+  return (
+    <div
+      ref={mergedRef}
+      role="menu"
+      aria-orientation="vertical"
+      data-placement={placement}
+      style={{ ...floatingStyles, ...transitionStyles, ...style }}
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
         FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
+        "z-50 min-w-[8rem] overflow-hidden",
         className,
       )}
-      style={{
-        ...floatingStyles,
-        ...transitionStyles,
+      {...floatingProps}
+      onKeyDownCapture={(event) => {
+        floatingProps.onKeyDownCapture?.(event);
+        props.onKeyDownCapture?.(event);
+
+        if (event.defaultPrevented) {
+          return;
+        }
+
+        if (event.ctrlKey || event.metaKey || event.altKey) {
+          return;
+        }
+
+        const { target } = event;
+        if (
+          target instanceof HTMLInputElement ||
+          target instanceof HTMLTextAreaElement ||
+          target instanceof HTMLSelectElement ||
+          target?.isContentEditable
+        ) {
+          return;
+        }
+
+        if (event.key.length !== 1) {
+          return;
+        }
+
+        const char = event.key;
+        if (!/^\S$/u.test(char)) {
+          return;
+        }
+
+        event.preventDefault();
+        const state = typeaheadRef.current;
+        state.buffer = `${state.buffer}${char.toLowerCase()}`;
+        if (state.timeoutId) {
+          window.clearTimeout(state.timeoutId);
+        }
+        state.timeoutId = window.setTimeout(() => {
+          state.buffer = "";
+          state.timeoutId = null;
+        }, 500);
+
+        const items = getNavigableDropdownItems(getContentRef());
+        const match = items.find((el) =>
+          el.textContent.trim().toLowerCase().startsWith(state.buffer),
+        );
+        match?.focus();
       }}
-      {...interactions.getFloatingProps({
-        ...props,
-        "data-state": open ? "open" : "closed",
-      })}
+      onKeyDown={(event) => {
+        floatingProps.onKeyDown?.(event);
+        props.onKeyDown?.(event);
+
+        if (event.defaultPrevented) {
+          return;
+        }
+
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault();
+          const edge = event.key === "ArrowUp" ? "last" : "first";
+          focusDropdownEdgeItem(getContentRef(), edge);
+        }
+      }}
     >
-      {showArrow ? (
-        // La flecha usa los mismos colores del panel para no parecer una capa aparte.
-        <FloatingArrow
-          ref={setArrowElement}
-          context={context}
-          width={16}
-          height={8}
-          tipRadius={2}
-          fill={arrowFill}
-          stroke={arrowStroke}
-          strokeWidth={1}
-          className="pointer-events-none"
-        />
-      ) : null}
       {children}
-    </ul>
+    </div>
   );
-
-  if (usePortal) {
-    return <FloatingPortal>{content}</FloatingPortal>;
-  }
-
-  return content;
 });
 
 export const DropdownItem = forwardRef(function DropdownItem(
   {
-    as: Component = "button",
+    as,
     children,
     className,
     closeOnClick = true,
     disabled = false,
     href,
     onClick,
+    onKeyDown,
+    onMouseEnter,
     variant = "default",
     ...props
   },
   ref,
 ) {
-  const { close } = useDropdownContext("DropdownItem");
-  const theme = resolveFloatingListTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("dropdown");
-  const resolvedVariant = variant === "danger" ? "danger" : "default";
+  const {
+    close,
+    getContentRef,
+    getItemProps,
+    refs,
+    setOpen,
+  } = useDropdownContext("DropdownItem");
+  const { theme: effectiveTheme, focusRing: focusRingEnabled } =
+    useQuickitControlState("dropdown");
+  const theme = resolveFloatingListTheme(effectiveTheme);
+  const Component = as ?? (href ? "a" : "button");
+  const isButton = Component === "button";
+  const isAnchor = Component === "a";
+  const itemTheme =
+    variant === "danger"
+      ? FLOATING_LIST_ITEM_THEME_CLASSES[theme].danger
+      : FLOATING_LIST_ITEM_THEME_CLASSES[theme].default;
 
-  const handleClick = (event) => {
-    if (disabled) {
-      event.preventDefault();
-      return;
-    }
+  const focusSiblingItem = useCallback(
+    (currentItem, direction) => {
+      const items = getNavigableDropdownItems(getContentRef());
+      const currentIndex = items.indexOf(currentItem);
 
-    onClick?.(event);
+      if (currentIndex === -1) {
+        return;
+      }
 
-    if (closeOnClick) {
-      close();
-    }
-  };
+      focusDropdownItem(getContentRef(), currentIndex + direction);
+    },
+    [getContentRef],
+  );
+
+  const handleActivate = useCallback(
+    (event) => {
+      if (disabled) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      onClick?.(event);
+
+      if (!event.defaultPrevented && closeOnClick) {
+        close();
+        window.requestAnimationFrame(() => {
+          refs.reference.current?.focus?.();
+        });
+      }
+    },
+    [close, closeOnClick, disabled, onClick, refs.reference],
+  );
 
   return (
-    <li role="none">
-      <Component
-        ref={ref}
-        role="menuitem"
-        href={href}
-        onClick={handleClick}
-        disabled={Component === "button" ? disabled : undefined}
-        aria-disabled={Component !== "button" && disabled ? true : undefined}
-        tabIndex={Component !== "button" && disabled ? -1 : undefined}
-        type={Component === "button" ? "button" : undefined}
-        className={cn(
-          resolveQuickitFocusRingClasses(
-            focusRingEnabled,
-            FLOATING_LIST_ITEM_PRIMITIVES.base,
-          ),
-          resolveQuickitFocusRingClasses(
-            focusRingEnabled,
-            FLOATING_LIST_ITEM_THEME_CLASSES[theme][resolvedVariant],
-          ),
-          disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
-    </li>
+    <Component
+      ref={ref}
+      data-qi-dropdown-item="true"
+      role="menuitem"
+      aria-disabled={disabled || undefined}
+      href={isAnchor ? href : undefined}
+      disabled={isButton ? disabled : undefined}
+      tabIndex={disabled ? -1 : -1}
+      className={cn(
+        FLOATING_LIST_ITEM_PRIMITIVES.base,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          FLOATING_LIST_ITEM_PRIMITIVES.base,
+        ),
+        resolveQuickitFocusRingClasses(focusRingEnabled, itemTheme),
+        disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
+        className,
+      )}
+      {...getItemProps({
+        ...props,
+        onClick: handleActivate,
+        onKeyDown(event) {
+          onKeyDown?.(event);
+
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            focusSiblingItem(event.currentTarget, 1);
+            return;
+          }
+
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            focusSiblingItem(event.currentTarget, -1);
+            return;
+          }
+
+          if (event.key === "Home") {
+            event.preventDefault();
+            focusDropdownEdgeItem(getContentRef(), "first");
+            return;
+          }
+
+          if (event.key === "End") {
+            event.preventDefault();
+            focusDropdownEdgeItem(getContentRef(), "last");
+            return;
+          }
+
+          if (event.key === "Escape") {
+            event.preventDefault();
+            close();
+            refs.reference.current?.focus?.();
+            return;
+          }
+
+          if (event.key === "Tab") {
+            setOpen(false);
+            return;
+          }
+
+          if (event.key === " " && !event.defaultPrevented) {
+            event.preventDefault();
+            handleActivate(event);
+            return;
+          }
+
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          if (
+            !isButton &&
+            !isAnchor &&
+            (event.key === "Enter" || event.key === " ")
+          ) {
+            event.preventDefault();
+            handleActivate(event);
+          }
+        },
+        onMouseEnter(event) {
+          onMouseEnter?.(event);
+        },
+      })}
+      type={isButton ? "button" : undefined}
+    >
+      {children}
+    </Component>
   );
 });
 
-export function DropdownSeparator({ className }) {
-  const theme = resolveFloatingListTheme(useQuickitTheme());
+export const DropdownSeparator = forwardRef(function DropdownSeparator(
+  { className, ...props },
+  ref,
+) {
+  const { theme: effectiveTheme } = useQuickitControlState("dropdown");
+  const theme = resolveFloatingListTheme(effectiveTheme);
 
   return (
-    <li
+    <div
+      ref={ref}
       role="separator"
+      aria-orientation="horizontal"
       className={cn(
         "my-1 border-t",
         FLOATING_LIST_ITEM_THEME_CLASSES[theme].separator,
         className,
       )}
+      {...props}
     />
   );
-}
+});
 
 Dropdown.Trigger = DropdownTrigger;
 Dropdown.Content = DropdownContent;

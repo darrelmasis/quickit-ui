@@ -1,0 +1,531 @@
+import {
+  forwardRef,
+  useCallback,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  FloatingPortal,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  size,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useListNavigation,
+  useRole,
+  useTransitionStyles,
+} from "@floating-ui/react";
+import { useQuickitControlState } from "@/lib/theme";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
+import { cn, getControlRadius } from "@/lib/utils";
+import { CheckFillIcon, ChevronDownIcon } from "@/lib/assets/icons";
+import { useFormControl } from "@/lib/components/form-control";
+import { useInputGroup } from "@/lib/components/input/input-group.context";
+import {
+  FORM_FIELD_THEME_CLASSES,
+  resolveFormFieldColor,
+} from "@/lib/components/_shared/form-field";
+import {
+  FLOATING_LIST_ITEM_PRIMITIVES,
+  FLOATING_LIST_ITEM_THEME_CLASSES,
+  FLOATING_LIST_SURFACE_PRIMITIVES,
+  FLOATING_LIST_SURFACE_THEME_CLASSES,
+  getFloatingClosedTransform,
+  getFloatingPlacementOrigin,
+  resolveFloatingListTheme,
+} from "@/lib/components/_shared/floating-list";
+
+const COMBOBOX_PRIMITIVES = {
+  wrapper: "relative w-full",
+  input: [
+    "flex w-full items-center gap-2 border px-3.5 text-sm outline-none",
+    "transition-[background-color,border-color,color,box-shadow] duration-200",
+    "focus-visible:ring-4 focus-visible:ring-offset-0",
+    "disabled:cursor-not-allowed disabled:opacity-60",
+  ].join(" "),
+  icon: "shrink-0 text-current/55",
+  content: "max-h-72 overflow-y-auto",
+};
+
+const COMBOBOX_PLACEMENT = "bottom-start";
+const COMBOBOX_OPEN_DURATION = 140;
+const COMBOBOX_CLOSE_DURATION = 100;
+
+const COMBOBOX_SIZE_CLASSES = {
+  sm: "h-9",
+  md: "h-11",
+  lg: "h-12 text-base",
+};
+
+const COMBOBOX_THEME_CLASSES = {
+  light: {
+    invalid: FORM_FIELD_THEME_CLASSES.light.invalid,
+  },
+  dark: {
+    invalid: FORM_FIELD_THEME_CLASSES.dark.invalid,
+  },
+};
+
+function assignRef(ref, value) {
+  if (typeof ref === "function") {
+    ref(value);
+  } else if (ref && typeof ref === "object") {
+    ref.current = value;
+  }
+}
+
+function createChangeEvent({ id, name, nativeEvent, value }) {
+  return {
+    type: "change",
+    nativeEvent,
+    target: { id, name, value },
+    currentTarget: { id, name, value },
+    preventDefault() {
+      nativeEvent?.preventDefault?.();
+    },
+    stopPropagation() {
+      nativeEvent?.stopPropagation?.();
+    },
+  };
+}
+
+function normalizeOptions(raw) {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw.map((item, index) => {
+    if (item == null) {
+      return {
+        disabled: true,
+        key: `opt-${index}`,
+        label: "",
+        value: "",
+      };
+    }
+
+    const value =
+      item.value !== undefined && item.value !== null
+        ? String(item.value)
+        : String(item.label ?? index);
+    const label =
+      item.label !== undefined && item.label !== null
+        ? String(item.label)
+        : value;
+
+    return {
+      disabled: Boolean(item.disabled),
+      key: `${value}-${index}`,
+      label,
+      value,
+    };
+  });
+}
+
+function filterOptionsByQuery(options, rawQuery) {
+  const q = rawQuery.trim().toLowerCase();
+  if (!q) {
+    return options;
+  }
+  return options.filter((o) => o.label.toLowerCase().includes(q));
+}
+
+function firstEnabledIndex(list) {
+  const index = list.findIndex((o) => !o.disabled);
+  return index >= 0 ? index : null;
+}
+
+const Combobox = forwardRef(function Combobox(
+  {
+    className,
+    color: colorProp,
+    defaultValue,
+    disabled = false,
+    emptyText = "Sin resultados",
+    id,
+    invalid = false,
+    name,
+    onChange,
+    onValueChange,
+    options: optionsProp = [],
+    placeholder = "Buscar…",
+    required = false,
+    size: controlSizeProp,
+    usePortal = true,
+    value: controlledValue,
+    ...props
+  },
+  ref,
+) {
+  const group = useInputGroup();
+  const isAttached = Boolean(group?.attached);
+  const { theme: fieldTheme, focusRing: focusRingEnabled } =
+    useQuickitControlState("select");
+  const theme = resolveFloatingListTheme(fieldTheme);
+  const ui = COMBOBOX_THEME_CLASSES[fieldTheme];
+  const controlSize = controlSizeProp ?? group?.size ?? "md";
+  const color = colorProp ?? group?.color ?? "neutral";
+  const resolvedColor = resolveFormFieldColor(color);
+  const colorUi = FORM_FIELD_THEME_CLASSES[fieldTheme][resolvedColor];
+  const field = useFormControl();
+  const options = useMemo(
+    () => normalizeOptions(optionsProp),
+    [optionsProp],
+  );
+  const resolvedInvalid = invalid || field?.invalid;
+  const resolvedDisabled = disabled || field?.disabled;
+  const resolvedRequired = required || field?.required;
+  const generatedId = useId();
+  const resolvedId = id ?? field?.controlId ?? generatedId;
+  const listboxId = `${resolvedId}-listbox`;
+  const describedBy =
+    [props["aria-describedby"], field?.descriptionId, resolvedInvalid ? field?.messageId : null]
+      .filter(Boolean)
+      .join(" ") || undefined;
+
+  const [uncontrolledValue, setUncontrolledValue] = useState(() =>
+    defaultValue !== undefined ? String(defaultValue) : "",
+  );
+  const resolvedValue =
+    controlledValue !== undefined
+      ? String(controlledValue)
+      : uncontrolledValue;
+
+  const selectedOption = options.find((o) => o.value === resolvedValue);
+  const [open, setOpen] = useState(false);
+  const [draftQuery, setDraftQuery] = useState(selectedOption?.label ?? "");
+  const [activeIndex, setActiveIndex] = useState(null);
+  const listRef = useRef([]);
+
+  const inputValue = open ? draftQuery : (selectedOption?.label ?? "");
+
+  const filteredOptions = useMemo(
+    () => filterOptionsByQuery(options, open ? draftQuery : ""),
+    [draftQuery, open, options],
+  );
+
+  const handleOpenChange = useCallback(
+    (nextOpen) => {
+      if (!nextOpen) {
+        setOpen(false);
+        setActiveIndex(null);
+        return;
+      }
+      setOpen((wasOpen) => {
+        if (!wasOpen) {
+          const seed = selectedOption?.label ?? "";
+          setDraftQuery(seed);
+          const list = filterOptionsByQuery(options, seed);
+          setActiveIndex(firstEnabledIndex(list));
+        }
+        return true;
+      });
+    },
+    [options, selectedOption],
+  );
+
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: handleOpenChange,
+    placement: COMBOBOX_PLACEMENT,
+    transform: false,
+    middleware: [
+      offset(8),
+      flip({ padding: 8 }),
+      shift({ padding: 8 }),
+      size({
+        apply({ rects, elements }) {
+          Object.assign(elements.floating.style, {
+            width: `${rects.reference.width}px`,
+          });
+        },
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const dismiss = useDismiss(context);
+  const role = useRole(context, { role: "listbox" });
+  const listNavigation = useListNavigation(context, {
+    activeIndex,
+    listRef,
+    loop: true,
+    onNavigate: setActiveIndex,
+    /** Evita mover el foco DOM a los botones de cada opción; el input conserva el foco (patrón combobox). */
+    virtual: true,
+  });
+  const interactions = useInteractions([dismiss, role, listNavigation]);
+
+  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
+    duration: { open: COMBOBOX_OPEN_DURATION, close: COMBOBOX_CLOSE_DURATION },
+    initial: ({ side }) => ({
+      opacity: 0,
+      transform: getFloatingClosedTransform(side),
+    }),
+    open: {
+      opacity: 1,
+      transform: "translate(0px, 0px) scale(1)",
+    },
+    close: ({ side }) => ({
+      opacity: 0,
+      transform: getFloatingClosedTransform(side),
+    }),
+    common: {
+      transformOrigin: getFloatingPlacementOrigin(COMBOBOX_PLACEMENT),
+    },
+  });
+
+  const floatingRef = useCallback(
+    (node) => {
+      refs.setFloating(node);
+    },
+    [refs],
+  );
+
+  const referenceRef = useCallback(
+    (node) => {
+      refs.setReference(node);
+      assignRef(ref, node);
+    },
+    [ref, refs],
+  );
+
+  const handleValueChange = useCallback(
+    (nextValue, labelText, nativeEvent) => {
+      if (controlledValue === undefined) {
+        setUncontrolledValue(nextValue);
+      }
+      setDraftQuery(labelText);
+      onValueChange?.(nextValue);
+      onChange?.(
+        createChangeEvent({
+          id: resolvedId,
+          name,
+          nativeEvent,
+          value: nextValue,
+        }),
+      );
+      handleOpenChange(false);
+      refs.reference.current?.focus?.();
+    },
+    [
+      controlledValue,
+      handleOpenChange,
+      name,
+      onChange,
+      onValueChange,
+      refs.reference,
+      resolvedId,
+    ],
+  );
+
+  const getOptionProps = useCallback(
+    (option, index) =>
+      interactions.getItemProps({
+        active: activeIndex === index,
+        selected: option.value === resolvedValue,
+        onClick(event) {
+          if (option.disabled) {
+            return;
+          }
+          handleValueChange(option.value, option.label, event);
+        },
+        onMouseEnter() {
+          setActiveIndex(index);
+        },
+        onKeyDown(event) {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            if (!option.disabled) {
+              handleValueChange(option.value, option.label, event);
+            }
+          }
+        },
+      }),
+    [activeIndex, handleValueChange, interactions, resolvedValue],
+  );
+
+  const content = isMounted ? (
+    <ul
+      id={listboxId}
+      ref={floatingRef}
+      className={cn(
+        FLOATING_LIST_SURFACE_PRIMITIVES.layout,
+        FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
+        COMBOBOX_PRIMITIVES.content,
+      )}
+      style={{
+        ...floatingStyles,
+        ...transitionStyles,
+      }}
+      {...interactions.getFloatingProps({
+        "aria-labelledby": resolvedId,
+      })}
+    >
+      {filteredOptions.length === 0 ? (
+        <li
+          role="presentation"
+          className="px-3 py-2 text-sm text-current/50"
+        >
+          {emptyText}
+        </li>
+      ) : (
+        filteredOptions.map((option, index) => {
+          const selected = option.value === resolvedValue;
+          return (
+            <li key={option.key} role="presentation">
+              <button
+                id={`${resolvedId}-opt-${index}`}
+                ref={(node) => {
+                  listRef.current[index] = node;
+                }}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                disabled={option.disabled}
+                className={cn(
+                  FLOATING_LIST_ITEM_PRIMITIVES.base,
+                  resolveQuickitFocusRingClasses(
+                    focusRingEnabled,
+                    FLOATING_LIST_ITEM_PRIMITIVES.base,
+                  ),
+                  resolveQuickitFocusRingClasses(
+                    focusRingEnabled,
+                    FLOATING_LIST_ITEM_THEME_CLASSES[theme].default,
+                  ),
+                  selected && FLOATING_LIST_ITEM_THEME_CLASSES[theme].selected,
+                  option.disabled &&
+                    FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
+                )}
+                {...getOptionProps(option, index)}
+              >
+                <span className="min-w-0 flex-1 truncate">{option.label}</span>
+                {selected ? (
+                  <CheckFillIcon className="size-4 shrink-0 fill-current text-current" />
+                ) : null}
+              </button>
+            </li>
+          );
+        })
+      )}
+    </ul>
+  ) : null;
+
+  return (
+    <span
+      className={cn(
+        COMBOBOX_PRIMITIVES.wrapper,
+        isAttached && "h-full",
+        group?.layout === "inline" && "flex-1",
+      )}
+    >
+      {name ? <input type="hidden" name={name} value={resolvedValue} /> : null}
+      <div
+        className={cn(
+          "relative flex w-full",
+          isAttached && "h-full",
+        )}
+      >
+        <input
+          ref={referenceRef}
+          id={resolvedId}
+          type="text"
+          autoComplete="off"
+          role="combobox"
+          aria-expanded={open}
+          aria-controls={open ? listboxId : undefined}
+          aria-autocomplete="list"
+          aria-invalid={resolvedInvalid || undefined}
+          aria-required={resolvedRequired || undefined}
+          aria-describedby={describedBy}
+          disabled={resolvedDisabled}
+          placeholder={placeholder}
+          value={inputValue}
+          className={cn(
+            COMBOBOX_PRIMITIVES.input,
+            isAttached
+              ? "h-full rounded-none border-0 shadow-none focus-visible:border-transparent focus-visible:ring-0"
+              : getControlRadius(controlSize),
+            isAttached
+              ? null
+              : COMBOBOX_SIZE_CLASSES[controlSize] ?? COMBOBOX_SIZE_CLASSES.md,
+            resolveQuickitFocusRingClasses(
+              isAttached ? false : focusRingEnabled,
+              resolvedInvalid ? ui.invalid : colorUi.base,
+            ),
+            !isAttached &&
+              !resolvedDisabled &&
+              !resolvedInvalid &&
+              colorUi.hover,
+            "pr-10",
+            className,
+          )}
+          {...interactions.getReferenceProps({
+            ...props,
+            onChange(event) {
+              props.onChange?.(event);
+              const next = event.target.value;
+              setDraftQuery(next);
+              setOpen(true);
+              const list = filterOptionsByQuery(options, next);
+              setActiveIndex(firstEnabledIndex(list));
+            },
+            onClick(event) {
+              props.onClick?.(event);
+              if (!resolvedDisabled) {
+                handleOpenChange(!open);
+              }
+            },
+            onKeyDown(event) {
+              props.onKeyDown?.(event);
+              if (event.defaultPrevented || resolvedDisabled) {
+                return;
+              }
+              if (event.key === "Escape") {
+                handleOpenChange(false);
+                return;
+              }
+              if (
+                !open &&
+                (event.key === "ArrowDown" ||
+                  event.key === "ArrowUp" ||
+                  event.key === "Enter")
+              ) {
+                event.preventDefault();
+                handleOpenChange(true);
+              }
+            },
+          })}
+        />
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden="true"
+          disabled={resolvedDisabled}
+          className={cn(
+            "absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-0.5",
+            COMBOBOX_PRIMITIVES.icon,
+            open && "rotate-180",
+          )}
+          onClick={() => {
+            if (!resolvedDisabled) {
+              handleOpenChange(!open);
+            }
+          }}
+        >
+          <ChevronDownIcon className="size-4 fill-current" />
+        </button>
+      </div>
+
+      {usePortal ? <FloatingPortal>{content}</FloatingPortal> : content}
+    </span>
+  );
+});
+
+export { Combobox };
+export default Combobox;

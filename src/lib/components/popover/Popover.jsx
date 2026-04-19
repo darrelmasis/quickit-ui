@@ -17,7 +17,8 @@ import {
   useRole,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
+import { useMergeRefs } from "@/lib/utils/use-merge-refs";
 import { cn } from "@/lib/utils";
 
 const POPOVER_PRIMITIVES = {
@@ -165,10 +166,6 @@ const POPOVER_THEME_CLASSES = {
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 function getPlacementOrigin(placement) {
   switch (placement) {
     case "top-start":
@@ -200,6 +197,12 @@ function getPlacementOrigin(placement) {
   }
 }
 
+const HOVER_DELAY_PRESETS = {
+  fast: { open: 40, close: 120 },
+  normal: { open: 80, close: 220 },
+  slow: { open: 150, close: 350 },
+};
+
 function getClosedTransform(side) {
   switch (side) {
     case "top":
@@ -222,6 +225,7 @@ function isTriggerDisabled(element) {
 }
 
 export default function Popover({
+  asChild = false,
   arrowHeight = 8,
   arrowFill,
   arrowStrokeWidth = 0.75,
@@ -234,18 +238,31 @@ export default function Popover({
   color = "default",
   content,
   offset: offsetValue = 8,
+  hoverDelayPreset = "normal",
+  open: controlledOpen,
+  onOpenChange,
   placement = "top",
   showArrow = true,
   trigger = "hover",
   usePortal = true,
   zIndex = 2000,
 }) {
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const isOpenControlled = controlledOpen !== undefined;
+  const open = isOpenControlled ? controlledOpen : uncontrolledOpen;
+  const setOpen = useCallback((nextOpen) => {
+    if (!isOpenControlled) {
+      setUncontrolledOpen(nextOpen);
+    }
+    onOpenChange?.(nextOpen);
+  }, [isOpenControlled, onOpenChange]);
   const [arrowElement, setArrowElement] = useState(null);
-  const theme = resolveTheme(useQuickitTheme());
-  const resolvedColor = POPOVER_THEME_CLASSES[theme][color] ? color : "default";
-  const palette = POPOVER_THEME_CLASSES[theme][resolvedColor];
+  const { theme: effectiveTheme } = useQuickitControlState("popover");
+  const resolvedColor = POPOVER_THEME_CLASSES[effectiveTheme][color] ? color : "default";
+  const palette = POPOVER_THEME_CLASSES[effectiveTheme][resolvedColor];
   const isHoverTrigger = trigger === "hover";
+  const hoverDelay =
+    HOVER_DELAY_PRESETS[hoverDelayPreset] ?? HOVER_DELAY_PRESETS.normal;
 
   const { refs, floatingStyles, context } = useFloating({
     open,
@@ -265,14 +282,18 @@ export default function Popover({
   const hover = useHover(context, {
     enabled: isHoverTrigger,
     move: false,
-    delay: { open: 80, close: 220 },
+    delay: hoverDelay,
     handleClose: safePolygon(),
   });
   const click = useClick(context, {
-    enabled: !isHoverTrigger,
+    enabled: !isHoverTrigger && trigger !== "manual",
   });
-  const focus = useFocus(context);
-  const dismiss = useDismiss(context);
+  const focus = useFocus(context, {
+    enabled: trigger !== "manual",
+  });
+  const dismiss = useDismiss(context, {
+    enabled: trigger !== "manual",
+  });
   const role = useRole(context, {
     role: isHoverTrigger ? "tooltip" : "dialog",
   });
@@ -326,7 +347,12 @@ export default function Popover({
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [autoCloseMs, open]);
+  }, [autoCloseMs, open, setOpen]);
+
+  const mergedChildRef = useMergeRefs(
+    isValidElement(children) ? children.ref : null,
+    referenceRef,
+  );
 
   const triggerElement = !isValidElement(children) ? (
     <span
@@ -336,6 +362,17 @@ export default function Popover({
     >
       {children}
     </span>
+  ) : asChild ? (
+    cloneElement(children, {
+      ...(isTriggerDisabled(children)
+        ? { "data-state": open ? "open" : "closed" }
+        : getReferenceProps({
+          ...children.props,
+          "data-state": open ? "open" : "closed",
+        })),
+      ref: mergedChildRef,
+      className: cn(children.props.className),
+    })
   ) : (
     <span
       ref={referenceRef}

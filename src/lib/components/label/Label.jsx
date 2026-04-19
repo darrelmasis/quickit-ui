@@ -1,61 +1,35 @@
 import { forwardRef } from "react";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-import { useFormControl } from "@/lib/components/form-control";
 
 const LABEL_THEME_CLASSES = {
-  light: {
-    base: "text-slate-950",
-    muted: "text-red-600",
-  },
-  dark: {
-    base: "text-stone-50",
-    muted: "text-red-300",
-  },
+  light: "text-slate-950/85",
+  dark: "text-zinc-50/85",
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
+const LABEL_SIZE_CLASSES = {
+  sm: "text-xs px-0.5",
+  md: "text-[0.85rem] px-0.1",
+};
 
 const Label = forwardRef(function Label(
-  {
-    children,
-    className,
-    htmlFor,
-    optional = false,
-    requiredIndicator = true,
-    ...props
-  },
+  { children, className, size = "md", ...props },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
-  const ui = LABEL_THEME_CLASSES[theme];
-  const field = useFormControl();
-  const showRequiredIndicator =
-    requiredIndicator && field?.required && !optional;
+  const { theme } = useQuickitControlState("label");
 
   return (
     <label
       ref={ref}
-      htmlFor={htmlFor ?? field?.controlId}
       className={cn(
-        "inline-flex cursor-pointer items-center gap-1.5 text-sm font-medium leading-6",
-        field?.disabled && "cursor-not-allowed opacity-60",
-        ui.base,
+        "inline-block font-medium tracking-[-0.01em]",
+        LABEL_THEME_CLASSES[theme],
+        LABEL_SIZE_CLASSES[size] ?? LABEL_SIZE_CLASSES.md,
         className,
       )}
       {...props}
     >
-      <span>{children}</span>
-      {showRequiredIndicator ? (
-        <span aria-hidden="true" className={ui.muted}>
-          *
-        </span>
-      ) : null}
-      {optional ? (
-        <span className="text-xs font-medium opacity-70">(Opcional)</span>
-      ) : null}
+      {children}
     </label>
   );
 });

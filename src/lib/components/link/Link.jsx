@@ -1,11 +1,5 @@
-import { forwardRef, useEffect } from "react";
-import {
-  useQuickitFocusRing,
-  useQuickitPressEffect,
-  useQuickitRipple,
-  useQuickitTheme,
-  resolveQuickitThemeMode,
-} from "@/lib/theme";
+import { forwardRef } from "react";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
@@ -15,6 +9,7 @@ import {
   ACTION_CONTROL_THEME_CLASSES,
   getActionControlRadius,
   resolveActionActivePseudoClasses,
+  resolveActionActiveStateClasses,
   resolveActionColor,
   resolveActionRippleStyles,
   resolveActionShape,
@@ -26,33 +21,99 @@ import {
   useRippleEffect,
 } from "@/lib/components/_shared/use-ripple-effect";
 
+const LINK_PRIMITIVES = {
+  base: [
+    "qi-link inline-flex items-center gap-1.5 font-medium transition-all duration-200 outline-none",
+    "focus-visible:ring-4 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+  ].join(" "),
+};
+
+const LINK_TEXT_VARIANT_CLASSES = {
+  default: "",
+  muted: "opacity-85",
+  subtle: "opacity-70",
+};
+
 const LINK_THEME_CLASSES = {
   light: {
-    default:
-      "text-blue-700 hover:text-blue-800 focus-visible:bg-blue-50/80 focus-visible:outline-blue-300 focus-visible:ring-blue-200/70",
-    muted:
-      "text-slate-600 hover:text-slate-950 focus-visible:bg-slate-100 focus-visible:outline-slate-300 focus-visible:ring-slate-300/80",
-    subtle:
-      "text-slate-500 hover:text-slate-950 focus-visible:bg-slate-100/90 focus-visible:outline-slate-300 focus-visible:ring-slate-300/80",
+    color: {
+      neutral: "text-slate-600 hover:text-slate-900 focus-visible:ring-slate-400/40",
+      slate: "text-slate-600 hover:text-slate-900 focus-visible:ring-slate-400/40",
+      zinc: "text-zinc-600 hover:text-zinc-900 focus-visible:ring-zinc-400/40",
+      primary: "text-sky-600 hover:text-sky-700 focus-visible:ring-sky-400/40",
+      brand: "text-brand-600 hover:text-brand-700 focus-visible:ring-brand-400/40",
+      success: "text-emerald-600 hover:text-emerald-700 focus-visible:ring-emerald-400/40",
+      danger: "text-rose-600 hover:text-rose-700 focus-visible:ring-rose-400/40",
+      warning: "text-amber-600 hover:text-amber-700 focus-visible:ring-amber-400/40",
+      info: "text-cyan-600 hover:text-cyan-700 focus-visible:ring-cyan-400/40",
+      light: "text-slate-400 hover:text-slate-200 focus-visible:ring-slate-300/40",
+      dark: "text-zinc-800 hover:text-zinc-950 focus-visible:ring-zinc-500/40",
+      black: "text-black hover:text-neutral-800 focus-visible:ring-neutral-400/40",
+    },
+    decoration: {
+      underline: "underline hover:no-underline underline-offset-4",
+      none: "no-underline",
+      hover: "no-underline hover:underline underline-offset-4",
+    },
   },
   dark: {
-    default:
-      "text-blue-300 hover:text-blue-200 focus-visible:bg-blue-400/10 focus-visible:outline-blue-300 focus-visible:ring-blue-400/30",
-    muted:
-      "text-stone-300 hover:text-stone-50 focus-visible:bg-zinc-900 focus-visible:outline-zinc-700 focus-visible:ring-zinc-500/35",
-    subtle:
-      "text-stone-400 hover:text-stone-50 focus-visible:bg-zinc-900 focus-visible:outline-zinc-700 focus-visible:ring-zinc-500/35",
+    color: {
+      neutral: "text-stone-300 hover:text-stone-50 focus-visible:ring-stone-500/40",
+      slate: "text-slate-300 hover:text-slate-50 focus-visible:ring-slate-500/40",
+      zinc: "text-zinc-300 hover:text-zinc-50 focus-visible:ring-zinc-500/40",
+      primary: "text-sky-400 hover:text-sky-300 focus-visible:ring-sky-500/40",
+      brand: "text-brand-400 hover:text-brand-300 focus-visible:ring-brand-500/40",
+      success: "text-emerald-400 hover:text-emerald-300 focus-visible:ring-emerald-500/40",
+      danger: "text-rose-400 hover:text-rose-300 focus-visible:ring-rose-500/40",
+      warning: "text-amber-400 hover:text-amber-300 focus-visible:ring-amber-500/40",
+      info: "text-cyan-400 hover:text-cyan-300 focus-visible:ring-cyan-500/40",
+      light: "text-slate-200 hover:text-white focus-visible:ring-slate-100/40",
+      dark: "text-zinc-400 hover:text-zinc-200 focus-visible:ring-zinc-600/40",
+      black: "text-white hover:text-stone-200 focus-visible:ring-white/40",
+    },
+    decoration: {
+      underline: "underline hover:no-underline underline-offset-4",
+      none: "no-underline",
+      hover: "no-underline hover:underline underline-offset-4",
+    },
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
+const LINK_UNDERLINE_TO_DECORATION = {
+  always: "underline",
+  hover: "hover",
+  none: "none",
+};
+
+const LINK_SIZE_CLASSES = {
+  xs: "text-xs",
+  sm: "text-sm",
+  md: "text-base",
+  lg: "text-lg",
+};
+
+function resolveExternalLinkRel(target, rel) {
+  if (target !== "_blank") {
+    return rel;
+  }
+
+  const parts = new Set(
+    String(rel ?? "")
+      .split(/\s+/u)
+      .filter(Boolean),
+  );
+
+  parts.add("noopener");
+  parts.add("noreferrer");
+
+  return Array.from(parts).join(" ");
 }
 
 const Link = forwardRef(function Link(
   {
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
+    active = false,
     activeMotion,
     appearance = "text",
     children,
@@ -64,11 +125,12 @@ const Link = forwardRef(function Link(
     onKeyDown,
     onPointerDown,
     pressEffect,
+    rel,
     ripple,
     shape = "default",
     size = "md",
     style,
-    tabIndex,
+    target,
     title,
     underline = "hover",
     variant = "default",
@@ -76,104 +138,120 @@ const Link = forwardRef(function Link(
   },
   ref,
 ) {
-  // Link puede funcionar como texto o como botón. Esta bifurcación vive en un
-  // solo componente para no duplicar color, focus ring y press effects.
-  const theme = resolveTheme(useQuickitTheme());
+  const {
+    theme,
+    focusRing: focusRingEnabled,
+    ripple: resolvedRipple,
+    pressEffect: resolvedPressEffect,
+  } = useQuickitControlState("link", {
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    children,
+    pressEffect,
+    ripple,
+    shape,
+    title,
+    ...props,
+  });
   const ui = LINK_THEME_CLASSES[theme];
-  const isButtonAppearance = appearance === "button";
-  const resolvedTextVariant = ui[variant] ? variant : "default";
-  const resolvedButtonVariant = resolveActionVariant(theme, variant);
-  const resolvedColor = resolveActionColor(theme, resolvedButtonVariant, color);
+  const resolvedColor = ui.color[color] ? color : "primary";
+  const resolvedDecorationKey =
+    LINK_UNDERLINE_TO_DECORATION[underline] ?? LINK_UNDERLINE_TO_DECORATION.hover;
+  const resolvedDecoration = ui.decoration[resolvedDecorationKey]
+    ? resolvedDecorationKey
+    : "hover";
   const resolvedShape = resolveActionShape(shape);
   const resolvedSize = resolveActionSize(size);
-  const focusRingEnabled = useQuickitFocusRing("link");
-  const providerPressEffect = useQuickitPressEffect();
-  const rippleEnabled = useQuickitRipple("link");
-  const resolvedPressEffect =
-    pressEffect === "ripple" || pressEffect === "transform"
-      ? pressEffect
-      : providerPressEffect;
+  const resolvedVariant = resolveActionVariant(theme, variant);
+  const resolvedButtonColor = resolveActionColor(theme, resolvedVariant, color);
+  const resolvedRadiusClass = getActionControlRadius(resolvedShape, resolvedSize);
+  const resolvedSizeClasses =
+    ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
+    ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md ??
+    ACTION_CONTROL_SIZE_CLASSES.default.md;
   const motionAllowedByShape =
     resolvedShape !== "square" && resolvedShape !== "circle";
   const resolvedActiveMotion =
     activeMotion ??
     (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
-  const resolvedRipple =
-    ripple ??
-    (resolvedPressEffect === "ripple" ? rippleEnabled : false);
-  const underlineClasses = {
-    always: "underline underline-offset-4",
-    hover: "no-underline hover:underline hover:underline-offset-4",
-    none: "no-underline",
-  };
   const rippleUi = resolveActionRippleStyles(
     theme,
-    resolvedButtonVariant,
-    resolvedColor,
+    resolvedVariant,
+    resolvedButtonColor,
   );
-  const rippleOpacity = rippleUi.opacity;
-  const rippleDuration =
-    {
-      sm: 700,
-      md: 780,
-      lg: 860,
-      xl: 940,
-      "2xl": 1020,
-    }[resolvedSize] ?? 780;
-  const {
-    handleKeyDown: handleRippleKeyDown,
-    handlePointerDown: handleRipplePointerDown,
-    rippleLayer,
-  } = useRippleEffect({
-    duration: rippleDuration,
-    enabled: isButtonAppearance && resolvedRipple && !disabled,
-    opacity: rippleOpacity,
-  });
+  const { handleKeyDown: handleRippleKeyDown, handlePointerDown: handleRipplePointerDown, rippleLayer } =
+    useRippleEffect({
+      duration: 780,
+      enabled: appearance === "button" && resolvedRipple && !disabled,
+      opacity: rippleUi.opacity,
+    });
 
-  useEffect(() => {
-    if (process.env.NODE_ENV === "production") {
-      return;
-    }
+  if (appearance !== "button") {
+    const resolvedTextVariant = LINK_TEXT_VARIANT_CLASSES[variant]
+      ? variant
+      : "default";
 
-    if (
-      !isButtonAppearance ||
-      (resolvedShape !== "square" && resolvedShape !== "circle")
-    ) {
-      return;
-    }
-
-    if (ariaLabel || ariaLabelledBy || title) {
-      return;
-    }
-
-    // Igual que Button, los icon links necesitan nombre accesible explícito.
-    console.warn(
-      'Quickit UI Link: links with appearance="button" and shape="square" or shape="circle" should include aria-label, aria-labelledby, or title.',
+    return (
+      <a
+        ref={ref}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        target={target}
+        rel={resolveExternalLinkRel(target, rel)}
+        title={title}
+        className={cn(
+          resolveQuickitFocusRingClasses(focusRingEnabled, LINK_PRIMITIVES.base),
+          LINK_SIZE_CLASSES[size] ?? LINK_SIZE_CLASSES.md,
+          LINK_TEXT_VARIANT_CLASSES[resolvedTextVariant],
+          resolveQuickitFocusRingClasses(focusRingEnabled, ui.color[resolvedColor]),
+          ui.decoration[resolvedDecoration],
+          disabled && "pointer-events-none opacity-50",
+          className,
+        )}
+        {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
+        {...props}
+      >
+        {children}
+      </a>
     );
-  }, [ariaLabel, ariaLabelledBy, isButtonAppearance, resolvedShape, title]);
+  }
 
   return (
     <a
       ref={ref}
-      aria-disabled={disabled || undefined}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
-      style={
-        isButtonAppearance
-          ? {
-              "--qi-ripple-color": rippleUi.color,
-              "--qi-ripple-opacity": rippleOpacity,
-              ...style,
-            }
-          : style
-      }
-      onClick={
-        disabled
-          ? (event) => {
-              event.preventDefault();
-            }
-          : onClick
-      }
+      target={target}
+      title={title}
+      rel={resolveExternalLinkRel(target, rel)}
+      {...props}
+      className={cn(
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          ACTION_CONTROL_BASE_CLASSES,
+        ),
+        resolvedRipple && "qi-ripple-host isolate overflow-hidden",
+        resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
+        fullWidth && "w-full",
+        resolvedRadiusClass,
+        resolvedSizeClasses,
+        resolveQuickitFocusRingClasses(
+          focusRingEnabled,
+          ACTION_CONTROL_THEME_CLASSES[theme][resolvedVariant]?.[
+            resolvedButtonColor
+          ] ?? ACTION_CONTROL_THEME_CLASSES[theme].solid.primary,
+        ),
+        resolveActionActivePseudoClasses(theme, resolvedVariant, resolvedButtonColor),
+        active &&
+          resolveActionActiveStateClasses(theme, resolvedVariant, resolvedButtonColor),
+        disabled && "pointer-events-none opacity-50",
+        className,
+      )}
+      style={{
+        "--qi-ripple-color": rippleUi.color,
+        "--qi-ripple-opacity": rippleUi.opacity,
+        ...style,
+      }}
       onPointerDown={(event) => {
         onPointerDown?.(event);
 
@@ -212,57 +290,19 @@ const Link = forwardRef(function Link(
           handleRippleKeyDown(event);
         }
       }}
-      tabIndex={disabled ? -1 : tabIndex}
-      className={cn(
-        isButtonAppearance
-          ? resolveQuickitFocusRingClasses(
-              focusRingEnabled,
-              ACTION_CONTROL_BASE_CLASSES,
-            )
-          : resolveQuickitFocusRingClasses(
-              focusRingEnabled,
-              "inline-flex items-center gap-1 rounded-[0.45rem] px-1.5 py-0.5 text-sm font-medium outline-none transition-[color,background-color,box-shadow] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:ring-4 focus-visible:ring-offset-0",
-            ),
-        isButtonAppearance
-          ? [
-              resolvedRipple && "qi-ripple-host isolate overflow-hidden",
-              getActionControlRadius(resolvedShape, resolvedSize),
-              resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
-              ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
-                ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md,
-              resolveQuickitFocusRingClasses(
-                focusRingEnabled,
-                ACTION_CONTROL_THEME_CLASSES[theme][resolvedButtonVariant]?.[
-                  resolvedColor
-                ] ?? ACTION_CONTROL_THEME_CLASSES[theme].solid.primary,
-              ),
-              resolveActionActivePseudoClasses(
-                theme,
-                resolvedButtonVariant,
-                resolvedColor,
-              ),
-              fullWidth && "w-full",
-            ]
-          : [
-              resolveQuickitFocusRingClasses(
-                focusRingEnabled,
-                ui[resolvedTextVariant],
-              ),
-              underlineClasses[underline] ?? underlineClasses.hover,
-            ],
-        disabled && "pointer-events-none opacity-60",
-        className,
-      )}
-      {...props}
+      onClick={(event) => {
+        onClick?.(event);
+
+        if (disabled) {
+          event.preventDefault();
+        }
+      }}
+      {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
     >
-      {isButtonAppearance && resolvedRipple ? rippleLayer : null}
-      {isButtonAppearance ? (
-        <span className="relative z-[1] inline-flex items-center gap-2">
-          {children}
-        </span>
-      ) : (
-        children
-      )}
+      {resolvedRipple ? rippleLayer : null}
+      <span className="relative z-[1] inline-flex items-center gap-2">
+        {children}
+      </span>
     </a>
   );
 });

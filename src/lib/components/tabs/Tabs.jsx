@@ -1,5 +1,5 @@
 import { useCallback, useId, useMemo, useState } from "react";
-import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
@@ -81,26 +81,22 @@ const TABS_THEME_CLASSES = {
     triggerIdle:
       "text-stone-300 hover:bg-zinc-950 hover:text-stone-50 focus-visible:outline-zinc-700",
     triggerActive: {
-      neutral: "border-zinc-700 bg-zinc-950 text-zinc-100",
-      slate: "border-slate-700 bg-slate-900 text-slate-100",
-      zinc: "border-zinc-700 bg-zinc-900 text-zinc-100",
+      neutral: "border-neutral-700 bg-neutral-800 text-neutral-100",
+      slate: "border-slate-700 bg-slate-800 text-slate-100",
+      zinc: "border-zinc-700 bg-zinc-800 text-zinc-100",
       primary: "border-sky-800 bg-sky-950 text-sky-200",
       brand: "border-brand-800 bg-brand-950 text-brand-200",
       success: "border-emerald-800 bg-emerald-950 text-emerald-200",
       danger: "border-rose-800 bg-rose-950 text-rose-200",
       warning: "border-amber-800 bg-amber-950 text-amber-200",
       info: "border-cyan-800 bg-cyan-950 text-cyan-200",
-      light: "border-slate-600 bg-slate-800 text-slate-50",
+      light: "border-neutral-600 bg-neutral-800 text-neutral-50",
       dark: "border-zinc-800 bg-zinc-950 text-white",
       black: "border-slate-950 bg-black text-white",
     },
     content: "text-stone-300",
   },
 };
-
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
 
 function getEnabledTabs(container) {
   return Array.from(container.querySelectorAll('[role="tab"]')).filter(
@@ -119,8 +115,6 @@ export function Tabs({
   size = "md",
   value: controlledValue,
 }) {
-  // Tabs mantiene el valor seleccionado y delega la interacción fina a
-  // TabsTrigger/TabsContent a través de contexto.
   const generatedId = useId();
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -186,7 +180,7 @@ export function Tabs({
 
 export function TabsList({ children, className }) {
   const { orientation, size } = useTabsContext("TabsList");
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
 
   return (
@@ -222,8 +216,7 @@ export function TabsTrigger({
     size,
     value: selectedValue,
   } = useTabsContext("TabsTrigger");
-  const theme = resolveTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("tabs");
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const isSelected = selectedValue === value;
 
@@ -244,7 +237,6 @@ export function TabsTrigger({
     const isHorizontal = orientation === "horizontal";
     let nextIndex = currentIndex;
 
-    // La navegación por teclado ignora tabs disabled y soporta ambos ejes.
     if (
       (isHorizontal && event.key === "ArrowRight") ||
       (!isHorizontal && event.key === "ArrowDown")
@@ -320,7 +312,7 @@ export function TabsContent({
   value,
 }) {
   const { baseId, value: selectedValue } = useTabsContext("TabsContent");
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const isSelected = selectedValue === value;
 

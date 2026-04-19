@@ -5,16 +5,22 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { CloseIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import {
+  focusFirstElement,
+  trapFocusWithin,
+} from "@/lib/components/_shared/overlay-focus";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
 import { DrawerContext, useDrawerContext } from "./drawer-context";
 
 const ANIMATION_DURATION = 160;
+const OVERLAY_DURATION = 180;
 let drawerIdCounter = 0;
 let drawerZIndexCounter = 60;
 const drawerStack = [];
@@ -23,28 +29,24 @@ const PLACEMENTS = {
   right: {
     panel: "inset-y-0 right-0 h-full",
     size: "w-full max-w-md",
-    hidden: "translate-x-full",
   },
   left: {
     panel: "inset-y-0 left-0 h-full",
     size: "w-full max-w-md",
-    hidden: "-translate-x-full",
   },
   bottom: {
     panel: "inset-x-0 bottom-0 w-full",
     size: "max-h-[80vh]",
-    hidden: "translate-y-full",
   },
   top: {
     panel: "inset-x-0 top-0 w-full",
     size: "max-h-[80vh]",
-    hidden: "-translate-y-full",
   },
 };
 
 const DRAWER_PRIMITIVES = {
   overlay:
-    "fixed inset-0 bg-neutral-950/70 transition-opacity duration-[160ms] ease-out",
+    "fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
   viewport: "fixed inset-0 pointer-events-none",
   panel: [
     "pointer-events-auto absolute flex w-full flex-col overflow-hidden border",
@@ -72,10 +74,6 @@ const DRAWER_THEME_CLASSES = {
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 function getDrawerTransform(placement, isVisible) {
   if (isVisible) {
     return "translate3d(0, 0, 0)";
@@ -83,15 +81,15 @@ function getDrawerTransform(placement, isVisible) {
 
   switch (placement) {
     case "left":
-      return "translate3d(-100%, 0, 0)";
+      return "translate3d(calc(-100% - 1.25rem), 0, 0)";
     case "right":
-      return "translate3d(100%, 0, 0)";
+      return "translate3d(calc(100% + 1.25rem), 0, 0)";
     case "top":
-      return "translate3d(0, -100%, 0)";
+      return "translate3d(0, calc(-100% - 1rem), 0)";
     case "bottom":
-      return "translate3d(0, 100%, 0)";
+      return "translate3d(0, calc(100% + 1rem), 0)";
     default:
-      return "translate3d(100%, 0, 0)";
+      return "translate3d(calc(100% + 1.25rem), 0, 0)";
   }
 }
 
@@ -121,12 +119,14 @@ function isTriggerDisabled(element) {
 
 export function Drawer({
   children,
+  closeOnEscape = true,
   defaultOpen = false,
   onBeforeClose,
   onOpenChange,
   open: controlledOpen,
   outsideClick = true,
   placement = "right",
+  showCloseButton = true,
   size,
   zIndex: customZIndex,
 }) {
@@ -134,12 +134,18 @@ export function Drawer({
   const [visible, setVisible] = useState(defaultOpen);
   const [rendered, setRendered] = useState(defaultOpen);
   const [instanceZIndex, setInstanceZIndex] = useState(customZIndex ?? 60);
+  const [titleCount, setTitleCount] = useState(0);
+  const [descriptionCount, setDescriptionCount] = useState(0);
+  const previousFocusedElementRef = useRef(null);
+  const triggerElementRef = useRef(null);
   const [drawerId] = useState(() => {
     drawerIdCounter += 1;
     return drawerIdCounter;
   });
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
+  const titleId = `qi-drawer-title-${drawerId}`;
+  const descriptionId = `qi-drawer-description-${drawerId}`;
 
   const setOpen = useCallback(
     (nextValue) => {
@@ -164,40 +170,57 @@ export function Drawer({
     setOpen(false);
   }, [onBeforeClose, setOpen]);
 
+  const registerTitle = useCallback((enabled) => {
+    setTitleCount((count) => Math.max(0, count + (enabled ? 1 : -1)));
+  }, []);
+
+  const registerDescription = useCallback((enabled) => {
+    setDescriptionCount((count) => Math.max(0, count + (enabled ? 1 : -1)));
+  }, []);
+
+  const setTriggerElement = useCallback((element) => {
+    triggerElementRef.current = element;
+  }, []);
+
   useEffect(() => {
-    let openFrameId = 0;
-    let openMidFrameId = 0;
-    let openEndFrameId = 0;
-    let closeFrameId = 0;
+    if (open && typeof document !== "undefined") {
+      previousFocusedElementRef.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+    }
+  }, [open]);
+
+  useEffect(() => {
+    let enterFrameId = 0;
+    let settleFrameId = 0;
+    let exitFrameId = 0;
     let closeTimeoutId = 0;
 
     if (open) {
-      openFrameId = window.requestAnimationFrame(() => {
+      enterFrameId = window.requestAnimationFrame(() => {
         setRendered(true);
         setVisible(false);
-        openMidFrameId = window.requestAnimationFrame(() => {
-          openEndFrameId = window.requestAnimationFrame(() => {
-            setVisible(true);
-          });
+        settleFrameId = window.requestAnimationFrame(() => {
+          setVisible(true);
         });
       });
 
       return () => {
-        window.cancelAnimationFrame(openFrameId);
-        window.cancelAnimationFrame(openMidFrameId);
-        window.cancelAnimationFrame(openEndFrameId);
+        window.cancelAnimationFrame(enterFrameId);
+        window.cancelAnimationFrame(settleFrameId);
       };
     }
 
-    closeFrameId = window.requestAnimationFrame(() => {
+    exitFrameId = window.requestAnimationFrame(() => {
       setVisible(false);
       closeTimeoutId = window.setTimeout(() => {
         setRendered(false);
-      }, ANIMATION_DURATION);
+      }, Math.max(ANIMATION_DURATION, OVERLAY_DURATION));
     });
 
     return () => {
-      window.cancelAnimationFrame(closeFrameId);
+      window.cancelAnimationFrame(exitFrameId);
       if (closeTimeoutId) {
         window.clearTimeout(closeTimeoutId);
       }
@@ -206,7 +229,22 @@ export function Drawer({
 
   useEffect(() => {
     if (!rendered) {
-      return undefined;
+      const previousFocusedElement =
+        triggerElementRef.current ?? previousFocusedElementRef.current;
+
+      if (!previousFocusedElement || typeof window === "undefined") {
+        return undefined;
+      }
+
+      const frameId = window.requestAnimationFrame(() => {
+        previousFocusedElement.focus?.();
+        previousFocusedElementRef.current = null;
+        triggerElementRef.current = null;
+      });
+
+      return () => {
+        window.cancelAnimationFrame(frameId);
+      };
     }
 
     addDrawerToStack(drawerId);
@@ -233,7 +271,7 @@ export function Drawer({
   }, [customZIndex, drawerId, rendered]);
 
   useEffect(() => {
-    if (!rendered || !outsideClick) {
+    if (!rendered || !closeOnEscape) {
       return undefined;
     }
 
@@ -250,29 +288,49 @@ export function Drawer({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [close, drawerId, outsideClick, rendered]);
+  }, [close, closeOnEscape, drawerId, rendered]);
 
   const value = useMemo(
     () => ({
       close,
+      closeOnEscape,
+      descriptionId,
+      hasDescription: descriptionCount > 0,
+      hasTitle: titleCount > 0,
       instanceZIndex,
+      isTopmost: () => isTopmostDrawer(drawerId),
       open,
       outsideClick,
       placement,
+      registerDescription,
+      registerTitle,
       rendered,
       setOpen,
+      setTriggerElement,
+      showCloseButton,
       size,
+      titleId,
       visible,
     }),
     [
       close,
+      closeOnEscape,
+      descriptionCount,
+      descriptionId,
+      drawerId,
       instanceZIndex,
       open,
       outsideClick,
       placement,
+      registerDescription,
+      registerTitle,
       rendered,
       setOpen,
+      setTriggerElement,
+      showCloseButton,
       size,
+      titleCount,
+      titleId,
       visible,
     ],
   );
@@ -288,7 +346,7 @@ export function DrawerTrigger({
   disabled = false,
   ...props
 }) {
-  const { open, setOpen } = useDrawerContext("DrawerTrigger");
+  const { open, setOpen, setTriggerElement } = useDrawerContext("DrawerTrigger");
 
   if (asChild) {
     const child = Children.only(children);
@@ -315,6 +373,7 @@ export function DrawerTrigger({
         child.props.onClick?.(event);
 
         if (!event.defaultPrevented) {
+          setTriggerElement(event.currentTarget);
           setOpen(!open);
         }
       },
@@ -332,6 +391,7 @@ export function DrawerTrigger({
         props.onClick?.(event);
 
         if (!disabled && !event.defaultPrevented) {
+          setTriggerElement(event.currentTarget);
           setOpen(!open);
         }
       }}
@@ -344,18 +404,36 @@ export function DrawerTrigger({
 export function DrawerContent({ children, className }) {
   const {
     close,
+    descriptionId,
     instanceZIndex,
+    isTopmost,
     outsideClick,
     placement,
     rendered,
     size,
+    titleId,
     visible,
   } = useDrawerContext("DrawerContent");
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("drawer");
   const ui = DRAWER_THEME_CLASSES[theme];
   const resolvedPlacement = PLACEMENTS[placement] ?? PLACEMENTS.right;
   const sizeClass = size ?? resolvedPlacement.size;
   const transform = getDrawerTransform(placement, visible);
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !rendered) {
+      return undefined;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      focusFirstElement(panelRef.current, panelRef.current);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [rendered]);
 
   if (typeof window === "undefined" || !rendered) {
     return null;
@@ -369,11 +447,15 @@ export function DrawerContent({ children, className }) {
           visible ? "opacity-100" : "opacity-0",
         )}
         style={{ zIndex: instanceZIndex }}
-        onClick={outsideClick ? close : undefined}
+        onClick={outsideClick && isTopmost() ? close : undefined}
       />
 
-      <div className={DRAWER_PRIMITIVES.viewport} style={{ zIndex: instanceZIndex + 1 }}>
+      <div
+        className={DRAWER_PRIMITIVES.viewport}
+        style={{ zIndex: instanceZIndex + 1 }}
+      >
         <div
+          ref={panelRef}
           className={cn(
             DRAWER_PRIMITIVES.panel,
             ui.panel,
@@ -383,13 +465,21 @@ export function DrawerContent({ children, className }) {
           )}
           style={{
             transform,
-            opacity: visible ? 1 : 0,
+            opacity: visible ? 1 : 0.72,
             transition:
-              "transform 180ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease",
+              "transform 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
           role="dialog"
           aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={descriptionId}
+          tabIndex={-1}
           onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => {
+            if (event.key === "Tab" && isTopmost()) {
+              trapFocusWithin(panelRef.current, event);
+            }
+          }}
         >
           {children}
         </div>
@@ -400,14 +490,14 @@ export function DrawerContent({ children, className }) {
 }
 
 export function DrawerHeader({ children, className }) {
-  const { close, outsideClick } = useDrawerContext("DrawerHeader");
-  const theme = resolveTheme(useQuickitTheme());
+  const { close, showCloseButton } = useDrawerContext("DrawerHeader");
+  const { theme } = useQuickitControlState("drawer");
   const ui = DRAWER_THEME_CLASSES[theme];
 
   return (
     <div className={cn(DRAWER_PRIMITIVES.header, ui.header, className)}>
       <div className="min-w-0 flex-1">{children}</div>
-      {outsideClick ? (
+      {showCloseButton ? (
         <Button
           type="button"
           variant="ghost"
@@ -425,9 +515,20 @@ export function DrawerHeader({ children, className }) {
   );
 }
 
-export function DrawerTitle({ centered = false, children, className }) {
+export function DrawerTitle({ centered = false, children, className, id }) {
+  const { registerTitle, titleId } = useDrawerContext("DrawerTitle");
+
+  useEffect(() => {
+    registerTitle(true);
+
+    return () => {
+      registerTitle(false);
+    };
+  }, [registerTitle]);
+
   return (
     <h2
+      id={id ?? titleId}
       className={cn(
         "text-lg font-semibold tracking-[-0.02em]",
         centered && "text-center",
@@ -439,12 +540,21 @@ export function DrawerTitle({ centered = false, children, className }) {
   );
 }
 
-export function DrawerBody({ children, className }) {
-  const theme = resolveTheme(useQuickitTheme());
+export function DrawerBody({ children, className, id }) {
+  const { descriptionId, registerDescription } = useDrawerContext("DrawerBody");
+  const { theme } = useQuickitControlState("drawer");
   const ui = DRAWER_THEME_CLASSES[theme];
 
+  useEffect(() => {
+    registerDescription(true);
+
+    return () => {
+      registerDescription(false);
+    };
+  }, [registerDescription]);
+
   return (
-    <div className={cn(DRAWER_PRIMITIVES.body, ui.muted, className)}>
+    <div id={id ?? descriptionId} className={cn(DRAWER_PRIMITIVES.body, ui.muted, className)}>
       {children}
     </div>
   );
@@ -455,7 +565,7 @@ export function DrawerActions({
   className,
   placement = "end",
 }) {
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("drawer");
   const ui = DRAWER_THEME_CLASSES[theme];
 
   return (

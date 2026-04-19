@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { QUICKIT_SEMANTIC_COLORS, resolveQuickitToken } from "@/lib/tokens";
 
@@ -24,9 +24,9 @@ const PROGRESS_COLORS = {
     black: "bg-black",
   },
   dark: {
-    neutral: "bg-neutral-100",
-    slate: "bg-slate-100",
-    zinc: "bg-zinc-100",
+    neutral: "bg-neutral-500",
+    slate: "bg-slate-500",
+    zinc: "bg-zinc-500",
     primary: "bg-sky-300",
     brand: "bg-brand-300",
     success: "bg-emerald-300",
@@ -45,10 +45,6 @@ const PROGRESS_SIZES = {
   lg: "h-3.5",
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 const Progress = forwardRef(function Progress(
   {
     className,
@@ -61,7 +57,7 @@ const Progress = forwardRef(function Progress(
   },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("progress");
   const resolvedColor = resolveQuickitToken(
     QUICKIT_SEMANTIC_COLORS,
     color,

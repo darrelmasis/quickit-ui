@@ -1,155 +1,119 @@
-import { forwardRef, useId } from "react";
-import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { CheckIcon, MinusIcon } from "@/lib/assets/icons";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
-import { CheckStrokeIcon } from "@/lib/assets/icons";
-import { useFormControl } from "@/lib/components/form-control";
-import { Label } from "@/lib/components/label";
+import { useFormControl } from "../form-control/form-control-context";
+
+const CHECKBOX_PRIMITIVES = {
+  host: "flex cursor-pointer items-center gap-2.5",
+  input:
+    "peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed",
+  box: [
+    "pointer-events-none inline-flex items-center justify-center rounded border transition-all duration-200",
+    "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
+  ].join(" "),
+  indicator: "size-3.5 fill-current",
+  label: "font-medium leading-none select-none",
+};
 
 const CHECKBOX_SIZE_CLASSES = {
   sm: {
-    root: "size-4",
-    box: "size-4 rounded-[0.35rem]",
+    box: "size-4 rounded-[0.375rem]",
     icon: "size-3",
   },
   md: {
-    root: "size-5",
-    box: "size-5 rounded-[0.45rem]",
+    box: "size-5 rounded-[0.425rem]",
     icon: "size-3.5",
   },
 };
 
 const CHECKBOX_THEME_CLASSES = {
   light: {
-    box: "border-slate-300 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] peer-hover:border-slate-400 peer-hover:bg-slate-50",
-    focus:
-      "peer-focus-visible:outline-slate-500 peer-focus-visible:ring-slate-400/45 peer-focus-visible:ring-offset-white",
-    colors: {
-      neutral: {
-        box: "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-hover:peer-checked:border-slate-800 peer-hover:peer-checked:bg-slate-800",
-        icon: "text-white",
-      },
-      slate: {
-        box: "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-hover:peer-checked:border-slate-800 peer-hover:peer-checked:bg-slate-800",
-        icon: "text-white",
-      },
-      zinc: {
-        box: "peer-checked:border-zinc-700 peer-checked:bg-zinc-700 peer-hover:peer-checked:border-zinc-800 peer-hover:peer-checked:bg-zinc-800",
-        icon: "text-white",
-      },
-      primary: {
-        box: "peer-checked:border-sky-600 peer-checked:bg-sky-600 peer-hover:peer-checked:border-sky-700 peer-hover:peer-checked:bg-sky-700",
-        icon: "text-white",
-      },
-      brand: {
-        box: "peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-hover:peer-checked:border-brand-700 peer-hover:peer-checked:bg-brand-700",
-        icon: "text-white",
-      },
-      success: {
-        box: "peer-checked:border-emerald-600 peer-checked:bg-emerald-600 peer-hover:peer-checked:border-emerald-700 peer-hover:peer-checked:bg-emerald-700",
-        icon: "text-white",
-      },
-      danger: {
-        box: "peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
-        icon: "text-white",
-      },
-      warning: {
-        box: "peer-checked:border-amber-500 peer-checked:bg-amber-500 peer-hover:peer-checked:border-amber-600 peer-hover:peer-checked:bg-amber-600",
-        icon: "text-slate-950",
-      },
-      info: {
-        box: "peer-checked:border-cyan-600 peer-checked:bg-cyan-600 peer-hover:peer-checked:border-cyan-700 peer-hover:peer-checked:bg-cyan-700",
-        icon: "text-white",
-      },
-      light: {
-        box: "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-hover:peer-checked:border-stone-300 peer-hover:peer-checked:bg-stone-300",
-        icon: "text-stone-950",
-      },
-      dark: {
-        box: "peer-checked:border-zinc-800 peer-checked:bg-zinc-800 peer-hover:peer-checked:border-zinc-900 peer-hover:peer-checked:bg-zinc-900",
-        icon: "text-white",
-      },
-      black: {
-        box: "peer-checked:border-slate-950 peer-checked:bg-slate-950 peer-hover:peer-checked:border-black peer-hover:peer-checked:bg-black",
-        icon: "text-white",
+    box: {
+      idle: "border-slate-300 bg-white hover:border-slate-400",
+      invalid: "border-rose-500 bg-white",
+      focus: "focus-visible:ring-slate-400/50 focus-visible:ring-offset-white",
+      colors: {
+        neutral:
+          "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-checked:text-white",
+        slate:
+          "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-checked:text-white",
+        zinc:
+          "peer-checked:border-zinc-700 peer-checked:bg-zinc-700 peer-checked:text-white",
+        primary:
+          "peer-checked:border-sky-600 peer-checked:bg-sky-600 peer-checked:text-white",
+        brand:
+          "peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-checked:text-white",
+        success:
+          "peer-checked:border-emerald-600 peer-checked:bg-emerald-600 peer-checked:text-white",
+        danger:
+          "peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-checked:text-white",
+        warning:
+          "peer-checked:border-amber-500 peer-checked:bg-amber-500 peer-checked:text-slate-950",
+        info:
+          "peer-checked:border-cyan-600 peer-checked:bg-cyan-600 peer-checked:text-white",
+        light:
+          "peer-checked:border-stone-300 peer-checked:bg-stone-300 peer-checked:text-slate-950",
+        dark:
+          "peer-checked:border-zinc-800 peer-checked:bg-zinc-800 peer-checked:text-white",
+        black:
+          "peer-checked:border-black peer-checked:bg-black peer-checked:text-white",
       },
     },
-    invalid: "border-rose-300 peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
-    invalidIcon: "text-white",
+    label: "text-slate-900",
   },
   dark: {
-    box: "border-zinc-700 bg-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.34)] peer-hover:border-zinc-600 peer-hover:bg-zinc-900",
-    focus:
-      "peer-focus-visible:outline-zinc-400 peer-focus-visible:ring-zinc-400/35 peer-focus-visible:ring-offset-[#09090b]",
-    colors: {
-      neutral: {
-        box: "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
-        icon: "text-zinc-950",
-      },
-      slate: {
-        box: "peer-checked:border-slate-100 peer-checked:bg-slate-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
-        icon: "text-slate-950",
-      },
-      zinc: {
-        box: "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
-        icon: "text-zinc-950",
-      },
-      primary: {
-        box: "peer-checked:border-sky-300 peer-checked:bg-sky-300 peer-hover:peer-checked:border-sky-200 peer-hover:peer-checked:bg-sky-200",
-        icon: "text-zinc-950",
-      },
-      brand: {
-        box: "peer-checked:border-brand-300 peer-checked:bg-brand-300 peer-hover:peer-checked:border-brand-200 peer-hover:peer-checked:bg-brand-200",
-        icon: "text-zinc-950",
-      },
-      success: {
-        box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-hover:peer-checked:border-emerald-200 peer-hover:peer-checked:bg-emerald-200",
-        icon: "text-zinc-950",
-      },
-      danger: {
-        box: "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
-        icon: "text-zinc-950",
-      },
-      warning: {
-        box: "peer-checked:border-amber-300 peer-checked:bg-amber-300 peer-hover:peer-checked:border-amber-200 peer-hover:peer-checked:bg-amber-200",
-        icon: "text-zinc-950",
-      },
-      info: {
-        box: "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-hover:peer-checked:border-cyan-200 peer-hover:peer-checked:bg-cyan-200",
-        icon: "text-zinc-950",
-      },
-      light: {
-        box: "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:bg-stone-100",
-        icon: "text-zinc-950",
-      },
-      dark: {
-        box: "peer-checked:border-zinc-300 peer-checked:bg-zinc-300 peer-hover:peer-checked:border-zinc-200 peer-hover:peer-checked:bg-zinc-200",
-        icon: "text-zinc-950",
-      },
-      black: {
-        box: "peer-checked:border-white peer-checked:bg-white peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:bg-stone-100",
-        icon: "text-zinc-950",
+    box: {
+      idle: "border-zinc-700 bg-zinc-950 hover:border-zinc-600",
+      invalid: "border-rose-500 bg-zinc-950",
+      focus: "focus-visible:ring-zinc-500/50 focus-visible:ring-offset-zinc-950",
+      colors: {
+        neutral:
+          "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-checked:text-zinc-950",
+        slate:
+          "peer-checked:border-slate-100 peer-checked:bg-slate-100 peer-checked:text-slate-950",
+        zinc:
+          "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-checked:text-zinc-950",
+        primary:
+          "peer-checked:border-sky-300 peer-checked:bg-sky-300 peer-checked:text-zinc-950",
+        brand:
+          "peer-checked:border-brand-300 peer-checked:bg-brand-300 peer-checked:text-zinc-950",
+        success:
+          "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-checked:text-zinc-950",
+        danger:
+          "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-checked:text-zinc-950",
+        warning:
+          "peer-checked:border-amber-300 peer-checked:bg-amber-300 peer-checked:text-zinc-950",
+        info:
+          "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-checked:text-zinc-950",
+        light:
+          "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-checked:text-zinc-950",
+        dark:
+          "peer-checked:border-zinc-300 peer-checked:bg-zinc-300 peer-checked:text-zinc-950",
+        black:
+          "peer-checked:border-white peer-checked:bg-white peer-checked:text-zinc-950",
       },
     },
-    invalid: "border-rose-500/70 peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
-    invalidIcon: "text-zinc-950",
+    label: "text-stone-50",
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 const Checkbox = forwardRef(function Checkbox(
   {
+    checked,
+    children,
     className,
     color = "neutral",
     containerClassName,
+    defaultChecked = false,
     disabled = false,
     id,
+    indeterminate = false,
     invalid = false,
     label,
     labelClassName,
+    name,
     onChange,
     onCheckedChange,
     required = false,
@@ -158,87 +122,105 @@ const Checkbox = forwardRef(function Checkbox(
   },
   ref,
 ) {
-  // Checkbox prioriza compatibilidad con formularios nativos, pero añade un
-  // callback directo con boolean para los casos donde React suele ser más cómodo.
-  const generatedId = useId();
-  const theme = resolveTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("checkbox");
+  const inputRef = useRef(null);
+  const formControl = useFormControl();
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("checkbox");
   const ui = CHECKBOX_THEME_CLASSES[theme];
-  const field = useFormControl();
-  const resolvedInvalid = invalid || field?.invalid;
-  const resolvedDisabled = disabled || field?.disabled;
-  const resolvedRequired = required || field?.required;
-  const resolvedColor = ui.colors[color] ? color : "neutral";
+  const isControlled = checked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const resolvedChecked = isControlled ? checked : internalChecked;
+  const resolvedColor = ui.box.colors[color] ? color : "neutral";
   const resolvedSize = CHECKBOX_SIZE_CLASSES[size] ? size : "md";
-  const resolvedId = id ?? field?.controlId ?? generatedId;
-  const describedBy = [
-    props["aria-describedby"],
-    field?.descriptionId,
-    resolvedInvalid ? field?.messageId : null,
-  ]
-    .filter(Boolean)
-    .join(" ") || undefined;
+  const labelContent = label ?? children;
 
-  const control = (
-    <span
-      className={cn(
-        "relative inline-flex shrink-0",
-        CHECKBOX_SIZE_CLASSES[resolvedSize].root,
-        className,
-      )}
-    >
-      <input
-        ref={ref}
-        type="checkbox"
-        id={resolvedId}
-        required={resolvedRequired}
-        disabled={resolvedDisabled}
-        aria-invalid={resolvedInvalid || undefined}
-        aria-describedby={describedBy}
-        className="peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed"
-        onChange={(event) => {
-          onChange?.(event);
-          // onCheckedChange expone el valor ya resuelto para evitar que el
-          // consumidor tenga que leer event.target.checked cada vez.
-          onCheckedChange?.(event.target.checked, event);
-        }}
-        {...props}
-      />
-      <span
-        aria-hidden="true"
-        className={cn(
-          resolveQuickitFocusRingClasses(
-            focusRingEnabled,
-            "pointer-events-none inline-flex items-center justify-center border outline-none transition-[background-color,border-color,opacity,box-shadow] duration-200 peer-disabled:opacity-60 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:ring-4 peer-focus-visible:ring-offset-2 peer-checked:[&_svg]:opacity-100",
-          ),
-          CHECKBOX_SIZE_CLASSES[resolvedSize].box,
-          ui.box,
-          resolveQuickitFocusRingClasses(focusRingEnabled, ui.focus),
-          resolvedInvalid ? ui.invalid : ui.colors[resolvedColor].box,
-        )}
-      >
-        <CheckStrokeIcon
-          className={cn(
-            "pointer-events-none opacity-0 transition-opacity duration-150",
-            CHECKBOX_SIZE_CLASSES[resolvedSize].icon,
-            resolvedInvalid ? ui.invalidIcon : ui.colors[resolvedColor].icon,
-          )}
-        />
-      </span>
-    </span>
-  );
+  const isInvalid = invalid || formControl?.invalid;
+  const isDisabled = disabled || formControl?.disabled;
+  const isRequired = required || formControl?.required;
 
-  if (!label) {
-    return control;
-  }
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.indeterminate = indeterminate;
+    }
+  }, [indeterminate]);
+
+  const handleChange = (event) => {
+    if (isDisabled) {
+      return;
+    }
+
+    if (!isControlled) {
+      setInternalChecked(event.target.checked);
+    }
+
+    onChange?.(event);
+    onCheckedChange?.(event.target.checked, event);
+  };
 
   return (
-    <span className={cn("inline-flex items-center gap-3", containerClassName)}>
-      {control}
-      <Label htmlFor={resolvedId} className={labelClassName}>
-        {label}
-      </Label>
-    </span>
+    <label
+      className={cn(
+        CHECKBOX_PRIMITIVES.host,
+        isDisabled && "pointer-events-none opacity-50",
+        containerClassName,
+      )}
+    >
+      <div className="relative flex items-center">
+        <input
+          {...props}
+          ref={(node) => {
+            inputRef.current = node;
+
+            if (typeof ref === "function") {
+              ref(node);
+              return;
+            }
+
+            if (ref) {
+              ref.current = node;
+            }
+          }}
+          type="checkbox"
+          id={id ?? formControl?.controlId}
+          name={name}
+          checked={isControlled ? checked : undefined}
+          defaultChecked={isControlled ? undefined : defaultChecked}
+          disabled={isDisabled}
+          required={isRequired}
+          aria-invalid={isInvalid || undefined}
+          aria-required={isRequired || undefined}
+          aria-describedby={formControl?.descriptionId}
+          className={cn(CHECKBOX_PRIMITIVES.input, className)}
+          onChange={handleChange}
+        />
+
+        <div
+          className={cn(
+            resolveQuickitFocusRingClasses(focusRingEnabled, CHECKBOX_PRIMITIVES.box),
+            CHECKBOX_SIZE_CLASSES[resolvedSize].box,
+            ui.box.idle,
+            ui.box.focus,
+            ui.box.colors[resolvedColor],
+            isInvalid && ui.box.invalid,
+          )}
+        >
+          {indeterminate ? (
+            <MinusIcon
+              className={cn(CHECKBOX_PRIMITIVES.indicator, CHECKBOX_SIZE_CLASSES[resolvedSize].icon)}
+            />
+          ) : resolvedChecked ? (
+            <CheckIcon
+              className={cn(CHECKBOX_PRIMITIVES.indicator, CHECKBOX_SIZE_CLASSES[resolvedSize].icon)}
+            />
+          ) : null}
+        </div>
+      </div>
+
+      {labelContent ? (
+        <span className={cn(CHECKBOX_PRIMITIVES.label, ui.label, labelClassName)}>
+          {labelContent}
+        </span>
+      ) : null}
+    </label>
   );
 });
 

@@ -51,8 +51,9 @@ export function Pagination({
   const isControlled = controlledPage !== undefined;
   const [internalPage, setInternalPage] = useState(defaultPage);
   const page = isControlled ? controlledPage : internalPage;
-  const safeCount = Math.max(1, count ?? 1);
-  const currentPage = Math.min(Math.max(page, 1), safeCount);
+  const safeCount = Math.max(0, count ?? 0);
+  const currentPage =
+    safeCount === 0 ? 0 : Math.min(Math.max(page, 1), safeCount);
   const items = useMemo(
     () =>
       createPaginationItems({
@@ -64,7 +65,7 @@ export function Pagination({
   );
 
   const setPage = (nextPage) => {
-    if (disabled) {
+    if (disabled || safeCount === 0) {
       return;
     }
 
@@ -88,7 +89,7 @@ export function Pagination({
         variant="outline"
         color={color}
         size="sm"
-        disabled={disabled || currentPage === 1}
+        disabled={disabled || safeCount === 0 || currentPage === 1}
         onClick={() => setPage(currentPage - 1)}
       >
         Anterior
@@ -125,7 +126,7 @@ export function Pagination({
         variant="outline"
         color={color}
         size="sm"
-        disabled={disabled || currentPage === safeCount}
+        disabled={disabled || safeCount === 0 || currentPage === safeCount}
         onClick={() => setPage(currentPage + 1)}
       >
         Siguiente

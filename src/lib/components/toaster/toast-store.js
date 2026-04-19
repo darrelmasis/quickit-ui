@@ -181,6 +181,8 @@ export function dismissToast(id) {
   scheduleRemoveAfterExit(id);
 }
 
+export const dismiss = dismissToast;
+
 /**
  * Actualiza un toast existente (p. ej. transición loading → success en `toast.promise`).
  * `duration` en el patch reprograma el auto-cierre; `0` o ausente tras merge sin número > 0 no programa.

@@ -714,6 +714,7 @@ export declare const Tabs: TabsComponent;
 export declare function useTabs(): TabsContextValue;
 
 export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
+  clickOutside?: boolean;
   collapsible?: boolean;
   defaultValue?: string | string[];
   onValueChange?: (value: string | string[] | null) => void;
@@ -816,21 +817,31 @@ export interface DropdownProps {
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   placement?: string;
-  showArrow?: boolean;
+  /** `click`: al pulsar el trigger (por defecto). `hover`: al pasar el puntero por el trigger. */
+  trigger?: "click" | "hover";
   usePortal?: boolean;
 }
 export interface DropdownContextValue {
+  close: () => void;
+  floatingStyles: React.CSSProperties;
+  getContentRef: () => HTMLDivElement | null;
+  getFloatingProps: (
+    userProps?: Record<string, unknown>,
+  ) => Record<string, unknown>;
+  getItemProps: (
+    userProps?: Record<string, unknown>,
+  ) => Record<string, unknown>;
+  getReferenceProps: (
+    userProps?: Record<string, unknown>,
+  ) => Record<string, unknown>;
+  isMounted: boolean;
   open: boolean;
+  placement: string;
+  refs: unknown;
+  setContentNode: (node: HTMLDivElement | null) => void;
   setOpen: (open: boolean) => void;
   toggle: () => void;
-  close: () => void;
-  refs: unknown;
-  context: unknown;
-  interactions: unknown;
-  floatingStyles: React.CSSProperties;
-  placement: string;
-  setArrowElement: (element: Element | null) => void;
-  showArrow: boolean;
+  transitionStyles: React.CSSProperties;
   usePortal: boolean;
 }
 export interface DropdownTriggerProps
@@ -839,9 +850,7 @@ export interface DropdownTriggerProps
   children?: React.ReactNode;
 }
 export interface DropdownContentProps
-  extends React.HTMLAttributes<HTMLUListElement> {
-  animated?: boolean;
-}
+  extends React.HTMLAttributes<HTMLDivElement> {}
 export interface DropdownItemProps
   extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
@@ -851,19 +860,19 @@ export interface DropdownItemProps
   variant?: "default" | "danger";
 }
 export interface DropdownSeparatorProps
-  extends React.HTMLAttributes<HTMLLIElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {}
 export declare const DropdownTrigger: React.ForwardRefExoticComponent<
   DropdownTriggerProps & React.RefAttributes<HTMLButtonElement>
 >;
 export declare const DropdownContent: React.ForwardRefExoticComponent<
-  DropdownContentProps & React.RefAttributes<HTMLUListElement>
+  DropdownContentProps & React.RefAttributes<HTMLDivElement>
 >;
 export declare const DropdownItem: React.ForwardRefExoticComponent<
   DropdownItemProps & React.RefAttributes<HTMLElement>
 >;
-export declare function DropdownSeparator(
-  props: DropdownSeparatorProps,
-): React.JSX.Element;
+export declare const DropdownSeparator: React.ForwardRefExoticComponent<
+  DropdownSeparatorProps & React.RefAttributes<HTMLDivElement>
+>;
 export interface DropdownComponent extends React.FC<DropdownProps> {
   Trigger: typeof DropdownTrigger;
   Content: typeof DropdownContent;
@@ -874,6 +883,7 @@ export declare const Dropdown: DropdownComponent;
 export declare function useDropdown(): DropdownContextValue;
 
 export interface PopoverProps {
+  asChild?: boolean;
   arrowHeight?: number;
   arrowFill?: string;
   arrowStroke?: string;
@@ -885,36 +895,60 @@ export interface PopoverProps {
   className?: string;
   color?: QuickitFloatingColor;
   content: React.ReactNode;
-  offset?: number;
+  hoverDelayPreset?: "fast" | "normal" | "slow";
+  offset?:
+    | number
+    | {
+      mainAxis?: number;
+      crossAxis?: number;
+      alignmentAxis?: number | null;
+    };
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   placement?: string;
   showArrow?: boolean;
-  trigger?: "hover" | "click";
+  trigger?: "hover" | "click" | "manual";
   usePortal?: boolean;
   zIndex?: number;
 }
 export declare function Popover(props: PopoverProps): React.JSX.Element;
 
-export interface TooltipProps extends Omit<PopoverProps, "trigger"> {}
+export interface TooltipProps extends PopoverProps {}
 export declare function Tooltip(props: TooltipProps): React.JSX.Element;
 
 export interface ModalContextValue {
+  blockingOverlay: boolean;
   close: () => Promise<void> | void;
+  closeOnEscape: boolean;
+  descriptionId: string;
+  hasDescription: boolean;
+  hasTitle: boolean;
   instanceZIndex: number;
+  isTopmost: () => boolean;
   maxWidth: string;
   open: boolean;
   outsideClick: boolean;
+  registerDescription: (enabled: boolean) => void;
+  registerTitle: (enabled: boolean) => void;
   rendered: boolean;
   setOpen: (open: boolean) => void;
+  setTriggerElement: (element: HTMLElement | null) => void;
+  showCloseButton: boolean;
+  titleId: string;
   visible: boolean;
 }
 export interface ModalProps {
   children?: React.ReactNode;
+  /** Si es `false`, el backdrop no intercepta clics. */
+  blockingOverlay?: boolean;
+  closeOnEscape?: boolean;
   defaultOpen?: boolean;
   maxWidth?: string;
   onBeforeClose?: () => boolean | Promise<boolean | void> | void;
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   outsideClick?: boolean;
+  showCloseButton?: boolean;
   zIndex?: number;
 }
 export interface ModalTriggerProps {
@@ -959,23 +993,35 @@ export declare function useModal(): ModalContextValue;
 
 export interface DrawerContextValue {
   close: () => Promise<void> | void;
+  closeOnEscape: boolean;
+  descriptionId: string;
+  hasDescription: boolean;
+  hasTitle: boolean;
   instanceZIndex: number;
+  isTopmost: () => boolean;
   open: boolean;
   outsideClick: boolean;
   placement: "right" | "left" | "bottom" | "top";
+  registerDescription: (enabled: boolean) => void;
+  registerTitle: (enabled: boolean) => void;
   rendered: boolean;
   setOpen: (open: boolean) => void;
+  setTriggerElement: (element: HTMLElement | null) => void;
+  showCloseButton: boolean;
   size?: string;
+  titleId: string;
   visible: boolean;
 }
 export interface DrawerProps {
   children?: React.ReactNode;
+  closeOnEscape?: boolean;
   defaultOpen?: boolean;
   placement?: "right" | "left" | "bottom" | "top";
   onBeforeClose?: () => boolean | Promise<boolean | void> | void;
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   outsideClick?: boolean;
+  showCloseButton?: boolean;
   size?: string;
   zIndex?: number;
 }
@@ -1031,10 +1077,42 @@ export declare const Progress: React.ForwardRefExoticComponent<
 
 export type RangeProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  "size" | "type"
+  "size" | "type" | "value" | "defaultValue" | "onChange"
 > & {
+  allowWheel?: boolean;
   color?: QuickitSemanticColor;
+  getAriaValueText?: (
+    value: number,
+    thumb: "start" | "end",
+  ) => string;
+  defaultValue?: number | readonly [number, number];
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onValueChange?: (value: number | readonly [number, number]) => void;
+  orientation?: "horizontal" | "vertical";
+  range?: boolean;
+  showValueTooltip?: boolean;
   size?: "sm" | "md" | "lg";
+  tooltipCrossOffset?: number;
+  tooltipHideDelay?: number;
+  tooltipFormatter?: (
+    value: number,
+    thumb: "start" | "end",
+  ) => React.ReactNode;
+  tooltipOffset?: number;
+  tooltipPlacement?:
+    | "top"
+    | "top-start"
+    | "top-end"
+    | "right"
+    | "right-start"
+    | "right-end"
+    | "bottom"
+    | "bottom-start"
+    | "bottom-end"
+    | "left"
+    | "left-start"
+    | "left-end";
+  value?: number | readonly [number, number];
 };
 
 export declare const Range: React.ForwardRefExoticComponent<
@@ -1156,3 +1234,178 @@ export interface UseFloatingLayerOptions {
 export declare function useFloatingLayer(
   options?: UseFloatingLayerOptions,
 ): any;
+
+export interface ComboboxOption {
+  disabled?: boolean;
+  label?: React.ReactNode;
+  value: string | number;
+}
+
+export interface ComboboxProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "size" | "onChange" | "value" | "defaultValue"
+  > {
+  defaultValue?: string | number;
+  emptyText?: string;
+  name?: string;
+  onChange?: (event: {
+    type: "change";
+    target: { id?: string; name?: string; value: string };
+    currentTarget: { id?: string; name?: string; value: string };
+    nativeEvent?: unknown;
+    preventDefault: () => void;
+    stopPropagation: () => void;
+  }) => void;
+  onValueChange?: (value: string) => void;
+  options?: readonly ComboboxOption[];
+  placeholder?: string;
+  size?: "sm" | "md" | "lg";
+  usePortal?: boolean;
+  value?: string | number;
+}
+
+export declare const Combobox: React.ForwardRefExoticComponent<
+  ComboboxProps & React.RefAttributes<HTMLInputElement>
+>;
+
+export interface StepperStep {
+  clickable?: boolean;
+  description?: React.ReactNode;
+  id?: string | number;
+  title?: React.ReactNode;
+}
+
+export interface StepperProps {
+  activeStep?: number;
+  className?: string;
+  id?: string;
+  onStepChange?: (index: number) => void;
+  orientation?: "horizontal" | "vertical";
+  steps?: readonly StepperStep[];
+}
+
+export declare function Stepper(props: StepperProps): React.JSX.Element;
+
+export type DatePickerSelectionMode = "between" | "single";
+
+export interface DatePickerRangePartial {
+  from: Date | string | number | null;
+  to: Date | string | number | null;
+}
+
+export interface DatePickerProps
+  extends Omit<
+    React.ComponentPropsWithoutRef<"input">,
+    | "children"
+    | "color"
+    | "defaultValue"
+    | "onChange"
+    | "size"
+    | "type"
+    | "value"
+  > {
+  /**
+   * Color de acento del calendario (días seleccionados y franja de rango).
+   * Si se omite, se usa el mismo que `color` del campo.
+   */
+  calendarColor?: QuickitSemanticColor;
+  color?: QuickitSemanticColor;
+  /**
+   * Cómo mostrar la fecha en el input: compacta (`short`), con mes largo (`long`) o con día de la semana (`full`). Usa `Intl` y el locale del entorno.
+   * @default "long"
+   */
+  dateStyle?: "full" | "long" | "short";
+  /**
+   * Una fecha o `{ from, to }` según `selectionMode`.
+   * Con `between`, puede incluir solo `from` mientras el usuario elige el fin.
+   */
+  defaultValue?:
+    | Date
+    | string
+    | number
+    | { from?: Date | string | number; to?: Date | string | number };
+  maxDate?: Date | string | number;
+  minDate?: Date | string | number;
+  /**
+   * `single`: `(date) => void`.
+   * `between`: `(range) => void` — en el primer clic `to` es `null`; al completar, fechas en orden (inicio ≤ fin).
+   */
+  onChange?:
+    | ((date: Date) => void)
+    | ((range: { from: Date; to: Date | null }) => void);
+  /**
+   * `between`: fecha inicio y fin en dos clics; el input muestra ambas separadas por un guión largo.
+   */
+  selectionMode?: DatePickerSelectionMode;
+  size?: "sm" | "md" | "lg";
+  value?:
+    | Date
+    | string
+    | number
+    | null
+    | DatePickerRangePartial;
+}
+
+export declare const DatePicker: React.ForwardRefExoticComponent<
+  DatePickerProps &
+    React.RefAttributes<HTMLInputElement>
+>;
+
+export type DataTableSortDir = "asc" | "desc";
+
+export interface DataTableSortState {
+  column: string;
+  dir: DataTableSortDir;
+}
+
+export interface DataTableColumn<Row = Record<string, unknown>> {
+  accessor?: (row: Row) => unknown;
+  header: React.ReactNode;
+  key: string;
+  render?: (row: Row, rowIndex: number) => React.ReactNode;
+  sortable?: boolean;
+}
+
+export interface DataTableProps<Row = Record<string, unknown>> {
+  caption?: string;
+  className?: string;
+  columns?: readonly DataTableColumn<Row>[];
+  data?: readonly Row[];
+  defaultSort?: DataTableSortState | null;
+  onSortChange?: (sort: DataTableSortState | null) => void;
+  rowKey?: (row: Row, index: number) => React.Key;
+  sort?: DataTableSortState | null;
+  stickyHeader?: boolean;
+}
+
+export declare function DataTable<Row = Record<string, unknown>>(
+  props: DataTableProps<Row>,
+): React.JSX.Element;
+
+export interface CommandPaletteItem {
+  id?: string;
+  keywords?: readonly string[];
+  label: React.ReactNode;
+  onSelect?: () => void;
+  textValue?: string;
+}
+
+export interface CommandPaletteGroup {
+  heading?: React.ReactNode;
+  items?: readonly CommandPaletteItem[];
+}
+
+export interface CommandPaletteProps {
+  className?: string;
+  emptyText?: string;
+  groups?: readonly CommandPaletteGroup[];
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+  placeholder?: string;
+  shortcutLabel?: string;
+}
+
+export declare function CommandPalette(
+  props: CommandPaletteProps,
+): React.JSX.Element;

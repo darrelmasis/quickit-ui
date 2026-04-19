@@ -1,10 +1,5 @@
 import { forwardRef, useEffect } from "react";
-import {
-  useQuickitFocusRing,
-  useQuickitPressEffect,
-  useQuickitRipple,
-  useQuickitTheme,
-} from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { SpinnerIcon } from "@/lib/assets/icons";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
@@ -20,7 +15,6 @@ import {
   resolveActionRippleStyles,
   resolveActionShape,
   resolveActionSize,
-  resolveActionTheme,
   resolveActionVariant,
 } from "@/lib/components/_shared/action-control";
 import {
@@ -75,32 +69,43 @@ const Button = forwardRef(function Button(
 ) {
   // Button junta tres políticas distintas: tema, focus ring y press effect.
   // Por eso casi toda la resolución visual ocurre antes del return.
-  const resolvedTheme = resolveActionTheme(useQuickitTheme());
+  const {
+    theme: resolvedTheme,
+    focusRing: focusRingEnabled,
+    ripple: resolvedRipple,
+    pressEffect: resolvedPressEffect,
+  } = useQuickitControlState("button", {
+    pressEffect,
+    ripple,
+    focusRing: props.focusRing,
+    shape,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    title,
+    children,
+    ...props,
+  });
+
   const isDisabled = disabled || loading;
   const isActive = active || pressed;
   const resolvedVariant = resolveActionVariant(resolvedTheme, variant);
   const stateClass = loading
     ? BUTTON_STATE_CLASSES.loading
     : BUTTON_STATE_CLASSES.idle;
-  const resolvedColor = resolveActionColor(resolvedTheme, resolvedVariant, color);
+  const resolvedColor = resolveActionColor(
+    resolvedTheme,
+    resolvedVariant,
+    color,
+  );
   const resolvedShape = resolveActionShape(shape);
   const resolvedSize = resolveActionSize(size);
-  const focusRingEnabled = useQuickitFocusRing("button");
-  const providerPressEffect = useQuickitPressEffect();
-  const rippleEnabled = useQuickitRipple("button");
-  const resolvedPressEffect =
-    pressEffect === "ripple" || pressEffect === "transform"
-      ? pressEffect
-      : providerPressEffect;
+
   // Los icon buttons compactos se sienten más estables sin translate/scale.
   const motionAllowedByShape =
     resolvedShape !== "square" && resolvedShape !== "circle";
   const resolvedActiveMotion =
     activeMotion ??
     (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
-  const resolvedRipple =
-    ripple ??
-    (resolvedPressEffect === "ripple" ? rippleEnabled : false);
   const isSmall = size === "sm";
   const showLoadingText =
     !isSmall && resolvedShape !== "square" && resolvedShape !== "circle";
@@ -128,12 +133,15 @@ const Button = forwardRef(function Button(
       xl: 940,
       "2xl": 1020,
     }[resolvedSize] ?? 780;
-  const { handleKeyDown: handleRippleKeyDown, handlePointerDown: handleRipplePointerDown, rippleLayer } =
-    useRippleEffect({
-      duration: rippleDuration,
-      enabled: resolvedRipple && !isDisabled,
-      opacity: rippleOpacity,
-    });
+  const {
+    handleKeyDown: handleRippleKeyDown,
+    handlePointerDown: handleRipplePointerDown,
+    rippleLayer,
+  } = useRippleEffect({
+    duration: rippleDuration,
+    enabled: resolvedRipple && !isDisabled,
+    opacity: rippleOpacity,
+  });
 
   useEffect(() => {
     if (process.env.NODE_ENV === "production") {
@@ -261,9 +269,9 @@ const Button = forwardRef(function Button(
 
       {loading ? (
         <span className="absolute inset-0 z-10 inline-flex items-center justify-center gap-2">
-            {spinner ? (
-              <SpinnerIcon className="size-4 animate-spin motion-reduce:animate-none" />
-            ) : null}
+          {spinner ? (
+            <SpinnerIcon className="size-4 animate-spin motion-reduce:animate-none" />
+          ) : null}
           {showLoadingText ? <span>{loadingContent}</span> : null}
         </span>
       ) : null}

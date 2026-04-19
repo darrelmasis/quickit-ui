@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 const SKELETON_THEME_CLASSES = {
@@ -13,15 +13,13 @@ const SKELETON_SHAPE_CLASSES = {
   circle: "size-12 rounded-full",
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
+
 
 const Skeleton = forwardRef(function Skeleton(
   { animated = true, className, shape = "line", ...props },
   ref,
 ) {
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("skeleton");
 
   return (
     <div

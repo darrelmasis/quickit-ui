@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useQuickitFocusRing, useQuickitTheme } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
@@ -7,12 +7,11 @@ import {
   FORM_FIELD_THEME_CLASSES,
   getFormFieldAutofillStyle,
   resolveFormFieldColor,
-  resolveFormFieldTheme,
 } from "@/lib/components/_shared/form-field";
 
 const TEXTAREA_PRIMITIVES = {
   base: [
-    "qi-form-field-autofill w-full border px-3.5 py-3 text-sm outline-none",
+    "qi-form-field-autofill flex min-h-[80px] w-full border px-3.5 py-2.5 text-sm outline-none",
     "transition-[background-color,border-color,color,box-shadow] duration-200",
     "placeholder:text-current/45",
     "focus-visible:ring-4 focus-visible:ring-offset-0",
@@ -27,15 +26,15 @@ const Textarea = forwardRef(function Textarea(
     disabled = false,
     id,
     invalid = false,
-    minRows = 4,
     required = false,
+    shape = "square",
+    size = "md",
     style,
     ...props
   },
   ref,
 ) {
-  const theme = resolveFormFieldTheme(useQuickitTheme());
-  const focusRingEnabled = useQuickitFocusRing("textarea");
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("textarea");
   const ui = FORM_FIELD_THEME_CLASSES[theme];
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[theme][resolvedColor];
@@ -43,38 +42,26 @@ const Textarea = forwardRef(function Textarea(
   const resolvedInvalid = invalid || field?.invalid;
   const resolvedDisabled = disabled || field?.disabled;
   const resolvedRequired = required || field?.required;
-  const describedBy =
-    [
-      props["aria-describedby"],
-      field?.descriptionId,
-      resolvedInvalid ? field?.messageId : null,
-    ]
-      .filter(Boolean)
-      .join(" ") || undefined;
+  const resolvedId = id ?? field?.controlId;
+  const describedBy = [
+    props["aria-describedby"],
+    field?.descriptionId,
+    resolvedInvalid ? field?.messageId : null,
+  ]
+    .filter(Boolean)
+    .join(" ") || undefined;
 
   return (
     <textarea
       ref={ref}
-      id={id ?? field?.controlId}
+      id={resolvedId}
       required={resolvedRequired}
       disabled={resolvedDisabled}
       aria-invalid={resolvedInvalid || undefined}
       aria-describedby={describedBy}
-      field-sizing="content"
-      rows={minRows}
-      style={getFormFieldAutofillStyle({
-        color,
-        invalid: resolvedInvalid,
-        style,
-        theme,
-      })}
       className={cn(
-        resolveQuickitFocusRingClasses(
-          focusRingEnabled,
-          TEXTAREA_PRIMITIVES.base,
-        ),
-        getControlRadius("md"),
-        "min-h-28",
+        resolveQuickitFocusRingClasses(focusRingEnabled, TEXTAREA_PRIMITIVES.base),
+        getControlRadius(shape === "pill" ? "lg" : size),
         resolveQuickitFocusRingClasses(
           focusRingEnabled,
           resolvedInvalid ? ui.invalid : colorUi.base,
@@ -82,6 +69,12 @@ const Textarea = forwardRef(function Textarea(
         !resolvedDisabled && !resolvedInvalid && colorUi.hover,
         className,
       )}
+      style={getFormFieldAutofillStyle({
+        color,
+        invalid: resolvedInvalid,
+        style,
+        theme,
+      })}
       {...props}
     />
   );

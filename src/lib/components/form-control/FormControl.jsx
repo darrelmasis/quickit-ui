@@ -1,22 +1,18 @@
 import { useId, useMemo } from "react";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-import { FormControlContext, useFormControlContext } from "./form-control-context";
+import { FormControlContext, useFormControl } from "./form-control-context";
 
 const FORM_CONTROL_THEME_CLASSES = {
   light: {
     description: "text-slate-500",
-    message: "text-red-600",
+    message: "text-rose-600",
   },
   dark: {
-    description: "text-stone-400",
-    message: "text-red-300",
+    description: "text-zinc-400",
+    message: "text-rose-400",
   },
 };
-
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
 
 export function FormControl({
   children,
@@ -25,70 +21,87 @@ export function FormControl({
   id,
   invalid = false,
   required = false,
-  ...props
 }) {
   const generatedId = useId();
-  const resolvedId = id ?? `quickit-field-${generatedId}`;
+  const controlId = id ?? `qi-control-${generatedId}`;
+  const labelId = `qi-label-${generatedId}`;
+  const descriptionId = `qi-description-${generatedId}`;
+  const messageId = `qi-message-${generatedId}`;
 
-  // El contexto concentra todos los ids accesibles del campo para que Input,
-  // Label, FormDescription y FormMessage no tengan que coordinarse manualmente.
-  const contextValue = useMemo(
+  const value = useMemo(
     () => ({
-      controlId: resolvedId,
-      descriptionId: `${resolvedId}-description`,
+      controlId,
+      descriptionId,
       disabled,
       invalid,
-      messageId: `${resolvedId}-message`,
+      labelId,
+      messageId,
       required,
     }),
-    [disabled, invalid, required, resolvedId],
+    [
+      controlId,
+      descriptionId,
+      disabled,
+      invalid,
+      labelId,
+      messageId,
+      required,
+    ],
   );
 
   return (
-    <FormControlContext.Provider value={contextValue}>
-      <div className={cn("space-y-2", className)} {...props}>
+    <FormControlContext.Provider value={value}>
+      <div
+        role="group"
+        className={cn("flex flex-col gap-2", className)}
+      >
         {children}
       </div>
     </FormControlContext.Provider>
   );
 }
 
-export function FormDescription({ children, className, id, ...props }) {
-  const theme = resolveTheme(useQuickitTheme());
+export function FormControlDescription({ children, className }) {
+  const { descriptionId } = useFormControl() ?? {};
+  const { theme } = useQuickitControlState("form-control-description");
   const ui = FORM_CONTROL_THEME_CLASSES[theme];
-  const field = useFormControlContext("FormDescription");
 
   return (
     <p
-      id={id ?? field?.descriptionId}
-      className={cn("text-sm leading-6", ui.description, className)}
-      {...props}
+      id={descriptionId}
+      className={cn("text-xs leading-relaxed", ui.description, className)}
     >
       {children}
     </p>
   );
 }
 
-export function FormMessage({ children, className, id, ...props }) {
-  const theme = resolveTheme(useQuickitTheme());
+export function FormControlErrorMessage({ children, className }) {
+  const { invalid, messageId } = useFormControl() ?? {};
+  const { theme } = useQuickitControlState("form-control-error-message");
   const ui = FORM_CONTROL_THEME_CLASSES[theme];
-  const field = useFormControlContext("FormMessage");
 
-  if (!children) {
-    // Evita renderizar un contenedor vacío y deja aria-describedby limpio.
+  if (!invalid) {
     return null;
   }
 
   return (
     <p
-      id={id ?? field?.messageId}
-      className={cn("text-sm leading-6", ui.message, className)}
-      {...props}
+      id={messageId}
+      role="alert"
+      className={cn("text-xs font-medium leading-relaxed", ui.message, className)}
     >
       {children}
     </p>
   );
 }
 
-FormControl.Description = FormDescription;
-FormControl.Message = FormMessage;
+FormControl.Description = FormControlDescription;
+FormControl.Message = FormControlErrorMessage;
+FormControl.ErrorMessage = FormControlErrorMessage;
+
+export {
+  FormControlDescription as FormDescription,
+  FormControlErrorMessage as FormMessage,
+};
+export default FormControl;

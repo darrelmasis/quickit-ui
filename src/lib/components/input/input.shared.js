@@ -1,4 +1,4 @@
-import { useQuickitTheme } from "@/lib/theme";
+import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
@@ -422,9 +422,7 @@ export function useInputFieldState({
   required = false,
   ariaDescribedBy,
 }) {
-  // El input puede vivir solo o dentro de FormControl. Este hook resuelve una
-  // sola fuente de verdad para ids, aria-describedby y estados visuales.
-  const theme = resolveFormFieldTheme(useQuickitTheme());
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("input");
   const ui = FORM_FIELD_THEME_CLASSES[theme];
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[theme][resolvedColor];
@@ -443,6 +441,7 @@ export function useInputFieldState({
   return {
     colorUi,
     describedBy,
+    focusRingEnabled,
     resolvedDisabled,
     resolvedId: id ?? field?.controlId,
     resolvedInvalid,

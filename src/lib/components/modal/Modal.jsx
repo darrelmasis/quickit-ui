@@ -5,19 +5,33 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { CloseIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import {
+  focusFirstElement,
+  trapFocusWithin,
+} from "@/lib/components/_shared/overlay-focus";
+import { useQuickitControlState } from "@/lib/theme";
 import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
 import { ModalContext, useModalContext } from "./modal-context";
 
-const ANIMATION_DURATION = 140;
+const ANIMATION_DURATION = 220;
+const OVERLAY_DURATION = 180;
 let modalIdCounter = 0;
 let modalZIndexCounter = 50;
 const modalStack = [];
+
+function getModalTransform(isVisible) {
+  if (isVisible) {
+    return "translate3d(0, 0, 0) scale(1)";
+  }
+
+  return "translate3d(0, 0.875rem, 0) scale(0.985)";
+}
 
 function addModalToStack(id) {
   if (!modalStack.includes(id)) {
@@ -45,12 +59,12 @@ function isTriggerDisabled(element) {
 
 const MODAL_PRIMITIVES = {
   overlay:
-    "fixed inset-0 bg-neutral-950/70 transition-opacity duration-[140ms]",
+    "fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
   viewport:
     "fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none",
   dialog: [
     "pointer-events-auto flex max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden",
-    "rounded-[1.25rem] border transition-[opacity,transform] duration-[140ms] ease-out",
+    "rounded-[1.25rem] border transform-gpu will-change-transform",
   ].join(" "),
   header:
     "flex items-start justify-between gap-4 border-b px-5 py-4 flex-shrink-0",
@@ -74,31 +88,36 @@ const MODAL_THEME_CLASSES = {
   },
 };
 
-function resolveTheme(theme) {
-  return resolveQuickitThemeMode(theme);
-}
-
 export function Modal({
   children,
+  closeOnEscape = true,
   defaultOpen = false,
+  /** Si es `false`, el backdrop no captura clics (overlay no bloqueante). */
+  blockingOverlay = true,
   maxWidth = "max-w-md",
   onBeforeClose,
   onOpenChange,
   open: controlledOpen,
   outsideClick = true,
+  showCloseButton = true,
   zIndex: customZIndex,
 }) {
-  // visible controla el ciclo de salida; open solo representa la intención de abrir/cerrar.
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [visible, setVisible] = useState(defaultOpen);
+  const [rendered, setRendered] = useState(defaultOpen);
   const [instanceZIndex, setInstanceZIndex] = useState(customZIndex ?? 50);
+  const [titleCount, setTitleCount] = useState(0);
+  const [descriptionCount, setDescriptionCount] = useState(0);
+  const previousFocusedElementRef = useRef(null);
+  const triggerElementRef = useRef(null);
   const [modalId] = useState(() => {
     modalIdCounter += 1;
     return modalIdCounter;
   });
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
-  const rendered = open || visible;
+  const titleId = `qi-modal-title-${modalId}`;
+  const descriptionId = `qi-modal-description-${modalId}`;
 
   const setOpen = useCallback(
     (nextValue) => {
@@ -123,10 +142,74 @@ export function Modal({
     setOpen(false);
   }, [onBeforeClose, setOpen]);
 
+  const registerTitle = useCallback((enabled) => {
+    setTitleCount((count) => Math.max(0, count + (enabled ? 1 : -1)));
+  }, []);
+
+  const registerDescription = useCallback((enabled) => {
+    setDescriptionCount((count) => Math.max(0, count + (enabled ? 1 : -1)));
+  }, []);
+
+  const setTriggerElement = useCallback((element) => {
+    triggerElementRef.current = element;
+  }, []);
+
   useEffect(() => {
+    if (open && typeof document !== "undefined") {
+      previousFocusedElementRef.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+    }
+  }, [open]);
+
+  useEffect(() => {
+    let enterFrameId = 0;
+    let settleFrameId = 0;
+    let exitFrameId = 0;
+    let exitTimeoutId = 0;
+
     if (open) {
+      enterFrameId = window.requestAnimationFrame(() => {
+        setRendered(true);
+        setVisible(false);
+        settleFrameId = window.requestAnimationFrame(() => {
+          setVisible(true);
+        });
+      });
+
+      return () => {
+        window.cancelAnimationFrame(enterFrameId);
+        window.cancelAnimationFrame(settleFrameId);
+      };
+    }
+
+    exitFrameId = window.requestAnimationFrame(() => {
+      setVisible(false);
+      exitTimeoutId = window.setTimeout(() => {
+        setRendered(false);
+      }, Math.max(ANIMATION_DURATION, OVERLAY_DURATION));
+    });
+
+    return () => {
+      window.cancelAnimationFrame(exitFrameId);
+      window.clearTimeout(exitTimeoutId);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!rendered) {
+      const previousFocusedElement =
+        triggerElementRef.current ?? previousFocusedElementRef.current;
+
+      if (!previousFocusedElement || typeof window === "undefined") {
+        return undefined;
+      }
+
       const frameId = window.requestAnimationFrame(() => {
-        setVisible(true);
+        previousFocusedElement.focus?.();
+        previousFocusedElementRef.current = null;
+        triggerElementRef.current = null;
       });
 
       return () => {
@@ -134,22 +217,6 @@ export function Modal({
       };
     }
 
-    const timeoutId = window.setTimeout(() => {
-      setVisible(false);
-    }, ANIMATION_DURATION);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [open]);
-
-  useEffect(() => {
-    if (!rendered) {
-      return undefined;
-    }
-
-    // Cada modal toma su propio z-index para que los overlays anidados respeten
-    // el orden de apertura sin exigir al consumidor que lo administre.
     addModalToStack(modalId);
     lockAppScroll();
     const nextZIndex = customZIndex
@@ -174,7 +241,7 @@ export function Modal({
   }, [customZIndex, modalId, rendered]);
 
   useEffect(() => {
-    if (!rendered || !outsideClick) {
+    if (!rendered || !closeOnEscape) {
       return undefined;
     }
 
@@ -183,7 +250,6 @@ export function Modal({
         return;
       }
 
-      // Solo el modal superior responde a Escape.
       close();
     };
 
@@ -192,20 +258,51 @@ export function Modal({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [close, modalId, outsideClick, rendered]);
+  }, [close, closeOnEscape, modalId, rendered]);
 
   const value = useMemo(
     () => ({
+      blockingOverlay,
       close,
+      closeOnEscape,
+      descriptionId,
+      hasDescription: descriptionCount > 0,
+      hasTitle: titleCount > 0,
       instanceZIndex,
+      isTopmost: () => isTopmostModal(modalId),
       maxWidth,
       open,
       outsideClick,
+      registerDescription,
+      registerTitle,
       rendered,
       setOpen,
+      setTriggerElement,
+      showCloseButton,
+      titleId,
       visible,
     }),
-    [close, instanceZIndex, maxWidth, open, outsideClick, rendered, setOpen, visible],
+    [
+      blockingOverlay,
+      close,
+      closeOnEscape,
+      descriptionCount,
+      descriptionId,
+      instanceZIndex,
+      maxWidth,
+      modalId,
+      open,
+      outsideClick,
+      registerDescription,
+      registerTitle,
+      rendered,
+      setOpen,
+      setTriggerElement,
+      showCloseButton,
+      titleCount,
+      titleId,
+      visible,
+    ],
   );
 
   return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>;
@@ -219,7 +316,7 @@ export function ModalTrigger({
   disabled = false,
   ...props
 }) {
-  const { open, setOpen } = useModalContext("ModalTrigger");
+  const { open, setOpen, setTriggerElement } = useModalContext("ModalTrigger");
 
   if (asChild) {
     const child = Children.only(children);
@@ -246,6 +343,7 @@ export function ModalTrigger({
         child.props.onClick?.(event);
 
         if (!event.defaultPrevented) {
+          setTriggerElement(event.currentTarget);
           setOpen(!open);
         }
       },
@@ -263,6 +361,7 @@ export function ModalTrigger({
         props.onClick?.(event);
 
         if (!disabled && !event.defaultPrevented) {
+          setTriggerElement(event.currentTarget);
           setOpen(!open);
         }
       }}
@@ -274,15 +373,35 @@ export function ModalTrigger({
 
 export function ModalContent({ children, className }) {
   const {
+    blockingOverlay,
     close,
+    descriptionId,
     instanceZIndex,
+    isTopmost,
     maxWidth,
     outsideClick,
     rendered,
+    titleId,
     visible,
   } = useModalContext("ModalContent");
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
+  const dialogRef = useRef(null);
+  const dialogTransform = getModalTransform(visible);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !rendered) {
+      return undefined;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      focusFirstElement(dialogRef.current, dialogRef.current);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [rendered]);
 
   if (typeof window === "undefined" || !rendered) {
     return null;
@@ -294,24 +413,44 @@ export function ModalContent({ children, className }) {
         className={cn(
           MODAL_PRIMITIVES.overlay,
           visible ? "opacity-100" : "opacity-0",
+          !blockingOverlay && "pointer-events-none",
         )}
         style={{ zIndex: instanceZIndex }}
-        onClick={outsideClick ? close : undefined}
+        onClick={
+          blockingOverlay && outsideClick && isTopmost() ? close : undefined
+        }
       />
 
-      <div className={MODAL_PRIMITIVES.viewport} style={{ zIndex: instanceZIndex + 1 }}>
+      <div
+        className={MODAL_PRIMITIVES.viewport}
+        style={{ zIndex: instanceZIndex + 1 }}
+      >
         <div
+          ref={dialogRef}
           className={cn(
             MODAL_PRIMITIVES.dialog,
             ui.dialog,
             maxWidth,
-            "translate-y-0 scale-100 opacity-100",
-            !visible && "translate-y-2 scale-[0.995] opacity-0",
             className,
           )}
+          style={{
+            transform: dialogTransform,
+            opacity: visible ? 1 : 0,
+            transformOrigin: "center center",
+            transition:
+              "transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
           role="dialog"
           aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={descriptionId}
+          tabIndex={-1}
           onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => {
+            if (event.key === "Tab" && isTopmost()) {
+              trapFocusWithin(dialogRef.current, event);
+            }
+          }}
         >
           {children}
         </div>
@@ -322,14 +461,14 @@ export function ModalContent({ children, className }) {
 }
 
 export function ModalHeader({ children, className }) {
-  const { close, outsideClick } = useModalContext("ModalHeader");
-  const theme = resolveTheme(useQuickitTheme());
+  const { close, showCloseButton } = useModalContext("ModalHeader");
+  const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
 
   return (
     <div className={cn(MODAL_PRIMITIVES.header, ui.header, className)}>
       <div className="min-w-0 flex-1">{children}</div>
-      {outsideClick ? (
+      {showCloseButton ? (
         <Button
           type="button"
           variant="ghost"
@@ -347,9 +486,20 @@ export function ModalHeader({ children, className }) {
   );
 }
 
-export function ModalTitle({ centered = true, children, className }) {
+export function ModalTitle({ centered = true, children, className, id }) {
+  const { registerTitle, titleId } = useModalContext("ModalTitle");
+
+  useEffect(() => {
+    registerTitle(true);
+
+    return () => {
+      registerTitle(false);
+    };
+  }, [registerTitle]);
+
   return (
     <h2
+      id={id ?? titleId}
       className={cn(
         "text-lg font-semibold tracking-[-0.02em]",
         centered && "text-center",
@@ -361,12 +511,23 @@ export function ModalTitle({ centered = true, children, className }) {
   );
 }
 
-export function ModalBody({ children, className }) {
-  const theme = resolveTheme(useQuickitTheme());
+export function ModalBody({ children, className, id }) {
+  const { descriptionId, registerDescription } = useModalContext("ModalBody");
+  const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
 
+  useEffect(() => {
+    registerDescription(true);
+
+    return () => {
+      registerDescription(false);
+    };
+  }, [registerDescription]);
+
   return (
-    <div className={cn(MODAL_PRIMITIVES.body, ui.muted, className)}>{children}</div>
+    <div id={id ?? descriptionId} className={cn(MODAL_PRIMITIVES.body, ui.muted, className)}>
+      {children}
+    </div>
   );
 }
 
@@ -375,7 +536,7 @@ export function ModalActions({
   className,
   placement = "center",
 }) {
-  const theme = resolveTheme(useQuickitTheme());
+  const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
 
   return (

@@ -8,6 +8,8 @@ import {
   Button,
   Checkbox,
   Default,
+  Dropdown,
+  Drawer,
   For,
   getInitials,
   Input,
@@ -46,6 +48,7 @@ import {
   TabsTrigger,
   Textarea,
   UserChip,
+  useDropdown,
   type ButtonProps,
   type LinkProps,
   type QuickitBreakpoint,
@@ -82,6 +85,16 @@ const pressEffect: QuickitPressEffect = QUICKIT_PRESS_EFFECTS[0];
 const rippleComponent: QuickitRippleComponent = QUICKIT_RIPPLE_COMPONENTS[0];
 const controllerValue: QuickitThemeControllerValue | null = null;
 const themeOption: QuickitThemeOption = QUICKIT_THEME_OPTIONS[0];
+
+function DropdownStatePreview() {
+  const { open, close } = useDropdown();
+
+  return (
+    <Dropdown.Item as="div" closeOnClick={false} disabled={!open} onClick={close}>
+      {open ? "Abierto" : "Cerrado"}
+    </Dropdown.Item>
+  );
+}
 
 function ConsumerPreviewInner() {
   const responsive = useBreakpoint({ breakpoints: customBreakpoints });
@@ -158,6 +171,17 @@ function ConsumerPreviewInner() {
         <option value="docs">Docs</option>
         <option value="tokens">Tokens</option>
       </Select>
+      <Dropdown defaultOpen closeOnScroll={false} collisionPadding={12} offsetX={4}>
+        <Dropdown.Trigger asChild>
+          <Button color="neutral">Opciones</Button>
+        </Dropdown.Trigger>
+        <Dropdown.Content>
+          <Dropdown.Item href="#docs">Docs</Dropdown.Item>
+          <Dropdown.Separator />
+          <Dropdown.Item variant="danger">Eliminar</Dropdown.Item>
+          <DropdownStatePreview />
+        </Dropdown.Content>
+      </Dropdown>
       <Avatar size="lg" shape="rounded">
         <AvatarFallback>ER</AvatarFallback>
         <AvatarPresence status={presence} />
@@ -194,6 +218,8 @@ function ConsumerPreviewInner() {
           <Button color="neutral">Abrir</Button>
         </Modal.Trigger>
       </Modal>
+      <Modal closeOnEscape outsideClick={false} showCloseButton />
+      <Drawer closeOnEscape outsideClick={false} showCloseButton />
     </QuickitProvider>
   );
 }
