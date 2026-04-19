@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Component, useState } from "react";
 import {
   Accordion,
   Alert,
@@ -2130,13 +2130,47 @@ function NavigationPreviewCanvas() {
   );
 }
 
+class ExampleSectionBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error) {
+    // Keeps diagnostics visible in production without crashing the full page.
+    console.error(`[ExamplesPage] section render failed: ${this.props.title}`, error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className={EXAMPLE_SUBCARD}>
+          <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+            Esta seccion no pudo renderizarse.
+          </p>
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+            Revisa la consola para ver el componente exacto que fallo en
+            produccion.
+          </p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 function ExampleSection({ id, title, children }) {
   return (
     <section id={id} className="scroll-mt-28 space-y-6">
       <h2 className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">
         {title}
       </h2>
-      {children}
+      <ExampleSectionBoundary title={title}>{children}</ExampleSectionBoundary>
     </section>
   );
 }
