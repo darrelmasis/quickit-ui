@@ -1,6 +1,6 @@
 # Quickit UI
 
-Quickit UI es una librería de componentes primitivos para React 19 y Tailwind CSS 4, enfocada en proporcionar cimientos de interfaz accesibles, sin estilos predefinidos restrictivos y altamente composibles.
+Quickit UI es una librería de componentes primitivos para React 18+ y Tailwind CSS 4, enfocada en proporcionar cimientos de interfaz accesibles, sin estilos predefinidos restrictivos y altamente composibles.
 
 ## Instalación
 
@@ -65,7 +65,7 @@ La documentación es accesible en `/docs` y cuenta con una referencia de API det
 
 ## Requisitos
 
-- React 19 o superior
+- React 18 o superior
 - Node.js 18 o superior
 - Entorno Tailwind CSS 4
 

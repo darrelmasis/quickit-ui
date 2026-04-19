@@ -15,9 +15,11 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [isLibraryBuild ? null : react(), tailwindcss()].filter(Boolean),
-    define: {
-      "process.env.NODE_ENV": JSON.stringify("production"),
-    },
+    define: isLibraryBuild
+      ? {
+          "process.env.NODE_ENV": JSON.stringify("production"),
+        }
+      : undefined,
     resolve: {
       alias: {
         "@": srcDir,
@@ -32,7 +34,7 @@ export default defineConfig(({ command, mode }) => {
           }
         : {
           emptyOutDir: true,
-          sourcemap: false,
+          sourcemap: true,
           lib: {
             entry: libEntry,
             name: "QuickitUI",
