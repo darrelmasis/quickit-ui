@@ -76,6 +76,7 @@ const Input = forwardRef(function Input(
   const {
     colorUi,
     describedBy,
+    resolvedColor,
     resolvedDisabled,
     resolvedId,
     resolvedInvalid,
@@ -295,6 +296,8 @@ const Input = forwardRef(function Input(
                 size: resolvedActionSize,
                 theme,
                 focusRingEnabled,
+                color: resolvedColor,
+                invalid: resolvedInvalid,
               })}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
@@ -318,6 +321,8 @@ const Input = forwardRef(function Input(
                 size: resolvedActionSize,
                 theme,
                 focusRingEnabled,
+                color: resolvedColor,
+                invalid: resolvedInvalid,
               })}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {

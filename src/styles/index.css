@@ -127,19 +127,15 @@
     filter 360ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Hover / stack expandido: relieve para leer cada toast */
+/* Hover / stack expandido sin relieve adicional */
 .qk-toast-stack--expanded .qk-toast-surface {
-  box-shadow:
-    0 22px 50px rgba(15, 23, 42, 0.2),
-    0 0 0 1px rgba(15, 23, 42, 0.04);
-  filter: saturate(1.02);
+  box-shadow: none;
+  filter: none;
 }
 
 .dark .qk-toast-stack--expanded .qk-toast-surface {
-  box-shadow:
-    0 22px 50px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
-  filter: saturate(1.04);
+  box-shadow: none;
+  filter: none;
 }
 
 .qk-toast-surface--in-b {

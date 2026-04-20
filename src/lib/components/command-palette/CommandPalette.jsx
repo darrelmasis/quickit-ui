@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import Modal from "@/lib/components/modal/Modal";
 import Input from "@/lib/components/input/Input";
 import { cn } from "@/lib/utils";
@@ -38,16 +38,42 @@ export function CommandPalette({
   className,
   emptyText = "Sin resultados",
   groups = [],
+  headerTrailing,
+  title = "Comandos",
   onOpenChange,
   open,
   placeholder = "Buscar comando…",
   shortcutLabel = "Ctrl+K",
+  autoFocusOnOpen = true,
 }) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const inputRef = useRef(null);
   const normalized = useMemo(() => normalizeGroups(groups), [groups]);
   const isControlled = open !== undefined;
   const resolvedOpen = isControlled ? open : internalOpen;
+
+  // Callback ref: fires when the <Input> mounts/unmounts in the DOM.
+  // Modal's ModalContent uses a single rAF to `focusFirstElement` (which
+  // targets the close button). A double-rAF here guarantees we run one
+  // frame *after* that, so the input always wins the focus race.
+  const handleInputMount = useCallback(
+    (node) => {
+      inputRef.current = node;
+
+      if (!node || !autoFocusOnOpen) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          node.focus?.();
+          node.select?.();
+        });
+      });
+    },
+    [autoFocusOnOpen],
+  );
 
   const handleOpenChange = useCallback(
     (next) => {
@@ -112,8 +138,12 @@ export function CommandPalette({
       <Modal.Content className={cn("max-w-lg", className)}>
         <Modal.Header>
           <Modal.Title className="text-left">
-            Comandos
-            {shortcutLabel ? (
+            {title}
+            {headerTrailing != null ? (
+              <span className="ml-2 inline-flex items-center">
+                {headerTrailing}
+              </span>
+            ) : shortcutLabel ? (
               <span className="ml-2 text-xs font-normal text-current/50">
                 {shortcutLabel}
               </span>
@@ -122,13 +152,27 @@ export function CommandPalette({
         </Modal.Header>
         <Modal.Body className="space-y-3">
           <Input
-            autoFocus
+            ref={handleInputMount}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={placeholder}
             aria-label="Buscar en la paleta de comandos"
           />
-          <div className="max-h-72 overflow-y-auto rounded-xl border border-current/10">
+          <div
+            className={cn(
+              "max-h-72 overflow-y-auto rounded-xl border border-current/10",
+              "[scrollbar-width:thin] [scrollbar-color:rgb(163_163_163)_transparent]",
+              "[&::-webkit-scrollbar]:w-2",
+              "[&::-webkit-scrollbar-track]:bg-transparent",
+              "[&::-webkit-scrollbar-thumb]:rounded-full",
+              "[&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent",
+              "[&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:bg-clip-content",
+              "[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400",
+              "dark:[scrollbar-color:rgb(115_115_115)_transparent]",
+              "dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700",
+              "dark:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600",
+            )}
+          >
             {flatCount === 0 ? (
               <div className="px-4 py-6 text-center text-sm text-current/50">
                 {emptyText}

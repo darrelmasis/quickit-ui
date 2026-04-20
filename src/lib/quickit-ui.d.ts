@@ -1479,10 +1479,14 @@ export interface CommandPaletteProps {
   className?: string;
   emptyText?: string;
   groups?: readonly CommandPaletteGroup[];
+  headerTrailing?: React.ReactNode;
+  title?: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   placeholder?: string;
   shortcutLabel?: string;
+  /** Enfoca el input al abrirse (por defecto `true`). */
+  autoFocusOnOpen?: boolean;
 }
 
 export declare function CommandPalette(

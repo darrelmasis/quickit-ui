@@ -72,16 +72,135 @@ export const INPUT_ACTION_BUTTON_SIZE_CLASSES = {
 };
 
 export const INPUT_ACTION_BUTTON_THEME_CLASSES = {
-  light: [
-    "border-transparent bg-transparent text-slate-500",
-    "hover:border-slate-200 hover:bg-slate-100 hover:text-slate-950",
-    "focus-visible:outline-slate-500",
-  ].join(" "),
-  dark: [
-    "border-transparent bg-transparent text-zinc-400",
-    "hover:border-zinc-800 hover:bg-zinc-900 hover:text-zinc-50",
-    "focus-visible:outline-zinc-400",
-  ].join(" "),
+  light: "border-transparent bg-transparent",
+  dark: "border-transparent bg-transparent",
+};
+
+const INPUT_ACTION_BUTTON_COLOR_CLASSES = {
+  light: {
+    neutral: [
+      "text-slate-500",
+      "hover:border-slate-200 hover:bg-slate-100 hover:text-slate-950",
+      "focus-visible:outline-slate-500",
+    ].join(" "),
+    slate: [
+      "text-slate-500",
+      "hover:border-slate-200 hover:bg-slate-100 hover:text-slate-950",
+      "focus-visible:outline-slate-500",
+    ].join(" "),
+    zinc: [
+      "text-zinc-500",
+      "hover:border-zinc-200 hover:bg-zinc-100 hover:text-zinc-950",
+      "focus-visible:outline-zinc-500",
+    ].join(" "),
+    primary: [
+      "text-sky-600",
+      "hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800",
+      "focus-visible:outline-sky-600",
+    ].join(" "),
+    brand: [
+      "text-brand-600",
+      "hover:border-brand-200 hover:bg-brand-50 hover:text-brand-800",
+      "focus-visible:outline-brand-600",
+    ].join(" "),
+    success: [
+      "text-emerald-600",
+      "hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-800",
+      "focus-visible:outline-emerald-600",
+    ].join(" "),
+    danger: [
+      "text-rose-600",
+      "hover:border-rose-200 hover:bg-rose-50 hover:text-rose-800",
+      "focus-visible:outline-rose-600",
+    ].join(" "),
+    warning: [
+      "text-amber-700",
+      "hover:border-amber-200 hover:bg-amber-50 hover:text-amber-900",
+      "focus-visible:outline-amber-700",
+    ].join(" "),
+    info: [
+      "text-cyan-600",
+      "hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800",
+      "focus-visible:outline-cyan-600",
+    ].join(" "),
+    light: [
+      "text-neutral-600",
+      "hover:border-neutral-200 hover:bg-neutral-50 hover:text-neutral-950",
+      "focus-visible:outline-neutral-600",
+    ].join(" "),
+    dark: [
+      "text-zinc-600",
+      "hover:border-zinc-200 hover:bg-zinc-100 hover:text-zinc-950",
+      "focus-visible:outline-zinc-600",
+    ].join(" "),
+    black: [
+      "text-neutral-700",
+      "hover:border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950",
+      "focus-visible:outline-neutral-700",
+    ].join(" "),
+  },
+  dark: {
+    neutral: [
+      "text-zinc-400",
+      "hover:border-zinc-800 hover:bg-zinc-900 hover:text-zinc-50",
+      "focus-visible:outline-zinc-400",
+    ].join(" "),
+    slate: [
+      "text-slate-300",
+      "hover:border-slate-700 hover:bg-slate-800/60 hover:text-slate-50",
+      "focus-visible:outline-slate-300",
+    ].join(" "),
+    zinc: [
+      "text-zinc-300",
+      "hover:border-zinc-700 hover:bg-zinc-800/60 hover:text-zinc-50",
+      "focus-visible:outline-zinc-300",
+    ].join(" "),
+    primary: [
+      "text-sky-300",
+      "hover:border-sky-800/60 hover:bg-sky-950/40 hover:text-sky-200",
+      "focus-visible:outline-sky-300",
+    ].join(" "),
+    brand: [
+      "text-brand-300",
+      "hover:border-brand-800/60 hover:bg-brand-950/35 hover:text-brand-200",
+      "focus-visible:outline-brand-300",
+    ].join(" "),
+    success: [
+      "text-emerald-300",
+      "hover:border-emerald-800/60 hover:bg-emerald-950/35 hover:text-emerald-200",
+      "focus-visible:outline-emerald-300",
+    ].join(" "),
+    danger: [
+      "text-rose-300",
+      "hover:border-rose-800/60 hover:bg-rose-950/35 hover:text-rose-200",
+      "focus-visible:outline-rose-300",
+    ].join(" "),
+    warning: [
+      "text-amber-300",
+      "hover:border-amber-800/60 hover:bg-amber-950/35 hover:text-amber-200",
+      "focus-visible:outline-amber-300",
+    ].join(" "),
+    info: [
+      "text-cyan-300",
+      "hover:border-cyan-800/60 hover:bg-cyan-950/35 hover:text-cyan-200",
+      "focus-visible:outline-cyan-300",
+    ].join(" "),
+    light: [
+      "text-neutral-200",
+      "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
+      "focus-visible:outline-neutral-200",
+    ].join(" "),
+    dark: [
+      "text-zinc-200",
+      "hover:border-zinc-700 hover:bg-zinc-900 hover:text-zinc-50",
+      "focus-visible:outline-zinc-200",
+    ].join(" "),
+    black: [
+      "text-neutral-200",
+      "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
+      "focus-visible:outline-neutral-200",
+    ].join(" "),
+  },
 };
 
 export const INPUT_ACTION_ICON_SIZE_CLASSES = {
@@ -442,6 +561,7 @@ export function useInputFieldState({
     colorUi,
     describedBy,
     focusRingEnabled,
+    resolvedColor,
     resolvedDisabled,
     resolvedId: id ?? field?.controlId,
     resolvedInvalid,
@@ -490,11 +610,18 @@ export function getInputActionButtonClassName({
   shape = "circle",
   size = "md",
   theme = "light",
+  color = "neutral",
+  invalid = false,
 }) {
   const resolvedShape = shape === "square" ? "square" : "circle";
   const resolvedSize = INPUT_ACTION_BUTTON_SIZE_CLASSES[resolvedShape]?.[size]
     ? size
     : "md";
+  const resolvedTheme = theme === "dark" ? "dark" : "light";
+  const resolvedColor = invalid ? "danger" : color;
+  const colorClasses =
+    INPUT_ACTION_BUTTON_COLOR_CLASSES[resolvedTheme]?.[resolvedColor] ??
+    INPUT_ACTION_BUTTON_COLOR_CLASSES[resolvedTheme].neutral;
 
   return cn(
     resolveQuickitFocusRingClasses(
@@ -507,6 +634,7 @@ export function getInputActionButtonClassName({
       focusRingEnabled,
       INPUT_ACTION_BUTTON_THEME_CLASSES[theme],
     ),
+    resolveQuickitFocusRingClasses(focusRingEnabled, colorClasses),
   );
 }
 
