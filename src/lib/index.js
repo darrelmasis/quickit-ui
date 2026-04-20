@@ -1,4 +1,4 @@
-import '@/styles/index.css'
+import './styles.css'
 
 export * from './components'
 export * from './hooks'
