@@ -31,9 +31,9 @@ const TOAST_ROOT_WIDTH_CLASS =
 
 const TOAST_THEME = {
   light:
-    "border-neutral-200 bg-white text-neutral-950 shadow-[0_18px_40px_rgba(15,23,42,0.15)]",
+    "border-neutral-200 bg-white text-neutral-950",
   dark:
-    "border-neutral-800 bg-neutral-950 text-neutral-100 shadow-[0_18px_40px_rgba(0,0,0,0.4)]",
+    "border-neutral-800 bg-neutral-950 text-neutral-100",
 };
 
 const DEFAULT_GAP_COLLAPSED = 12;
