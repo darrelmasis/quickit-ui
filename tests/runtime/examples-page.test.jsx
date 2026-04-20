@@ -8,7 +8,7 @@ describe("ExamplesPage", () => {
     renderWithProvider(<ExamplesPage />);
 
     expect(
-      screen.getByRole("heading", { name: "Flujos reales con Quickit UI" }),
+      screen.getByRole("heading", { name: "Ejemplos de producto reales" }),
     ).toBeTruthy();
   });
 });

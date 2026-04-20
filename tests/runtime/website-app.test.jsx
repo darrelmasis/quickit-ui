@@ -71,7 +71,7 @@ describe("WebsiteApp", () => {
     );
 
     expect(
-      await screen.findByRole("heading", { name: "Flujos reales con Quickit UI" }),
+      await screen.findByRole("heading", { name: "Ejemplos de producto reales" }),
     ).toBeTruthy();
   }, 15000);
 
