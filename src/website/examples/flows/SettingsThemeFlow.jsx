@@ -1,7 +1,7 @@
 import { Alert, Button, Modal, Radio, Select, Switch } from "@/lib";
 import { useState } from "react";
 
-function SettingsThemeFlow() {
+export function SettingsThemeFlow() {
   const [density, setDensity] = useState("comfortable");
   const [themeMode, setThemeMode] = useState("system");
   const [emailUpdates, setEmailUpdates] = useState(true);
@@ -84,11 +84,3 @@ function SettingsThemeFlow() {
     </div>
   );
 }
-
-export const settingsThemeFlow = {
-  id: "settings-theme",
-  label: "Settings + Theme",
-  title: "Pantalla de ajustes y tema",
-  description: "Preferencias reales de UI con confirmaciones y guardado.",
-  Component: SettingsThemeFlow,
-};

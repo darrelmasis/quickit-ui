@@ -1,7 +1,7 @@
 import { Button, FormControl, Input, Label, Modal, Select, Stepper } from "@/lib";
 import { useState } from "react";
 
-function CheckoutFlow() {
+export function CheckoutFlow() {
   const [activeStep, setActiveStep] = useState(1);
 
   return (
@@ -64,11 +64,3 @@ function CheckoutFlow() {
     </div>
   );
 }
-
-export const checkoutFlow = {
-  id: "checkout-payment",
-  label: "Checkout",
-  title: "Checkout y pago",
-  description: "Flujo de pago con pasos, validación y confirmación.",
-  Component: CheckoutFlow,
-};

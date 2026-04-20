@@ -1,7 +1,7 @@
 import { Badge, Button, Combobox, DataTable, Input, InputGroup, Pagination, Select, Skeleton } from "@/lib";
 import { useMemo, useState } from "react";
 
-function DashboardTableFlow() {
+export function DashboardTableFlow() {
   const [page, setPage] = useState(1);
   const [owner, setOwner] = useState("all");
   const rows = useMemo(
@@ -75,11 +75,3 @@ function DashboardTableFlow() {
     </div>
   );
 }
-
-export const dashboardTableFlow = {
-  id: "dashboard-table",
-  label: "Dashboard + Tabla",
-  title: "Dashboard operativo con tabla",
-  description: "Filtros, tabla, estados y paginación en un panel real.",
-  Component: DashboardTableFlow,
-};

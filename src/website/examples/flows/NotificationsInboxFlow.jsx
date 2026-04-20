@@ -1,6 +1,6 @@
 import { Alert, Badge, Button, EmptyState, Toaster, toast } from "@/lib";
 
-function NotificationsInboxFlow() {
+export function NotificationsInboxFlow() {
   return (
     <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="space-y-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
@@ -62,11 +62,3 @@ function NotificationsInboxFlow() {
     </div>
   );
 }
-
-export const notificationsInboxFlow = {
-  id: "notifications-inbox",
-  label: "Notificaciones",
-  title: "Inbox de notificaciones de producto",
-  description: "Alertas reales, estado vacío y acciones de seguimiento.",
-  Component: NotificationsInboxFlow,
-};

@@ -1,6 +1,6 @@
 import { Alert, Badge, Button, Checkbox, FormControl, Input, Label } from "@/lib";
 
-function OnboardingAuthFlow() {
+export function OnboardingAuthFlow() {
   return (
     <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
@@ -47,11 +47,3 @@ function OnboardingAuthFlow() {
     </div>
   );
 }
-
-export const onboardingAuthFlow = {
-  id: "onboarding-auth",
-  label: "Onboarding + Auth",
-  title: "Onboarding y autenticación",
-  description: "Registro, login y validaciones del inicio de producto.",
-  Component: OnboardingAuthFlow,
-};

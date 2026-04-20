@@ -1,7 +1,7 @@
 import { Badge, Button, DatePicker, EmptyState, Range, TimePicker } from "@/lib";
 import { useState } from "react";
 
-function SchedulingFlow() {
+export function SchedulingFlow() {
   const [duration, setDuration] = useState(45);
 
   return (
@@ -41,11 +41,3 @@ function SchedulingFlow() {
     </div>
   );
 }
-
-export const schedulingFlow = {
-  id: "scheduling",
-  label: "Scheduling",
-  title: "Agendado y disponibilidad",
-  description: "Date/Time picker + duración + estado sin disponibilidad.",
-  Component: SchedulingFlow,
-};

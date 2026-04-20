@@ -1,7 +1,7 @@
 import { Button, CommandPalette, Toaster, Tooltip, toast } from "@/lib";
 import { useState } from "react";
 
-function CommandCenterFlow() {
+export function CommandCenterFlow() {
   const [openPalette, setOpenPalette] = useState(false);
 
   return (
@@ -54,11 +54,3 @@ function CommandCenterFlow() {
     </div>
   );
 }
-
-export const commandCenterFlow = {
-  id: "command-center",
-  label: "Command Center",
-  title: "Centro de comandos",
-  description: "Paleta de comandos, atajos y feedback de acciones.",
-  Component: CommandCenterFlow,
-};

@@ -1,6 +1,6 @@
 import { Avatar, Badge, Button, Drawer, Dropdown } from "@/lib";
 
-function TeamAdminFlow() {
+export function TeamAdminFlow() {
   const users = [
     { id: 1, name: "Ada Lovelace", role: "Owner", initials: "AL" },
     { id: 2, name: "Grace Hopper", role: "Editor", initials: "GH" },
@@ -68,11 +68,3 @@ function TeamAdminFlow() {
     </div>
   );
 }
-
-export const teamAdminFlow = {
-  id: "team-admin",
-  label: "Team Admin",
-  title: "Administración de equipo",
-  description: "Miembros, roles, acciones y panel lateral de permisos.",
-  Component: TeamAdminFlow,
-};
