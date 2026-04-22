@@ -11,6 +11,9 @@ export default function Tooltip({
   color = "default",
   content,
   placement = "top",
+  autoCloseMs: _autoCloseMs,
+  interactive: _interactive,
+  trigger: _trigger,
   ...props
 }) {
   return (
@@ -19,6 +22,7 @@ export default function Tooltip({
       color={color}
       placement={placement}
       trigger="hover"
+      interactive={false}
       showArrow
       arrowWidth={12}
       arrowHeight={6}

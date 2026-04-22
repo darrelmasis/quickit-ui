@@ -57,4 +57,38 @@ describe("Toaster", () => {
       { timeout: 1000 },
     );
   });
+
+  it("anuncia errores con una live region assertive", async () => {
+    renderWithProvider(<Toaster />);
+
+    toast({
+      title: "Error de red",
+      kind: "error",
+      duration: 0,
+    });
+
+    const alert = await screen.findByRole("alert");
+
+    expect(alert.getAttribute("aria-live")).toBe("assertive");
+    expect(alert.getAttribute("aria-atomic")).toBe("true");
+  });
+
+  it("respeta preventDefault en la accion del toast", async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(<Toaster />);
+
+    toast({
+      title: "Sincronización pendiente",
+      action: {
+        label: "Mantener",
+        onClick: (event) => event.preventDefault(),
+      },
+      duration: 0,
+    });
+
+    await user.click(await screen.findByRole("button", { name: "Mantener" }));
+
+    expect(screen.getByText("Sincronización pendiente")).toBeTruthy();
+  });
 });

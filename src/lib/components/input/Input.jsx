@@ -76,6 +76,7 @@ const Input = forwardRef(function Input(
   const {
     colorUi,
     describedBy,
+    labelledBy,
     resolvedColor,
     resolvedDisabled,
     resolvedId,
@@ -85,6 +86,7 @@ const Input = forwardRef(function Input(
     ui,
   } = useInputFieldState({
     ariaDescribedBy: props["aria-describedby"],
+    ariaLabelledBy: props["aria-labelledby"],
     color,
     disabled,
     id,
@@ -106,11 +108,11 @@ const Input = forwardRef(function Input(
       ? "text"
       : "password"
     : originalType;
-  const resolvedAutoComplete =
-    props.autoComplete ?? (originalType === "password" ? "new-password" : undefined);
+  const resolvedAutoComplete = props.autoComplete;
   const showClearButton =
     shouldEnableClear &&
     !resolvedDisabled &&
+    !props.readOnly &&
     !shouldEnablePasswordToggle &&
     currentValue.length > 0;
   const iconSizeClassName = INPUT_ACTION_ICON_SIZE_CLASSES[resolvedActionSize];
@@ -139,6 +141,10 @@ const Input = forwardRef(function Input(
     INPUT_SIDE_ELEMENT_THEME_CLASSES[theme],
   );
   const clearInputValue = () => {
+    if (props.readOnly) {
+      return;
+    }
+
     dispatchNativeInputValue(inputRef.current, "");
     inputRef.current?.focus();
     onClear?.();
@@ -192,7 +198,6 @@ const Input = forwardRef(function Input(
       resizeObserver.disconnect();
     };
   }, [
-    currentValue,
     hasActionButton,
     hasLeftElement,
     hasRightElement,
@@ -227,6 +232,7 @@ const Input = forwardRef(function Input(
         disabled={resolvedDisabled}
         aria-invalid={resolvedInvalid || undefined}
         aria-describedby={describedBy}
+        aria-labelledby={labelledBy}
         className={getInputClassName({
           attached: isAttached,
           className,
@@ -301,7 +307,9 @@ const Input = forwardRef(function Input(
               })}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
-                clearInputValue();
+                if (!props.readOnly) {
+                  clearInputValue();
+                }
               }}
             >
               {clearButtonContent}

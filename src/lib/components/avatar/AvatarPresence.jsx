@@ -5,7 +5,6 @@ import {
   AVATAR_PRESENCE_MARKER,
   AVATAR_PRESENCE_SIZE_CLASSES,
   AVATAR_PRESENCE_STATUS_CLASSES,
-  AVATAR_PRESENCE_STATUS_LABELS,
   AVATAR_PRESENCE_TRANSLATE_RATIO,
 } from "./avatar.constants";
 import { resolveAvatarSize, resolvePresenceStatus } from "./avatar.utils";
@@ -25,8 +24,9 @@ const AvatarPresence = forwardRef(function AvatarPresence(
     <span
       ref={ref}
       data-slot="avatar-presence"
-      role="status"
-      aria-label={label ?? AVATAR_PRESENCE_STATUS_LABELS[resolvedStatus]}
+      role={label ? "img" : undefined}
+      aria-hidden={label ? undefined : true}
+      aria-label={label ?? undefined}
       className={cn(
         "absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full",
         sizeClasses.outer,

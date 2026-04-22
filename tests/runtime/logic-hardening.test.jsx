@@ -83,7 +83,7 @@ describe("logic hardening", () => {
 
     const searchInput = screen.getByLabelText(/buscar en la paleta de comandos/i);
     await user.type(searchInput, "ini");
-    await user.click(screen.getByRole("button", { name: "Inicio" }));
+    await user.click(screen.getByRole("option", { name: "Inicio" }));
 
     expect(onSelect).toHaveBeenCalledTimes(1);
   });

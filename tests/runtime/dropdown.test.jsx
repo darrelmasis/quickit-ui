@@ -15,6 +15,34 @@ function DropdownState() {
 }
 
 describe("Dropdown", () => {
+  it("mantiene la composicion aunque trigger y content esten envueltos", async () => {
+    const user = userEvent.setup();
+
+    function WrappedTrigger() {
+      return <Dropdown.Trigger>Opciones envueltas</Dropdown.Trigger>;
+    }
+
+    function WrappedContent() {
+      return (
+        <Dropdown.Content>
+          <Dropdown.Item>Editar</Dropdown.Item>
+        </Dropdown.Content>
+      );
+    }
+
+    renderWithProvider(
+      <Dropdown>
+        <WrappedTrigger />
+        <WrappedContent />
+      </Dropdown>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Opciones envueltas" }));
+
+    expect(await screen.findByRole("menu")).toBeTruthy();
+    expect(screen.getByRole("menuitem", { name: "Editar" })).toBeTruthy();
+  });
+
   it("supports asChild triggers and keyboard navigation without manual indexes", async () => {
     const user = userEvent.setup();
     const onDelete = vi.fn();

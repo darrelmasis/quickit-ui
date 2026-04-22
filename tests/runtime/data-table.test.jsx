@@ -58,11 +58,45 @@ describe("DataTable", () => {
       />,
     );
 
-    await user.click(screen.getByRole("columnheader", { name: "Usage" }));
+    const sortButton = screen.getByRole("button", { name: "Usage" });
+    await user.click(sortButton);
 
     const cells = screen.getAllByRole("cell");
 
     expect(cells[0].textContent).toBe("10");
     expect(cells[1].textContent).toBe("40");
+    expect(
+      screen.getByRole("columnheader", { name: "Usage" }).getAttribute("aria-sort"),
+    ).toBe("ascending");
+  });
+
+  it("expone el header sortable como boton navegable por teclado", async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <DataTable
+        stickyHeader={false}
+        columns={[
+          {
+            key: "usage",
+            header: "Usage",
+            sortable: true,
+          },
+        ]}
+        data={[
+          { id: 1, usage: 40 },
+          { id: 2, usage: 10 },
+        ]}
+        rowKey={(row) => row.id}
+      />,
+    );
+
+    const sortButton = screen.getByRole("button", { name: "Usage" });
+    sortButton.focus();
+    await user.keyboard("{Enter}");
+
+    expect(
+      screen.getByRole("columnheader", { name: "Usage" }).getAttribute("aria-sort"),
+    ).toBe("ascending");
   });
 });

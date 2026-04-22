@@ -16,7 +16,7 @@ import Tooltip from "@/lib/components/tooltip/Tooltip";
 const RANGE_PRIMITIVES = {
   root: "relative flex w-full touch-none select-none items-center",
   track: "relative h-2 w-full grow overflow-hidden rounded-full border",
-  range: "absolute h-full",
+  range: "absolute",
   thumb: [
     "block size-5 rounded-full border bg-white shadow-sm ring-offset-white",
     "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
@@ -116,6 +116,16 @@ const Range = forwardRef(function Range(
     getAriaValueText,
     value,
     defaultValue,
+    "aria-describedby": ariaDescribedBy,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    name,
+    onBlur: onBlurProp,
+    onChange: onChangeProp,
+    onFocus: onFocusProp,
+    onMouseEnter: onMouseEnterProp,
+    onMouseLeave: onMouseLeaveProp,
+    onPointerDown: onPointerDownProp,
     ...props
   },
   ref,
@@ -128,6 +138,14 @@ const Range = forwardRef(function Range(
   const resolvedDisabled = disabled || field?.disabled;
   const resolvedRequired = required || field?.required;
   const resolvedId = id ?? field?.controlId ?? generatedId;
+  const labelledBy = [ariaLabelledBy, field?.labelId].filter(Boolean).join(" ") || undefined;
+  const describedBy = [
+    ariaDescribedBy,
+    field?.descriptionId,
+    resolvedInvalid ? field?.messageId : null,
+  ].filter(Boolean).join(" ") || undefined;
+  const startThumbLabelId = `${resolvedId}-start-label`;
+  const endThumbLabelId = `${resolvedId}-end-label`;
   const isVertical = orientation === "vertical";
   const numericStep = Number(step);
   const wheelStep = Number.isFinite(numericStep) && numericStep > 0 ? numericStep : 1;
@@ -319,11 +337,12 @@ const Range = forwardRef(function Range(
   };
 
   const handleWheel = useCallback((event) => {
-    // Evita que la rueda haga scroll en la página al interactuar con el Range.
-    event.preventDefault();
-    if (!allowWheel || resolvedDisabled) {
+    if (!allowWheel || resolvedDisabled || max <= min) {
       return;
     }
+
+    // Evita que la rueda haga scroll en la página solo cuando la interacción está activa.
+    event.preventDefault();
     const direction = event.deltaY < 0 ? 1 : -1;
     const delta = direction * wheelStep;
 
@@ -408,8 +427,21 @@ const Range = forwardRef(function Range(
         resolvedDisabled && "opacity-60",
         className,
       )}
-      onPointerDown={handlePointerDown}
+      onPointerDown={(event) => {
+        handlePointerDown(event);
+        onPointerDownProp?.(event);
+      }}
     >
+      {isDual ? (
+        <>
+          <span id={startThumbLabelId} className="sr-only">
+            Valor minimo
+          </span>
+          <span id={endThumbLabelId} className="sr-only">
+            Valor maximo
+          </span>
+        </>
+      ) : null}
       <div
         className={cn(
           RANGE_PRIMITIVES.track,
@@ -424,8 +456,19 @@ const Range = forwardRef(function Range(
           )}
           style={
             isVertical
-              ? { bottom: `${fillLeft}%`, height: `${fillWidth}%`, left: 0, width: "100%" }
-              : { left: `${fillLeft}%`, width: `${fillWidth}%` }
+              ? {
+                  top: `${100 - (fillLeft + fillWidth)}%`,
+                  height: `${fillWidth}%`,
+                  left: 0,
+                  right: 0,
+                  width: "100%",
+                }
+              : {
+                  left: `${fillLeft}%`,
+                  top: 0,
+                  bottom: 0,
+                  width: `${fillWidth}%`,
+                }
           }
         />
       </div>
@@ -433,12 +476,17 @@ const Range = forwardRef(function Range(
         <>
           <input
             ref={ref}
+            {...props}
             type="range"
             id={resolvedId}
             min={min}
             max={max}
             step={step}
             value={startValue}
+            name={undefined}
+            aria-describedby={describedBy}
+            aria-label={undefined}
+            aria-labelledby={labelledBy ? `${labelledBy} ${startThumbLabelId}` : startThumbLabelId}
             aria-valuetext={formatAriaValueText(startValue, "start")}
             required={resolvedRequired}
             disabled={resolvedDisabled}
@@ -449,18 +497,20 @@ const Range = forwardRef(function Range(
               "[&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-5",
             )}
             style={inputOrientationStyle}
-            onPointerDown={() => {
+            onPointerDown={(event) => {
               setActiveThumb("start");
               activeThumbRef.current = "start";
               showTooltipForThumb("start");
               setDraggingThumb("start");
+              onPointerDownProp?.(event);
             }}
-            onMouseEnter={() => {
+            onMouseEnter={(event) => {
               setHoveredThumb("start");
               hoveredThumbRef.current = "start";
               showTooltipForThumb("start");
+              onMouseEnterProp?.(event);
             }}
-            onMouseLeave={() => {
+            onMouseLeave={(event) => {
               setHoveredThumb((current) =>
                 current === "start" ? null : current,
               );
@@ -468,18 +518,21 @@ const Range = forwardRef(function Range(
                 hoveredThumbRef.current = null;
               }
               scheduleTooltipHide();
+              onMouseLeaveProp?.(event);
             }}
-            onFocus={() => {
+            onFocus={(event) => {
               setActiveThumb("start");
               activeThumbRef.current = "start";
               setFocusedThumb("start");
               showTooltipForThumb("start");
+              onFocusProp?.(event);
             }}
-            onBlur={() => {
+            onBlur={(event) => {
               setFocusedThumb((current) =>
                 current === "start" ? null : current,
               );
               scheduleTooltipHide();
+              onBlurProp?.(event);
             }}
             onChange={(event) => {
               const nextStart = Math.min(
@@ -493,18 +546,22 @@ const Range = forwardRef(function Range(
               if (!isControlled) {
                 setInternalValue(nextTuple);
               }
-              onChange?.(event);
+              onChangeProp?.(event);
               onValueChange?.(nextTuple);
             }}
-            {...props}
           />
           <input
+            {...props}
             type="range"
             id={`${resolvedId}-end`}
             min={min}
             max={max}
             step={step}
             value={endValue}
+            name={undefined}
+            aria-describedby={describedBy}
+            aria-label={undefined}
+            aria-labelledby={labelledBy ? `${labelledBy} ${endThumbLabelId}` : endThumbLabelId}
             aria-valuetext={formatAriaValueText(endValue, "end")}
             required={resolvedRequired}
             disabled={resolvedDisabled}
@@ -515,18 +572,20 @@ const Range = forwardRef(function Range(
               "[&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-5",
             )}
             style={inputOrientationStyle}
-            onPointerDown={() => {
+            onPointerDown={(event) => {
               setActiveThumb("end");
               activeThumbRef.current = "end";
               showTooltipForThumb("end");
               setDraggingThumb("end");
+              onPointerDownProp?.(event);
             }}
-            onMouseEnter={() => {
+            onMouseEnter={(event) => {
               setHoveredThumb("end");
               hoveredThumbRef.current = "end";
               showTooltipForThumb("end");
+              onMouseEnterProp?.(event);
             }}
-            onMouseLeave={() => {
+            onMouseLeave={(event) => {
               setHoveredThumb((current) =>
                 current === "end" ? null : current,
               );
@@ -534,18 +593,21 @@ const Range = forwardRef(function Range(
                 hoveredThumbRef.current = null;
               }
               scheduleTooltipHide();
+              onMouseLeaveProp?.(event);
             }}
-            onFocus={() => {
+            onFocus={(event) => {
               setActiveThumb("end");
               activeThumbRef.current = "end";
               setFocusedThumb("end");
               showTooltipForThumb("end");
+              onFocusProp?.(event);
             }}
-            onBlur={() => {
+            onBlur={(event) => {
               setFocusedThumb((current) =>
                 current === "end" ? null : current,
               );
               scheduleTooltipHide();
+              onBlurProp?.(event);
             }}
             onChange={(event) => {
               const nextEnd = Math.max(
@@ -559,10 +621,9 @@ const Range = forwardRef(function Range(
               if (!isControlled) {
                 setInternalValue(nextTuple);
               }
-              onChange?.(event);
+              onChangeProp?.(event);
               onValueChange?.(nextTuple);
             }}
-            {...props}
           />
           {shouldShowTooltip && tooltipThumb === "start" ? (
             <Tooltip
@@ -683,12 +744,17 @@ const Range = forwardRef(function Range(
         <>
           <input
             ref={ref}
+            {...props}
             type="range"
             id={resolvedId}
             min={min}
             max={max}
             step={step}
             value={startValue}
+            name={name}
+            aria-describedby={describedBy}
+            aria-label={ariaLabel}
+            aria-labelledby={labelledBy}
             aria-valuetext={formatAriaValueText(startValue, "start")}
             required={resolvedRequired}
             disabled={resolvedDisabled}
@@ -705,19 +771,18 @@ const Range = forwardRef(function Range(
               if (!isControlled) {
                 setInternalValue(newValue);
               }
-              onChange?.(event);
+              onChangeProp?.(event);
               onValueChange?.(newValue);
             }}
-            {...props}
             onFocus={(event) => {
               setFocusedThumb("start");
               showTooltipForThumb("start");
-              props.onFocus?.(event);
+              onFocusProp?.(event);
             }}
             onBlur={(event) => {
               setFocusedThumb(null);
               scheduleTooltipHide();
-              props.onBlur?.(event);
+              onBlurProp?.(event);
             }}
           />
           {shouldShowTooltip ? (

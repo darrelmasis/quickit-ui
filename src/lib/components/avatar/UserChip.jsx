@@ -38,7 +38,8 @@ const UserChip = forwardRef(function UserChip(
   const ui = AVATAR_THEME_CLASSES[theme];
   const resolvedSize = resolveAvatarSize(size);
   const Component = href ? "a" : "div";
-  const avatarFallback = initials ?? getInitials(name);
+  const initialsSource = normalizeInitialsSource(name);
+  const avatarFallback = initials ?? getInitials(initialsSource || "?");
 
   return (
     <Component
@@ -56,7 +57,7 @@ const UserChip = forwardRef(function UserChip(
       {...props}
     >
       <Avatar size={resolvedSize} shape={shape}>
-        {src ? <AvatarImage src={src} alt={normalizeInitialsSource(name)} /> : null}
+        {src ? <AvatarImage src={src} alt={initialsSource} /> : null}
         <AvatarFallback>{avatarFallback}</AvatarFallback>
         {presence ? <AvatarPresence status={presence} /> : null}
       </Avatar>

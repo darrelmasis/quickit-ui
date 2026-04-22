@@ -1,4 +1,4 @@
-import { Children, forwardRef, useId, useMemo, useState } from "react";
+import { Children, forwardRef, isValidElement, useId, useMemo, useState } from "react";
 import { useQuickitTheme } from "@/lib/theme";
 import { cn, getAvatarRadius } from "@/lib/utils";
 import { AvatarPresenceMaskDefs } from "@/lib/assets/vectors";
@@ -26,9 +26,12 @@ const Avatar = forwardRef(function Avatar(
   const ui = AVATAR_THEME_CLASSES[theme];
   const resolvedShape = resolveAvatarShape(shape);
   const resolvedSize = resolveAvatarSize(size);
-  const [status, setStatus] = useState("error");
   const maskId = useId().replaceAll(":", "");
   const avatarChildren = Children.toArray(children);
+  const hasImageSource = avatarChildren.some(
+    (child) => isValidElement(child) && Boolean(child.props?.src),
+  );
+  const [status, setStatus] = useState(() => (hasImageSource ? "loading" : "error"));
   const presenceChildren = avatarChildren.filter(isAvatarPresenceElement);
   const contentChildren = avatarChildren.filter(
     (child) => !isAvatarPresenceElement(child),

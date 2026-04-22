@@ -7,5 +7,6 @@
    ─────────────────────────────────────────────────────────────────────────────── */
 
 @import "tailwindcss";
+@import "../lib/theme/brand-theme.css";
 
 @custom-variant dark (&:where(.dark, .dark *));

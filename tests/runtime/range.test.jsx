@@ -63,4 +63,65 @@ describe("Range", () => {
     fireEvent.wheel(root, { deltaY: -120 });
     expect(onValueChange).toHaveBeenLastCalledWith(45);
   });
+
+  it("no bloquea la rueda cuando allowWheel es false", () => {
+    const onValueChange = vi.fn();
+
+    renderWithProvider(
+      <Range defaultValue={40} step={5} allowWheel={false} onValueChange={onValueChange} />,
+    );
+
+    const input = screen.getByRole("slider");
+    const root = input.parentElement;
+    const wheelEvent = new WheelEvent("wheel", {
+      bubbles: true,
+      cancelable: true,
+      deltaY: -120,
+    });
+
+    root.dispatchEvent(wheelEvent);
+
+    expect(wheelEvent.defaultPrevented).toBe(false);
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(input.value).toBe("40");
+  });
+
+  it("mantiene la actualizacion interna aunque el consumer pase onChange", () => {
+    const onChange = vi.fn();
+
+    renderWithProvider(
+      <Range
+        min={0}
+        max={100}
+        defaultValue={20}
+        onChange={onChange}
+      />,
+    );
+
+    const input = screen.getByRole("slider");
+    fireEvent.change(input, { target: { value: "55" } });
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(input.value).toBe("55");
+  });
+
+  it("diferencia accesiblemente los thumbs en modo dual", () => {
+    renderWithProvider(
+      <>
+        <span id="range-label">Precio</span>
+        <Range
+          range
+          defaultValue={[10, 70]}
+          aria-labelledby="range-label"
+        />
+      </>,
+    );
+
+    expect(
+      screen.getByRole("slider", { name: /precio valor minimo/i }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("slider", { name: /precio valor maximo/i }),
+    ).toBeTruthy();
+  });
 });

@@ -119,6 +119,22 @@ function resolveToastIcon(item, { defaultIcon, icons }) {
   return null;
 }
 
+function getToastAnnouncementProps(item) {
+  if (item.kind === "error") {
+    return {
+      role: "alert",
+      "aria-atomic": "true",
+      "aria-live": "assertive",
+    };
+  }
+
+  return {
+    role: "status",
+    "aria-atomic": "true",
+    "aria-live": "polite",
+  };
+}
+
 export function Toaster({
   position = "bottom-right",
   visibleToasts: visibleToastsProp,
@@ -282,6 +298,7 @@ export function Toaster({
                 }}
               >
                 <div
+                  {...getToastAnnouncementProps(item)}
                   className={cn(
                     "qk-toast-surface pointer-events-auto w-full min-w-0 max-w-full rounded-2xl border px-4 py-3",
                     stackAnimClasses(position, Boolean(item.dismissing)),
@@ -329,9 +346,12 @@ export function Toaster({
                         size="sm"
                         variant="outline"
                         color="neutral"
-                        onClick={() => {
-                          item.action?.onClick?.();
-                          dismissToast(item.id);
+                        onClick={(event) => {
+                          item.action?.onClick?.(event);
+
+                          if (!event.defaultPrevented) {
+                            dismissToast(item.id);
+                          }
                         }}
                       >
                         {item.action.label}

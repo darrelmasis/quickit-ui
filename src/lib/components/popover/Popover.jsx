@@ -1,4 +1,4 @@
-import { Children, cloneElement, isValidElement, useCallback, useEffect, useState } from "react";
+import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef, useState } from "react";
 import {
   FloatingArrow,
   FloatingPortal,
@@ -239,6 +239,7 @@ export default function Popover({
   content,
   offset: offsetValue = 8,
   hoverDelayPreset = "normal",
+  interactive = false,
   open: controlledOpen,
   onOpenChange,
   placement = "top",
@@ -256,6 +257,7 @@ export default function Popover({
     }
     onOpenChange?.(nextOpen);
   }, [isOpenControlled, onOpenChange]);
+  const panelRef = useRef(null);
   const [arrowElement, setArrowElement] = useState(null);
   const { theme: effectiveTheme } = useQuickitControlState("popover");
   const resolvedColor = POPOVER_THEME_CLASSES[effectiveTheme][color] ? color : "default";
@@ -295,7 +297,7 @@ export default function Popover({
     enabled: trigger !== "manual",
   });
   const role = useRole(context, {
-    role: isHoverTrigger ? "tooltip" : "dialog",
+    role: isHoverTrigger && !interactive ? "tooltip" : interactive ? "dialog" : undefined,
   });
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
@@ -349,6 +351,24 @@ export default function Popover({
     };
   }, [autoCloseMs, open, setOpen]);
 
+  useEffect(() => {
+    if (!open || !interactive) {
+      return undefined;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      const focusTarget =
+        panelRef.current?.querySelector("[data-overlay-autofocus='true']") ??
+        panelRef.current;
+
+      focusTarget?.focus?.();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [interactive, open]);
+
   const mergedChildRef = useMergeRefs(
     isValidElement(children) ? children.ref : null,
     referenceRef,
@@ -397,7 +417,10 @@ export default function Popover({
     arrowStroke ?? palette.arrowStroke;
   const floatingNode = (
     <div
-      ref={floatingRef}
+      ref={(node) => {
+        floatingRef(node);
+        panelRef.current = node;
+      }}
       className={cn(
         POPOVER_PRIMITIVES.panel,
         palette.panel,
@@ -411,6 +434,7 @@ export default function Popover({
       {...getFloatingProps({
         "data-state": open ? "open" : "closed",
       })}
+      tabIndex={interactive ? -1 : undefined}
     >
       {content}
       {showArrow ? (

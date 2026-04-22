@@ -6,29 +6,29 @@ import { cn } from "@/lib/utils";
 const TABLE_SKIN = {
   light: {
     neutral: {
-      wrap: "border-slate-200",
-      table: "divide-slate-200",
-      head: "border-slate-200 bg-slate-50 text-slate-600",
+      wrap: "border-slate-200/70",
+      table: "divide-slate-200/70",
+      head: "border-slate-200/70 bg-slate-50/70 text-slate-600",
       headActive: "text-slate-900",
-      row: "border-slate-100",
+      row: "border-slate-100/80",
       cellHover: "group-hover:bg-slate-50",
       cell: "text-slate-800",
     },
     slate: {
-      wrap: "border-slate-200",
-      table: "divide-slate-200",
-      head: "border-slate-200 bg-slate-50 text-slate-600",
+      wrap: "border-slate-200/70",
+      table: "divide-slate-200/70",
+      head: "border-slate-200/70 bg-slate-50/70 text-slate-600",
       headActive: "text-slate-900",
-      row: "border-slate-100",
+      row: "border-slate-100/80",
       cellHover: "group-hover:bg-slate-50",
       cell: "text-slate-800",
     },
     zinc: {
-      wrap: "border-zinc-200",
-      table: "divide-zinc-200",
-      head: "border-zinc-200 bg-zinc-50 text-zinc-600",
+      wrap: "border-zinc-200/75",
+      table: "divide-zinc-200/75",
+      head: "border-zinc-200/75 bg-zinc-50/70 text-zinc-600",
       headActive: "text-zinc-900",
-      row: "border-zinc-100",
+      row: "border-zinc-100/75",
       cellHover: "group-hover:bg-zinc-50",
       cell: "text-zinc-800",
     },
@@ -87,20 +87,20 @@ const TABLE_SKIN = {
       cell: "text-slate-800",
     },
     light: {
-      wrap: "border-neutral-200",
-      table: "divide-neutral-200",
-      head: "border-neutral-200 bg-white text-neutral-600",
+      wrap: "border-neutral-200/70",
+      table: "divide-neutral-200/70",
+      head: "border-neutral-200/70 bg-white text-neutral-600",
       headActive: "text-neutral-950",
-      row: "border-neutral-100",
+      row: "border-neutral-100/75",
       cellHover: "group-hover:bg-neutral-50",
       cell: "text-neutral-900",
     },
     dark: {
-      wrap: "border-zinc-300",
-      table: "divide-zinc-200",
-      head: "border-zinc-300 bg-zinc-100 text-zinc-700",
+      wrap: "border-zinc-300/80",
+      table: "divide-zinc-200/80",
+      head: "border-zinc-300/80 bg-zinc-100/85 text-zinc-700",
       headActive: "text-zinc-950",
-      row: "border-zinc-200",
+      row: "border-zinc-200/80",
       cellHover: "group-hover:bg-zinc-100",
       cell: "text-zinc-900",
     },
@@ -116,29 +116,29 @@ const TABLE_SKIN = {
   },
   dark: {
     neutral: {
-      wrap: "border-zinc-800",
-      table: "divide-zinc-800",
-      head: "border-zinc-800 bg-zinc-900/80 text-zinc-400",
+      wrap: "border-zinc-800/75",
+      table: "divide-zinc-800/70",
+      head: "border-zinc-800/75 bg-zinc-900/70 text-zinc-400",
       headActive: "text-zinc-100",
-      row: "border-zinc-800/80",
+      row: "border-zinc-800/60",
       cellHover: "group-hover:bg-zinc-900",
       cell: "text-zinc-100",
     },
     slate: {
-      wrap: "border-slate-800",
-      table: "divide-slate-800",
-      head: "border-slate-800 bg-slate-900/80 text-slate-400",
+      wrap: "border-slate-800/75",
+      table: "divide-slate-800/70",
+      head: "border-slate-800/75 bg-slate-900/70 text-slate-400",
       headActive: "text-slate-100",
-      row: "border-slate-800/80",
+      row: "border-slate-800/60",
       cellHover: "group-hover:bg-slate-900",
       cell: "text-slate-100",
     },
     zinc: {
-      wrap: "border-zinc-800",
-      table: "divide-zinc-800",
-      head: "border-zinc-800 bg-zinc-900/80 text-zinc-400",
+      wrap: "border-zinc-800/75",
+      table: "divide-zinc-800/70",
+      head: "border-zinc-800/75 bg-zinc-900/70 text-zinc-400",
       headActive: "text-zinc-100",
-      row: "border-zinc-800/80",
+      row: "border-zinc-800/60",
       cellHover: "group-hover:bg-zinc-900",
       cell: "text-zinc-100",
     },
@@ -197,20 +197,20 @@ const TABLE_SKIN = {
       cell: "text-zinc-100",
     },
     light: {
-      wrap: "border-neutral-700",
-      table: "divide-neutral-800",
-      head: "border-neutral-700 bg-neutral-900 text-neutral-300",
+      wrap: "border-neutral-700/75",
+      table: "divide-neutral-800/70",
+      head: "border-neutral-700/75 bg-neutral-900/80 text-neutral-300",
       headActive: "text-neutral-50",
-      row: "border-neutral-800",
+      row: "border-neutral-800/60",
       cellHover: "group-hover:bg-neutral-900",
       cell: "text-neutral-100",
     },
     dark: {
-      wrap: "border-zinc-700",
-      table: "divide-zinc-700",
-      head: "border-zinc-700 bg-zinc-900 text-zinc-300",
+      wrap: "border-zinc-700/75",
+      table: "divide-zinc-700/70",
+      head: "border-zinc-700/75 bg-zinc-900/80 text-zinc-300",
       headActive: "text-zinc-50",
-      row: "border-zinc-800",
+      row: "border-zinc-800/60",
       cellHover: "group-hover:bg-zinc-900",
       cell: "text-zinc-100",
     },
@@ -230,6 +230,12 @@ const TABLE_ALIGNMENTS = {
   center: "text-center",
   left: "text-left",
   right: "text-right",
+};
+
+const TABLE_BUTTON_ALIGNMENTS = {
+  center: "justify-center",
+  left: "justify-start",
+  right: "justify-end",
 };
 
 function nextDirection(prev, key) {
@@ -329,29 +335,50 @@ export function DataTable({
               const active = sortState?.column === col.key;
               const alignClass =
                 TABLE_ALIGNMENTS[col.align] ?? TABLE_ALIGNMENTS.left;
+              const buttonAlignClass =
+                TABLE_BUTTON_ALIGNMENTS[col.align] ?? TABLE_BUTTON_ALIGNMENTS.left;
               const canSort = Boolean(col.sortable);
+              const ariaSort = canSort
+                ? active
+                  ? sortState.dir === "asc"
+                    ? "ascending"
+                    : "descending"
+                  : "none"
+                : undefined;
 
               return (
                 <th
                   key={col.key}
                   scope="col"
+                  aria-sort={ariaSort}
                   className={cn(
                     "px-4 py-3 text-xs font-semibold uppercase tracking-wide",
                     alignClass,
-                    canSort && "cursor-pointer select-none",
                     active && skin.headActive,
                     col.headerClassName,
                   )}
-                  onClick={() => canSort && setSort(col.key)}
                 >
-                  <span className="inline-flex items-center gap-1">
-                    {col.header}
-                    {canSort && active ? (
-                      <span aria-hidden="true">
-                        {sortState.dir === "asc" ? "▲" : "▼"}
-                      </span>
-                    ) : null}
-                  </span>
+                  {canSort ? (
+                    <button
+                      type="button"
+                      className={cn(
+                        "inline-flex w-full select-none items-center gap-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2",
+                        buttonAlignClass,
+                      )}
+                      onClick={() => setSort(col.key)}
+                    >
+                      <span>{col.header}</span>
+                      {active ? (
+                        <span aria-hidden="true">
+                          {sortState.dir === "asc" ? "▲" : "▼"}
+                        </span>
+                      ) : null}
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-1">
+                      {col.header}
+                    </span>
+                  )}
                 </th>
               );
             })}

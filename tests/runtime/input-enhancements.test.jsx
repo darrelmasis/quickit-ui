@@ -31,7 +31,7 @@ describe("enhanced input actions", () => {
     });
 
     expect(input.getAttribute("type")).toBe("password");
-    expect(input.getAttribute("autocomplete")).toBe("new-password");
+    expect(input.hasAttribute("autocomplete")).toBe(false);
 
     await user.click(toggle);
 

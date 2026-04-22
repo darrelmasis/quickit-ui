@@ -87,7 +87,14 @@ function parseSingleValue(raw) {
   if (raw == null || raw === "") {
     return null;
   }
-  return startOfDay(new Date(raw));
+
+  const parsed = new Date(raw);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return startOfDay(parsed);
 }
 
 function parseRangeValue(raw) {
@@ -97,6 +104,18 @@ function parseRangeValue(raw) {
   const from = raw.from != null ? parseSingleValue(raw.from) : null;
   const to = raw.to != null ? parseSingleValue(raw.to) : null;
   return { from, to };
+}
+
+function serializeDateValue(value) {
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+    return "";
+  }
+
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 const WEEKDAYS = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"];
@@ -207,6 +226,7 @@ export const DatePicker = forwardRef(function DatePicker(
     invalid = false,
     maxDate,
     minDate,
+    name,
     onChange,
     placeholder,
     required = false,
@@ -214,6 +234,7 @@ export const DatePicker = forwardRef(function DatePicker(
     size: sizeProp,
     value: controlledValue,
     "aria-describedby": ariaDescribedByProp,
+    "aria-labelledby": ariaLabelledByProp,
     ...rest
   },
   ref,
@@ -241,6 +262,7 @@ export const DatePicker = forwardRef(function DatePicker(
     colorUi,
     describedBy,
     focusRingEnabled,
+    labelledBy,
     resolvedDisabled,
     resolvedId,
     resolvedInvalid,
@@ -248,6 +270,7 @@ export const DatePicker = forwardRef(function DatePicker(
     ui,
   } = useInputFieldState({
     ariaDescribedBy: ariaDescribedByProp,
+    ariaLabelledBy: ariaLabelledByProp,
     color,
     disabled,
     id,
@@ -256,6 +279,7 @@ export const DatePicker = forwardRef(function DatePicker(
   });
 
   const inputId = resolvedId ?? genId;
+  const popupId = `${inputId}-calendar`;
 
   const min = minDate ? startOfDay(new Date(minDate)) : null;
   const max = maxDate ? startOfDay(new Date(maxDate)) : null;
@@ -336,6 +360,20 @@ export const DatePicker = forwardRef(function DatePicker(
     }
     return fmt(selected);
   }, [dateStyle, isRange, selected, selectedRange]);
+  const normalizedValue = useMemo(() => {
+    if (isRange) {
+      const from = serializeDateValue(selectedRange.from);
+      const to = serializeDateValue(selectedRange.to);
+
+      if (!from && !to) {
+        return "";
+      }
+
+      return `${from}..${to}`;
+    }
+
+    return serializeDateValue(selected);
+  }, [isRange, selected, selectedRange]);
 
   const grid = useMemo(() => {
     const year = visibleMonth.getFullYear();
@@ -475,6 +513,7 @@ export const DatePicker = forwardRef(function DatePicker(
 
   const calendarContent = (
     <div
+      id={popupId}
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-2",
         "text-slate-900 dark:text-stone-100",
@@ -745,6 +784,15 @@ export const DatePicker = forwardRef(function DatePicker(
         group?.layout === "inline" && "flex-1",
       )}
     >
+      {name ? (
+        <input
+          type="hidden"
+          name={name}
+          value={normalizedValue}
+          disabled={resolvedDisabled}
+        />
+      ) : null}
+
       <Popover
         asChild
         trigger="click"
@@ -755,20 +803,22 @@ export const DatePicker = forwardRef(function DatePicker(
       >
         <input
           ref={ref}
+          {...rest}
           id={inputId}
           type="text"
           readOnly
           autoComplete="off"
           role="combobox"
+          aria-controls={calendarOpen ? popupId : undefined}
           aria-expanded={calendarOpen}
           aria-haspopup="dialog"
           aria-invalid={resolvedInvalid || undefined}
           aria-required={resolvedRequired || undefined}
           aria-describedby={describedBy}
+          aria-labelledby={labelledBy}
           placeholder={resolvedPlaceholder}
           value={displayValue}
           disabled={resolvedDisabled}
-          {...rest}
           onKeyDown={(event) => {
             rest.onKeyDown?.(event);
 
@@ -807,7 +857,8 @@ export const DatePicker = forwardRef(function DatePicker(
       <button
         type="button"
         aria-label={calendarOpen ? "Cerrar calendario" : "Abrir calendario"}
-        aria-controls={calendarOpen ? inputId : undefined}
+        aria-controls={calendarOpen ? popupId : undefined}
+        aria-haspopup="dialog"
         aria-expanded={calendarOpen}
         disabled={resolvedDisabled}
         className={cn(

@@ -26,10 +26,19 @@ describe("identity components", () => {
           <AvatarFallback>ER</AvatarFallback>
           <AvatarPresence status="away" />
         </Avatar>
+        <Avatar size="lg">
+          <AvatarFallback>ER</AvatarFallback>
+          <AvatarPresence status="away" label="Away" />
+        </Avatar>
       </div>,
     );
 
-    expect(screen.getAllByText("ER").length).toBe(2);
+    expect(screen.getAllByText("ER").length).toBe(3);
+    expect(
+      container
+        .querySelector('[data-slot="avatar-presence"]')
+        ?.getAttribute("aria-hidden"),
+    ).toBe("true");
     expect(screen.getByLabelText("Away")).toBeTruthy();
     expect(
       container
@@ -39,7 +48,7 @@ describe("identity components", () => {
   });
 
   it("renders UserChip content with presence and trailing content", () => {
-    renderWithProvider(
+    const { container } = renderWithProvider(
       <UserChip
         name="Elena Ruiz"
         description="Design lead"
@@ -52,6 +61,8 @@ describe("identity components", () => {
     expect(screen.getByText("Elena Ruiz")).toBeTruthy();
     expect(screen.getByText("Design lead")).toBeTruthy();
     expect(screen.getByText("Core")).toBeTruthy();
-    expect(screen.getByLabelText("Online")).toBeTruthy();
+    expect(
+      container.querySelector('[data-slot="avatar-presence"]')?.getAttribute("aria-hidden"),
+    ).toBe("true");
   });
 });

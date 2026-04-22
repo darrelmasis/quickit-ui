@@ -278,6 +278,7 @@ export const TimePicker = forwardRef(function TimePicker(
     size: sizeProp,
     value: controlledValue,
     "aria-describedby": ariaDescribedByProp,
+    "aria-labelledby": ariaLabelledByProp,
     ...rest
   },
   ref,
@@ -302,6 +303,7 @@ export const TimePicker = forwardRef(function TimePicker(
     colorUi,
     describedBy,
     focusRingEnabled,
+    labelledBy,
     resolvedDisabled,
     resolvedId,
     resolvedInvalid,
@@ -310,6 +312,7 @@ export const TimePicker = forwardRef(function TimePicker(
     ui,
   } = useInputFieldState({
     ariaDescribedBy: ariaDescribedByProp,
+    ariaLabelledBy: ariaLabelledByProp,
     color,
     disabled,
     id,
@@ -318,6 +321,7 @@ export const TimePicker = forwardRef(function TimePicker(
   });
 
   const inputId = resolvedId ?? generatedId;
+  const popupId = `${inputId}-timepicker`;
   const selectedValue =
     controlledValue !== undefined
       ? parseTimeValue(controlledValue)
@@ -403,6 +407,7 @@ export const TimePicker = forwardRef(function TimePicker(
 
   const content = (
     <div
+      id={popupId}
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-1 text-slate-900 dark:text-stone-100",
         "text-slate-900 dark:text-stone-100",
@@ -629,20 +634,22 @@ export const TimePicker = forwardRef(function TimePicker(
       >
         <input
           ref={ref}
+          {...rest}
           id={inputId}
           type="text"
           readOnly
           autoComplete="off"
           role="combobox"
+          aria-controls={open ? popupId : undefined}
           aria-expanded={open}
           aria-haspopup="dialog"
           aria-invalid={resolvedInvalid || undefined}
           aria-required={resolvedRequired || undefined}
           aria-describedby={describedBy}
+          aria-labelledby={labelledBy}
           placeholder={placeholder}
           value={displayValue}
           disabled={resolvedDisabled}
-          {...rest}
           onKeyDown={(event) => {
             rest.onKeyDown?.(event);
 
@@ -713,6 +720,8 @@ export const TimePicker = forwardRef(function TimePicker(
           size="sm"
           aria-label={open ? "Cerrar selector de hora" : "Abrir selector de hora"}
           title={open ? "Cerrar selector de hora" : "Abrir selector de hora"}
+          aria-controls={open ? popupId : undefined}
+          aria-haspopup="dialog"
           disabled={resolvedDisabled}
           className={cn(
             "pointer-events-auto",

@@ -160,6 +160,7 @@ const Combobox = forwardRef(function Combobox(
     name,
     onChange,
     onClear,
+    onInputChange,
     onValueChange,
     options: optionsProp = [],
     placeholder = "Buscar…",
@@ -167,6 +168,7 @@ const Combobox = forwardRef(function Combobox(
     size: controlSizeProp,
     usePortal = true,
     value: controlledValue,
+    "aria-labelledby": ariaLabelledBy,
     ...props
   },
   ref,
@@ -174,7 +176,7 @@ const Combobox = forwardRef(function Combobox(
   const group = useInputGroup();
   const isAttached = Boolean(group?.attached);
   const { theme: fieldTheme, focusRing: focusRingEnabled } =
-    useQuickitControlState("select");
+    useQuickitControlState("combobox");
   const theme = resolveFloatingListTheme(fieldTheme);
   const ui = COMBOBOX_THEME_CLASSES[fieldTheme];
   const controlSize = controlSizeProp ?? group?.size ?? "md";
@@ -189,6 +191,8 @@ const Combobox = forwardRef(function Combobox(
   const generatedId = useId();
   const resolvedId = id ?? field?.controlId ?? generatedId;
   const listboxId = `${resolvedId}-listbox`;
+  const labelledBy =
+    [ariaLabelledBy, field?.labelId].filter(Boolean).join(" ") || undefined;
   const describedBy =
     [
       props["aria-describedby"],
@@ -371,6 +375,10 @@ const Combobox = forwardRef(function Combobox(
       resolvedId,
     ],
   );
+  const activeOptionId =
+    open && activeIndex !== null && filteredOptions[activeIndex]
+      ? `${resolvedId}-opt-${activeIndex}`
+      : undefined;
 
   const getOptionProps = useCallback(
     (option, index) =>
@@ -469,7 +477,14 @@ const Combobox = forwardRef(function Combobox(
         group?.layout === "inline" && "flex-1",
       )}
     >
-      {name ? <input type="hidden" name={name} value={resolvedValue} /> : null}
+      {name ? (
+        <input
+          type="hidden"
+          name={name}
+          value={resolvedValue}
+          disabled={resolvedDisabled}
+        />
+      ) : null}
       <div className={cn("relative flex w-full", isAttached && "h-full")}>
         <input
           ref={referenceRef}
@@ -478,7 +493,9 @@ const Combobox = forwardRef(function Combobox(
           autoComplete="off"
           role="combobox"
           aria-expanded={open}
+          aria-labelledby={labelledBy}
           aria-controls={open ? listboxId : undefined}
+          aria-activedescendant={activeOptionId}
           aria-autocomplete="list"
           aria-invalid={resolvedInvalid || undefined}
           aria-required={resolvedRequired || undefined}
@@ -509,17 +526,17 @@ const Combobox = forwardRef(function Combobox(
           {...interactions.getReferenceProps({
             ...props,
             onChange(event) {
-              props.onChange?.(event);
               const next = event.target.value;
               setDraftQuery(next);
               setOpen(true);
               const list = filterOptionsByQuery(options, next);
               setActiveIndex(firstEnabledIndex(list));
+              onInputChange?.(next, event);
             },
             onClick(event) {
               props.onClick?.(event);
-              if (!resolvedDisabled) {
-                handleOpenChange(!open);
+              if (!resolvedDisabled && !open) {
+                handleOpenChange(true);
               }
             },
             onKeyDown(event) {
@@ -577,7 +594,7 @@ const Combobox = forwardRef(function Combobox(
             size="sm"
             tabIndex={-1}
             title={open ? "Cerrar opciones" : "Abrir opciones"}
-            aria-hidden="true"
+            aria-label={open ? "Cerrar opciones" : "Abrir opciones"}
             disabled={resolvedDisabled}
             className={cn(
               COMBOBOX_PRIMITIVES.actionButton,

@@ -4,6 +4,7 @@ import {
   isValidElement,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -12,7 +13,7 @@ import { createPortal } from "react-dom";
 import { CloseIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
 import {
-  focusFirstElement,
+  getFocusableElements,
   trapFocusWithin,
 } from "@/lib/components/_shared/overlay-focus";
 import { useQuickitControlState } from "@/lib/theme";
@@ -106,8 +107,8 @@ export function Modal({
   const [visible, setVisible] = useState(defaultOpen);
   const [rendered, setRendered] = useState(defaultOpen);
   const [instanceZIndex, setInstanceZIndex] = useState(customZIndex ?? 50);
-  const [titleCount, setTitleCount] = useState(0);
-  const [descriptionCount, setDescriptionCount] = useState(0);
+  const [registeredTitleIds, setRegisteredTitleIds] = useState([]);
+  const [registeredDescriptionIds, setRegisteredDescriptionIds] = useState([]);
   const previousFocusedElementRef = useRef(null);
   const triggerElementRef = useRef(null);
   const [modalId] = useState(() => {
@@ -142,12 +143,28 @@ export function Modal({
     setOpen(false);
   }, [onBeforeClose, setOpen]);
 
-  const registerTitle = useCallback((enabled) => {
-    setTitleCount((count) => Math.max(0, count + (enabled ? 1 : -1)));
+  const registerTitle = useCallback((id) => {
+    setRegisteredTitleIds((currentIds) => (
+      currentIds.includes(id) ? currentIds : [...currentIds, id]
+    ));
+
+    return () => {
+      setRegisteredTitleIds((currentIds) =>
+        currentIds.filter((currentId) => currentId !== id),
+      );
+    };
   }, []);
 
-  const registerDescription = useCallback((enabled) => {
-    setDescriptionCount((count) => Math.max(0, count + (enabled ? 1 : -1)));
+  const registerDescription = useCallback((id) => {
+    setRegisteredDescriptionIds((currentIds) => (
+      currentIds.includes(id) ? currentIds : [...currentIds, id]
+    ));
+
+    return () => {
+      setRegisteredDescriptionIds((currentIds) =>
+        currentIds.filter((currentId) => currentId !== id),
+      );
+    };
   }, []);
 
   const setTriggerElement = useCallback((element) => {
@@ -266,8 +283,10 @@ export function Modal({
       close,
       closeOnEscape,
       descriptionId,
-      hasDescription: descriptionCount > 0,
-      hasTitle: titleCount > 0,
+      effectiveDescriptionId: registeredDescriptionIds[0] ?? null,
+      effectiveTitleId: registeredTitleIds[0] ?? null,
+      hasDescription: registeredDescriptionIds.length > 0,
+      hasTitle: registeredTitleIds.length > 0,
       instanceZIndex,
       isTopmost: () => isTopmostModal(modalId),
       maxWidth,
@@ -286,20 +305,20 @@ export function Modal({
       blockingOverlay,
       close,
       closeOnEscape,
-      descriptionCount,
       descriptionId,
       instanceZIndex,
       maxWidth,
       modalId,
       open,
       outsideClick,
+      registeredDescriptionIds,
+      registeredTitleIds,
       registerDescription,
       registerTitle,
       rendered,
       setOpen,
       setTriggerElement,
       showCloseButton,
-      titleCount,
       titleId,
       visible,
     ],
@@ -375,13 +394,13 @@ export function ModalContent({ children, className }) {
   const {
     blockingOverlay,
     close,
-    descriptionId,
+    effectiveDescriptionId: descriptionId,
     instanceZIndex,
     isTopmost,
     maxWidth,
     outsideClick,
     rendered,
-    titleId,
+    effectiveTitleId: titleId,
     visible,
   } = useModalContext("ModalContent");
   const { theme } = useQuickitControlState("modal");
@@ -395,7 +414,14 @@ export function ModalContent({ children, className }) {
     }
 
     const frameId = window.requestAnimationFrame(() => {
-      focusFirstElement(dialogRef.current, dialogRef.current);
+      const preferredTarget =
+        dialogRef.current?.querySelector("[data-overlay-autofocus='true']") ??
+        getFocusableElements(dialogRef.current).find(
+          (element) => element.getAttribute("data-overlay-close") !== "true",
+        ) ??
+        dialogRef.current;
+
+      preferredTarget?.focus?.();
     });
 
     return () => {
@@ -441,9 +467,9 @@ export function ModalContent({ children, className }) {
               "transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
           role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
+          aria-modal={blockingOverlay ? "true" : undefined}
+          aria-labelledby={titleId || undefined}
+          aria-describedby={descriptionId || undefined}
           tabIndex={-1}
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => {
@@ -478,6 +504,7 @@ export function ModalHeader({ children, className }) {
           aria-label="Cerrar modal"
           onClick={close}
           className="shrink-0"
+          data-overlay-close="true"
         >
           <CloseIcon className="size-4" />
         </Button>
@@ -488,18 +515,15 @@ export function ModalHeader({ children, className }) {
 
 export function ModalTitle({ centered = true, children, className, id }) {
   const { registerTitle, titleId } = useModalContext("ModalTitle");
+  const resolvedId = id ?? titleId;
 
-  useEffect(() => {
-    registerTitle(true);
-
-    return () => {
-      registerTitle(false);
-    };
-  }, [registerTitle]);
+  useLayoutEffect(() => {
+    return registerTitle(resolvedId);
+  }, [registerTitle, resolvedId]);
 
   return (
     <h2
-      id={id ?? titleId}
+      id={resolvedId}
       className={cn(
         "text-lg font-semibold tracking-[-0.02em]",
         centered && "text-center",
@@ -515,17 +539,14 @@ export function ModalBody({ children, className, id }) {
   const { descriptionId, registerDescription } = useModalContext("ModalBody");
   const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
+  const resolvedId = id ?? descriptionId;
 
-  useEffect(() => {
-    registerDescription(true);
-
-    return () => {
-      registerDescription(false);
-    };
-  }, [registerDescription]);
+  useLayoutEffect(() => {
+    return registerDescription(resolvedId);
+  }, [registerDescription, resolvedId]);
 
   return (
-    <div id={id ?? descriptionId} className={cn(MODAL_PRIMITIVES.body, ui.muted, className)}>
+    <div id={resolvedId} className={cn(MODAL_PRIMITIVES.body, ui.muted, className)}>
       {children}
     </div>
   );
@@ -576,7 +597,7 @@ export function ModalAction({
       onClick={async (event) => {
         await onClick?.(event);
 
-        if (closeOnClick) {
+        if (closeOnClick && !event.defaultPrevented) {
           close();
         }
       }}

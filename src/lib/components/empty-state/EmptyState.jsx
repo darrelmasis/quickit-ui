@@ -16,7 +16,7 @@ const EMPTY_STATE_THEME_CLASSES = {
 };
 
 const EMPTY_STATE_PRIMITIVES = {
-  root: "flex flex-col rounded-2xl border border-dashed p-8",
+  root: "flex w-full flex-col rounded-2xl border border-dashed p-6 sm:p-8",
   align: {
     center: "items-center justify-center text-center",
     start: "items-start justify-center text-left",
@@ -24,7 +24,8 @@ const EMPTY_STATE_PRIMITIVES = {
   icon: "mb-4 flex size-12 items-center justify-center rounded-full bg-current/10 text-current",
   title: "text-lg font-semibold",
   description: "mt-1 text-sm",
-  actions: "mt-6 flex flex-wrap items-center gap-3",
+  actions:
+    "mt-6 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center",
 };
 
 const EmptyState = forwardRef(function EmptyState(
@@ -91,6 +92,22 @@ export const EmptyStateTitle = forwardRef(function EmptyStateTitle(
   );
 });
 
+export const EmptyStateIcon = forwardRef(function EmptyStateIcon(
+  { children, className, ...props },
+  ref,
+) {
+  return (
+    <div
+      ref={ref}
+      data-slot="empty-state-icon"
+      className={cn(EMPTY_STATE_PRIMITIVES.icon, className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
+
 export const EmptyStateDescription = forwardRef(function EmptyStateDescription(
   { children, className, ...props },
   ref,
@@ -125,6 +142,7 @@ export const EmptyStateActions = forwardRef(function EmptyStateActions(
 });
 
 EmptyState.Title = EmptyStateTitle;
+EmptyState.Icon = EmptyStateIcon;
 EmptyState.Description = EmptyStateDescription;
 EmptyState.Actions = EmptyStateActions;
 

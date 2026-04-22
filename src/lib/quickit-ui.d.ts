@@ -245,12 +245,13 @@ export interface QuickitFormControlContextValue {
 }
 
 export interface FormControlProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
-  disabled?: boolean;
-  id?: string;
-  invalid?: boolean;
-  required?: boolean;
-}
+    children?: React.ReactNode;
+    controlId?: string;
+    disabled?: boolean;
+    id?: string;
+    invalid?: boolean;
+    required?: boolean;
+  }
 export interface FormControlComponent extends React.FC<FormControlProps> {
   Description: typeof FormDescription;
   Message: typeof FormMessage;
@@ -410,13 +411,21 @@ export declare const Avatar: AvatarComponent;
 export interface EmptyStateProps
   extends React.HTMLAttributes<HTMLDivElement> {
   align?: "center" | "start";
+  description?: React.ReactNode;
+  icon?: React.ReactNode;
+  title?: React.ReactNode;
 }
+export interface EmptyStateIconProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
 export interface EmptyStateTitleProps
   extends React.HTMLAttributes<HTMLHeadingElement> {}
 export interface EmptyStateDescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {}
 export interface EmptyStateActionsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
+export declare const EmptyStateIcon: React.ForwardRefExoticComponent<
+  EmptyStateIconProps & React.RefAttributes<HTMLDivElement>
+>;
 export declare const EmptyStateTitle: React.ForwardRefExoticComponent<
   EmptyStateTitleProps & React.RefAttributes<HTMLHeadingElement>
 >;
@@ -429,6 +438,7 @@ export declare const EmptyStateActions: React.ForwardRefExoticComponent<
 export type EmptyStateComponent = React.ForwardRefExoticComponent<
   EmptyStateProps & React.RefAttributes<HTMLDivElement>
 > & {
+  Icon: typeof EmptyStateIcon;
   Title: typeof EmptyStateTitle;
   Description: typeof EmptyStateDescription;
   Actions: typeof EmptyStateActions;
@@ -578,9 +588,10 @@ export declare const Textarea: React.ForwardRefExoticComponent<
 >;
 
 export interface LabelProps extends LabelBaseProps {
-  optional?: boolean;
-  requiredIndicator?: boolean;
-}
+    optional?: boolean;
+    requiredIndicator?: React.ReactNode | false;
+    size?: "sm" | "md";
+  }
 export declare const Label: React.ForwardRefExoticComponent<
   LabelProps & React.RefAttributes<HTMLLabelElement>
 >;
@@ -938,6 +949,7 @@ export interface PopoverProps {
   color?: QuickitFloatingColor;
   content: React.ReactNode;
   hoverDelayPreset?: "fast" | "normal" | "slow";
+  interactive?: boolean;
   offset?:
     | number
     | {
@@ -955,7 +967,11 @@ export interface PopoverProps {
 }
 export declare function Popover(props: PopoverProps): React.JSX.Element;
 
-export interface TooltipProps extends PopoverProps {}
+export interface TooltipProps
+  extends Omit<
+    PopoverProps,
+    "autoCloseMs" | "interactive" | "trigger"
+  > {}
 export declare function Tooltip(props: TooltipProps): React.JSX.Element;
 
 export interface ModalContextValue {
@@ -1165,7 +1181,7 @@ export type ToastKind = "default" | "loading" | "success" | "error";
 
 export interface ToastAction {
   label: string;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 export interface ToastOptions {
   id?: string;
@@ -1294,16 +1310,20 @@ export interface ComboboxProps
   defaultValue?: string | number;
   emptyText?: string;
   name?: string;
-  onChange?: (event: {
-    type: "change";
-    target: { id?: string; name?: string; value: string };
-    currentTarget: { id?: string; name?: string; value: string };
-    nativeEvent?: unknown;
-    preventDefault: () => void;
-    stopPropagation: () => void;
-  }) => void;
-  onClear?: () => void;
-  onValueChange?: (value: string) => void;
+    onChange?: (event: {
+      type: "change";
+      target: { id?: string; name?: string; value: string };
+      currentTarget: { id?: string; name?: string; value: string };
+      nativeEvent?: unknown;
+      preventDefault: () => void;
+      stopPropagation: () => void;
+    }) => void;
+    onClear?: () => void;
+    onInputChange?: (
+      query: string,
+      event: React.ChangeEvent<HTMLInputElement>,
+    ) => void;
+    onValueChange?: (value: string) => void;
   options?: readonly ComboboxOption[];
   placeholder?: string;
   size?: "sm" | "md" | "lg";
@@ -1485,6 +1505,8 @@ export interface CommandPaletteProps {
   open?: boolean;
   placeholder?: string;
   shortcutLabel?: string;
+  /** Registra el atajo global Ctrl+K/Cmd+K. Si montas varias paletas, deja solo una con este prop en `true`. */
+  shortcutEnabled?: boolean;
   /** Enfoca el input al abrirse (por defecto `true`). */
   autoFocusOnOpen?: boolean;
 }

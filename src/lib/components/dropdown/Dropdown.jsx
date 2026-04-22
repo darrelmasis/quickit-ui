@@ -4,6 +4,7 @@ import {
   forwardRef,
   isValidElement,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -208,20 +209,9 @@ export function Dropdown({
     ],
   );
 
-  const childrenArray = Children.toArray(children);
-  const triggerNode = childrenArray.find(
-    (child) => isValidElement(child) && child.type === DropdownTrigger,
-  );
-  const content = childrenArray.find(
-    (child) =>
-      isValidElement(child) &&
-      (child.type === DropdownContent || child.type === DropdownContent.render),
-  );
-
   return (
     <DropdownContext.Provider value={contextValue}>
-      {triggerNode}
-      {usePortal ? <FloatingPortal>{content}</FloatingPortal> : content}
+      {children}
     </DropdownContext.Provider>
   );
 }
@@ -331,11 +321,20 @@ export const DropdownContent = forwardRef(function DropdownContent(
     floatingStyles,
     setContentNode,
     transitionStyles,
+    usePortal,
   } = useDropdownContext("DropdownContent");
   const { theme: effectiveTheme } = useQuickitControlState("dropdown");
   const theme = resolveFloatingListTheme(effectiveTheme);
   const mergedRef = useMergeRefs(ref, refs.setFloating, setContentNode);
   const typeaheadRef = useRef({ buffer: "", timeoutId: null });
+
+  useEffect(() => () => {
+    if (typeaheadRef.current.timeoutId) {
+      window.clearTimeout(typeaheadRef.current.timeoutId);
+      typeaheadRef.current.timeoutId = null;
+      typeaheadRef.current.buffer = "";
+    }
+  }, []);
 
   if (!isMounted) {
     return null;
@@ -343,7 +342,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
 
   const floatingProps = getFloatingProps(props);
 
-  return (
+  const contentNode = (
     <div
       ref={mergedRef}
       role="menu"
@@ -423,6 +422,8 @@ export const DropdownContent = forwardRef(function DropdownContent(
       {children}
     </div>
   );
+
+  return usePortal ? <FloatingPortal>{contentNode}</FloatingPortal> : contentNode;
 });
 
 export const DropdownItem = forwardRef(function DropdownItem(

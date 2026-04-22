@@ -9,7 +9,7 @@ const AvatarFallback = forwardRef(function AvatarFallback(
 ) {
   const { size, status } = useAvatarContext("AvatarFallback");
 
-  if (status === "loaded") {
+  if (status === "loaded" || status === "loading") {
     return null;
   }
 

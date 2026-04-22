@@ -3,7 +3,7 @@ import { CheckIcon, MinusIcon } from "@/lib/assets/icons";
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
-import { useFormControl } from "../form-control/form-control-context";
+import { useFormControl } from "@/lib/components/form-control";
 
 const CHECKBOX_PRIMITIVES = {
   host: "flex cursor-pointer items-center gap-2.5",
@@ -136,6 +136,15 @@ const Checkbox = forwardRef(function Checkbox(
   const isInvalid = invalid || formControl?.invalid;
   const isDisabled = disabled || formControl?.disabled;
   const isRequired = required || formControl?.required;
+  const describedBy = [
+    props["aria-describedby"],
+    formControl?.descriptionId,
+    isInvalid ? formControl?.messageId : null,
+  ]
+    .filter(Boolean)
+    .join(" ") || undefined;
+  const labelledBy =
+    [props["aria-labelledby"], formControl?.labelId].filter(Boolean).join(" ") || undefined;
 
   useEffect(() => {
     if (inputRef.current) {
@@ -188,7 +197,8 @@ const Checkbox = forwardRef(function Checkbox(
           required={isRequired}
           aria-invalid={isInvalid || undefined}
           aria-required={isRequired || undefined}
-          aria-describedby={formControl?.descriptionId}
+          aria-describedby={describedBy}
+          aria-labelledby={labelContent ? undefined : labelledBy}
           className={cn(CHECKBOX_PRIMITIVES.input, className)}
           onChange={handleChange}
         />

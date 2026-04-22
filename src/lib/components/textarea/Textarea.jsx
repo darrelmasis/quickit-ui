@@ -51,6 +51,12 @@ const Textarea = forwardRef(function Textarea(
   ]
     .filter(Boolean)
     .join(" ") || undefined;
+  const labelledBy = [
+    props["aria-labelledby"],
+    field?.labelId,
+  ]
+    .filter(Boolean)
+    .join(" ") || undefined;
 
   return (
     <textarea
@@ -58,9 +64,10 @@ const Textarea = forwardRef(function Textarea(
       id={resolvedId}
       required={resolvedRequired}
       disabled={resolvedDisabled}
-      rows={minRows}
+      rows={props.rows ?? minRows}
       aria-invalid={resolvedInvalid || undefined}
       aria-describedby={describedBy}
+      aria-labelledby={labelledBy}
       className={cn(
         resolveQuickitFocusRingClasses(focusRingEnabled, TEXTAREA_PRIMITIVES.base),
         getControlRadius(shape === "pill" ? "lg" : size),

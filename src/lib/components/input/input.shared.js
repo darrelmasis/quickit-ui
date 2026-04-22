@@ -534,6 +534,7 @@ export function normalizeInputValue(value) {
 }
 
 export function useInputFieldState({
+  ariaLabelledBy,
   color = "neutral",
   disabled = false,
   id,
@@ -556,11 +557,18 @@ export function useInputFieldState({
   ]
     .filter(Boolean)
     .join(" ") || undefined;
+  const labelledBy = [
+    ariaLabelledBy,
+    field?.labelId,
+  ]
+    .filter(Boolean)
+    .join(" ") || undefined;
 
   return {
     colorUi,
     describedBy,
     focusRingEnabled,
+    labelledBy,
     resolvedColor,
     resolvedDisabled,
     resolvedId: id ?? field?.controlId,

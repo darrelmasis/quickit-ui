@@ -178,6 +178,7 @@ const Select = forwardRef(function Select(
     required = false,
     usePortal = true,
     value: controlledValue,
+    "aria-labelledby": ariaLabelledBy,
     ...props
   },
   ref,
@@ -216,6 +217,9 @@ const Select = forwardRef(function Select(
   const resolvedDisabled = disabled || field?.disabled;
   const resolvedRequired = required || field?.required;
   const resolvedId = id ?? field?.controlId;
+  const labelledBy = [ariaLabelledBy, field?.labelId]
+    .filter(Boolean)
+    .join(" ") || undefined;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -257,6 +261,12 @@ const Select = forwardRef(function Select(
   const role = useRole(context, { role: "listbox" });
   const listNavigation = useListNavigation(context, {
     activeIndex,
+    disabledIndices: options.reduce((indices, option, index) => {
+      if (option.disabled) {
+        indices.push(index);
+      }
+      return indices;
+    }, []),
     listRef,
     loop: true,
     onNavigate: setActiveIndex,
@@ -422,13 +432,19 @@ const Select = forwardRef(function Select(
       )}
     >
       {name ? (
-        <input type="hidden" name={name} value={resolvedValue} />
+        <input
+          type="hidden"
+          name={name}
+          value={resolvedValue}
+          disabled={resolvedDisabled}
+        />
       ) : null}
       <button
         ref={referenceRef}
         id={resolvedId}
         type="button"
         disabled={resolvedDisabled}
+        aria-labelledby={labelledBy}
         aria-describedby={describedBy}
         aria-expanded={open}
         aria-haspopup="listbox"

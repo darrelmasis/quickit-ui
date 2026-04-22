@@ -79,4 +79,64 @@ describe("Drawer", () => {
       expect(screen.queryByRole("dialog")).toBeNull();
     });
   });
+
+  it("usa ids efectivos para title y body", async () => {
+    renderWithProvider(
+      <Drawer defaultOpen>
+        <Drawer.Content>
+          <Drawer.Header>
+            <Drawer.Title id="drawer-title-custom">Titulo custom</Drawer.Title>
+          </Drawer.Header>
+          <DrawerBody id="drawer-body-custom">Body custom</DrawerBody>
+        </Drawer.Content>
+      </Drawer>,
+    );
+
+    const dialog = await screen.findByRole("dialog");
+
+    expect(dialog.getAttribute("aria-labelledby")).toBe("drawer-title-custom");
+    expect(dialog.getAttribute("aria-describedby")).toBe("drawer-body-custom");
+  });
+
+  it("omite referencias ARIA cuando no hay title ni body", async () => {
+    renderWithProvider(
+      <Drawer defaultOpen>
+        <Drawer.Content>
+          <div>Solo panel</div>
+        </Drawer.Content>
+      </Drawer>,
+    );
+
+    const dialog = await screen.findByRole("dialog");
+
+    expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+    expect(dialog.hasAttribute("aria-describedby")).toBe(false);
+  });
+
+  it("no cierra si la accion cancela el evento", async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Drawer defaultOpen>
+        <Drawer.Content>
+          <Drawer.Header>
+            <Drawer.Title>Persistente</Drawer.Title>
+          </Drawer.Header>
+          <DrawerBody>Contenido</DrawerBody>
+          <DrawerActions placement="end">
+            <Drawer.Action
+              color="neutral"
+              onClick={(event) => event.preventDefault()}
+            >
+              Mantener abierto
+            </Drawer.Action>
+          </DrawerActions>
+        </Drawer.Content>
+      </Drawer>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Mantener abierto" }));
+
+    expect(screen.getByRole("dialog")).toBeTruthy();
+  });
 });

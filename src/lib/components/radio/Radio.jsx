@@ -164,7 +164,9 @@ const Radio = forwardRef(function Radio(
   const resolvedRequired = required || field?.required;
   const resolvedColor = ui.colors[color] ? color : "neutral";
   const resolvedSize = RADIO_SIZE_CLASSES[size] ? size : "md";
-  const resolvedId = id ?? field?.controlId ?? generatedId;
+  const resolvedId = id ?? generatedId;
+  const labelledBy =
+    [props["aria-labelledby"], !label ? field?.labelId : null].filter(Boolean).join(" ") || undefined;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -190,6 +192,7 @@ const Radio = forwardRef(function Radio(
         required={resolvedRequired}
         disabled={resolvedDisabled}
         aria-invalid={resolvedInvalid || undefined}
+        aria-labelledby={labelledBy}
         aria-describedby={describedBy}
         className="peer absolute inset-0 z-10 m-0 cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed"
         onChange={(event) => {

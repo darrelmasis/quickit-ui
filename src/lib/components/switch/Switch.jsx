@@ -143,6 +143,8 @@ const Switch = forwardRef(function Switch(
   const resolvedColor = ui.checked[color] ? color : "neutral";
   const resolvedSize = SWITCH_SIZE_CLASSES[size] ? size : "md";
   const resolvedId = id ?? field?.controlId ?? generatedId;
+  const labelledBy =
+    [props["aria-labelledby"], !label ? field?.labelId : null].filter(Boolean).join(" ") || undefined;
   const describedBy = [
     props["aria-describedby"],
     field?.descriptionId,
@@ -196,6 +198,7 @@ const Switch = forwardRef(function Switch(
         id={resolvedId}
         aria-checked={resolvedChecked}
         aria-invalid={resolvedInvalid || undefined}
+        aria-labelledby={labelledBy}
         aria-describedby={describedBy}
         disabled={resolvedDisabled}
         data-state={resolvedChecked ? "checked" : "unchecked"}
