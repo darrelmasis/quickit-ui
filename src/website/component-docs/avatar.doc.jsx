@@ -1,7 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import {
   Avatar,
+  AvatarFallback,
   AvatarGroup,
+  AvatarImage,
   AvatarPresence,
   Badge,
   Initials,
@@ -19,8 +21,8 @@ export function AvatarPreview() {
 }`;
 function AvatarPreviewCanvas() {
   return <Avatar>
-      <Avatar.Image src="https://i.pravatar.cc/120?img=11" alt="Elena Ruiz" />
-      <Avatar.Fallback>ER</Avatar.Fallback>
+      <AvatarImage src="https://i.pravatar.cc/120?img=11" alt="Elena Ruiz" />
+      <AvatarFallback>ER</AvatarFallback>
     </Avatar>;
 }
 export const avatarDoc = {
@@ -45,19 +47,19 @@ export function AvatarUsage() {
     description: "sm, md, lg, xl, 2xl.",
     preview: <div className="flex flex-wrap items-center gap-3">
           <Avatar size="sm">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
           <Avatar size="md">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
           <Avatar size="lg">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
           <Avatar size="xl">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
           <Avatar size="2xl">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
         </div>
   }, {
@@ -66,13 +68,13 @@ export function AvatarUsage() {
     description: "circle, rounded, square.",
     preview: <div className="flex flex-wrap items-center gap-3">
           <Avatar shape="circle">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
           <Avatar shape="rounded">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
           <Avatar shape="square">
-            <Avatar.Fallback>ER</Avatar.Fallback>
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
         </div>
   }, {
@@ -81,13 +83,13 @@ export function AvatarUsage() {
     description: "Agrupa avatares y permite stacking.",
     preview: <AvatarGroup stacked>
           <Avatar>
-            <Avatar.Fallback>AR</Avatar.Fallback>
+            <AvatarFallback>AR</AvatarFallback>
           </Avatar>
           <Avatar>
-            <Avatar.Fallback>MN</Avatar.Fallback>
+            <AvatarFallback>MN</AvatarFallback>
           </Avatar>
           <Avatar>
-            <Avatar.Fallback>RS</Avatar.Fallback>
+            <AvatarFallback>RS</AvatarFallback>
           </Avatar>
         </AvatarGroup>
   }, {
@@ -96,19 +98,19 @@ export function AvatarUsage() {
     description: "Indicador de presencia con status.",
     preview: <div className="flex flex-wrap items-center gap-6">
           <Avatar>
-            <Avatar.Fallback>ON</Avatar.Fallback>
+            <AvatarFallback>ON</AvatarFallback>
             <AvatarPresence status="online" />
           </Avatar>
           <Avatar>
-            <Avatar.Fallback>AW</Avatar.Fallback>
+            <AvatarFallback>AW</AvatarFallback>
             <AvatarPresence status="away" />
           </Avatar>
           <Avatar>
-            <Avatar.Fallback>BU</Avatar.Fallback>
+            <AvatarFallback>BU</AvatarFallback>
             <AvatarPresence status="busy" />
           </Avatar>
           <Avatar>
-            <Avatar.Fallback>OF</Avatar.Fallback>
+            <AvatarFallback>OF</AvatarFallback>
             <AvatarPresence status="offline" />
           </Avatar>
         </div>
@@ -117,7 +119,7 @@ export function AvatarUsage() {
     title: "Avatar con presencia",
     description: "Combina Avatar y Avatar.Presence.",
     preview: <Avatar size="lg">
-          <Avatar.Fallback>ER</Avatar.Fallback>
+          <AvatarFallback>ER</AvatarFallback>
           <AvatarPresence status="online" />
         </Avatar>
   }, {
@@ -138,8 +140,8 @@ export function AvatarUsage() {
     title: "Imagen y fallback",
     description: "Avatar.Image cae al fallback si no hay imagen.",
     preview: <Avatar>
-            <Avatar.Image alt="Sin imagen" />
-            <Avatar.Fallback>NA</Avatar.Fallback>
+            <AvatarImage alt="Sin imagen" />
+            <AvatarFallback>NA</AvatarFallback>
           </Avatar>
   }, {
     id: "ejemplos-props",
