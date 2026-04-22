@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.0.7 - 22 de abril de 2026
+
+Release de consolidación enfocada en alinear la librería, el website y la documentación con una pasada completa de hardening técnico y visual.
+
+### Highlights
+
+- Librería y docs quedaron alineadas con el runtime real en props, accesibilidad y ejemplos.
+- Se endurecieron formularios, overlays, feedback global, tablas, pickers y controles complejos.
+- Se cerró la distribución del paquete con builds, type checks, tests runtime y `npm pack --dry-run` en verde.
+
+### Cambios destacados
+
+- `FormControl`, `Label`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `TimePicker` y `Range` quedaron mejor conectados en naming accesible, estados y contratos de integración.
+- `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown` y `CommandPalette` mejoraron consistencia accesible y comportamiento de interacción.
+- `CommandPalette` ahora evita que varias instancias respondan al mismo atajo global al mismo tiempo.
+- `EmptyState` añade un patrón más sólido para icono superior y acciones mobile-first con `EmptyState.Icon`.
+- `AvatarPresence` pasa a ser decorativo por defecto y solo anuncia estado cuando recibe `label`.
+- El website ahora documenta mejor formularios, shortcuts, composición y restricciones reales de cada componente.
+- Se corrigieron tokens de tema `brand` para que librería y docs generen y consuman los mismos colores.
+
+### Migración principal desde 0.2.4
+
+Revisa [docs/migration.md](docs/migration.md).
+
 ## 1.0.3 - 19 de abril de 2026
 
 Release de parche con mejoras de interacción, responsividad y calidad visual en componentes y ejemplos del sitio.
