@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { FormControl, Label, Radio } from "@/lib";
+import { Label, Radio } from "@/lib";
 import { QUICKIT_COMPACT_CONTROL_SIZES } from "@/lib/tokens";
 const RADIO_PREVIEW_CODE = `import { Radio } from "quickit-ui";
 
@@ -55,14 +55,16 @@ export function RadioUsage() {
   }, {
     id: "ejemplos-grupo",
     title: "Grupo de opciones",
-    description: "Combina varios radios con el mismo name.",
-    preview: <FormControl required>
-          <div className="mt-3 grid gap-2">
+    description: "Combina varios radios con el mismo `name` y un label de grupo propio.",
+    preview: <div role="radiogroup" aria-labelledby="billing-plan-label" className="grid gap-2">
+          <p id="billing-plan-label" className="text-sm font-medium text-neutral-950 dark:text-neutral-50">
+            Plan de facturación
+          </p>
+          <div className="grid gap-2">
             <Radio id="plan-monthly" name="plan" label="Mensual" />
             <Radio id="plan-annual" name="plan" label="Anual" />
           </div>
-          <FormControl.Message>Selecciona una opción.</FormControl.Message>
-        </FormControl>
+        </div>
   }, {
     id: "ejemplos-label",
     title: "Label externo",
@@ -115,6 +117,6 @@ export function RadioUsage() {
       defaultValue: "undefined",
       description: "Callback de cambio."
     }],
-    notes: ["Radio acepta atributos nativos de input (checked, defaultChecked, disabled, name, value, onChange)."]
+    notes: ["Radio acepta atributos nativos de input (checked, defaultChecked, disabled, name, value, onChange).", "Para requisitos del grupo (`elige una opción`) usa `fieldset`/`legend` o validación controlada propia; `required` en cada radio no sustituye una abstracción de `RadioGroup`."]
   }]
 };

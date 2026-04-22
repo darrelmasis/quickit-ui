@@ -10,7 +10,7 @@ function PopoverPreviewCanvas() {
 }
 export const popoverDoc = {
   name: "Popover",
-  description: "Capa contextual flotante con trigger click u hover.",
+  description: "Capa contextual flotante para contenido informativo o interactivo, según el trigger y la prop `interactive`.",
   previewCode: POPOVER_PREVIEW_CODE,
   preview: <PopoverPreviewCanvas />,
   installCode: `import { Popover } from "quickit-ui";`,
@@ -25,11 +25,21 @@ export function PopoverUsage() {
 }`,
   examples: [{
     id: "ejemplos-trigger",
-    title: "Triggers",
-    description: "Cambia el trigger a hover.",
-    preview: <Popover content="Detalle rápido" trigger="hover">
-          Hover aquí
-        </Popover>
+    title: "Informativo vs interactivo",
+    description: "Usa `hover` para contenido breve no interactivo. Para acciones o foco interno, usa `click` + `interactive`.",
+    preview: <div className="flex flex-wrap gap-4">
+          <Popover content="Resumen rápido" trigger="hover">
+            Hover informativo
+          </Popover>
+          <Popover content={<div className="space-y-2">
+                <p className="text-sm font-medium">Atajo</p>
+                <button type="button" className="rounded-lg border border-current px-2 py-1 text-xs">
+                  Confirmar
+                </button>
+              </div>} trigger="click" interactive>
+            Popover interactivo
+          </Popover>
+        </div>
   }, {
     id: "ejemplos-arrow",
     title: "Arrow",
@@ -65,6 +75,11 @@ export function PopoverUsage() {
       type: "boolean",
       defaultValue: "false",
       description: "Usa el hijo como nodo de referencia sin wrapper."
+    }, {
+      name: "interactive",
+      type: "boolean",
+      defaultValue: "false",
+      description: "Activa semántica y foco para contenido interactivo."
     }, {
       name: "hoverDelayPreset",
       type: `"fast" | "normal" | "slow"`,
@@ -135,6 +150,7 @@ export function PopoverUsage() {
       type: "number",
       defaultValue: "2000",
       description: "Controla el stacking."
-    }]
+    }],
+    notes: ["`trigger=\"hover\"` está pensado para contenido no interactivo.", "Si el contenido contiene botones, links o inputs, usa `trigger=\"click\"` o `manual` junto con `interactive`."]
   }]
 };

@@ -28,8 +28,9 @@ export function DatePickerPreview() {
 export function DatePickerUsage() {
   return (
     <>
-      <DatePicker onChange={(d) => console.log(d)} />
+      <DatePicker name="startDate" onChange={(d) => console.log(d)} />
       <DatePicker
+        name="vacation"
         selectionMode="between"
         onChange={(r) => console.log(r.from, r.to)}
       />
@@ -99,11 +100,16 @@ export function DatePickerUsage() {
       defaultValue: `"long"`,
       description: "Formato del texto en el campo (Intl `dateStyle`: corto, largo o completo con día de la semana)."
     }, {
+      name: "name",
+      type: "string",
+      defaultValue: "undefined",
+      description: "Serializa el valor con hidden input. `single` envía `YYYY-MM-DD`; `between` envía `YYYY-MM-DD..YYYY-MM-DD`."
+    }, {
       name: "color / calendarColor",
       type: "QuickitSemanticColor",
       defaultValue: `"neutral"`,
       description: "`color` estiliza el borde/fondo del input. `calendarColor` (opcional) pinta selección y rango en la cuadrícula; si no se pasa, usa el mismo que `color`."
     }],
-    notes: ["La semana inicia en lunes en la cabecera del calendario."]
+    notes: ["La semana inicia en lunes en la cabecera del calendario.", "El input visible es de solo lectura; si necesitas integración con formularios, usa `name` y deja que el componente serialice el valor oculto.", "En `selectionMode=\"between\"`, mientras el rango está incompleto `to` es `null` y el hidden input sigue vacío hasta tener ambas fechas."]
   }]
 };

@@ -1,4 +1,5 @@
 import { Badge, Button, DatePicker, EmptyState, Range, TimePicker } from "@/lib";
+import { CopyIcon } from "@/lib/assets/icons";
 import { useState } from "react";
 
 export function SchedulingFlow() {
@@ -27,6 +28,9 @@ export function SchedulingFlow() {
       <div className="space-y-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Disponibilidad</h3>
         <EmptyState align="center">
+          <EmptyState.Icon>
+            <CopyIcon className="size-5" />
+          </EmptyState.Icon>
           <EmptyState.Title>Sin slots disponibles hoy</EmptyState.Title>
           <EmptyState.Description>
             Intenta mañana o amplía la ventana.

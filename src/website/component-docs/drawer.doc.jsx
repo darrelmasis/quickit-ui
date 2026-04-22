@@ -125,11 +125,16 @@ export function DrawerUsage() {
       defaultValue: "true",
       description: "Cierra al hacer click fuera."
     }, {
+      name: "showCloseButton",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Muestra el botón de cierre dentro de Drawer.Header."
+    }, {
       name: "zIndex",
       type: "number",
       defaultValue: "auto",
       description: "Override del z-index."
     }],
-    notes: ["Drawer.Trigger acepta `asChild` para componer con `Button` u otro elemento sin anidar botones.", "Drawer.Header incluye botón de cerrar cuando `outsideClick` es `true`."]
+    notes: ["Drawer.Trigger acepta `asChild` para componer con `Button` u otro elemento sin anidar botones.", "Drawer.Header incluye botón de cerrar cuando `showCloseButton` es `true`.", "Si el handler de `Drawer.Action` hace `event.preventDefault()`, el drawer no se cierra aunque `closeOnClick` siga activo."]
   }]
 };

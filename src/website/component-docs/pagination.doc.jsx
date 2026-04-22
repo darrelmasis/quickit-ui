@@ -64,6 +64,7 @@ export function PaginationUsage() {
       type: "QuickitSemanticColor",
       defaultValue: `"neutral"`,
       description: "Color del control."
-    }]
+    }],
+    notes: ["`count`, `page` y `defaultPage` deben representar un rango válido; valores fuera de rango se ajustan internamente.", "`siblingCount` debe ser mayor o igual a 0."]
   }]
 };

@@ -7,7 +7,7 @@ function CommandPaletteDocPreview() {
       <Button type="button" onClick={() => setOpen(true)}>
         Abrir paleta (o Ctrl+K)
       </Button>
-      <CommandPalette open={open} onOpenChange={setOpen} groups={[{
+      <CommandPalette open={open} onOpenChange={setOpen} shortcutEnabled={false} groups={[{
       heading: "Acciones",
       items: [{
         id: "home",
@@ -24,7 +24,7 @@ function CommandPaletteDocPreview() {
 }
 export const commandPaletteDoc = {
   name: "CommandPalette",
-  description: "Paleta de comandos con búsqueda, basada en `Modal`. Registra atajo Ctrl+K / Cmd+K.",
+  description: "Paleta de comandos con búsqueda, basada en `Modal`. Puede registrar atajo Ctrl+K / Cmd+K como paleta principal de la página.",
   previewCode: `import { CommandPalette } from "quickit-ui";
 
 export function CommandPalettePreview() {
@@ -38,20 +38,26 @@ export function CommandPalettePreview() {
 }`,
   preview: <CommandPaletteDocPreview />,
   installCode: `import { CommandPalette } from "quickit-ui";`,
-  usageCode: `import { CommandPalette } from "quickit-ui";
+  usageCode: `import { useState } from "react";
+import { Button, CommandPalette } from "quickit-ui";
 
 export function CommandPaletteUsage() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <CommandPalette
-      open={open}
-      onOpenChange={setOpen}
-      groups={[
-        {
-          heading: "Acciones",
-          items: [{ id: "x", label: "Salir", onSelect: () => {} }],
-        },
-      ]}
-    />
+    <>
+      <Button onClick={() => setOpen(true)}>Abrir paleta</Button>
+      <CommandPalette
+        open={open}
+        onOpenChange={setOpen}
+        groups={[
+          {
+            heading: "Acciones",
+            items: [{ id: "x", label: "Salir", onSelect: () => {} }],
+          },
+        ]}
+      />
+    </>
   );
 }`,
   examples: [{
@@ -72,7 +78,12 @@ export function CommandPaletteUsage() {
       type: "string",
       defaultValue: `"Ctrl+K"`,
       description: "Texto mostrado junto al título (solo informativo)."
+    }, {
+      name: "shortcutEnabled",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Registra el atajo global Ctrl+K / Cmd+K. Desactívalo en instancias secundarias o demos embebidas."
     }],
-    notes: ["El atajo global se registra mientras el componente está montado.", "Evita montar varias paletas a la vez con el mismo atajo."]
+    notes: ["El atajo global se registra mientras el componente está montado.", "La librería evita que se abran todas a la vez: solo una instancia dueña del shortcut responde al atajo global.", "Aun así, la recomendación práctica es tener una sola paleta global por página y usar `shortcutEnabled={false}` en instancias secundarias o previews."]
   }]
 };

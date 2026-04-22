@@ -161,7 +161,7 @@ export function AvatarUsage() {
       name: "label (AvatarPresence)",
       type: "string",
       defaultValue: "undefined",
-      description: "Label accesible en AvatarPresence."
+      description: "Nombre accesible opcional. Si no lo pasas, AvatarPresence se trata como decorativo."
     }, {
       name: "size (AvatarPresence)",
       type: "QuickitAvatarSize",
@@ -191,7 +191,7 @@ export function AvatarUsage() {
       name: "name (UserChip)",
       type: "ReactNode",
       defaultValue: "required",
-      description: "Nombre en UserChip."
+      description: "Contenido visible principal. Si no es string/number y quieres fallback estable, pasa `initials` explícito."
     }, {
       name: "description (UserChip)",
       type: "ReactNode",
@@ -238,6 +238,6 @@ export function AvatarUsage() {
       defaultValue: "undefined",
       description: "Elemento a la derecha en UserChip."
     }],
-    notes: ["Avatar.Image acepta props nativas de img (también exportado como AvatarImage).", "Avatar.Presence acepta size para el badge; el nombre plano AvatarPresence sigue exportado.", "Para la máscara de recorte, renderiza Avatar.Presence como hijo directo de Avatar.", "Avatar.UserChip acepta href/target; Initials y UserChip siguen disponibles como exports con nombre."]
+    notes: ["Avatar.Image acepta props nativas de img (también exportado como AvatarImage).", "Avatar.Presence acepta size para el badge; el nombre plano AvatarPresence sigue exportado.", "Para la máscara de recorte, renderiza Avatar.Presence como hijo directo de Avatar.", "Avatar.UserChip acepta href/target; Initials y UserChip siguen disponibles como exports con nombre.", "Si `UserChip.name` no es texto plano y no pasas `initials`, el fallback puede degradar a `?`."]
   }]
 };

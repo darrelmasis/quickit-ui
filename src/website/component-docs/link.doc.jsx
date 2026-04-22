@@ -28,7 +28,7 @@ function LinkPreviewCanvas() {
 }
 export const linkDoc = {
   name: "Link",
-  description: "Link cubre navegación y acciones tipo botón con variantes de texto, subrayado y apariencia de botón.",
+  description: "Link cubre navegación textual y acciones con apariencia de botón. El significado de varias props cambia según `appearance`.",
   previewCode: LINK_PREVIEW_CODE,
   preview: <LinkPreviewCanvas />,
   installCode: `import { Link } from "quickit-ui";`,
@@ -127,7 +127,7 @@ export const linkDoc = {
       name: "variant",
       type: "QuickitLinkTextVariant | QuickitButtonVariant",
       defaultValue: `"default"`,
-      description: "Define la variante de texto o la variante de botón cuando appearance es button."
+      description: "Con `appearance=\"text\"` usa variantes de link; con `appearance=\"button\"` reutiliza variantes de Button."
     }, {
       name: "underline",
       type: "QuickitLinkUnderline",
@@ -169,6 +169,6 @@ export const linkDoc = {
       defaultValue: "auto",
       description: "Habilita el motion de presión."
     }],
-    notes: ["Link acepta atributos nativos de HTMLAnchorElement.", "Si appearance es button y shape es square o circle, define aria-label, aria-labelledby o title."]
+    notes: ["Link acepta atributos nativos de HTMLAnchorElement.", "Piensa el componente como dos contratos: texto navegable y link con apariencia de botón.", "Si `appearance` es `button` y `shape` es `square` o `circle`, define `aria-label`, `aria-labelledby` o `title`."]
   }]
 };

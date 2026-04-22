@@ -66,6 +66,7 @@ export function ProgressUsage() {
       type: `"sm" | "md" | "lg"`,
       defaultValue: `"md"`,
       description: "Altura del progreso."
-    }]
+    }],
+    notes: ["Usa un rango válido con `max > min` para evitar semántica accesible incoherente.", "Si necesitas estados de carga accesibles, anúncialos en el contenedor y deja `Progress` como indicador visual."]
   }]
 };

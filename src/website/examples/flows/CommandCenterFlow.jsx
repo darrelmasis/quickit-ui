@@ -1,4 +1,4 @@
-import { Button, CommandPalette, Toaster, Tooltip, toast } from "@/lib";
+import { Button, CommandPalette, Tooltip, toast } from "@/lib";
 import { useState } from "react";
 
 export function CommandCenterFlow() {
@@ -50,7 +50,6 @@ export function CommandCenterFlow() {
           },
         ]}
       />
-      <Toaster position="bottom-right" />
     </div>
   );
 }

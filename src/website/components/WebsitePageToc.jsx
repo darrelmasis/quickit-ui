@@ -18,6 +18,16 @@ export default function WebsitePageToc({ sections }) {
   }, [sections]);
 
   useEffect(() => {
+    setActiveId((current) => {
+      if (!allSectionIds.length) {
+        return "";
+      }
+
+      return allSectionIds.includes(current) ? current : allSectionIds[0];
+    });
+  }, [allSectionIds]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

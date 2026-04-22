@@ -116,11 +116,6 @@ export function RangeUsage() {
       defaultValue: `"primary"`,
       description: "Color del thumb (accent nativo)."
     }, {
-      name: "size",
-      type: `"sm" | "md" | "lg"`,
-      defaultValue: `"md"`,
-      description: "Altura del slider."
-    }, {
       name: "min",
       type: "number",
       defaultValue: "0",
@@ -199,13 +194,13 @@ export function RangeUsage() {
       name: "onChange",
       type: "(event) => void",
       defaultValue: "undefined",
-      description: "Evento nativo del input."
+      description: "Evento del input nativo en modo simple. En modo doble no es el callback recomendado."
     }, {
       name: "onValueChange",
       type: "(value: number | [number, number]) => void",
       defaultValue: "undefined",
       description: "Callback de valor normalizado."
     }],
-    notes: ["El resto de props válidas de `input type=\"range\"` se reenvían al elemento nativo.", "En modo doble se montan dos inputs range superpuestos para controlar inicio y fin.", "Con orientación vertical, el valor bajo queda abajo y el alto arriba.", "`aria-valuetext` mejora la lectura del valor en SR cuando usas `getAriaValueText` o un `tooltipFormatter` textual."]
+    notes: ["En modo simple el componente se comporta cerca de un `input[type=\"range\"]` estilizado y respeta `name` para formularios.", "En modo doble se montan dos inputs range internos con labels accesibles de mínimo y máximo; para submit HTML usa `onValueChange` y serializa tú mismo el intervalo.", "Con orientación vertical, el valor bajo queda abajo y el alto arriba.", "`aria-valuetext` mejora la lectura del valor en SR cuando usas `getAriaValueText` o un `tooltipFormatter` textual."]
   }]
 };

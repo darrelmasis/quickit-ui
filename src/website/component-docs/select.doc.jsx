@@ -137,13 +137,13 @@ export function SelectUsage() {
       name: "onChange",
       type: "(event) => void",
       defaultValue: "undefined",
-      description: "Callback de cambio."
+      description: "Evento sintético con `{ target: { id, name, value } }` para integraciones tipo formulario."
     }, {
       name: "onValueChange",
       type: "(value: string) => void",
       defaultValue: "undefined",
       description: "Callback con el valor."
     }],
-    notes: ["Select acepta <option> como hijos para definir opciones."]
+    notes: ["Select acepta <option> como hijos para definir opciones.", "Si pasas `name`, el valor se serializa con un hidden input y el botón visible conserva la experiencia accesible del select custom.", "Para lógica de negocio usa `onValueChange`; deja `onChange` para adaptadores que esperen un evento estilo DOM."]
   }]
 };

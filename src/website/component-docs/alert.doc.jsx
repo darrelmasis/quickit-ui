@@ -141,7 +141,7 @@ export function AlertUsage() {
       ],
       notes: [
         "Alert.Title, Alert.Description y Alert.Actions son la ruta recomendada cuando necesitas layout personalizado.",
-        "Si usas children, éstos sustituyen el shorthand title, description y actions.",
+        "No mezcles `children` con `title`, `description` y `actions`: el contenido compuesto sustituye por completo el shorthand.",
       ],
     },
   ],

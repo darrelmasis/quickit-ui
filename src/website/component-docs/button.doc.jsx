@@ -68,7 +68,7 @@ export const buttonDoc = {
             →
           </Button>
         </div>,
-    note: "Nota: en `square` y `circle` el `pressEffect=\"transform\"` se desactiva por defecto. Si lo necesitas, fuerza `activeMotion`."
+    note: "Nota: en `square` y `circle` el `pressEffect=\"transform\"` se desactiva por defecto. Si lo necesitas, fuerza `activeMotion`. Para botones solo-icono usa `aria-label` o `aria-labelledby`."
   }, {
     id: "ejemplos-colores",
     title: "Colores",

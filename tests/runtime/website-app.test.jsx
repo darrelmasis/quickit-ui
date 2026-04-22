@@ -36,7 +36,7 @@ describe("WebsiteApp", () => {
     );
 
     await user.type(searchInput, "Accordion");
-    await user.click(await screen.findByRole("button", { name: "Accordion" }));
+    await user.click(await screen.findByRole("option", { name: "Accordion" }));
 
     expect(await screen.findByRole("heading", { name: "Accordion" })).toBeTruthy();
     expect(window.location.pathname).toBe("/docs/components/accordion");

@@ -55,14 +55,14 @@ export function CheckboxUsage() {
   }, {
     id: "ejemplos-grupo",
     title: "Grupo con descripción",
-    description: "Combina con FormControl, Label y FormControl.Message.",
-    preview: <FormControl required>
+    description: "Combina con FormControl para compartir descripción y mensajes, no para modelar validación grupal de \"elige al menos uno\".",
+    preview: <FormControl invalid>
           <div className="mt-3 grid gap-2">
             <Checkbox id="prefs-weekly" label="Correos semanales" defaultChecked />
             <Checkbox id="prefs-alerts" label="Alertas de seguridad" />
           </div>
           <FormControl.Description>Selecciona lo que quieras recibir.</FormControl.Description>
-          <FormControl.Message>Este campo es requerido.</FormControl.Message>
+          <FormControl.Message>Hay una preferencia incompatible con tu plan actual.</FormControl.Message>
         </FormControl>
   }, {
     id: "ejemplos-label",

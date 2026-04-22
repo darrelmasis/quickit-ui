@@ -89,43 +89,43 @@ export default function RootLayout({ children }) {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.0.0",
-  date: "18 de abril de 2026",
+  version: "1.0.7",
+  date: "22 de abril de 2026",
   summary:
-    "Quickit UI 1.0.0 es la primera release estable de la librería. Esta versión consolida la API principal para usarla en aplicaciones reales con una documentación más completa y una base de componentes más amplia.",
+    "Quickit UI 1.0.7 consolida la librería y el website después de una pasada completa de refactorización, hardening accesible y alineación documental.",
   highlights: [
-    "Nuevos componentes disponibles como parte estable de la librería: Combobox, DatePicker, CommandPalette, DataTable, Drawer, Stepper, Progress y Toaster.",
-    "Mejoras en overlays y navegación contextual para una integración más consistente en modales, drawers, dropdowns y popovers.",
-    "Compatibilidad oficial con React 18.2+ y React 19.",
-    "Documentación ampliada con buscador, changelog y guía de migración.",
-    "Cobertura de uso más completa en formularios, navegación, identidad visual y feedback.",
+    "Librería, tipos públicos y documentación quedaron alineados con el runtime real.",
+    "Se reforzaron formularios, overlays, feedback global, tablas, pickers y controles complejos.",
+    "Los tokens de tema `brand` se unificaron entre librería y website.",
+    "La guía de migración y los ejemplos del website ahora reflejan los contratos reales de integración.",
+    "La release queda validada con build, tests runtime, test de tipos, build de docs y pack check.",
   ],
   notableChanges: [
-    "La forma recomendada de usar `Breadcrumb` ahora prioriza `Breadcrumb.Item` con `href` o `current` para el caso común.",
-    "La documentación adopta de forma consistente las APIs compuestas como `Tabs.List`, `Tabs.Trigger` y `FormControl.Description`.",
-    "DatePicker amplía sus escenarios de uso con selección más completa y navegación por vistas.",
-    "El sitio de documentación incorpora búsqueda y referencias más claras para adopción inicial y actualización de versiones.",
+    "`CommandPalette` ahora evita que múltiples instancias respondan al mismo `Ctrl+K` / `Cmd+K`.",
+    "`EmptyState` añade `EmptyState.Icon` y acciones mobile-first a ancho completo.",
+    "`AvatarPresence` pasa a ser decorativo por defecto salvo que se le asigne `label`.",
+    "El website documenta mejor contratos de formulario, shortcuts, composición y restricciones reales de cada componente.",
   ],
 };
 
 export const QUICKIT_V1_MIGRATION = {
   fromVersion: "0.2.4",
-  toVersion: "1.0.0",
+  toVersion: "1.0.7",
   summary:
-    "La migración desde 0.2.4 a 1.0.0 es directa en la mayoría de proyectos. El objetivo principal es alinear tu código con las APIs recomendadas que ahora quedan como base estable de la librería.",
+    "La migración desde 0.2.4 a 1.0.7 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas y los ajustes finales de accesibilidad, shortcuts, formularios y documentación.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube a `quickit-ui@1.0.0` y vuelve a instalar dependencias. La librería ahora declara soporte oficial para React 18.2+ y React 19.",
+        "Sube directamente a `quickit-ui@1.0.7` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
       beforeCode: "npm install quickit-ui@0.2.4",
-      afterCode: "npm install quickit-ui@1.0.0",
+      afterCode: "npm install quickit-ui@1.0.7",
       language: "bash",
     },
     {
       title: "Simplifica Breadcrumb",
       description:
-        "En 1.0.0 la forma preferida es usar `Breadcrumb.Item` con `href` o `current`, en vez de construir el caso común con primitives más verbosas.",
+        "La forma recomendada ahora es usar `Breadcrumb.Item` con `href` o `current` para el caso común, en vez de combinar primitives más verbosas.",
       beforeCode: `import { Breadcrumb } from "quickit-ui";
 
 export function Navigation() {
@@ -133,7 +133,7 @@ export function Navigation() {
     <Breadcrumb>
       <Breadcrumb.List>
         <Breadcrumb.Item>
-          <Breadcrumb.Link href="#">Home</Breadcrumb.Link>
+          <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
         </Breadcrumb.Item>
         <Breadcrumb.Separator />
         <Breadcrumb.Item>
@@ -149,7 +149,7 @@ export function Navigation() {
   return (
     <Breadcrumb>
       <Breadcrumb.List>
-        <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
         <Breadcrumb.Item current>Productos</Breadcrumb.Item>
       </Breadcrumb.List>
     </Breadcrumb>
@@ -158,98 +158,131 @@ export function Navigation() {
       language: "jsx",
     },
     {
-      title: "Prefiere la API compuesta de Tabs",
+      title: "Prefiere la API compuesta de Tabs y FormControl",
       description:
-        "Los exports planos siguen existiendo por compatibilidad, pero en 1.0.0 la documentación y el camino recomendado usan `Tabs.List`, `Tabs.Trigger` y `Tabs.Content`.",
+        "La documentación oficial ahora prioriza subcomponentes compuestos como `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, `FormControl.Description` y `FormControl.Message`.",
       beforeCode: `import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
-} from "quickit-ui";
-
-export function ProfileTabs() {
-  return (
-    <Tabs defaultValue="overview">
-      <TabsList>
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="team">Equipo</TabsTrigger>
-      </TabsList>
-      <TabsContent value="overview">Resumen</TabsContent>
-      <TabsContent value="team">Miembros</TabsContent>
-    </Tabs>
-  );
-}`,
-      afterCode: `import { Tabs } from "quickit-ui";
-
-export function ProfileTabs() {
-  return (
-    <Tabs defaultValue="overview">
-      <Tabs.List>
-        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-        <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
-      </Tabs.List>
-      <Tabs.Content value="overview">Resumen</Tabs.Content>
-      <Tabs.Content value="team">Miembros</Tabs.Content>
-    </Tabs>
-  );
-}`,
-      language: "jsx",
-    },
-    {
-      title: "Alinea FormControl con sus subcomponentes",
-      description:
-        "Los exports planos siguen disponibles, pero la guía de 1.0.0 prioriza `FormControl.Description` y `FormControl.Message` para mantener el árbol más claro.",
-      beforeCode: `import {
   FormControl,
-  Label,
-  Input,
   FormDescription,
   FormMessage,
+  Label,
+  Input,
 } from "quickit-ui";
 
-export function EmailField() {
+export function Settings() {
   return (
-    <FormControl invalid required>
-      <Label htmlFor="email">Correo</Label>
-      <Input id="email" type="email" />
-      <FormDescription>Usa tu correo principal.</FormDescription>
-      <FormMessage>El correo es obligatorio.</FormMessage>
-    </FormControl>
+    <>
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="team">Equipo</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">Resumen</TabsContent>
+        <TabsContent value="team">Miembros</TabsContent>
+      </Tabs>
+
+      <FormControl invalid required>
+        <Label htmlFor="email">Correo</Label>
+        <Input id="email" type="email" />
+        <FormDescription>Usa tu correo principal.</FormDescription>
+        <FormMessage>El correo es obligatorio.</FormMessage>
+      </FormControl>
+    </>
   );
 }`,
-      afterCode: `import { FormControl, Label, Input } from "quickit-ui";
+      afterCode: `import { Tabs, FormControl, Label, Input } from "quickit-ui";
 
-export function EmailField() {
+export function Settings() {
   return (
-    <FormControl invalid required>
-      <Label htmlFor="email">Correo</Label>
-      <Input id="email" type="email" />
-      <FormControl.Description>
-        Usa tu correo principal.
-      </FormControl.Description>
-      <FormControl.Message>
-        El correo es obligatorio.
-      </FormControl.Message>
-    </FormControl>
+    <>
+      <Tabs defaultValue="overview">
+        <Tabs.List>
+          <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+          <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="overview">Resumen</Tabs.Content>
+        <Tabs.Content value="team">Miembros</Tabs.Content>
+      </Tabs>
+
+      <FormControl invalid required>
+        <Label htmlFor="email">Correo</Label>
+        <Input id="email" type="email" />
+        <FormControl.Description>
+          Usa tu correo principal.
+        </FormControl.Description>
+        <FormControl.Message>
+          El correo es obligatorio.
+        </FormControl.Message>
+      </FormControl>
+    </>
   );
 }`,
       language: "jsx",
     },
     {
-      title: "Valida el salto final",
+      title: "Revisa tus CommandPalette y EmptyState",
       description:
-        "Antes de cerrar la migración, ejecuta tu verificación habitual y revisa visualmente los componentes que más uses en producto.",
-      beforeCode: "npm run lint && npm run test",
+        "Si montas varias `CommandPalette`, deja una sola con el shortcut global. Y si usas `EmptyState`, revisa el layout mobile-first y el uso de `EmptyState.Icon`.",
+      beforeCode: `import { CommandPalette, EmptyState, Button } from "quickit-ui";
+
+export function Page() {
+  return (
+    <>
+      <CommandPalette />
+      <CommandPalette />
+
+      <EmptyState
+        title="Sin resultados"
+        description="No hay elementos por mostrar."
+        actions={<Button>Recargar</Button>}
+      />
+    </>
+  );
+}`,
+      afterCode: `import { CommandPalette, EmptyState, Button } from "quickit-ui";
+import { CopyIcon } from "quickit-ui/icons";
+
+export function Page() {
+  return (
+    <>
+      <CommandPalette />
+      <CommandPalette shortcutEnabled={false} />
+
+      <EmptyState>
+        <EmptyState.Icon>
+          <CopyIcon />
+        </EmptyState.Icon>
+        <EmptyState.Title>Sin resultados</EmptyState.Title>
+        <EmptyState.Description>
+          No hay elementos por mostrar.
+        </EmptyState.Description>
+        <EmptyState.Actions>
+          <Button>Recargar</Button>
+        </EmptyState.Actions>
+      </EmptyState>
+    </>
+  );
+}`,
+      language: "jsx",
+    },
+    {
+      title: "Verifica formularios, overlays y visuales",
+      description:
+        "Haz una pasada final a formularios, pickers, overlays y componentes que dependen de tokens `brand` o fills de `Range`.",
+      beforeCode: "npm run test",
       afterCode:
-        "npm run lint && npm run test && npm run test:types && npm run build",
+        "npm run test && npm run test:types && npm run build && npm run build:docs",
       language: "bash",
     },
   ],
   checks: [
-    "Verifica tus pantallas con overlays: Modal, Drawer, Dropdown, Popover y CommandPalette.",
-    "Revisa formularios que usen Select, Combobox, DatePicker, Checkbox, Radio y Switch.",
-    "Adopta las APIs compuestas recomendadas cuando quieras mantener tu código alineado con la documentación oficial.",
+    "Revisa formularios que usen `Select`, `Combobox`, `DatePicker`, `TimePicker`, `Checkbox`, `Radio`, `Switch` y `Range`.",
+    "Verifica `Modal`, `Drawer`, `Dropdown`, `Popover` y `CommandPalette` en teclado y cierre.",
+    "Haz smoke test visual de `Button`, `Badge`, `Alert`, `Range` y `EmptyState` si dependen de tokens `brand` o nuevos layouts.",
   ],
 };
 
@@ -440,7 +473,7 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
-  { id: "migracion-1-0-0", label: "Migración 1.0.0" },
+  { id: "migracion-1-0-7", label: "Migración 1.0.7" },
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },
@@ -495,8 +528,8 @@ export const WEBSITE_HOOKS = [
     description: "Accede al contexto compartido de un formulario para enlazar labels, inputs y mensajes de error.",
     returns: [
       { name: "controlId", type: "string", description: "ID único para el control del campo." },
-      { name: "descriptionId", type: "string", description: "ID para el texto de descripción/ayuda." },
-      { name: "messageId", type: "string", description: "ID para el mensaje de validación." },
+      { name: "descriptionId", type: "string | null", description: "ID para el texto de descripción/ayuda cuando existe un FormControl.Description montado." },
+      { name: "messageId", type: "string | null", description: "ID para el mensaje de validación cuando existe un FormControl.Message montado." },
       { name: "invalid", type: "boolean", description: "Indica si el campo tiene errores." },
       { name: "disabled", type: "boolean", description: "Indica si el campo está inactivo." },
       { name: "required", type: "boolean", description: "Indica si el campo es obligatorio." },

@@ -63,6 +63,6 @@ export function StepperUsage() {
       defaultValue: `"horizontal"`,
       description: "Disposición del stepper."
     }],
-    notes: ["Pasa `onStepChange` para habilitar navegación por click en los pasos."]
+    notes: ["Pasa `onStepChange` para habilitar navegación por click en los pasos.", "Sin `onStepChange`, Stepper se usa como indicador estático de progreso.", "Mantén `activeStep` dentro del rango real de `steps`."]
   }]
 };

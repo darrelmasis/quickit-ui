@@ -122,6 +122,6 @@ export function SwitchUsage() {
       defaultValue: "undefined",
       description: "Clases del label interno."
     }],
-    notes: ["Switch acepta atributos nativos de button (disabled, onClick)."]
+    notes: ["El control visible es un `button[role=\"switch\"]`.", "Si pasas `name`, el componente añade un checkbox oculto para integrarse con formularios HTML.", "Usa `onCheckedChange` para lógica de negocio y deja `onChange` para adaptadores que necesiten un evento estilo formulario."]
   }]
 };

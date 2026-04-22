@@ -49,6 +49,6 @@ export function SwitchUsage({ status }) {
       defaultValue: "undefined",
       description: "Contenido si no hay Match/Default."
     }],
-    notes: ["Match acepta when como valor, array o función.", "Default define el contenido por defecto."]
+    notes: ["Match acepta when como valor, array o función.", "Default define el contenido por defecto.", "`Match` y `Default` deben renderizarse como hijos directos de `RenderSwitch` para que el componente pueda resolverlos correctamente."]
   }]
 };

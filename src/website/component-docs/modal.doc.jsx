@@ -105,6 +105,11 @@ export function ModalUsage() {
       defaultValue: "true",
       description: "Cierra al click fuera."
     }, {
+      name: "showCloseButton",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Muestra el botón de cierre en Modal.Header."
+    }, {
       name: "maxWidth",
       type: "string",
       defaultValue: `"max-w-md"`,
@@ -120,6 +125,6 @@ export function ModalUsage() {
       defaultValue: "undefined",
       description: "Controla el stacking (auto si no se define)."
     }],
-    notes: ["Modal.Action hereda props de Button y acepta closeOnClick."]
+    notes: ["Modal.Action hereda props de Button y acepta closeOnClick.", "Si el handler de `Modal.Action` hace `event.preventDefault()`, el modal no se cierra aunque `closeOnClick` siga en true."]
   }]
 };

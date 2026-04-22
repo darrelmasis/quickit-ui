@@ -53,9 +53,9 @@ import {
 } from "@/website/site-config";
 import {
   WEBSITE_BUTTON_DOC,
-  WEBSITE_COMPONENT_DOC_SECTIONS,
   WEBSITE_COMPONENT_GROUPS,
   WEBSITE_COMPONENT_LOOKUP,
+  WEBSITE_COMPONENT_REVIEW_NOTES,
   WEBSITE_DOC_OVERVIEW_SECTIONS,
   QUICKIT_V1_MIGRATION,
   QUICKIT_V1_RELEASE,
@@ -142,6 +142,45 @@ function PropsTable({ props, caption = "Tabla de props" }) {
   );
 }
 
+function NotesList({ notes }) {
+  return (
+    <div className="space-y-3">
+      {notes.map((note, index) => (
+        <div
+          key={`${note}-${index}`}
+          className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+        >
+          {note}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReviewNotesList({ notes }) {
+  return (
+    <div className="space-y-3">
+      {notes.map((note, index) => (
+        <div
+          key={`${note.tag ?? "nota"}-${index}`}
+          className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800"
+        >
+          <div className="flex flex-wrap items-center gap-3">
+            {note.tag ? (
+              <Badge color="neutral" variant="soft">
+                {note.tag}
+              </Badge>
+            ) : null}
+            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              {note.text}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function parseDocsRoute(pathname) {
   const segments = pathname.split("/").filter(Boolean);
 
@@ -172,9 +211,10 @@ function parseDocsRoute(pathname) {
 
 function getComponentSections(slug) {
   const doc = COMPONENT_DOCS[slug];
+  const reviewNotes = WEBSITE_COMPONENT_REVIEW_NOTES[slug] ?? [];
 
   if (!doc) {
-    return WEBSITE_COMPONENT_DOC_SECTIONS;
+    return [{ id: "componente-no-encontrado", label: "Componente no encontrado" }];
   }
 
   const exampleChildren =
@@ -183,16 +223,31 @@ function getComponentSections(slug) {
       label: example.title,
     })) ?? [];
 
-  return [
+  const sections = [
     { id: "ejemplo-visual", label: "Ejemplo visual y código" },
     { id: "instalacion", label: "Instalación" },
     { id: "uso", label: "Uso" },
-    {
-      id: "ejemplos",
-      label: "Ejemplos",
-      children: exampleChildren,
-    },
   ];
+
+  if (doc.props?.length) {
+    sections.push({ id: "api", label: "API" });
+  }
+
+  if (doc.notes?.length) {
+    sections.push({ id: "notas", label: "Notas" });
+  }
+
+  if (reviewNotes.length) {
+    sections.push({ id: "notas-de-revision", label: "Notas de revisión" });
+  }
+
+  sections.push({
+    id: "ejemplos",
+    label: "Ejemplos",
+    children: exampleChildren,
+  });
+
+  return sections;
 }
 
 function OverviewPage() {
@@ -399,10 +454,10 @@ function GenericSectionPage({ sectionId }) {
         </WebsiteSection>
       </Show>
 
-      <Show when={sectionId === "migracion-1-0-0"}>
+      <Show when={sectionId === "migracion-1-0-7"}>
         <WebsiteSection
-          id="migracion-1-0-0"
-          title="Migración a 1.0.0"
+          id="migracion-1-0-7"
+          title="Migración a 1.0.7"
           description={QUICKIT_V1_MIGRATION.summary}
         >
           <div className="space-y-8">
@@ -825,6 +880,7 @@ function GenericSectionPage({ sectionId }) {
 
 function ComponentPage({ component }) {
   const doc = COMPONENT_DOCS[component.slug];
+  const reviewNotes = WEBSITE_COMPONENT_REVIEW_NOTES[component.slug] ?? [];
 
   return (
     <>
@@ -852,6 +908,36 @@ function ComponentPage({ component }) {
           <WebsiteSection id="uso" title="Uso">
             <WebsiteCodeBlock code={doc.usageCode} language="jsx" />
           </WebsiteSection>
+
+          <Show when={doc.props?.length}>
+            <WebsiteSection
+              id="api"
+              title="API"
+              description="Props y valores más relevantes para integrar el componente en proyectos reales."
+            >
+              <PropsTable props={doc.props} />
+            </WebsiteSection>
+          </Show>
+
+          <Show when={doc.notes?.length}>
+            <WebsiteSection
+              id="notas"
+              title="Notas"
+              description="Detalles de uso, composición y comportamiento que conviene tener presentes al integrar este componente."
+            >
+              <NotesList notes={doc.notes} />
+            </WebsiteSection>
+          </Show>
+
+          <Show when={reviewNotes.length}>
+            <WebsiteSection
+              id="notas-de-revision"
+              title="Notas de revisión"
+              description="Hallazgos editoriales y técnicos para evitar integraciones ambiguas o frágiles."
+            >
+              <ReviewNotesList notes={reviewNotes} />
+            </WebsiteSection>
+          </Show>
 
           <WebsiteSection id="ejemplos" title="Ejemplos">
             <div className="space-y-10">
@@ -881,18 +967,7 @@ function ComponentPage({ component }) {
                       <PropsTable props={example.props} />
                     </div>
                   ) : null}
-                  {example.notes ? (
-                    <div className="mt-6 space-y-3">
-                      {example.notes.map((note) => (
-                        <div
-                          key={note}
-                          className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
-                        >
-                          {note}
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
+                  {example.notes ? <div className="mt-6"><NotesList notes={example.notes} /></div> : null}
                 </div>
               ))}
             </div>
@@ -920,6 +995,28 @@ function ComponentPage({ component }) {
   );
 }
 
+function ComponentNotFoundPage({ componentSlug }) {
+  return (
+    <WebsiteSection
+      id="componente-no-encontrado"
+      title="Componente no encontrado"
+      description={`No existe un componente documentado con el slug "${componentSlug}".`}
+    >
+      <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+          Revisa la URL o vuelve al índice de componentes para abrir una página
+          válida de la librería.
+        </p>
+        <div className="mt-4">
+          <Link href={WEBSITE_ROUTES.components} appearance="button" color="neutral">
+            Ver componentes
+          </Link>
+        </div>
+      </div>
+    </WebsiteSection>
+  );
+}
+
 function getGenericSections(sectionId) {
   if (sectionId === "introduccion") {
     return [
@@ -932,14 +1029,14 @@ function getGenericSections(sectionId) {
   if (sectionId === "instalacion") {
     return [{ id: "instalacion", label: "Instalación" }];
   }
-  if (sectionId === "migracion-1-0-0") {
+  if (sectionId === "migracion-1-0-7") {
     return [
-      { id: "migracion-1-0-0", label: "Migración 1.0.0" },
-      { id: "migracion-paso-1", label: "Actualizar paquete" },
-      { id: "migracion-paso-2", label: "Simplificar Breadcrumb" },
-      { id: "migracion-paso-3", label: "Usar Tabs compuestas" },
-      { id: "migracion-paso-4", label: "Alinear FormControl" },
-      { id: "migracion-paso-5", label: "Validar el salto final" },
+      { id: "migracion-1-0-7", label: "Migración 1.0.7" },
+      { id: "migracion-paso-1", label: "Actualiza el paquete" },
+      { id: "migracion-paso-2", label: "Simplifica Breadcrumb" },
+      { id: "migracion-paso-3", label: "Usa APIs compuestas" },
+      { id: "migracion-paso-4", label: "CommandPalette y EmptyState" },
+      { id: "migracion-paso-5", label: "Verificación final" },
       { id: "migracion-checklist", label: "Checklist final" },
     ];
   }
@@ -1002,6 +1099,8 @@ export default function DocsPage({ currentPath }) {
     tocSections = getGenericSections(sectionId);
   } else if (mode === "hooks-index") {
     tocSections = [{ id: "hooks", label: "Hooks" }];
+  } else if (mode === "component") {
+    tocSections = [{ id: "componente-no-encontrado", label: "Componente no encontrado" }];
   }
 
   return (
@@ -1018,7 +1117,11 @@ export default function DocsPage({ currentPath }) {
         <article className="min-w-0 w-full max-w-3xl justify-self-center">
           <RenderSwitch value={mode}>
             <Match when="component">
-              <ComponentPage component={currentComponent} />
+              {currentComponent ? (
+                <ComponentPage component={currentComponent} />
+              ) : (
+                <ComponentNotFoundPage componentSlug={componentSlug} />
+              )}
             </Match>
             <Match when="hook">
               <HookDetailPage slug={hookSlug} />

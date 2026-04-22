@@ -10,7 +10,7 @@ function TooltipPreviewCanvas() {
 }
 export const tooltipDoc = {
   name: "Tooltip",
-  description: "Ayuda contextual breve sobre hover o focus.",
+  description: "Ayuda contextual breve para hover o focus. Está pensado para contenido no interactivo.",
   previewCode: TOOLTIP_PREVIEW_CODE,
   preview: <TooltipPreviewCanvas />,
   installCode: `import { Tooltip } from "quickit-ui";`,
@@ -34,11 +34,6 @@ export function TooltipUsage() {
       type: "ReactNode",
       defaultValue: "required",
       description: "Texto o nodo de tooltip."
-    }, {
-      name: "trigger",
-      type: `"hover" | "click"`,
-      defaultValue: `"hover"`,
-      description: "Modo de activación."
     }, {
       name: "placement",
       type: "string",
@@ -85,11 +80,6 @@ export function TooltipUsage() {
       defaultValue: "undefined",
       description: "Color del borde del arrow."
     }, {
-      name: "autoCloseMs",
-      type: "number",
-      defaultValue: "0",
-      description: "Cierra automáticamente después de ms."
-    }, {
       name: "color",
       type: "\"default\" | QuickitSemanticColor",
       defaultValue: `"default"`,
@@ -104,6 +94,7 @@ export function TooltipUsage() {
       type: "number",
       defaultValue: "2000",
       description: "Controla el stacking."
-    }]
+    }],
+    notes: ["Tooltip fuerza `trigger=\"hover\"` e `interactive={false}`; para contenido accionable usa `Popover`.", "Mantén el contenido corto y descriptivo para no convertir el tooltip en un mini diálogo."]
   }]
 };

@@ -41,6 +41,8 @@ export function ComboboxUsage() {
         { value: "a", label: "Opción A" },
         { value: "b", label: "Opción B" },
       ]}
+      onInputChange={(query) => console.log("query", query)}
+      onValueChange={(value) => console.log("value", value)}
       placeholder="Escribe para filtrar"
     />
   );
@@ -64,6 +66,16 @@ export function ComboboxUsage() {
       defaultValue: "undefined",
       description: "Callback al elegir una opción."
     }, {
+      name: "onInputChange",
+      type: "(query: string, event) => void",
+      defaultValue: "undefined",
+      description: "Se ejecuta al escribir en el input; úsalo para analytics o filtrado remoto."
+    }, {
+      name: "name",
+      type: "string",
+      defaultValue: "undefined",
+      description: "Serializa el valor seleccionado mediante hidden input."
+    }, {
       name: "emptyText",
       type: "string",
       defaultValue: `"Sin resultados"`,
@@ -79,6 +91,6 @@ export function ComboboxUsage() {
       defaultValue: "undefined",
       description: "Se ejecuta cuando el usuario limpia manualmente el combobox."
     }],
-    notes: ["El filtrado es por subcadena insensible a mayúsculas en `label`.", "Integración con `FormControl` para `id`, invalid y mensajes."]
+    notes: ["`onInputChange` y `onValueChange` no significan lo mismo: el primero refleja texto escrito; el segundo, la opción finalmente seleccionada.", "El filtrado es por subcadena insensible a mayúsculas en `label`.", "Integración con `FormControl` para `id`, invalid y mensajes."]
   }]
 };

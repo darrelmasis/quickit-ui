@@ -4,18 +4,18 @@ const FORM_CONTROL_PREVIEW_CODE = `import { FormControl, Label, Input } from "qu
 
 export function FormControlPreview() {
   return (
-    <FormControl>
-      <Label htmlFor="name">Nombre</Label>
-      <Input id="name" placeholder="Elena Ruiz" />
+    <FormControl controlId="name">
+      <Label>Nombre</Label>
+      <Input placeholder="Elena Ruiz" />
       <FormControl.Description>Se mostrará en tu perfil público.</FormControl.Description>
     </FormControl>
   );
 }`;
 function FormControlPreviewCanvas() {
   return <div className="w-full max-w-md space-y-3">
-      <FormControl>
-        <Label htmlFor="fc-name">Nombre</Label>
-        <Input id="fc-name" placeholder="Elena Ruiz" />
+      <FormControl controlId="fc-name">
+        <Label>Nombre</Label>
+        <Input placeholder="Elena Ruiz" />
         <FormControl.Description>Se mostrará en tu perfil público.</FormControl.Description>
       </FormControl>
     </div>;
@@ -30,9 +30,9 @@ export const formControlDoc = {
 
 export function FormControlUsage() {
   return (
-    <FormControl invalid>
-      <Label htmlFor="email">Correo</Label>
-      <Input id="email" type="email" required />
+    <FormControl controlId="email" invalid required>
+      <Label>Correo</Label>
+      <Input type="email" />
       <FormControl.Message>El correo no es válido.</FormControl.Message>
     </FormControl>
   );
@@ -42,14 +42,14 @@ export function FormControlUsage() {
     title: "Estados",
     description: "disabled, required e invalid se propagan a los hijos.",
     preview: <div className="grid gap-4 sm:grid-cols-2">
-          <FormControl required>
-            <Label htmlFor="fc-required">Nombre</Label>
-            <Input id="fc-required" placeholder="Elena Ruiz" />
+          <FormControl controlId="fc-required" required>
+            <Label>Nombre</Label>
+            <Input placeholder="Elena Ruiz" />
             <FormControl.Description>Este campo es obligatorio.</FormControl.Description>
           </FormControl>
-          <FormControl disabled>
-            <Label htmlFor="fc-disabled">Equipo</Label>
-            <Input id="fc-disabled" placeholder="Quickit" />
+          <FormControl controlId="fc-disabled" disabled>
+            <Label>Equipo</Label>
+            <Input placeholder="Quickit" />
             <FormControl.Description>Campo deshabilitado.</FormControl.Description>
           </FormControl>
         </div>
@@ -72,11 +72,16 @@ export function FormControlUsage() {
       defaultValue: "false",
       description: "Propaga el estado required a los hijos."
     }, {
-      name: "id",
+      name: "controlId",
       type: "string",
       defaultValue: "auto",
-      description: "Base usada para asociar ids internos."
+      description: "Id compartido por Label, Input/Textarea/Select y el resto de hijos conectados al contexto."
+    }, {
+      name: "id",
+      type: "string",
+      defaultValue: "undefined",
+      description: "Id del contenedor wrapper (`div[role=\"group\"]`)."
     }],
-    notes: ["FormControl.Description y FormControl.Message son opcionales; equivalen a FormDescription y FormMessage (siguen exportados con nombre).", "`useFormControl()` lee el mismo contexto desde inputs o controles personalizados."]
+    notes: ["`Label`, `Input`, `Textarea`, `Select`, `DatePicker`, `TimePicker`, `Combobox` y `Range` consumen el contexto automáticamente; evita duplicar `htmlFor` e `id` cuando uses `controlId`.", "FormControl.Description y FormControl.Message son opcionales; equivalen a FormDescription y FormMessage (siguen exportados con nombre).", "`useFormControl()` lee el mismo contexto desde inputs o controles personalizados."]
   }]
 };

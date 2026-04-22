@@ -16,7 +16,7 @@ function LogicShowPreviewCanvas() {
 }
 export const showDoc = {
   name: "Show",
-  description: "Render condicional simple con fallback.",
+  description: "Render condicional simple con fallback usando la truthiness nativa de JavaScript.",
   previewCode: LOGIC_SHOW_PREVIEW_CODE,
   preview: <LogicShowPreviewCanvas />,
   installCode: `import { Show } from "quickit-ui";`,
@@ -36,7 +36,7 @@ export function ShowUsage({ isReady }) {
       name: "when",
       type: "T",
       defaultValue: "required",
-      description: "Valor evaluado para render."
+      description: "Valor evaluado por truthiness. `0`, `\"\"`, `false`, `null` y `undefined` renderizan el fallback."
     }, {
       name: "children",
       type: "ReactNode | (value) => ReactNode",
@@ -47,6 +47,7 @@ export function ShowUsage({ isReady }) {
       type: "ReactNode | (value) => ReactNode",
       defaultValue: "undefined",
       description: "Contenido alterno."
-    }]
+    }],
+    notes: ["`Show` no hace comparación booleana estricta: usa la truthiness normal de JavaScript.", "Si quieres renderizar con `0` o `\"\"` como valores válidos, conviértelos antes a una condición explícita."]
   }]
 };

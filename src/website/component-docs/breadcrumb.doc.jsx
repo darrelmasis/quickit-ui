@@ -81,11 +81,6 @@ export function BreadcrumbUsage() {
       defaultValue: "undefined",
       description: "Clases del separador automático."
     }, {
-      name: "allowLink",
-      type: "boolean",
-      defaultValue: "false",
-      description: "Compatibilidad: fuerza el render como link incluso si no pasas href."
-    }, {
       name: "current",
       type: "boolean",
       defaultValue: "false",
@@ -116,6 +111,6 @@ export function BreadcrumbUsage() {
       defaultValue: "undefined",
       description: "Tooltip nativo opcional."
     }],
-    notes: ["La forma recomendada es usar Breadcrumb.Item con href o current; Breadcrumb.Link y Breadcrumb.Current siguen disponibles para casos más específicos.", "Breadcrumb.Separator permite separadores manuales cuando necesitas layout custom."]
+    notes: ["La forma recomendada es usar `Breadcrumb.Item` con `href` o `current`; `Breadcrumb.Link` y `Breadcrumb.Current` siguen disponibles para casos más específicos.", "`allowLink` existe por compatibilidad, pero no es la ruta recomendada frente a `href`.", "Breadcrumb.Separator permite separadores manuales cuando necesitas layout custom."]
   }]
 };

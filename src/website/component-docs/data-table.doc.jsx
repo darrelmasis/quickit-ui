@@ -307,6 +307,7 @@ export function SeatsTable() {
       notes: [
         "Usa render cuando la celda necesite badges, varios textos o formatos especiales.",
         "cellClassName y headerClassName permiten ajustar wrapping y densidad por columna.",
+        "Las columnas `sortable` se renderizan con interacción de teclado y `aria-sort`; evita duplicar esa lógica fuera del componente.",
       ],
     },
   ],

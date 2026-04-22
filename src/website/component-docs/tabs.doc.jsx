@@ -131,6 +131,6 @@ export function TabsUsage() {
       defaultValue: `"neutral"`,
       description: "Color activo."
     }],
-    notes: ["Tabs.Trigger requiere prop value (TabsTrigger sigue exportado con nombre).", "Tabs.Content acepta forceMount."]
+    notes: ["Tabs.Trigger requiere prop value (TabsTrigger sigue exportado con nombre).", "Tabs.Content acepta forceMount.", "Pasa siempre `defaultValue` o `value` para que exista un tab seleccionado desde el primer render.", "Si necesitas handlers o atributos nativos extra en `Tabs.Trigger`, comprueba la versión de runtime que estás consumiendo porque la superficie HTML aún se está consolidando."]
   }]
 };

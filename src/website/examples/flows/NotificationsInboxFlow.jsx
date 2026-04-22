@@ -1,4 +1,5 @@
-import { Alert, Badge, Button, EmptyState, Toaster, toast } from "@/lib";
+import { Alert, Badge, Button, EmptyState, toast } from "@/lib";
+import { CopyIcon } from "@/lib/assets/icons";
 
 export function NotificationsInboxFlow() {
   return (
@@ -33,6 +34,9 @@ export function NotificationsInboxFlow() {
       <div className="space-y-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Estado vacío + acciones</h3>
         <EmptyState align="center">
+          <EmptyState.Icon>
+            <CopyIcon className="size-5" />
+          </EmptyState.Icon>
           <EmptyState.Title>No hay notificaciones pendientes</EmptyState.Title>
           <EmptyState.Description>
             Cuando llegue algo nuevo aparecerá en este panel.
@@ -57,7 +61,6 @@ export function NotificationsInboxFlow() {
             </Button>
           </EmptyState.Actions>
         </EmptyState>
-        <Toaster position="bottom-right" />
       </div>
     </div>
   );

@@ -53,6 +53,7 @@ export function ForUsage({ items }) {
       type: "ReactNode | (items) => ReactNode",
       defaultValue: "undefined",
       description: "Render cuando no hay items."
-    }]
+    }],
+    notes: ["`For` no genera keys por ti; devuelve nodos con `key` estable dentro del render de cada item."]
   }]
 };

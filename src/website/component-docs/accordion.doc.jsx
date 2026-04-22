@@ -86,7 +86,7 @@ export function AccordionUsage() {
           name: "clickOutside",
           type: "boolean",
           defaultValue: "false",
-          description: "Cierra todos los panels abiertos al hacer click fuera del accordion.",
+          description: "Cierra panels abiertos al hacer click fuera. En `type=\"single\"` úsalo junto con `collapsible` para evitar un contrato ambiguo.",
         },
         {
           name: "collapsible",
@@ -116,6 +116,7 @@ export function AccordionUsage() {
       notes: [
         "Accordion.Item requiere prop value (también disponible como AccordionItem).",
         "En `type=\"single\"` solo puede haber un ítem abierto; si `value` o `defaultValue` llegan como array, solo se usa el primer elemento.",
+        "Si activas `clickOutside` en `type=\"single\"`, deja también `collapsible` en true para que el comportamiento sea coherente.",
         "El panel anima altura con CSS grid (`0fr` → `1fr`); con `prefers-reduced-motion` la transición se acorta.",
         "`forceMount` se mantiene por compatibilidad; el contenido queda montado para poder animar.",
       ],

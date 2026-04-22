@@ -20,7 +20,7 @@ export const textareaDoc = {
   usageCode: `import { Textarea } from "quickit-ui";
 
 export function TextareaUsage() {
-  return <Textarea minRows={4} placeholder="Escribe algo..." />;
+  return <Textarea rows={4} placeholder="Escribe algo..." />;
 }`,
   examples: [{
     id: "ejemplos-formcontrol",
@@ -44,7 +44,22 @@ export function TextareaUsage() {
       name: "minRows",
       type: "number",
       defaultValue: "3",
-      description: "Controla la altura mínima."
+      description: "Define las filas iniciales cuando no pasas `rows`; no activa autosize."
+    }, {
+      name: "rows",
+      type: "number",
+      defaultValue: "undefined",
+      description: "Controla directamente el atributo nativo `rows`."
+    }, {
+      name: "shape",
+      type: `"square" | "pill"`,
+      defaultValue: `"square"`,
+      description: "Radio visual del campo."
+    }, {
+      name: "size",
+      type: `"sm" | "md" | "lg" | "xl" | "2xl"`,
+      defaultValue: `"md"`,
+      description: "Escala el radio del control para mantener coherencia con otros fields."
     }, {
       name: "invalid",
       type: "boolean",
@@ -56,6 +71,6 @@ export function TextareaUsage() {
       defaultValue: "false",
       description: "Marca como requerido."
     }],
-    notes: ["Textarea acepta atributos nativos de HTMLTextAreaElement."]
+    notes: ["Textarea acepta atributos nativos de HTMLTextAreaElement.", "Si necesitas altura variable según contenido, hoy debes implementarla fuera del componente; `minRows` no hace autosize."]
   }]
 };

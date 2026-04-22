@@ -70,7 +70,7 @@ export function DropdownUsage() {
   }, {
     id: "ejemplos-apertura-hover",
     title: "Apertura por hover",
-    description: "Usa `trigger=\"hover\"` para abrir el menú al pasar el puntero (ideal para barras o navegación densa).",
+    description: "Úsalo con criterio en barras densas o accesos rápidos. Para menús de acciones delicadas, `click` sigue siendo el patrón recomendado.",
     preview: <Dropdown trigger="hover">
           <Dropdown.Trigger asChild>
             <Button color="neutral" variant="outline" size="sm">
@@ -171,6 +171,6 @@ export function DropdownUsage() {
       defaultValue: `"click"`,
       description: "Modo de apertura: clic (por defecto) o hover sobre el trigger."
     }],
-    notes: ["Dropdown.Trigger soporta asChild para usar un Button u otro componente.", "Dropdown.Item soporta as, href, disabled, closeOnClick y variant=\"danger\"."]
+    notes: ["Dropdown.Trigger soporta asChild para usar un Button u otro componente.", "Reserva `trigger=\"hover\"` para navegación ligera o descubrimiento rápido; para acciones importantes o destructivas usa apertura por click.", "Dropdown.Item soporta as, href, disabled, closeOnClick y variant=\"danger\"."]
   }]
 };

@@ -11,16 +11,14 @@ export function LabelPreview() {
       <Label htmlFor="label-preview">Correo</Label>
     </div>,
   installCode: `import { Label } from "quickit-ui";`,
-  usageCode: `import { Label, Input } from "quickit-ui";
+  usageCode: `import { FormControl, Label, Input } from "quickit-ui";
 
 export function LabelUsage() {
   return (
-    <>
-      <Label htmlFor="email" requiredIndicator>
-        Correo
-      </Label>
-      <Input id="email" type="email" />
-    </>
+    <FormControl controlId="email" required>
+      <Label>Correo</Label>
+      <Input type="email" />
+    </FormControl>
   );
 }`,
   examples: [{
@@ -34,11 +32,14 @@ export function LabelUsage() {
         </FormControl>
   }, {
     id: "ejemplos-opcional",
-    title: "Opcional",
-    description: "Usa optional para mostrar el indicador.",
+    title: "Optional y requiredIndicator",
+    description: "`optional` muestra un texto auxiliar. `requiredIndicator` personaliza el marcador cuando el campo viene como requerido desde FormControl.",
     preview: <div className="flex flex-wrap gap-6">
           <Label optional>Descripción</Label>
-          <Label requiredIndicator>Correo</Label>
+          <FormControl controlId="label-required-indicator" required>
+            <Label requiredIndicator="Obligatorio">Correo</Label>
+            <Input type="email" placeholder="correo@quickit.dev" />
+          </FormControl>
         </div>
   }, {
     id: "ejemplos-custom",
@@ -63,10 +64,15 @@ export function LabelUsage() {
       description: "Muestra un indicador de opcional."
     }, {
       name: "requiredIndicator",
-      type: "boolean",
-      defaultValue: "true",
-      description: "Muestra indicador de requerido cuando FormControl está en required."
+      type: "ReactNode | false",
+      defaultValue: `"*"`,
+      description: "Personaliza u oculta el indicador cuando FormControl está en `required`."
+    }, {
+      name: "size",
+      type: `"sm" | "md"`,
+      defaultValue: `"md"`,
+      description: "Tamaño tipográfico del label."
     }],
-    notes: ["Label acepta atributos nativos de HTMLLabelElement.", "Si optional es true, no se renderiza el indicador de requerido."]
+    notes: ["Label acepta atributos nativos de HTMLLabelElement.", "Si `optional` es true, no se renderiza el indicador de requerido.", "Fuera de FormControl, `requiredIndicator` no fuerza por sí solo un marcador; úsalo como personalización del estado requerido contextual."]
   }]
 };
