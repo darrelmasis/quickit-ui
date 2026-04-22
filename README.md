@@ -54,6 +54,44 @@ export function AppProviders({ children }) {
 }
 ```
 
+### Ripple global
+
+Para activar el ripple globalmente no basta con pasar `ripple={true}`. En Quickit UI el efecto visual de ripple solo se aplica cuando la política global de `pressEffect` está en `"ripple"`.
+
+```jsx
+import { QuickitThemeProvider } from "quickit-ui";
+
+export function AppProviders({ children }) {
+  return (
+    <QuickitThemeProvider
+      defaultTheme="system"
+      ripple={true}
+      pressEffect="ripple"
+    >
+      {children}
+    </QuickitThemeProvider>
+  );
+}
+```
+
+También puedes activarlo globalmente y excluir componentes concretos:
+
+```jsx
+<QuickitThemeProvider
+  defaultTheme="system"
+  pressEffect="ripple"
+  ripple={{ enabled: true, disabledComponents: ["link"] }}
+>
+  <App />
+</QuickitThemeProvider>
+```
+
+Notas:
+
+- El ripple global aplica a `Button` y `Link`.
+- Si usas `ripple={true}` pero dejas `pressEffect="transform"`, no verás ripple.
+- `QuickitProvider` y `QuickitThemeProvider` aceptan la misma configuración de `ripple`, `focusRing` y `pressEffect`.
+
 ## Uso básico
 
 ```jsx
