@@ -1,5 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Avatar, Badge } from "@/lib";
+import {
+  Avatar,
+  AvatarGroup,
+  AvatarPresence,
+  Badge,
+  Initials,
+  UserChip,
+} from "@/lib";
 const AVATAR_PREVIEW_CODE = `import { Avatar } from "quickit-ui";
 
 export function AvatarPreview() {
@@ -72,7 +79,7 @@ export function AvatarUsage() {
     id: "ejemplos-group",
     title: "Avatar.Group",
     description: "Agrupa avatares y permite stacking.",
-    preview: <Avatar.Group stacked>
+    preview: <AvatarGroup stacked>
           <Avatar>
             <Avatar.Fallback>AR</Avatar.Fallback>
           </Avatar>
@@ -82,7 +89,7 @@ export function AvatarUsage() {
           <Avatar>
             <Avatar.Fallback>RS</Avatar.Fallback>
           </Avatar>
-        </Avatar.Group>
+        </AvatarGroup>
   }, {
     id: "ejemplos-presence",
     title: "Avatar.Presence",
@@ -90,19 +97,19 @@ export function AvatarUsage() {
     preview: <div className="flex flex-wrap items-center gap-6">
           <Avatar>
             <Avatar.Fallback>ON</Avatar.Fallback>
-            <Avatar.Presence status="online" />
+            <AvatarPresence status="online" />
           </Avatar>
           <Avatar>
             <Avatar.Fallback>AW</Avatar.Fallback>
-            <Avatar.Presence status="away" />
+            <AvatarPresence status="away" />
           </Avatar>
           <Avatar>
             <Avatar.Fallback>BU</Avatar.Fallback>
-            <Avatar.Presence status="busy" />
+            <AvatarPresence status="busy" />
           </Avatar>
           <Avatar>
             <Avatar.Fallback>OF</Avatar.Fallback>
-            <Avatar.Presence status="offline" />
+            <AvatarPresence status="offline" />
           </Avatar>
         </div>
   }, {
@@ -111,21 +118,21 @@ export function AvatarUsage() {
     description: "Combina Avatar y Avatar.Presence.",
     preview: <Avatar size="lg">
           <Avatar.Fallback>ER</Avatar.Fallback>
-          <Avatar.Presence status="online" />
+          <AvatarPresence status="online" />
         </Avatar>
   }, {
     id: "ejemplos-initials",
     title: "Avatar.Initials",
     description: "Genera iniciales desde nombre.",
     preview: <div className="flex flex-wrap items-center gap-3">
-          <Avatar.Initials name="Elena Ruiz" />
-          <Avatar.Initials name="Quickit UI" max={1} />
+          <Initials name="Elena Ruiz" />
+          <Initials name="Quickit UI" max={1} />
         </div>
   }, {
     id: "ejemplos-userchip",
     title: "Avatar.UserChip",
     description: "Chip con avatar, nombre y trailing.",
-    preview: <Avatar.UserChip name="Elena Ruiz" description="Design lead" initials="ER" presence="online" trailing={<Badge size="sm">Core</Badge>} />
+    preview: <UserChip name="Elena Ruiz" description="Design lead" initials="ER" presence="online" trailing={<Badge size="sm">Core</Badge>} />
   }, {
     id: "ejemplos-imagen",
     title: "Imagen y fallback",

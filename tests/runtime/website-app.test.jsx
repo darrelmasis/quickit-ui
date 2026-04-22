@@ -93,4 +93,20 @@ describe("WebsiteApp", () => {
       }),
     ).toBeTruthy();
   }, 15000);
+
+  it("renders the avatar docs page without invalid component types", async () => {
+    window.history.pushState(null, "", "/docs/components/avatar");
+
+    render(
+      <QuickitThemeProvider
+        defaultTheme="light"
+        storageKey={WEBSITE_THEME_STORAGE_KEY}
+      >
+        <WebsiteApp />
+      </QuickitThemeProvider>,
+    );
+
+    expect(await screen.findByRole("heading", { name: "Avatar" })).toBeTruthy();
+    expect(await screen.findByText("Design lead")).toBeTruthy();
+  }, 15000);
 });
