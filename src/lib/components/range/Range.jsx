@@ -101,7 +101,6 @@ const Range = forwardRef(function Range(
     invalid = false,
     max = 100,
     min = 0,
-    onChange,
     onValueChange,
     orientation = "horizontal",
     required = false,

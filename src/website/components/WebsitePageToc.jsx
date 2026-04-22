@@ -17,15 +17,8 @@ export default function WebsitePageToc({ sections }) {
     return ids;
   }, [sections]);
 
-  useEffect(() => {
-    setActiveId((current) => {
-      if (!allSectionIds.length) {
-        return "";
-      }
-
-      return allSectionIds.includes(current) ? current : allSectionIds[0];
-    });
-  }, [allSectionIds]);
+  const resolvedActiveId =
+    allSectionIds.includes(activeId) ? activeId : (allSectionIds[0] ?? "");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -55,7 +48,7 @@ export default function WebsitePageToc({ sections }) {
   };
 
   const renderLink = (id, label, isChild = false) => {
-    const isActive = activeId === id;
+    const isActive = resolvedActiveId === id;
     
     return (
       <a

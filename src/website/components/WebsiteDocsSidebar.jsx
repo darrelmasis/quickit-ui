@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, For } from "@/lib";
 import { ChevronDownIcon } from "@/lib/assets/icons";
 import { cn } from "@/lib/utils";
@@ -34,38 +34,19 @@ export default function WebsiteDocsSidebar({
   sections,
   currentPath,
 }) {
-  const [openSections, setOpenSections] = useState(() => {
-    return new Set(
-      sections
-        .filter((section) => {
-          const state = getSectionState(section, currentPath);
-          return state.isActive || state.isChildActive;
-        })
-        .map((section) => section.id),
-    );
-  });
-
-  useEffect(() => {
-    setOpenSections((previous) => {
-      const next = new Set(previous);
-
-      sections.forEach((section) => {
-        const state = getSectionState(section, currentPath);
-        if (state.isActive || state.isChildActive) {
-          next.add(section.id);
-        }
-      });
-
-      if (
-        next.size === previous.size &&
-        [...next].every((sectionId) => previous.has(sectionId))
-      ) {
-        return previous;
-      }
-
-      return next;
-    });
-  }, [sections, currentPath]);
+  const [openSections, setOpenSections] = useState(() => new Set());
+  const activeSectionIds = useMemo(
+    () =>
+      new Set(
+        sections
+          .filter((section) => {
+            const state = getSectionState(section, currentPath);
+            return state.isActive || state.isChildActive;
+          })
+          .map((section) => section.id),
+      ),
+    [sections, currentPath],
+  );
 
   return (
     <aside className="hidden self-start lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-3 lg:[scrollbar-width:thin] lg:[scrollbar-color:rgb(163_163_163)_transparent] lg:[&::-webkit-scrollbar]:w-2 lg:[&::-webkit-scrollbar-track]:bg-transparent lg:[&::-webkit-scrollbar-thumb]:rounded-full lg:[&::-webkit-scrollbar-thumb]:border-2 lg:[&::-webkit-scrollbar-thumb]:border-transparent lg:[&::-webkit-scrollbar-thumb]:bg-neutral-300 lg:[&::-webkit-scrollbar-thumb]:bg-clip-content lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:lg:[scrollbar-color:rgb(115_115_115)_transparent] dark:lg:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600">
@@ -86,7 +67,9 @@ export default function WebsiteDocsSidebar({
                 } = getSectionState(section, currentPath);
                 const isExpanded =
                   hasChildren &&
-                  (openSections.has(section.id) || isChildActive);
+                  (openSections.has(section.id) ||
+                    activeSectionIds.has(section.id) ||
+                    isChildActive);
 
                 return (
                   <div key={`${section.id}-${index}`} className="space-y-1">

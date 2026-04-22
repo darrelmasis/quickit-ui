@@ -11,11 +11,13 @@ export default function Tooltip({
   color = "default",
   content,
   placement = "top",
-  autoCloseMs: _autoCloseMs,
-  interactive: _interactive,
-  trigger: _trigger,
   ...props
 }) {
+  const popoverProps = { ...props };
+  delete popoverProps.autoCloseMs;
+  delete popoverProps.interactive;
+  delete popoverProps.trigger;
+
   return (
     <Popover
       content={content}
@@ -28,7 +30,7 @@ export default function Tooltip({
       arrowHeight={6}
       arrowTipRadius={1.5}
       className={[TOOLTIP_BASE_CLASSES, className].filter(Boolean).join(" ")}
-      {...props}
+      {...popoverProps}
     >
       {children}
     </Popover>
