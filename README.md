@@ -1,6 +1,6 @@
 # Quickit UI
 
-Quickit UI es una librería de componentes primitivos para React 18+ y Tailwind CSS 4, enfocada en proporcionar cimientos de interfaz accesibles, sin estilos predefinidos restrictivos y altamente composibles.
+Quickit UI es una librería de componentes para React 18.2+ / 19+ y Tailwind CSS 4. Está pensada para construir interfaces reales con una API consistente, soporte de tema, primitives compuestos y documentación integrada.
 
 ## Instalación
 
@@ -8,93 +8,132 @@ Quickit UI es una librería de componentes primitivos para React 18+ y Tailwind 
 npm install quickit-ui
 ```
 
-## Configuración
+## Estilos
 
-Quickit UI requiere un entorno compatible con Tailwind CSS 4. Añade lo siguiente a tu hoja de estilos global:
+Importa los estilos de la librería antes de Tailwind:
 
 ```css
 @import "quickit-ui/styles.css";
 @import "tailwindcss";
 
-/* Opcional: Sincroniza las utilidades dependientes del tema con el modo oscuro de Quickit */
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
-## Uso Básico
+## Providers
 
-Envuelve tu aplicación con `QuickitProvider` para habilitar la gestión de temas y las configuraciones globales.
+Usa `QuickitProvider` si solo quieres fijar la política visual global.
 
 ```jsx
-import "quickit-ui/styles.css";
-import { QuickitProvider, Button, Input } from "quickit-ui";
+import { QuickitProvider } from "quickit-ui";
 
-export default function App() {
+export function AppProviders({ children }) {
   return (
-    <QuickitProvider defaultTheme="system">
-      <div className="flex flex-col gap-4 p-8">
-        <Input placeholder="Buscar componentes..." />
-        <Button variant="solid" color="brand">
-          Empezar
-        </Button>
-      </div>
+    <QuickitProvider
+      theme="light"
+      focusRing
+      ripple
+      pressEffect="transform"
+    >
+      {children}
     </QuickitProvider>
   );
 }
 ```
 
-## Componentes
+Usa `QuickitThemeProvider` si quieres tema persistente con `light`, `dark` y `system`.
 
-La librería proporciona más de 35 componentes diseñados como primitivos de bajo nivel:
+```jsx
+import { QuickitThemeProvider } from "quickit-ui";
 
-- **Base**: `Button`, `Link`, `Badge`, `Label`, `Skeleton`, `Progress`, `Alert`
-- **Formularios**: `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`, `Combobox`
-- **Overlays**: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`, `CommandPalette`
-- **Navegación**: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
-- **Datos**: `DataTable`, `DatePicker`, `TimePicker`
-- **Identidad**: `Avatar`, `AvatarGroup`, `UserChip`, `Initials`
-- **Lógica**: `Show`, `For`, `RenderSwitch`, `Match`, `Default`
-- **Feedback**: `EmptyState`, `FormDescription`, `FormMessage`
+export function AppProviders({ children }) {
+  return (
+    <QuickitThemeProvider defaultTheme="system">
+      {children}
+    </QuickitThemeProvider>
+  );
+}
+```
 
-## Hooks
+## Uso básico
 
-La librería incluye hooks útiles para desarrollo:
+```jsx
+import "quickit-ui/styles.css";
+import { Button, FormControl, Input, Label, QuickitThemeProvider } from "quickit-ui";
 
-- `useBreakpoint`: Para detectar cambios en el tamaño de pantalla.
-- `useFloatingLayer`: Para gestionar capas flotantes.
-- `useMediaQuery`: Para consultas de medios personalizadas.
+export default function App() {
+  return (
+    <QuickitThemeProvider defaultTheme="system">
+      <div className="mx-auto flex max-w-md flex-col gap-4 p-8">
+        <FormControl required>
+          <Label>Correo</Label>
+          <Input type="email" placeholder="equipo@quickit.dev" />
+          <FormControl.Description>
+            Usa tu correo principal.
+          </FormControl.Description>
+        </FormControl>
+
+        <Button color="brand">Empezar</Button>
+      </div>
+    </QuickitThemeProvider>
+  );
+}
+```
+
+## Qué incluye
+
+- Formularios: `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `TimePicker`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
+- Overlays: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`, `CommandPalette`
+- Navegación: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
+- Datos y feedback: `DataTable`, `Alert`, `EmptyState`, `Skeleton`, `Progress`, `Badge`
+- Identidad y acciones: `Button`, `Link`, `Avatar`
+- Lógica declarativa: `Show`, `For`, `RenderSwitch`, `Match`, `Default`
+- Hooks: `useBreakpoint`, `useFloatingLayer`, `useMediaQuery`, `useQuickitTheme`, `useQuickitThemeController`, `useFormControl`
 
 ## Documentación
 
-Para consultar la documentación completa, detalles de arquitectura y ejemplos extensos, ejecuta el servidor de desarrollo local:
+- Sitio: [https://quickit-ui.vercel.app](https://quickit-ui.vercel.app)
+- Docs locales:
 
 ```bash
 npm install
 npm run dev
 ```
 
-La documentación es accesible en `/docs` y cuenta con una referencia de API detallada para cada componente y hook.
+Rutas útiles:
 
-Para construir la documentación estática:
+- `/docs`
+- `/docs/components`
+- `/docs/hooks`
+
+Build de documentación:
 
 ```bash
 npm run build:docs
 ```
 
-Para previsualizar la documentación construida:
+## Validación del paquete
 
 ```bash
-npm run preview:docs
+npm run lint
+npm run build
+npm run test
+npm run test:types
+npm run pack:check
 ```
 
-## Release 1.0.2
+## Migración y cambios
 
-Quickit UI entra en `1.0.2` como release de parche con correcciones menores. El detalle de cambios está en [CHANGELOG.md](./CHANGELOG.md).
+- Changelog: [CHANGELOG.md](./CHANGELOG.md)
+- Guía de migración: [docs/migration.md](./docs/migration.md)
+
+Versión actual: `1.0.7`
 
 ## Requisitos
 
-- React 18.2+ o 19+
-- Node.js 18 o superior
-- Entorno Tailwind CSS 4
+- React `^18.2.0 || ^19.0.0`
+- React DOM `^18.2.0 || ^19.0.0`
+- Node.js `>=18`
+- Tailwind CSS 4
 
 ## Licencia
 
