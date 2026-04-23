@@ -89,37 +89,33 @@ export default function RootLayout({ children }) {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.0.7",
+  version: "1.0.8",
   date: "22 de abril de 2026",
   summary:
-    "Quickit UI 1.0.7 consolida la librería y el website después de una pasada completa de refactorización, hardening accesible y alineación documental.",
+    "Quickit UI 1.0.8 añade un parche de publicación para que el subpath de estilos del paquete se resuelva correctamente en proyectos consumidores.",
   highlights: [
-    "Librería, tipos públicos y documentación quedaron alineados con el runtime real.",
-    "Se reforzaron formularios, overlays, feedback global, tablas, pickers y controles complejos.",
-    "Los tokens de tema `brand` se unificaron entre librería y website.",
-    "La guía de migración y los ejemplos del website ahora reflejan los contratos reales de integración.",
-    "La release queda validada con build, tests runtime, test de tipos, build de docs y pack check.",
+    "Se corrigió la exportación de `styles.css` para que `@import \"quickit-ui/styles.css\";` funcione de forma fiable.",
+    "El paquete ahora publica un archivo físico `dist/styles.css` además del CSS principal generado por Vite.",
+    "La release queda validada con build y pack check del paquete.",
   ],
   notableChanges: [
-    "`CommandPalette` ahora evita que múltiples instancias respondan al mismo `Ctrl+K` / `Cmd+K`.",
-    "`EmptyState` añade `EmptyState.Icon` y acciones mobile-first a ancho completo.",
-    "`AvatarPresence` pasa a ser decorativo por defecto salvo que se le asigne `label`.",
-    "El website documenta mejor contratos de formulario, shortcuts, composición y restricciones reales de cada componente.",
+    "El campo `style` del paquete y el export map `./styles.css` ahora apuntan a `dist/styles.css`.",
+    "El script de build copia el CSS generado a `dist/styles.css` durante la preparación del paquete.",
   ],
 };
 
 export const QUICKIT_V1_MIGRATION = {
   fromVersion: "0.2.4",
-  toVersion: "1.0.7",
+  toVersion: "1.0.8",
   summary:
-    "La migración desde 0.2.4 a 1.0.7 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas y los ajustes finales de accesibilidad, shortcuts, formularios y documentación.",
+    "La migración desde 0.2.4 a 1.0.8 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas y el parche final de publicación de estilos.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube directamente a `quickit-ui@1.0.7` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
+        "Sube directamente a `quickit-ui@1.0.8` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
       beforeCode: "npm install quickit-ui@0.2.4",
-      afterCode: "npm install quickit-ui@1.0.7",
+      afterCode: "npm install quickit-ui@1.0.8",
       language: "bash",
     },
     {
@@ -473,7 +469,7 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
-  { id: "migracion-1-0-7", label: "Migración 1.0.7" },
+  { id: "migracion-1-0-7", label: "Migración 1.0.8" },
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },

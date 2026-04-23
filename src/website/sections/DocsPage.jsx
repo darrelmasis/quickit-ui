@@ -457,7 +457,7 @@ function GenericSectionPage({ sectionId }) {
       <Show when={sectionId === "migracion-1-0-7"}>
         <WebsiteSection
           id="migracion-1-0-7"
-          title="Migración a 1.0.7"
+          title="Migración a 1.0.8"
           description={QUICKIT_V1_MIGRATION.summary}
         >
           <div className="space-y-8">
@@ -1031,7 +1031,7 @@ function getGenericSections(sectionId) {
   }
   if (sectionId === "migracion-1-0-7") {
     return [
-      { id: "migracion-1-0-7", label: "Migración 1.0.7" },
+      { id: "migracion-1-0-7", label: "Migración 1.0.8" },
       { id: "migracion-paso-1", label: "Actualiza el paquete" },
       { id: "migracion-paso-2", label: "Simplifica Breadcrumb" },
       { id: "migracion-paso-3", label: "Usa APIs compuestas" },

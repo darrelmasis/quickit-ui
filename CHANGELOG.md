@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.8 - 22 de abril de 2026
+
+Release de parche para corregir la publicación del subpath de estilos del paquete.
+
+### Cambios destacados
+
+- Se corrigió la exportación de `styles.css` para que `@import "quickit-ui/styles.css";` resuelva de forma fiable en proyectos consumidores.
+- El paquete ahora publica un archivo físico `dist/styles.css` además del CSS principal generado por Vite.
+
 ## 1.0.7 - 22 de abril de 2026
 
 Release de consolidación enfocada en alinear la librería, el website y la documentación con una pasada completa de hardening técnico y visual.
