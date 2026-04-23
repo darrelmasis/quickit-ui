@@ -1,4 +1,14 @@
 # Changelog
+ 
+## 1.0.10 - 22 de abril de 2026
+ 
+Fix para asegurar que los estilos de Tailwind CSS se empaqueten correctamente en la librería.
+ 
+### Cambios destacados
+ 
+- Se agregaron las importaciones de Tailwind (`theme` y `utilities`) al punto de entrada de estilos de la librería (`src/lib/styles.css`).
+- Se optimizó el bundle de CSS eliminando el preflight (reset) para evitar conflictos en proyectos consumidores, manteniendo todas las utilidades necesarias para los componentes.
+- Se verificó que el archivo `dist/quickit-ui.css` incluya correctamente todas las clases generadas por Tailwind.
 
 ## 1.0.9 - 22 de abril de 2026
 

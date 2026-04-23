@@ -7,8 +7,12 @@
    El website lo obtiene a través de su propio src/styles/index.css.
 ─────────────────────────────────────────────────────────────────────────────── */
 
-/* Brand color tokens */
-@import "./theme/brand-vars.css";
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@import "./theme/brand-theme.css";
 
 /* ─── Ripple ──────────────────────────────────────────────────────────────── */
 .qi-ripple-host {
