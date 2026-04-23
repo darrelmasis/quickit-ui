@@ -30,7 +30,7 @@
   "main": "./dist/quickit-ui.js",
   "module": "./dist/quickit-ui.js",
   "types": "./dist/quickit-ui.d.ts",
-  "style": "./dist/quickit-ui.css",
+  "style": "./dist/styles.css",
   "exports": {
     ".": {
       "types": "./dist/quickit-ui.d.ts",
@@ -38,7 +38,7 @@
     },
     "./styles.css": {
       "types": "./dist/styles.css.d.ts",
-      "default": "./dist/quickit-ui.css"
+      "default": "./dist/styles.css"
     }
   },
   "sideEffects": [

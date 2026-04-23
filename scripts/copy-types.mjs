@@ -14,3 +14,7 @@ await copyFile(
   path.join(rootDir, "src", "lib", "styles.css.d.ts"),
   path.join(distDir, "styles.css.d.ts"),
 );
+await copyFile(
+  path.join(distDir, "quickit-ui.css"),
+  path.join(distDir, "styles.css"),
+);
