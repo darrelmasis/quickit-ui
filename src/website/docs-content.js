@@ -89,10 +89,10 @@ export default function RootLayout({ children }) {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.0.8",
+  version: "1.0.9",
   date: "22 de abril de 2026",
   summary:
-    "Quickit UI 1.0.8 añade un parche de publicación para que el subpath de estilos del paquete se resuelva correctamente en proyectos consumidores.",
+    "Quickit UI 1.0.9 añade un parche de publicación para que el subpath de estilos del paquete se resuelva correctamente en proyectos consumidores.",
   highlights: [
     "Se corrigió la exportación de `styles.css` para que `@import \"quickit-ui/styles.css\";` funcione de forma fiable.",
     "El paquete ahora publica un archivo físico `dist/styles.css` además del CSS principal generado por Vite.",
@@ -106,16 +106,16 @@ export const QUICKIT_V1_RELEASE = {
 
 export const QUICKIT_V1_MIGRATION = {
   fromVersion: "0.2.4",
-  toVersion: "1.0.8",
+  toVersion: "1.0.9",
   summary:
-    "La migración desde 0.2.4 a 1.0.8 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas y el parche final de publicación de estilos.",
+    "La migración desde 0.2.4 a 1.0.9 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas y el parche final de publicación de estilos.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube directamente a `quickit-ui@1.0.8` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
+        "Sube directamente a `quickit-ui@1.0.9` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
       beforeCode: "npm install quickit-ui@0.2.4",
-      afterCode: "npm install quickit-ui@1.0.8",
+      afterCode: "npm install quickit-ui@1.0.9",
       language: "bash",
     },
     {
@@ -469,7 +469,7 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
-  { id: "migracion-1-0-7", label: "Migración 1.0.8" },
+  { id: "migracion-1-0-7", label: "Migración 1.0.9" },
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },

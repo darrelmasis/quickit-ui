@@ -1,13 +1,13 @@
 # Migración
 
-## 1.0.8 - 22 de abril de 2026
+## 1.0.9 - 22 de abril de 2026
 
-Esta guía cubre la migración principal desde `0.2.4` hasta `1.0.8`. El salto sigue siendo directo en la mayoría de proyectos, pero conviene alinear tu código con las APIs y patrones que ahora quedan documentados como camino oficial.
+Esta guía cubre la migración principal desde `0.2.4` hasta `1.0.9`. El salto sigue siendo directo en la mayoría de proyectos, pero conviene alinear tu código con las APIs y patrones que ahora quedan documentados como camino oficial.
 
 ### Cambios a revisar
 
 - `Instalación y versión del paquete`
-  Sube directamente a `quickit-ui@1.0.8`.
+  Sube directamente a `quickit-ui@1.0.9`.
   Esta versión reúne la API estable de `1.0.0` y los ajustes posteriores de accesibilidad, docs, shortcuts y tema.
 
 - `Breadcrumb`, `Tabs` y APIs compuestas
@@ -39,7 +39,7 @@ Esta guía cubre la migración principal desde `0.2.4` hasta `1.0.8`. El salto s
 1. Actualiza el paquete:
 
 ```bash
-npm install quickit-ui@1.0.8
+npm install quickit-ui@1.0.9
 ```
 
 2. Revisa el uso de APIs compuestas y simplificadas:

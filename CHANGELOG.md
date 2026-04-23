@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.8 - 22 de abril de 2026
+## 1.0.9 - 22 de abril de 2026
 
 Release de parche para corregir la publicación del subpath de estilos del paquete.
 
