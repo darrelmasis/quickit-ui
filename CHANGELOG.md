@@ -9,6 +9,7 @@ Release de documentación e integración para aclarar el contrato de estilos con
 - Se documenta el orden recomendado para apps con Tailwind CSS 4: importar primero `quickit-ui/styles.css`, después `tailwindcss` y declarar `@theme` al final.
 - Website, README y manual explican la diferencia entre integración sin Tailwind y con Tailwind para evitar que la cascada reintroduzca defaults de Quickit sobre tokens de la app.
 - Se agrega `Quicki-UI-manual.md` como referencia completa de instalación, tema, comportamiento, tokens, utilidades, hooks, componentes, migración y guía para agentes.
+- El header del website agrega accesos directos a npm y GitHub para facilitar instalación y revisión del repositorio.
 
 ## 1.0.11 - 17 de mayo de 2026
 
