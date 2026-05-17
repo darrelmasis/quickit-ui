@@ -1,4 +1,28 @@
 # Changelog
+
+## 1.0.12 - 17 de mayo de 2026
+
+Release de documentación e integración para aclarar el contrato de estilos con Tailwind CSS 4 y consolidar el manual completo de la librería.
+
+### Cambios destacados
+
+- Se documenta el orden recomendado para apps con Tailwind CSS 4: importar primero `quickit-ui/styles.css`, después `tailwindcss` y declarar `@theme` al final.
+- Website, README y manual explican la diferencia entre integración sin Tailwind y con Tailwind para evitar que la cascada reintroduzca defaults de Quickit sobre tokens de la app.
+- Se agrega `Quicki-UI-manual.md` como referencia completa de instalación, tema, comportamiento, tokens, utilidades, hooks, componentes, migración y guía para agentes.
+
+## 1.0.11 - 17 de mayo de 2026
+
+Release de hardening compatible para cerrar inconsistencias de API, accesibilidad, tokens y documentación.
+
+### Cambios destacados
+
+- `Radio` corrige estados `checked + hover` en dark mode para variantes de color.
+- `Range` mejora accesibilidad de thumbs en modo doble, agrega labels configurables y serializa ambos extremos en formularios HTML cuando recibe `name`.
+- `CommandPalette` genera IDs únicos por instancia para evitar colisiones de `aria-controls` y `aria-activedescendant` con múltiples paletas montadas.
+- `Combobox` respeta `label` como `ReactNode` y usa `textValue` para búsqueda/input cuando el label es rico.
+- `Switch` alinea `onCheckedChange` con `Checkbox` y `Radio` entregando también el evento sintético como segundo argumento.
+- Los tokens públicos agregan colecciones compatibles más precisas: `QUICKIT_STATUS_COLORS`, `QUICKIT_BRAND_COLORS` y `QUICKIT_NEUTRAL_COLORS`.
+- README, migración y docs del website documentan mejor `@theme`, `brand`, estilos, tokens y contratos de integración.
  
 ## 1.0.10 - 22 de abril de 2026
  
