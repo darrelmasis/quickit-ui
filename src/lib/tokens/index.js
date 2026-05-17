@@ -27,6 +27,27 @@ export const QUICKIT_ACCENT_COLORS = Object.freeze([
   "info",
 ]);
 
+export const QUICKIT_STATUS_COLORS = Object.freeze([
+  "success",
+  "danger",
+  "warning",
+  "info",
+]);
+
+export const QUICKIT_BRAND_COLORS = Object.freeze([
+  "primary",
+  "brand",
+]);
+
+export const QUICKIT_NEUTRAL_COLORS = Object.freeze([
+  "neutral",
+  "slate",
+  "zinc",
+  "light",
+  "dark",
+  "black",
+]);
+
 export const QUICKIT_CONTROL_SIZES = Object.freeze([
   "sm",
   "md",

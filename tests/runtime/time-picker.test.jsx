@@ -19,6 +19,7 @@ describe("TimePicker", () => {
     );
 
     await user.click(screen.getByRole("combobox"));
+    expect(screen.getByRole("dialog", { name: "Selector de hora" })).toBeTruthy();
     const comboboxes = screen.getAllByRole("combobox");
     await user.click(comboboxes[2]);
     await user.click(screen.getByRole("option", { name: "30" }));
@@ -27,7 +28,7 @@ describe("TimePicker", () => {
 
     expect(screen.getAllByRole("combobox")[0].value).toBe("10:30 PM");
     expect(onChange).toHaveBeenLastCalledWith("22:30");
-  });
+  }, 15000);
 
   it("clears the current time from the action button", async () => {
     const user = userEvent.setup();

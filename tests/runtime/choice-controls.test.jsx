@@ -70,7 +70,7 @@ describe("choice controls", () => {
     await user.click(control);
 
     expect(onClick).toHaveBeenCalledTimes(1);
-    expect(onCheckedChange).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledWith(true, expect.any(Object));
     expect(onChange).toHaveBeenCalledWith(
       expect.objectContaining({
         target: expect.objectContaining({ checked: true, value: "on" }),

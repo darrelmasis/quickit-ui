@@ -99,6 +99,18 @@ function createChangeEvent({ id, name, nativeEvent, value }) {
   };
 }
 
+function getOptionTextValue(item, value) {
+  if (typeof item?.textValue === "string") {
+    return item.textValue;
+  }
+
+  if (typeof item?.label === "string" || typeof item?.label === "number") {
+    return String(item.label);
+  }
+
+  return value;
+}
+
 function normalizeOptions(raw) {
   if (!Array.isArray(raw)) {
     return [];
@@ -110,6 +122,7 @@ function normalizeOptions(raw) {
         disabled: true,
         key: `opt-${index}`,
         label: "",
+        textValue: "",
         value: "",
       };
     }
@@ -118,15 +131,14 @@ function normalizeOptions(raw) {
       item.value !== undefined && item.value !== null
         ? String(item.value)
         : String(item.label ?? index);
-    const label =
-      item.label !== undefined && item.label !== null
-        ? String(item.label)
-        : value;
+    const label = item.label ?? value;
+    const textValue = getOptionTextValue(item, value);
 
     return {
       disabled: Boolean(item.disabled),
       key: `${value}-${index}`,
       label,
+      textValue,
       value,
     };
   });
@@ -137,7 +149,9 @@ function filterOptionsByQuery(options, rawQuery) {
   if (!q) {
     return options;
   }
-  return options.filter((o) => o.label.toLowerCase().includes(q));
+  return options.filter((o) =>
+    `${o.textValue} ${o.value}`.toLowerCase().includes(q),
+  );
 }
 
 function firstEnabledIndex(list) {
@@ -210,11 +224,11 @@ const Combobox = forwardRef(function Combobox(
 
   const selectedOption = options.find((o) => o.value === resolvedValue);
   const [open, setOpen] = useState(false);
-  const [draftQuery, setDraftQuery] = useState(selectedOption?.label ?? "");
+  const [draftQuery, setDraftQuery] = useState(selectedOption?.textValue ?? "");
   const [activeIndex, setActiveIndex] = useState(null);
   const listRef = useRef([]);
 
-  const inputValue = open ? draftQuery : (selectedOption?.label ?? "");
+  const inputValue = open ? draftQuery : (selectedOption?.textValue ?? "");
   const clearButtonContent = clearIcon ?? (
     <ClearIcon className="size-4 fill-current" />
   );
@@ -237,7 +251,7 @@ const Combobox = forwardRef(function Combobox(
       }
       setOpen((wasOpen) => {
         if (!wasOpen) {
-          const seed = selectedOption?.label ?? "";
+          const seed = selectedOption?.textValue ?? "";
           setDraftQuery(seed);
           const list = filterOptionsByQuery(options, seed);
           setActiveIndex(firstEnabledIndex(list));
@@ -389,7 +403,7 @@ const Combobox = forwardRef(function Combobox(
           if (option.disabled) {
             return;
           }
-          handleValueChange(option.value, option.label, event);
+          handleValueChange(option.value, option.textValue, event);
         },
         onMouseEnter() {
           setActiveIndex(index);
@@ -398,7 +412,7 @@ const Combobox = forwardRef(function Combobox(
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             if (!option.disabled) {
-              handleValueChange(option.value, option.label, event);
+              handleValueChange(option.value, option.textValue, event);
             }
           }
         },

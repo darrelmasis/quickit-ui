@@ -30,7 +30,9 @@ describe("CommandPalette", () => {
     });
 
     await user.keyboard("{ArrowDown}");
-    expect(input.getAttribute("aria-activedescendant")).toBe("qi-command-item-close");
+    const activeId = input.getAttribute("aria-activedescendant");
+    expect(activeId).toBeTruthy();
+    expect(document.getElementById(activeId)?.textContent).toBe("Cerrar");
 
     await user.keyboard("{Enter}");
 
@@ -55,6 +57,27 @@ describe("CommandPalette", () => {
 
     expect(await screen.findByRole("listbox", { name: "Comandos" })).toBeTruthy();
     expect(screen.getAllByRole("option")).toHaveLength(2);
+  });
+
+  it("genera ids unicos cuando hay varias paletas montadas", async () => {
+    renderWithProvider(
+      <>
+        <CommandPalette
+          open
+          title="Paleta A"
+          groups={[{ heading: "General", items: [{ id: "open", label: "Abrir" }] }]}
+        />
+        <CommandPalette
+          open
+          title="Paleta B"
+          shortcutEnabled={false}
+          groups={[{ heading: "General", items: [{ id: "open", label: "Abrir" }] }]}
+        />
+      </>,
+    );
+
+    const ids = Array.from(document.querySelectorAll("[id]"), (node) => node.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it("solo deja a una instancia responder al atajo global", async () => {

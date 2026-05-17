@@ -139,4 +139,29 @@ describe("Combobox", () => {
 
     expect(input.getAttribute("aria-activedescendant")).toBeTruthy();
   });
+
+  it("permite labels ReactNode usando textValue para input y busqueda", async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Combobox
+        options={[
+          {
+            value: "docs",
+            textValue: "Documentación",
+            label: <span><strong>Docs</strong> Quickit</span>,
+          },
+          { value: "api", label: "API" },
+        ]}
+        placeholder="Destino"
+      />,
+    );
+
+    const input = screen.getByPlaceholderText("Destino");
+    await user.click(input);
+    await user.keyboard("doc");
+    await user.click(await screen.findByRole("option", { name: /docs quickit/i }));
+
+    expect(input.value).toBe("Documentación");
+  });
 });

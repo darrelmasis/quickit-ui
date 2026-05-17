@@ -113,6 +113,10 @@ const Range = forwardRef(function Range(
     tooltipPlacement,
     tooltipFormatter,
     getAriaValueText,
+    startLabel = "Valor mínimo",
+    endLabel = "Valor máximo",
+    startName,
+    endName,
     value,
     defaultValue,
     "aria-describedby": ariaDescribedBy,
@@ -145,6 +149,8 @@ const Range = forwardRef(function Range(
   ].filter(Boolean).join(" ") || undefined;
   const startThumbLabelId = `${resolvedId}-start-label`;
   const endThumbLabelId = `${resolvedId}-end-label`;
+  const resolvedStartName = startName ?? name;
+  const resolvedEndName = endName ?? (name ? `${name}End` : undefined);
   const isVertical = orientation === "vertical";
   const numericStep = Number(step);
   const wheelStep = Number.isFinite(numericStep) && numericStep > 0 ? numericStep : 1;
@@ -434,10 +440,10 @@ const Range = forwardRef(function Range(
       {isDual ? (
         <>
           <span id={startThumbLabelId} className="sr-only">
-            Valor minimo
+            {startLabel}
           </span>
           <span id={endThumbLabelId} className="sr-only">
-            Valor maximo
+            {endLabel}
           </span>
         </>
       ) : null}
@@ -473,6 +479,22 @@ const Range = forwardRef(function Range(
       </div>
       {isDual ? (
         <>
+          {resolvedStartName ? (
+            <input
+              type="hidden"
+              name={resolvedStartName}
+              value={startValue}
+              disabled={resolvedDisabled}
+            />
+          ) : null}
+          {resolvedEndName ? (
+            <input
+              type="hidden"
+              name={resolvedEndName}
+              value={endValue}
+              disabled={resolvedDisabled}
+            />
+          ) : null}
           <input
             ref={ref}
             {...props}

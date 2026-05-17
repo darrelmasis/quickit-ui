@@ -514,6 +514,8 @@ export const DatePicker = forwardRef(function DatePicker(
   const calendarContent = (
     <div
       id={popupId}
+      role="dialog"
+      aria-label={isRange ? "Selector de rango de fechas" : "Selector de fecha"}
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-2",
         "text-slate-900 dark:text-stone-100",

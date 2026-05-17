@@ -1,4 +1,3 @@
-/* Brand theme tokens shared by the library runtime and the docs build. */
 @theme {
   --color-brand-50: oklch(0.97 0.03 281);
   --color-brand-100: oklch(0.93 0.05 281);
@@ -12,5 +11,3 @@
   --color-brand-900: oklch(0.39 0.14 281);
   --color-brand-950: oklch(0.28 0.09 281);
 }
-
-@import "./brand-vars.css";

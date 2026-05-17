@@ -98,39 +98,39 @@ const RADIO_THEME_CLASSES = {
         dot: "bg-zinc-950",
       },
       brand: {
-        box: "peer-checked:border-brand-300 peer-checked:bg-brand-300 peer-hover:peer-checked:border-brand-200 peer-hover:peer-checked:border-brand-200",
+        box: "peer-checked:border-brand-300 peer-checked:bg-brand-300 peer-hover:peer-checked:border-brand-200 peer-hover:peer-checked:bg-brand-200",
         dot: "bg-zinc-950",
       },
       success: {
-        box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-hover:peer-checked:border-emerald-200 peer-hover:peer-checked:border-emerald-200",
+        box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-hover:peer-checked:border-emerald-200 peer-hover:peer-checked:bg-emerald-200",
         dot: "bg-zinc-950",
       },
       danger: {
-        box: "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:border-rose-200",
+        box: "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
         dot: "bg-zinc-950",
       },
       warning: {
-        box: "peer-checked:border-amber-300 peer-checked:bg-amber-300 peer-hover:peer-checked:border-amber-200 peer-hover:peer-checked:border-amber-200",
+        box: "peer-checked:border-amber-300 peer-checked:bg-amber-300 peer-hover:peer-checked:border-amber-200 peer-hover:peer-checked:bg-amber-200",
         dot: "bg-zinc-950",
       },
       info: {
-        box: "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-hover:peer-checked:border-cyan-200 peer-hover:peer-checked:border-cyan-200",
+        box: "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-hover:peer-checked:border-cyan-200 peer-hover:peer-checked:bg-cyan-200",
         dot: "bg-zinc-950",
       },
       light: {
-        box: "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:border-stone-100",
+        box: "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:bg-stone-100",
         dot: "bg-zinc-950",
       },
       dark: {
-        box: "peer-checked:border-zinc-300 peer-checked:bg-zinc-300 peer-hover:peer-checked:border-zinc-200 peer-hover:peer-checked:border-zinc-200",
+        box: "peer-checked:border-zinc-300 peer-checked:bg-zinc-300 peer-hover:peer-checked:border-zinc-200 peer-hover:peer-checked:bg-zinc-200",
         dot: "bg-zinc-950",
       },
       black: {
-        box: "peer-checked:border-white peer-checked:bg-white peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:border-stone-100",
+        box: "peer-checked:border-white peer-checked:bg-white peer-hover:peer-checked:border-stone-100 peer-hover:peer-checked:bg-stone-100",
         dot: "bg-zinc-950",
       },
     },
-    invalid: "border-rose-500/70 peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:border-rose-200",
+    invalid: "border-rose-500/70 peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
     invalidDot: "bg-zinc-950",
   },
 };

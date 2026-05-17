@@ -1,4 +1,4 @@
-import { forwardRef, useEffect } from "react";
+import { forwardRef } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { SpinnerIcon } from "@/lib/assets/icons";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
@@ -142,25 +142,6 @@ const Button = forwardRef(function Button(
     enabled: resolvedRipple && !isDisabled,
     opacity: rippleOpacity,
   });
-
-  useEffect(() => {
-    if (process.env.NODE_ENV === "production") {
-      return;
-    }
-
-    if (resolvedShape !== "square" && resolvedShape !== "circle") {
-      return;
-    }
-
-    if (ariaLabel || ariaLabelledBy || title) {
-      return;
-    }
-
-    // Los icon buttons sin texto necesitan un nombre accesible explícito.
-    console.warn(
-      'Quickit UI Button: buttons with shape="square" or shape="circle" should include aria-label, aria-labelledby, or title.',
-    );
-  }, [ariaLabel, ariaLabelledBy, resolvedShape, title]);
 
   return (
     <button

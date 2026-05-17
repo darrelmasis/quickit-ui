@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import { useEffect, useId, useMemo, useState, useCallback, useRef } from "react";
 import Modal from "@/lib/components/modal/Modal";
 import Input from "@/lib/components/input/Input";
 import { cn } from "@/lib/utils";
@@ -22,6 +22,7 @@ function normalizeGroups(groups) {
     items: Array.isArray(g?.items)
       ? g.items.map((item, ii) => ({
         id: item?.id ?? `${gi}-${ii}`,
+        key: `${gi}-${ii}-${String(item?.id ?? "item")}`,
         keywords: item?.keywords,
         label: item?.label ?? String(item?.id ?? ii),
         onSelect: item?.onSelect,
@@ -54,6 +55,9 @@ export function CommandPalette({
   const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef(null);
   const shortcutIdRef = useRef(Symbol("qi-command-palette-shortcut"));
+  const generatedId = useId();
+  const baseId = `qi-command-palette-${generatedId.replace(/:/g, "")}`;
+  const listboxId = `${baseId}-listbox`;
   const normalized = useMemo(() => normalizeGroups(groups), [groups]);
   const isControlled = open !== undefined;
   const resolvedOpen = isControlled ? open : internalOpen;
@@ -162,20 +166,32 @@ export function CommandPalette({
       .filter((g) => g.items.length > 0);
   }, [normalized, query]);
 
+  const indexedGroups = useMemo(() => {
+    let optionIndex = 0;
+
+    return filtered.map((group) => ({
+      ...group,
+      items: group.items.map((item) => ({
+        ...item,
+        optionIndex: optionIndex++,
+      })),
+    }));
+  }, [filtered]);
+
   const flatItems = useMemo(
     () =>
-      filtered.flatMap((group) =>
+      indexedGroups.flatMap((group) =>
         group.items.map((item) => ({
           ...item,
           groupHeading: group.heading,
         })),
       ),
-    [filtered],
+    [indexedGroups],
   );
 
-  const flatCount = filtered.reduce((n, g) => n + g.items.length, 0);
+  const flatCount = flatItems.length;
   const activeItem = activeIndex >= 0 ? flatItems[activeIndex] : null;
-  const activeItemId = activeItem ? `qi-command-item-${activeItem.id}` : undefined;
+  const activeItemId = activeItem ? `${baseId}-item-${activeItem.optionIndex}` : undefined;
 
   useEffect(() => {
     if (flatItems.length === 0) {
@@ -256,7 +272,7 @@ export function CommandPalette({
             aria-label="Buscar en la paleta de comandos"
             role="combobox"
             aria-expanded={resolvedOpen}
-            aria-controls="qi-command-palette-listbox"
+            aria-controls={listboxId}
             aria-activedescendant={activeItemId}
             aria-autocomplete="list"
             data-overlay-autofocus={autoFocusOnOpen ? "true" : undefined}
@@ -281,8 +297,8 @@ export function CommandPalette({
                 {emptyText}
               </div>
             ) : (
-              <div id="qi-command-palette-listbox" role="listbox" aria-label={title}>
-                {filtered.map((group, groupIndex) => (
+              <div id={listboxId} role="listbox" aria-label={title}>
+                {indexedGroups.map((group, groupIndex) => (
                 <div key={`${group.heading || "group"}-${groupIndex}`} className="p-2">
                   {group.heading ? (
                     <div className="px-2 pb-1 text-[0.65rem] font-semibold uppercase tracking-wide text-current/45">
@@ -291,15 +307,13 @@ export function CommandPalette({
                   ) : null}
                   <ul className="space-y-0.5">
                     {group.items.map((item) => {
-                      const itemIndex = flatItems.findIndex(
-                        (flatItem) => flatItem.id === item.id,
-                      );
+                      const itemIndex = item.optionIndex;
                       const isActive = itemIndex === activeIndex;
 
                       return (
-                      <li key={item.id}>
+                      <li key={item.key}>
                         <button
-                          id={`qi-command-item-${item.id}`}
+                          id={`${baseId}-item-${item.optionIndex}`}
                           type="button"
                           role="option"
                           aria-selected={isActive}

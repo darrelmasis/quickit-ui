@@ -18,45 +18,48 @@ import { useQuickitTheme } from "./useQuickitTheme";
 export function useQuickitControlState(component, props = {}) {
   const theme = useQuickitTheme();
   const resolvedTheme = useMemo(() => resolveQuickitThemeMode(theme), [theme]);
+  const ariaLabel = props["aria-label"];
+  const ariaLabelledBy = props["aria-labelledby"];
+  const { children, focusRing, pressEffect, ripple, shape, title } = props;
   
   const focusRingEnabled = useQuickitFocusRing(component);
   const rippleEnabled = useQuickitRipple(component);
   const providerPressEffect = useQuickitPressEffect();
 
   const resolvedPressEffect = useMemo(() => {
-    if (props.pressEffect === "ripple" || props.pressEffect === "transform") {
-      return props.pressEffect;
+    if (pressEffect === "ripple" || pressEffect === "transform") {
+      return pressEffect;
     }
     return providerPressEffect;
-  }, [props.pressEffect, providerPressEffect]);
+  }, [pressEffect, providerPressEffect]);
 
   const resolvedRipple = useMemo(() => {
-    if (props.ripple !== undefined) return props.ripple;
+    if (ripple !== undefined) return ripple;
     return resolvedPressEffect === "ripple" ? rippleEnabled : false;
-  }, [props.ripple, resolvedPressEffect, rippleEnabled]);
+  }, [ripple, resolvedPressEffect, rippleEnabled]);
 
   const resolvedFocusRing = useMemo(() => {
-    return props.focusRing !== undefined ? props.focusRing : focusRingEnabled;
-  }, [props.focusRing, focusRingEnabled]);
+    return focusRing !== undefined ? focusRing : focusRingEnabled;
+  }, [focusRing, focusRingEnabled]);
 
-  // Accesibilidad: Validación automática de icon buttons en desarrollo
+  // Validacion de accesibilidad solo en desarrollo para controles icon-only.
   useEffect(() => {
     if (process.env.NODE_ENV === "production" || !component) return;
     
     // Solo aplica a componentes tipo 'button' o 'link' que podrían ser icon-only
     if (component !== "button" && component !== "link") return;
 
-    const hasLabel = props["aria-label"] || props["aria-labelledby"] || props.title;
-    const isIconOnly = props.shape === "square" || props.shape === "circle";
+    const hasLabel = ariaLabel || ariaLabelledBy || title;
+    const isIconOnly = shape === "square" || shape === "circle";
 
-    if (isIconOnly && !hasLabel && !props.children) {
+    if (isIconOnly && !hasLabel && !children) {
       console.warn(
         `[Quickit UI] <${component.charAt(0).toUpperCase() + component.slice(1)}>: ` +
-        `Los componentes con forma "${props.shape}" sin contenido de texto ` +
+        `Los componentes con forma "${shape}" sin contenido de texto ` +
         `deben incluir "aria-label", "aria-labelledby" o "title" para ser accesibles.`
       );
     }
-  }, [component, props]);
+  }, [ariaLabel, ariaLabelledBy, children, component, shape, title]);
 
   return {
     theme: resolvedTheme,

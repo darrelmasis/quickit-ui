@@ -1,4 +1,10 @@
 import * as React from "react";
+import type {
+  Middleware,
+  Placement,
+  UseFloatingOptions,
+  UseFloatingReturn,
+} from "@floating-ui/react";
 
 export declare const QUICKIT_SEMANTIC_COLORS: readonly [
   "neutral",
@@ -24,6 +30,21 @@ export declare const QUICKIT_ACCENT_COLORS: readonly [
   "danger",
   "warning",
   "info",
+];
+export declare const QUICKIT_STATUS_COLORS: readonly [
+  "success",
+  "danger",
+  "warning",
+  "info",
+];
+export declare const QUICKIT_BRAND_COLORS: readonly ["primary", "brand"];
+export declare const QUICKIT_NEUTRAL_COLORS: readonly [
+  "neutral",
+  "slate",
+  "zinc",
+  "light",
+  "dark",
+  "black",
 ];
 export declare const QUICKIT_CONTROL_SIZES: readonly [
   "sm",
@@ -106,6 +127,9 @@ export type QuickitThemeMode = "light" | "dark";
 export type QuickitThemeOption = (typeof QUICKIT_THEME_OPTIONS)[number];
 export type QuickitSemanticColor = (typeof QUICKIT_SEMANTIC_COLORS)[number];
 export type QuickitAccentColor = (typeof QUICKIT_ACCENT_COLORS)[number];
+export type QuickitStatusColor = (typeof QUICKIT_STATUS_COLORS)[number];
+export type QuickitBrandColor = (typeof QUICKIT_BRAND_COLORS)[number];
+export type QuickitNeutralColor = (typeof QUICKIT_NEUTRAL_COLORS)[number];
 export type QuickitControlSize = (typeof QUICKIT_CONTROL_SIZES)[number];
 export type QuickitCompactControlSize =
   (typeof QUICKIT_COMPACT_CONTROL_SIZES)[number];
@@ -654,7 +678,10 @@ export interface SwitchProps extends SwitchButtonProps {
   labelClassName?: string;
   name?: string;
   onChange?: (event: QuickitCheckedChangeEvent) => void;
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (
+    checked: boolean,
+    event: QuickitCheckedChangeEvent,
+  ) => void;
   required?: boolean;
   size?: QuickitCompactControlSize;
   value?: string;
@@ -1150,6 +1177,10 @@ export type RangeProps = Omit<
   range?: boolean;
   showValueTooltip?: boolean;
   size?: "sm" | "md" | "lg";
+  startLabel?: React.ReactNode;
+  endLabel?: React.ReactNode;
+  startName?: string;
+  endName?: string;
   tooltipCrossOffset?: number;
   tooltipHideDelay?: number;
   tooltipFormatter?: (
@@ -1283,21 +1314,24 @@ export interface ForProps<T = unknown> {
 export declare function For<T = unknown>(props: ForProps<T>): React.JSX.Element;
 
 export interface UseFloatingLayerOptions {
-  middleware?: unknown[];
+  middleware?: Middleware[];
   offset?: number;
-  placement?: string;
+  placement?: Placement;
   shiftPadding?: number;
-  [key: string]: unknown;
 }
 export declare function useFloatingLayer(
-  options?: UseFloatingLayerOptions,
-): any;
+  options?: UseFloatingLayerOptions &
+    Omit<UseFloatingOptions, "middleware" | "placement">,
+): UseFloatingReturn;
 
 export interface ComboboxOption {
   disabled?: boolean;
   label?: React.ReactNode;
+  textValue?: string;
   value: string | number;
 }
+
+export type QuickitComboboxChangeEvent = QuickitSelectChangeEvent;
 
 export interface ComboboxProps
   extends Omit<
@@ -1310,14 +1344,7 @@ export interface ComboboxProps
   defaultValue?: string | number;
   emptyText?: string;
   name?: string;
-    onChange?: (event: {
-      type: "change";
-      target: { id?: string; name?: string; value: string };
-      currentTarget: { id?: string; name?: string; value: string };
-      nativeEvent?: unknown;
-      preventDefault: () => void;
-      stopPropagation: () => void;
-    }) => void;
+    onChange?: (event: QuickitComboboxChangeEvent) => void;
     onClear?: () => void;
     onInputChange?: (
       query: string,

@@ -177,16 +177,16 @@ const Switch = forwardRef(function Switch(
       setInternalChecked(nextValue);
     }
 
-    onCheckedChange?.(nextValue);
-    onChange?.(
-      createCheckedChangeEvent({
-        checked: nextValue,
-        id: resolvedId,
-        name,
-        nativeEvent,
-        value,
-      }),
-    );
+    const changeEvent = createCheckedChangeEvent({
+      checked: nextValue,
+      id: resolvedId,
+      name,
+      nativeEvent,
+      value,
+    });
+
+    onCheckedChange?.(nextValue, changeEvent);
+    onChange?.(changeEvent);
   };
 
   const control = (

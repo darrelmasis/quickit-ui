@@ -22,6 +22,7 @@ describe("DatePicker", () => {
     renderWithProvider(<DatePicker value={new Date(2026, 3, 18)} />);
 
     await user.click(screen.getByRole("combobox"));
+    expect(screen.getByRole("dialog", { name: "Selector de fecha" })).toBeTruthy();
     await user.click(getHeaderButton("abril de 2026"));
 
     expect(

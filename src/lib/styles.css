@@ -1,18 +1,10 @@
-/* ─── Quickit UI – Library Styles ─────────────────────────────────────────────
-   Este archivo contiene ÚNICAMENTE los estilos propios de la librería:
-   - Tokens de color brand
-   - Clases de componentes (ripple, autofill, toast, accordion)
-
-   Se importa en src/lib/index.js (para dev) y es el entry CSS del build de lib.
-   El website lo obtiene a través de su propio src/styles/index.css.
-─────────────────────────────────────────────────────────────────────────────── */
-
 @layer theme, base, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
+@import "./theme/brand-theme.css";
 @import "tailwindcss/utilities.css" layer(utilities);
 
-@import "./theme/brand-theme.css";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ─── Ripple ──────────────────────────────────────────────────────────────── */
 .qi-ripple-host {

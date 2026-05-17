@@ -118,10 +118,24 @@ describe("Range", () => {
     );
 
     expect(
-      screen.getByRole("slider", { name: /precio valor minimo/i }),
+      screen.getByRole("slider", { name: /precio valor mínimo/i }),
     ).toBeTruthy();
     expect(
-      screen.getByRole("slider", { name: /precio valor maximo/i }),
+      screen.getByRole("slider", { name: /precio valor máximo/i }),
     ).toBeTruthy();
+  });
+
+  it("serializa ambos valores en formularios cuando recibe name en modo dual", () => {
+    renderWithProvider(
+      <form aria-label="Filtros">
+        <Range range name="priceMin" defaultValue={[15, 85]} />
+      </form>,
+    );
+
+    const form = screen.getByRole("form", { name: "Filtros" });
+    const data = new FormData(form);
+
+    expect(data.get("priceMin")).toBe("15");
+    expect(data.get("priceMinEnd")).toBe("85");
   });
 });

@@ -47,7 +47,7 @@ describe("Switch", () => {
 
     await user.click(screen.getByRole("switch", { name: "Notificaciones" }));
 
-    expect(handleCheckedChange).toHaveBeenCalledWith(true);
+    expect(handleCheckedChange).toHaveBeenCalledWith(true, expect.any(Object));
     expect(handleChange.mock.calls[0][0].target.checked).toBe(true);
   });
 });

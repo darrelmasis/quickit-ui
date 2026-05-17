@@ -24,13 +24,16 @@ import {
   Link,
   Match,
   Modal,
+  QUICKIT_BRAND_COLORS,
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_BREAKPOINTS,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_FOCUS_RING_COMPONENTS,
+  QUICKIT_NEUTRAL_COLORS,
   QUICKIT_PRESS_EFFECTS,
   QUICKIT_RIPPLE_COMPONENTS,
   QUICKIT_SEMANTIC_COLORS,
+  QUICKIT_STATUS_COLORS,
   QUICKIT_THEME_OPTIONS,
   QuickitProvider,
   QuickitThemeProvider,
@@ -41,6 +44,7 @@ import {
   useQuickitThemeController,
   useMediaQuery,
   Radio,
+  Range,
   RenderSwitch,
   Select,
   Show,
@@ -58,15 +62,21 @@ import {
   type QuickitBreakpoint,
   type QuickitBreakpoints,
   type QuickitCheckedChangeEvent,
+  type QuickitBrandColor,
+  type QuickitNeutralColor,
   type QuickitPressEffect,
   type QuickitPresenceStatus,
   type QuickitRippleComponent,
   type QuickitSemanticColor,
+  type QuickitStatusColor,
   type QuickitThemeControllerValue,
   type QuickitThemeOption,
 } from "quickit-ui";
 
 const color: QuickitSemanticColor = QUICKIT_SEMANTIC_COLORS[0];
+const statusColor: QuickitStatusColor = QUICKIT_STATUS_COLORS[0];
+const brandColor: QuickitBrandColor = QUICKIT_BRAND_COLORS[0];
+const neutralColor: QuickitNeutralColor = QUICKIT_NEUTRAL_COLORS[0];
 const buttonProps: ButtonProps = {
   color,
   size: QUICKIT_CONTROL_SIZES[1],
@@ -135,7 +145,7 @@ function ConsumerPreviewInner() {
         onClear={() => {}}
         options={[
           { value: "es", label: "Español" },
-          { value: "en", label: "English" },
+          { value: "docs", textValue: "Documentación", label: <strong>Docs</strong> },
         ]}
         placeholder="Idioma"
       />
@@ -218,7 +228,21 @@ function ConsumerPreviewInner() {
           event.target.checked;
         }}
       />
-      <Switch onChange={handleToggleChange} onCheckedChange={(checked) => checked} />
+      <Switch
+        onChange={handleToggleChange}
+        onCheckedChange={(checked, event) => {
+          checked;
+          event.target.checked;
+        }}
+      />
+      <Range
+        range
+        name="priceMin"
+        endName="priceMax"
+        startLabel="Precio mínimo"
+        endLabel="Precio máximo"
+        defaultValue={[10, 90]}
+      />
       <Select color="brand" defaultValue="docs">
         <option value="docs">Docs</option>
         <option value="tokens">Tokens</option>

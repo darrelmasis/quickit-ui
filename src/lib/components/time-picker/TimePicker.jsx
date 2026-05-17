@@ -408,6 +408,8 @@ export const TimePicker = forwardRef(function TimePicker(
   const content = (
     <div
       id={popupId}
+      role="dialog"
+      aria-label="Selector de hora"
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-1 text-slate-900 dark:text-stone-100",
         "text-slate-900 dark:text-stone-100",
