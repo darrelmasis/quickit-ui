@@ -38,7 +38,7 @@ export function SwitchUsage() {
   }, {
     id: "ejemplos-colores",
     title: "Colores",
-    description: "Aplica colores semánticos.",
+    description: "Aplica colores del sistema visual.",
     preview: <div className="grid gap-2">
           <Switch defaultChecked color="neutral" label="Neutral" />
           <Switch defaultChecked color="brand" label="Brand" />

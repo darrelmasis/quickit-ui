@@ -1,9 +1,36 @@
 export const INSTALL_COMMAND = `npm install quickit-ui`;
 
-export const STYLES_SNIPPET = `@import "quickit-ui/styles.css";
+export const STYLES_SNIPPET = `@import "quickit-ui/styles.css";`;
+
+export const TAILWIND_STYLES_SNIPPET = `@import "quickit-ui/styles.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));`;
+
+export const BRAND_OVERRIDE_SNIPPET = `@import "quickit-ui/styles.css";
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: oklch(0.98 0.03 165);
+  --color-brand-100: oklch(0.94 0.06 165);
+  --color-brand-200: oklch(0.88 0.1 165);
+  --color-brand-300: oklch(0.8 0.14 165);
+  --color-brand-400: oklch(0.72 0.17 165);
+  --color-brand-500: oklch(0.64 0.19 165);
+  --color-brand-600: oklch(0.56 0.18 165);
+  --color-brand-700: oklch(0.48 0.15 165);
+  --color-brand-800: oklch(0.4 0.12 165);
+  --color-brand-900: oklch(0.34 0.09 165);
+  --color-brand-950: oklch(0.24 0.07 165);
+}`;
+
+export const COMPONENT_IMPORT_SNIPPET = `import { Button } from "quickit-ui";
+
+export function SaveAction() {
+  return <Button color="brand">Guardar</Button>;
+}`;
 
 export const QUICKIT_PROVIDER_SNIPPET = `import { QuickitProvider } from "quickit-ui";
 
@@ -53,6 +80,67 @@ function ThemeBadge() {
   return <span>Tema activo: {theme}</span>;
 }`;
 
+export const UTILS_CN_SNIPPET = `import { cn, getControlRadius, getAvatarRadius } from "quickit-ui";
+
+function Card({ active }) {
+  return (
+    <div
+      className={cn(
+        "border p-4 transition-colors",
+        getControlRadius("lg"),
+        active ? "border-brand-500 bg-brand-50" : "border-neutral-200",
+      )}
+    >
+      Radio de avatar: {getAvatarRadius("rounded", "md")}
+    </div>
+  );
+}`;
+
+export const UTILS_SCROLL_SNIPPET = `import { lockAppScroll, unlockAppScroll } from "quickit-ui";
+
+function openCustomOverlay() {
+  lockAppScroll();
+}
+
+function closeCustomOverlay() {
+  unlockAppScroll();
+}`;
+
+export const UTILS_REFS_SNIPPET = `import { useMergeRefs } from "quickit-ui";
+import { forwardRef, useRef } from "react";
+
+const SearchInput = forwardRef(function SearchInput(props, ref) {
+  const localRef = useRef(null);
+  const mergedRef = useMergeRefs(ref, localRef);
+
+  return <input ref={mergedRef} {...props} />;
+});`;
+
+export const UTILS_TOKENS_SNIPPET = `import {
+  QUICKIT_BRAND_COLORS,
+  QUICKIT_NEUTRAL_COLORS,
+  QUICKIT_SEMANTIC_COLORS,
+  QUICKIT_STATUS_COLORS,
+  isQuickitTokenValue,
+  resolveQuickitToken,
+} from "quickit-ui";
+
+const color = resolveQuickitToken(
+  QUICKIT_SEMANTIC_COLORS,
+  userColor,
+  "neutral",
+);
+
+const isKnownColor = isQuickitTokenValue(QUICKIT_SEMANTIC_COLORS, color);
+const statusColors = QUICKIT_STATUS_COLORS;
+const accentColors = QUICKIT_BRAND_COLORS;
+const neutralColors = QUICKIT_NEUTRAL_COLORS;`;
+
+export const UTILS_THEME_SNIPPET = `import { resolveQuickitThemeMode } from "quickit-ui";
+
+const mode = resolveQuickitThemeMode(themeFromConfig);
+// Devuelve "dark" solo si themeFromConfig === "dark"; cualquier otro valor cae a "light".`;
+
 export const THEME_FOUC_VITE_SNIPPET = `<script>
   (function() {
     try {
@@ -89,33 +177,34 @@ export default function RootLayout({ children }) {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.0.9",
-  date: "22 de abril de 2026",
+  version: "1.0.12",
+  date: "17 de mayo de 2026",
   summary:
-    "Quickit UI 1.0.9 añade un parche de publicación para que el subpath de estilos del paquete se resuelva correctamente en proyectos consumidores.",
+    "Quickit UI 1.0.12 cierra una pasada compatible de hardening sobre accesibilidad, formularios, tokens, tipos públicos y documentación, y aclara el contrato de estilos con Tailwind CSS 4.",
   highlights: [
-    "Se corrigió la exportación de `styles.css` para que `@import \"quickit-ui/styles.css\";` funcione de forma fiable.",
-    "El paquete ahora publica un archivo físico `dist/styles.css` además del CSS principal generado por Vite.",
-    "La release queda validada con build y pack check del paquete.",
+    "`Range`, `Combobox`, `CommandPalette`, `Radio` y `Switch` quedan mejor alineados con formularios, accesibilidad y composición real.",
+    "La documentación distingue acentos, estados semánticos y neutrales sin romper `QuickitSemanticColor`.",
+    "La release queda validada con build, pruebas y `npm pack --dry-run` sobre el paquete final.",
   ],
   notableChanges: [
-    "El campo `style` del paquete y el export map `./styles.css` ahora apuntan a `dist/styles.css`.",
-    "El script de build copia el CSS generado a `dist/styles.css` durante la preparación del paquete.",
+    "Se agregan colecciones de tokens más precisas: `QUICKIT_STATUS_COLORS`, `QUICKIT_BRAND_COLORS` y `QUICKIT_NEUTRAL_COLORS`.",
+    "`Combobox` soporta labels ricos mediante `textValue`; `Range` serializa ambos extremos en modo doble; `CommandPalette` evita colisiones de IDs.",
+    "El entry `quickit-ui/styles.css` sigue siendo el punto de entrada documentado para integrar tokens y estilos globales.",
   ],
 };
 
 export const QUICKIT_V1_MIGRATION = {
   fromVersion: "0.2.4",
-  toVersion: "1.0.9",
+  toVersion: "1.0.12",
   summary:
-    "La migración desde 0.2.4 a 1.0.9 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas y el parche final de publicación de estilos.",
+    "La migración desde 0.2.4 a 1.0.12 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas, el entry final de estilos, el orden de imports con Tailwind CSS 4 y los contratos actuales de formularios/tokens.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube directamente a `quickit-ui@1.0.9` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
+        "Sube directamente a `quickit-ui@1.0.12` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
       beforeCode: "npm install quickit-ui@0.2.4",
-      afterCode: "npm install quickit-ui@1.0.9",
+      afterCode: "npm install quickit-ui@1.0.12",
       language: "bash",
     },
     {
@@ -240,7 +329,6 @@ export function Page() {
   );
 }`,
       afterCode: `import { CommandPalette, EmptyState, Button } from "quickit-ui";
-import { CopyIcon } from "quickit-ui/icons";
 
 export function Page() {
   return (
@@ -250,7 +338,16 @@ export function Page() {
 
       <EmptyState>
         <EmptyState.Icon>
-          <CopyIcon />
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5">
+            <path
+              d="M5 8h14M8 5h8M7 11h10v8H7z"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+            />
+          </svg>
         </EmptyState.Icon>
         <EmptyState.Title>Sin resultados</EmptyState.Title>
         <EmptyState.Description>
@@ -438,6 +535,19 @@ function CustomControl() {
   );
 }`,
   },
+  useQuickitFocusRingConfig: {
+    code: `import { useQuickitFocusRingConfig } from "quickit-ui";
+
+function FocusPolicyMeta() {
+  const config = useQuickitFocusRingConfig();
+
+  return (
+    <pre className="rounded-xl border p-3 text-xs">
+      {JSON.stringify(config, null, 2)}
+    </pre>
+  );
+}`,
+  },
   useQuickitRipple: {
     code: `import { useQuickitRipple } from "quickit-ui";
 
@@ -448,6 +558,19 @@ function RippleBox() {
     <div className="p-10 border rounded relative overflow-hidden">
       {rippleEnabled ? "Ripple activo globalmente" : "Ripple desactivado"}
     </div>
+  );
+}`,
+  },
+  useQuickitRippleConfig: {
+    code: `import { useQuickitRippleConfig } from "quickit-ui";
+
+function RipplePolicyMeta() {
+  const config = useQuickitRippleConfig();
+
+  return (
+    <pre className="rounded-xl border p-3 text-xs">
+      {JSON.stringify(config, null, 2)}
+    </pre>
   );
 }`,
   },
@@ -469,11 +592,12 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
-  { id: "migracion-1-0-7", label: "Migración 1.0.9" },
+  { id: "migracion", label: "Migración 0.2.4 → 1.0.12" },
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },
   { id: "tokens", label: "Tokens" },
+  { id: "utilidades", label: "Utilidades" },
   {
     id: "hooks",
     label: "Hooks",
@@ -488,8 +612,10 @@ export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
       { id: "hook-use-modal", label: "useModal" },
       { id: "hook-use-floating-layer", label: "useFloatingLayer" },
       { id: "hook-use-quickit-focus-ring", label: "useQuickitFocusRing" },
+      { id: "hook-use-quickit-focus-ring-config", label: "useQuickitFocusRingConfig" },
       { id: "hook-use-quickit-press-effect", label: "useQuickitPressEffect" },
       { id: "hook-use-quickit-ripple", label: "useQuickitRipple" },
+      { id: "hook-use-quickit-ripple-config", label: "useQuickitRippleConfig" },
     ],
   },
   { id: "componentes", label: "Componentes" },
@@ -590,6 +716,14 @@ export const WEBSITE_HOOKS = [
     returns: "Boolean que indica si el foco debe ser visible."
   },
   {
+    name: "useQuickitFocusRingConfig",
+    description: "Expone la política global de focus ring ya normalizada por el provider.",
+    returns: [
+      { name: "enabled", type: "boolean", description: "Indica si el focus ring está activo globalmente." },
+      { name: "disabledComponents", type: "QuickitFocusRingComponent[]", description: "Listado de componentes que ignoran el focus ring aunque esté activo." },
+    ],
+  },
+  {
     name: "useQuickitPressEffect",
     description: "Consulta el efecto visual preferido (transform o ripple) para interacciones táctiles o click.",
     returns: "El valor 'transform' o 'ripple' configurado globalmente."
@@ -601,6 +735,14 @@ export const WEBSITE_HOOKS = [
       { name: "component", type: "string", description: "Opcional. Nombre del componente para revisar excepciones." }
     ],
     returns: "Boolean que indica si se debe renderizar el ripple."
+  },
+  {
+    name: "useQuickitRippleConfig",
+    description: "Expone la política global de ripple ya normalizada por el provider.",
+    returns: [
+      { name: "enabled", type: "boolean", description: "Indica si el ripple está activo globalmente." },
+      { name: "disabledComponents", type: "QuickitRippleComponent[]", description: "Listado de componentes que no deben mostrar ripple aunque el provider lo tenga activo." },
+    ],
   },
 ];
 
@@ -833,6 +975,11 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "for",
         name: "For",
         description: "Iteración declarativa con fallback vacío.",
+      },
+      {
+        slug: "animate",
+        name: "Animate",
+        description: "Ciclo declarativo de entrada/salida para animaciones simples.",
       },
     ],
   },
@@ -1128,7 +1275,7 @@ export function ButtonPreview() {
       values: ["default", "square", "circle", "pill"],
     },
     {
-      label: "Colores",
+      label: "Colores compatibles",
       values: [
         "neutral",
         "slate",
@@ -1162,7 +1309,7 @@ export function ButtonPreview() {
       name: "color",
       type: "QuickitSemanticColor",
       defaultValue: `"primary"`,
-      description: "Selecciona la paleta aplicada a fondo, borde y texto.",
+      description: "`QuickitSemanticColor` se mantiene por compatibilidad; conceptualmente `brand`/`primary` son acentos, `success`/`danger`/`warning`/`info` son estados y el resto son neutros/superficies.",
     },
     {
       name: "size",

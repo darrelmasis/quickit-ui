@@ -61,9 +61,13 @@ export function RangeUsage() {
       <Range defaultValue={50} min={0} max={100} step={5} />
       <Range
         range
+        name="priceMin"
+        endName="priceMax"
         defaultValue={[20, 80]}
         min={0}
         max={100}
+        startLabel="Precio mínimo"
+        endLabel="Precio máximo"
         showValueTooltip
       />
       <div className="h-40">
@@ -98,7 +102,16 @@ export function RangeUsage() {
     description: "Activa `range` para renderizar dos thumbs y seleccionar un intervalo.",
     preview: <div className="space-y-4">
           <Range range defaultValue={[15, 65]} />
-          <Range range defaultValue={[30, 90]} color="brand" showValueTooltip />
+          <Range
+            range
+            name="priceMin"
+            endName="priceMax"
+            defaultValue={[30, 90]}
+            color="brand"
+            startLabel="Precio mínimo"
+            endLabel="Precio máximo"
+            showValueTooltip
+          />
         </div>
   }, {
     id: "ejemplos-vertical",
@@ -140,6 +153,26 @@ export function RangeUsage() {
       type: "number | [number, number]",
       defaultValue: "undefined",
       description: "Valor inicial en modo no controlado."
+    }, {
+      name: "name",
+      type: "string",
+      defaultValue: "undefined",
+      description: "Nombre del input nativo. En modo doble serializa el valor inicial del rango."
+    }, {
+      name: "endName",
+      type: "string",
+      defaultValue: "`name + \"End\"`",
+      description: "Nombre del hidden input que serializa el valor final en modo doble."
+    }, {
+      name: "startName",
+      type: "string",
+      defaultValue: "`name`",
+      description: "Nombre explícito del hidden input que serializa el valor inicial en modo doble."
+    }, {
+      name: "startLabel / endLabel",
+      type: "ReactNode",
+      defaultValue: `"Valor mínimo" / "Valor máximo"`,
+      description: "Labels accesibles de cada thumb en modo doble."
     }, {
       name: "range",
       type: "boolean",
@@ -201,6 +234,6 @@ export function RangeUsage() {
       defaultValue: "undefined",
       description: "Callback de valor normalizado."
     }],
-    notes: ["En modo simple el componente se comporta cerca de un `input[type=\"range\"]` estilizado y respeta `name` para formularios.", "En modo doble se montan dos inputs range internos con labels accesibles de mínimo y máximo; para submit HTML usa `onValueChange` y serializa tú mismo el intervalo.", "Con orientación vertical, el valor bajo queda abajo y el alto arriba.", "`aria-valuetext` mejora la lectura del valor en SR cuando usas `getAriaValueText` o un `tooltipFormatter` textual."]
+    notes: ["En modo simple el componente se comporta cerca de un `input[type=\"range\"]` estilizado y respeta `name` para formularios.", "En modo doble se montan dos inputs range internos con labels accesibles de mínimo y máximo; si pasas `name`, Quickit serializa dos hidden inputs: `name` y `endName`.", "Con orientación vertical, el valor bajo queda abajo y el alto arriba; el fill siempre cubre el tramo seleccionado.", "`aria-valuetext` mejora la lectura del valor en SR cuando usas `getAriaValueText` o un `tooltipFormatter` textual.", "Si no quieres tooltips visibles durante interacción, desactiva `showValueTooltip`; no afecta el control nativo del slider."]
   }]
 };

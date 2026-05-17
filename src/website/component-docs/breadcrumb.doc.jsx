@@ -1,5 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Breadcrumb } from "@/lib";
+const HOME_HREF = "/docs/getting-started/installation";
+const SALES_HREF = "/examples/flows/checkout";
+const SAFE_LINK_PROPS = {
+  onClick: (event) => event.preventDefault()
+};
 const BREADCRUMB_PREVIEW_CODE = `import { Breadcrumb } from "quickit-ui";
 
 export function BreadcrumbPreview() {
@@ -7,14 +12,14 @@ export function BreadcrumbPreview() {
     <>
       <Breadcrumb>
         <Breadcrumb.List>
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+          <Breadcrumb.Item href="/docs/getting-started/installation">Home</Breadcrumb.Item>
           <Breadcrumb.Item current>Proyectos</Breadcrumb.Item>
         </Breadcrumb.List>
       </Breadcrumb>
       <Breadcrumb>
         <Breadcrumb.List separator="•">
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="#">Ventas</Breadcrumb.Item>
+          <Breadcrumb.Item href="/docs/getting-started/installation">Home</Breadcrumb.Item>
+          <Breadcrumb.Item href="/examples/flows/checkout">Ventas</Breadcrumb.Item>
           <Breadcrumb.Item current>Detalle</Breadcrumb.Item>
         </Breadcrumb.List>
       </Breadcrumb>
@@ -25,14 +30,14 @@ function BreadcrumbPreviewCanvas() {
   return <div className="space-y-4">
       <Breadcrumb>
         <Breadcrumb.List>
-          <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
+          <Breadcrumb.Item href={HOME_HREF} {...SAFE_LINK_PROPS}>Inicio</Breadcrumb.Item>
           <Breadcrumb.Item current>Proyectos</Breadcrumb.Item>
         </Breadcrumb.List>
       </Breadcrumb>
       <Breadcrumb>
         <Breadcrumb.List separator="•">
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="#">Ventas</Breadcrumb.Item>
+          <Breadcrumb.Item href={HOME_HREF} {...SAFE_LINK_PROPS}>Home</Breadcrumb.Item>
+          <Breadcrumb.Item href={SALES_HREF} {...SAFE_LINK_PROPS}>Ventas</Breadcrumb.Item>
           <Breadcrumb.Item current>Detalle</Breadcrumb.Item>
         </Breadcrumb.List>
       </Breadcrumb>
@@ -50,7 +55,7 @@ export function BreadcrumbUsage() {
   return (
     <Breadcrumb>
       <Breadcrumb.List>
-        <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/docs/getting-started/installation">Home</Breadcrumb.Item>
         <Breadcrumb.Item current>Productos</Breadcrumb.Item>
       </Breadcrumb.List>
     </Breadcrumb>
@@ -62,8 +67,8 @@ export function BreadcrumbUsage() {
     description: "Breadcrumb.List agrega separadores si no los defines manualmente.",
     preview: <Breadcrumb>
           <Breadcrumb.List separator="•">
-            <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
-            <Breadcrumb.Item href="#">Ventas</Breadcrumb.Item>
+            <Breadcrumb.Item href={HOME_HREF} {...SAFE_LINK_PROPS}>Inicio</Breadcrumb.Item>
+            <Breadcrumb.Item href={SALES_HREF} {...SAFE_LINK_PROPS}>Ventas</Breadcrumb.Item>
             <Breadcrumb.Item current>Detalle</Breadcrumb.Item>
           </Breadcrumb.List>
         </Breadcrumb>
@@ -111,6 +116,6 @@ export function BreadcrumbUsage() {
       defaultValue: "undefined",
       description: "Tooltip nativo opcional."
     }],
-    notes: ["La forma recomendada es usar `Breadcrumb.Item` con `href` o `current`; `Breadcrumb.Link` y `Breadcrumb.Current` siguen disponibles para casos más específicos.", "`allowLink` existe por compatibilidad, pero no es la ruta recomendada frente a `href`.", "Breadcrumb.Separator permite separadores manuales cuando necesitas layout custom."]
+    notes: ["La forma recomendada es usar `Breadcrumb.Item` con `href` o `current`; `Breadcrumb.Link` y `Breadcrumb.Current` siguen disponibles para casos más específicos.", "Los ejemplos usan rutas reales pero el preview evita navegar para no sacarte de la página de documentación.", "`allowLink` existe por compatibilidad, pero no es la ruta recomendada frente a `href`.", "Breadcrumb.Separator permite separadores manuales cuando necesitas layout custom."]
   }]
 };

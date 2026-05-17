@@ -26,9 +26,9 @@ export function TextareaUsage() {
     id: "ejemplos-formcontrol",
     title: "Con FormControl",
     description: "Ideal para estados inválidos y descripción.",
-    preview: <FormControl invalid required>
-          <Label htmlFor="doc-textarea-form">Mensaje</Label>
-          <Textarea id="doc-textarea-form" minRows={4} placeholder="Describe el problema..." />
+    preview: <FormControl controlId="doc-textarea-form" invalid required>
+          <Label>Mensaje</Label>
+          <Textarea minRows={4} placeholder="Describe el problema..." />
           <FormControl.Description>Se enviará al equipo de soporte.</FormControl.Description>
           <FormControl.Message>El mensaje es obligatorio.</FormControl.Message>
         </FormControl>
@@ -71,6 +71,6 @@ export function TextareaUsage() {
       defaultValue: "false",
       description: "Marca como requerido."
     }],
-    notes: ["Textarea acepta atributos nativos de HTMLTextAreaElement.", "Si necesitas altura variable según contenido, hoy debes implementarla fuera del componente; `minRows` no hace autosize."]
+    notes: ["Textarea acepta atributos nativos de HTMLTextAreaElement.", "Dentro de FormControl, usa `controlId` si quieres que Label, descripción y mensajes se conecten sin repetir ids manuales.", "Si necesitas altura variable según contenido, hoy debes implementarla fuera del componente; `minRows` no hace autosize."]
   }]
 };

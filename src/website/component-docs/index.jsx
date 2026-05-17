@@ -35,6 +35,7 @@ import { skeletonDoc } from "@/website/component-docs/skeleton.doc";
 import { showDoc } from "@/website/component-docs/show.doc";
 import { renderSwitchDoc } from "@/website/component-docs/render-switch.doc";
 import { forDoc } from "@/website/component-docs/for.doc";
+import { animateDoc } from "@/website/component-docs/animate.doc";
 export const COMPONENT_DOCS = {
   "button": buttonDoc,
   "link": linkDoc,
@@ -72,5 +73,6 @@ export const COMPONENT_DOCS = {
   "skeleton": skeletonDoc,
   "show": showDoc,
   "render-switch": renderSwitchDoc,
-  "for": forDoc
+  "for": forDoc,
+  "animate": animateDoc
 };

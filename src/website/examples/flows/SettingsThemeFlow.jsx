@@ -38,7 +38,7 @@ export function SettingsThemeFlow() {
         </div>
         <div className="space-y-3">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Densidad</p>
-          <Select value={density} onChange={(event) => setDensity(event.target.value)}>
+          <Select value={density} onValueChange={setDensity}>
             <option value="compact">Compacta</option>
             <option value="comfortable">Cómoda</option>
             <option value="relaxed">Amplia</option>

@@ -95,6 +95,11 @@ export function ModalUsage() {
       defaultValue: "undefined",
       description: "Callback de apertura."
     }, {
+      name: "closeOnEscape",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Permite cerrar el modal con Escape cuando es el overlay superior."
+    }, {
       name: "blockingOverlay",
       type: "boolean",
       defaultValue: "true",
@@ -125,6 +130,6 @@ export function ModalUsage() {
       defaultValue: "undefined",
       description: "Controla el stacking (auto si no se define)."
     }],
-    notes: ["Modal.Action hereda props de Button y acepta closeOnClick.", "Si el handler de `Modal.Action` hace `event.preventDefault()`, el modal no se cierra aunque `closeOnClick` siga en true."]
+    notes: ["Modal.Action hereda props de Button y acepta closeOnClick.", "Si el handler de `Modal.Action` hace `event.preventDefault()`, el modal no se cierra aunque `closeOnClick` siga en true.", "Usa `blockingOverlay={false}` solo cuando realmente quieras permitir interacción con el fondo; para confirmaciones y formularios suele convenir mantener el patrón modal clásico."]
   }]
 };

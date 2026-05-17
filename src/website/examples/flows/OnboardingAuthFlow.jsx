@@ -1,4 +1,4 @@
-import { Alert, Badge, Button, Checkbox, FormControl, Input, Label } from "@/lib";
+import { Alert, Badge, Button, Checkbox, FormControl, Input, Label, Link } from "@/lib";
 
 export function OnboardingAuthFlow() {
   return (
@@ -10,20 +10,20 @@ export function OnboardingAuthFlow() {
             2FA
           </Badge>
         </div>
-        <FormControl required>
-          <Label htmlFor="login-email">Correo</Label>
-          <Input id="login-email" type="email" placeholder="team@quickit.dev" />
+        <FormControl controlId="login-email" required>
+          <Label>Correo</Label>
+          <Input type="email" placeholder="team@quickit.dev" />
         </FormControl>
-        <FormControl required invalid>
-          <Label htmlFor="login-password">Contrasena</Label>
-          <Input id="login-password" type="password" passwordToggle placeholder="••••••••" />
+        <FormControl controlId="login-password" required invalid>
+          <Label>Contraseña</Label>
+          <Input type="password" passwordToggle placeholder="••••••••" />
           <FormControl.Message>Credenciales no coinciden</FormControl.Message>
         </FormControl>
         <div className="flex items-center justify-between">
-          <Checkbox label="Recordarme por 30 dias" />
-          <a href="#" className="text-xs text-brand-600 hover:underline">
+          <Checkbox label="Recordarme por 30 días" />
+          <Link href="/docs/components/input" className="text-xs">
             Recuperar acceso
-          </a>
+          </Link>
         </div>
         <Button color="brand" fullWidth>
           Entrar

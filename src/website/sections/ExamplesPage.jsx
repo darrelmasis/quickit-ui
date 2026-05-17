@@ -36,7 +36,7 @@ export default function ExamplesPage() {
         <div className="space-y-8">
           <header className="space-y-3">
             <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-              Documentacion
+              Documentación
             </p>
             <h1 className="text-3xl font-bold tracking-tight text-neutral-950 dark:text-neutral-50 sm:text-4xl">
               Ejemplos de producto reales

@@ -17,25 +17,25 @@ export function CheckoutFlow() {
         ]}
       />
       <div className="grid gap-3 sm:grid-cols-2">
-        <FormControl required>
-          <Label htmlFor="checkout-name">Nombre</Label>
-          <Input id="checkout-name" placeholder="Ada Lovelace" />
+        <FormControl controlId="checkout-name" required>
+          <Label>Nombre</Label>
+          <Input placeholder="Ada Lovelace" />
         </FormControl>
-        <FormControl required>
-          <Label htmlFor="checkout-email">Email</Label>
-          <Input id="checkout-email" type="email" placeholder="ada@quickit.dev" />
+        <FormControl controlId="checkout-email" required>
+          <Label>Email</Label>
+          <Input type="email" placeholder="ada@quickit.dev" />
         </FormControl>
-        <FormControl required>
-          <Label htmlFor="checkout-plan">Plan</Label>
-          <Select id="checkout-plan" defaultValue="growth">
+        <FormControl controlId="checkout-plan" required>
+          <Label>Plan</Label>
+          <Select defaultValue="growth">
             <option value="starter">Starter</option>
             <option value="growth">Growth</option>
             <option value="enterprise">Enterprise</option>
           </Select>
         </FormControl>
-        <FormControl required invalid>
-          <Label htmlFor="checkout-card">Tarjeta</Label>
-          <Input id="checkout-card" placeholder="4242 4242 4242 4242" />
+        <FormControl controlId="checkout-card" required invalid>
+          <Label>Tarjeta</Label>
+          <Input placeholder="4242 4242 4242 4242" />
           <FormControl.Message>Número inválido</FormControl.Message>
         </FormControl>
       </div>

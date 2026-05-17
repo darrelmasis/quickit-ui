@@ -1,5 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Button, Dropdown } from "@/lib";
+const PROFILE_HREF = "/docs/components/avatar";
+const SETTINGS_HREF = "/examples/flows/settings-theme";
+const SAFE_LINK_PROPS = {
+  onClick: (event) => event.preventDefault()
+};
 const DROPDOWN_PREVIEW_CODE = `import { Dropdown } from "quickit-ui";
 
 export function DropdownPreview() {
@@ -102,8 +107,8 @@ export function DropdownUsage() {
     preview: <Dropdown>
           <Dropdown.Trigger>Ir a</Dropdown.Trigger>
           <Dropdown.Content>
-            <Dropdown.Item href="#perfil">Perfil</Dropdown.Item>
-            <Dropdown.Item href="#config">Configuración</Dropdown.Item>
+            <Dropdown.Item href={PROFILE_HREF} {...SAFE_LINK_PROPS}>Perfil</Dropdown.Item>
+            <Dropdown.Item href={SETTINGS_HREF} {...SAFE_LINK_PROPS}>Configuración</Dropdown.Item>
           </Dropdown.Content>
         </Dropdown>
   }, {
@@ -171,6 +176,6 @@ export function DropdownUsage() {
       defaultValue: `"click"`,
       description: "Modo de apertura: clic (por defecto) o hover sobre el trigger."
     }],
-    notes: ["Dropdown.Trigger soporta asChild para usar un Button u otro componente.", "Reserva `trigger=\"hover\"` para navegación ligera o descubrimiento rápido; para acciones importantes o destructivas usa apertura por click.", "Dropdown.Item soporta as, href, disabled, closeOnClick y variant=\"danger\"."]
+    notes: ["Dropdown.Trigger soporta asChild para usar un Button u otro componente.", "Reserva `trigger=\"hover\"` para navegación ligera o descubrimiento rápido; para acciones importantes o destructivas usa apertura por click.", "Dropdown.Item soporta as, href, disabled, closeOnClick y variant=\"danger\".", "Si la lista vive dentro de contenedores con scroll complejo, prueba `closeOnScroll` y `collisionPadding` con datos reales antes de darlo por cerrado."]
   }]
 };

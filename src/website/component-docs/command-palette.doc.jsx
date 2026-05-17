@@ -74,6 +74,26 @@ export function CommandPaletteUsage() {
       defaultValue: "[]",
       description: "Comandos agrupados y filtrables por texto o keywords."
     }, {
+      name: "title",
+      type: "ReactNode",
+      defaultValue: `"Comandos"`,
+      description: "Título del modal en el header de la paleta."
+    }, {
+      name: "placeholder",
+      type: "string",
+      defaultValue: `"Buscar comando…"`,
+      description: "Placeholder del input de búsqueda."
+    }, {
+      name: "emptyText",
+      type: "string",
+      defaultValue: `"Sin resultados"`,
+      description: "Texto mostrado cuando ningún item coincide con la búsqueda."
+    }, {
+      name: "headerTrailing",
+      type: "ReactNode",
+      defaultValue: "undefined",
+      description: "Contenido opcional alineado a la derecha del header."
+    }, {
       name: "shortcutLabel",
       type: "string",
       defaultValue: `"Ctrl+K"`,
@@ -83,7 +103,12 @@ export function CommandPaletteUsage() {
       type: "boolean",
       defaultValue: "true",
       description: "Registra el atajo global Ctrl+K / Cmd+K. Desactívalo en instancias secundarias o demos embebidas."
+    }, {
+      name: "autoFocusOnOpen",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Enfoca y selecciona el input de búsqueda al abrir la paleta."
     }],
-    notes: ["El atajo global se registra mientras el componente está montado.", "La librería evita que se abran todas a la vez: solo una instancia dueña del shortcut responde al atajo global.", "Aun así, la recomendación práctica es tener una sola paleta global por página y usar `shortcutEnabled={false}` en instancias secundarias o previews."]
+    notes: ["El atajo global se registra mientras el componente está montado.", "La librería evita que se abran todas a la vez: solo una instancia dueña del shortcut responde al atajo global.", "Cada instancia genera IDs internos únicos para `aria-controls` y `aria-activedescendant`, incluso si repites ids de comandos en grupos distintos.", "Aun así, la recomendación práctica es tener una sola paleta global por página y usar `shortcutEnabled={false}` en instancias secundarias o previews.", "En demos embebidas dentro de docs o dashboards con varios overlays, suele convenir abrirla con un botón y desactivar el shortcut global localmente."]
   }]
 };

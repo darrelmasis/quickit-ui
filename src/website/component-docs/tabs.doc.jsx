@@ -21,7 +21,7 @@ export function TabsPreview() {
         </Tabs.List>
         <Tabs.Content value="overview">Contenido corto.</Tabs.Content>
         <Tabs.Content value="team">Miembros.</Tabs.Content>
-        <Tabs.Content value="billing">Metodos.</Tabs.Content>
+        <Tabs.Content value="billing">Métodos.</Tabs.Content>
       </Tabs>
     </>
   );
@@ -44,7 +44,7 @@ function TabsPreviewCanvas() {
         </Tabs.List>
         <Tabs.Content value="overview">Contenido corto.</Tabs.Content>
         <Tabs.Content value="team">Miembros.</Tabs.Content>
-        <Tabs.Content value="billing">Metodos.</Tabs.Content>
+        <Tabs.Content value="billing">Métodos.</Tabs.Content>
       </Tabs>
     </div>;
 }

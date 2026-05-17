@@ -95,6 +95,6 @@ export function TooltipUsage() {
       defaultValue: "2000",
       description: "Controla el stacking."
     }],
-    notes: ["Tooltip fuerza `trigger=\"hover\"` e `interactive={false}`; para contenido accionable usa `Popover`.", "Mantén el contenido corto y descriptivo para no convertir el tooltip en un mini diálogo."]
+    notes: ["Tooltip fuerza `trigger=\"hover\"` e `interactive={false}`; para contenido accionable usa `Popover`.", "Mantén el contenido corto y descriptivo para no convertir el tooltip en un mini diálogo.", "Si necesitas controlar apertura/cierre desde estado, usa `Popover` en modo `manual` en lugar de tratar `Tooltip` como overlay genérico."]
   }]
 };

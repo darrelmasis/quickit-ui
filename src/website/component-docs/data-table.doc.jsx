@@ -97,7 +97,7 @@ function DataTablePreviewCanvas() {
 export const dataTableDoc = {
   name: "DataTable",
   description:
-    "Tabla responsive con sorting opcional, colores semánticos y celdas personalizadas por columna.",
+    "Tabla responsive con sorting opcional, colores del sistema visual y celdas personalizadas por columna.",
   previewCode: `import { Badge, DataTable } from "quickit-ui";
 
 const columns = [
@@ -183,7 +183,7 @@ export function SeatsTable() {
   examples: [
     {
       id: "ejemplos-colores",
-      title: "Colores semánticos",
+    title: "Colores del sistema",
       description:
         "Usa color para adaptar la tabla al contexto visual de la pantalla sin tener que reestilar el componente.",
       preview: (

@@ -144,9 +144,32 @@ export function TimePickerUsage() {
           description:
             "Muestra un botón para limpiar la hora actual cuando ya existe un valor.",
         },
+        {
+          name: "clearButtonLabel",
+          type: "string",
+          defaultValue: `"Limpiar hora"`,
+          description:
+            "Label accesible del botón de limpiar.",
+        },
+        {
+          name: "name",
+          type: "string",
+          defaultValue: "undefined",
+          description:
+            "Serializa la hora normalizada mediante hidden input para formularios HTML.",
+        },
+        {
+          name: "size",
+          type: `"sm" | "md" | "lg"`,
+          defaultValue: `"md"`,
+          description:
+            "Tamaño del campo visible.",
+        },
       ],
       notes: [
+        "El input visible es de solo lectura; el componente usa popover + listas para construir un valor normalizado y serializable.",
         "Si pasas `name`, el componente renderiza un input hidden con el valor normalizado para formularios HTML.",
+        "Cuando limpias el valor, `onChange` recibe `null` y el hidden input queda vacío.",
       ],
     },
   ],

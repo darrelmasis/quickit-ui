@@ -10,13 +10,66 @@ npm install quickit-ui
 
 ## Estilos
 
-Importa los estilos de la librería antes de Tailwind:
+Importa los estilos de Quickit una sola vez en el entry de tu app. Este archivo incluye los estilos base de los componentes, tokens `brand`, variables CSS y variantes dark compiladas de la librería.
+
+```jsx
+import "quickit-ui/styles.css";
+```
+
+Si tu proyecto también usa Tailwind CSS 4, importa primero Quickit y después Tailwind en tu CSS global. Ese orden deja el contrato base de Quickit cargado, pero permite que las utilidades y tokens de tu app queden al final de la cascada.
 
 ```css
 @import "quickit-ui/styles.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+```
+
+Declara `@theme` al final del archivo cuando quieras sobrescribir tokens como `brand`.
+
+### Personalizar `brand`
+
+`brand` es el slot de marca de Quickit. En proyectos con Tailwind CSS 4, reemplázalo con `@theme` al final del CSS global para que tu escala gane sobre los defaults de Quickit.
+
+```css
+@import "quickit-ui/styles.css";
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: oklch(0.98 0.03 165);
+  --color-brand-100: oklch(0.94 0.06 165);
+  --color-brand-200: oklch(0.88 0.1 165);
+  --color-brand-300: oklch(0.8 0.14 165);
+  --color-brand-400: oklch(0.72 0.17 165);
+  --color-brand-500: oklch(0.64 0.19 165);
+  --color-brand-600: oklch(0.56 0.18 165);
+  --color-brand-700: oklch(0.48 0.15 165);
+  --color-brand-800: oklch(0.4 0.12 165);
+  --color-brand-900: oklch(0.34 0.09 165);
+  --color-brand-950: oklch(0.24 0.07 165);
+}
+```
+
+Todos los componentes que usan `color="brand"` tomarán esa nueva escala.
+
+### Taxonomía de colores
+
+La API compatible mantiene `QuickitSemanticColor` como unión histórica para props `color`, pero conceptualmente Quickit separa los tokens así:
+
+- `brand` y `primary`: acentos de producto.
+- `success`, `danger`, `warning`, `info`: estados semánticos.
+- `neutral`, `slate`, `zinc`, `light`, `dark`, `black`: escalas neutras o de superficie.
+
+Para construir wrappers o galerías puedes importar colecciones más precisas:
+
+```js
+import {
+  QUICKIT_BRAND_COLORS,
+  QUICKIT_NEUTRAL_COLORS,
+  QUICKIT_STATUS_COLORS,
+} from "quickit-ui";
 ```
 
 ## Providers
@@ -125,7 +178,15 @@ export default function App() {
 - Datos y feedback: `DataTable`, `Alert`, `EmptyState`, `Skeleton`, `Progress`, `Badge`
 - Identidad y acciones: `Button`, `Link`, `Avatar`
 - Lógica declarativa: `Show`, `For`, `RenderSwitch`, `Match`, `Default`
-- Hooks: `useBreakpoint`, `useFloatingLayer`, `useMediaQuery`, `useQuickitTheme`, `useQuickitThemeController`, `useFormControl`
+- Hooks: `useBreakpoint`, `useFloatingLayer`, `useMediaQuery`, `useQuickitTheme`, `useQuickitThemeController`, `useQuickitFocusRing`, `useQuickitFocusRingConfig`, `useQuickitRipple`, `useQuickitRippleConfig`, `useQuickitPressEffect`, `useFormControl`
+- Utilidades y tokens: `cn`, `getControlRadius`, `getAvatarRadius`, `lockAppScroll`, `unlockAppScroll`, `useMergeRefs`, `resolveQuickitToken`, `isQuickitTokenValue`, `resolveQuickitThemeMode`
+
+## Notas de integración
+
+- `CommandPalette`: monta una sola paleta global con `shortcutEnabled` activo por página. Si necesitas más instancias, usa `shortcutEnabled={false}` en las secundarias.
+- `Combobox`: `label` acepta `ReactNode`; cuando uses labels ricos, define `textValue` para búsqueda y texto visible del input.
+- `Range`: en modo `range`, `name` serializa el valor inicial y `endName` el valor final. Por defecto `endName` será `${name}End`.
+- `Switch`: `onCheckedChange` recibe `(checked, event)`, alineado con `Checkbox` y `Radio`; el segundo argumento puede ignorarse si no lo necesitas.
 
 ## Documentación
 
@@ -164,7 +225,7 @@ npm run pack:check
 - Changelog: [CHANGELOG.md](./CHANGELOG.md)
 - Guía de migración: [docs/migration.md](./docs/migration.md)
 
-Versión actual: `1.0.9`
+Versión actual: `1.0.12`
 
 ## Requisitos
 

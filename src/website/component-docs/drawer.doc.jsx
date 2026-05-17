@@ -115,6 +115,11 @@ export function DrawerUsage() {
       defaultValue: "undefined",
       description: "Callback al cambiar open."
     }, {
+      name: "closeOnEscape",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Permite cerrar el drawer con Escape cuando es el panel superior."
+    }, {
       name: "onBeforeClose",
       type: "() => boolean | Promise<boolean | void>",
       defaultValue: "undefined",
@@ -135,6 +140,6 @@ export function DrawerUsage() {
       defaultValue: "auto",
       description: "Override del z-index."
     }],
-    notes: ["Drawer.Trigger acepta `asChild` para componer con `Button` u otro elemento sin anidar botones.", "Drawer.Header incluye botón de cerrar cuando `showCloseButton` es `true`.", "Si el handler de `Drawer.Action` hace `event.preventDefault()`, el drawer no se cierra aunque `closeOnClick` siga activo."]
+    notes: ["Drawer.Trigger acepta `asChild` para componer con `Button` u otro elemento sin anidar botones.", "Drawer.Header incluye botón de cerrar cuando `showCloseButton` es `true`.", "Si el handler de `Drawer.Action` hace `event.preventDefault()`, el drawer no se cierra aunque `closeOnClick` siga activo.", "Elige `placement=\"bottom\"` o `top` cuando el contenido sea más cercano a un sheet móvil; para navegación lateral o detalle contextual, `right` y `left` suelen ser más naturales."]
   }]
 };

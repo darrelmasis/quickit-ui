@@ -9,6 +9,8 @@ describe("WebsiteApp", () => {
   beforeEach(() => {
     window.history.pushState(null, "", "/");
     window.scrollTo = vi.fn();
+    window.localStorage.clear();
+    document.documentElement.classList.remove("dark");
     Element.prototype.scrollIntoView = vi.fn();
     global.IntersectionObserver = class {
       disconnect() {}
@@ -108,5 +110,25 @@ describe("WebsiteApp", () => {
 
     expect(await screen.findByRole("heading", { name: "Avatar" })).toBeTruthy();
     expect(await screen.findByText("Design lead")).toBeTruthy();
+  }, 15000);
+
+  it("syncs the document theme when toggling dark mode", async () => {
+    const user = userEvent.setup();
+    window.history.pushState(null, "", "/");
+
+    render(
+      <QuickitThemeProvider
+        defaultTheme="light"
+        storageKey={WEBSITE_THEME_STORAGE_KEY}
+      >
+        <WebsiteApp />
+      </QuickitThemeProvider>,
+    );
+
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+
+    await user.click(screen.getByRole("button", { name: /activar tema oscuro/i }));
+
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
   }, 15000);
 });

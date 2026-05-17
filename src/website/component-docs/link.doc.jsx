@@ -1,21 +1,28 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Link } from "@/lib";
 import { QUICKIT_LINK_TEXT_VARIANTS, QUICKIT_LINK_UNDERLINES } from "@/lib/tokens";
+const DOCS_LINK_HREF = "/docs/components/button";
+const INPUT_LINK_HREF = "/docs/components/input";
+const MODAL_LINK_HREF = "/docs/components/modal";
+const SETTINGS_LINK_HREF = "/examples/flows/settings-theme";
+const SAFE_LINK_PROPS = {
+  onClick: (event) => event.preventDefault()
+};
 const LINK_PREVIEW_CODE = `import { Link } from "quickit-ui";
 
 export function LinkPreview() {
-  return <Link href="#">Visitar documentación</Link>;
+  return <Link href="/docs/components/button">Visitar documentación</Link>;
 }`;
 const LINK_USAGE_CODE = `import { Link } from "quickit-ui";
 
 export function LinkUsage() {
   return (
     <div className="flex flex-wrap gap-4">
-      <Link href="#">Link básico</Link>
-      <Link href="#" variant="muted">
+      <Link href="/docs/components/button">Link básico</Link>
+      <Link href="/docs/components/input" variant="muted">
         Muted
       </Link>
-      <Link href="#" appearance="button" color="neutral">
+      <Link href="/docs/components/modal" appearance="button" color="neutral">
         Acción
       </Link>
     </div>
@@ -23,7 +30,7 @@ export function LinkUsage() {
 }`;
 function LinkPreviewCanvas() {
   return <div className="flex items-center justify-center">
-      <Link href="#">Visitar documentación</Link>
+      <Link href={DOCS_LINK_HREF} {...SAFE_LINK_PROPS}>Visitar documentación</Link>
     </div>;
 }
 export const linkDoc = {
@@ -38,11 +45,11 @@ export const linkDoc = {
     title: "Variantes de texto",
     description: `Variantes disponibles: ${QUICKIT_LINK_TEXT_VARIANTS.join(", ")}.`,
     preview: <div className="flex flex-wrap gap-4">
-          <Link href="#">Default</Link>
-          <Link href="#" variant="muted">
+          <Link href={DOCS_LINK_HREF} {...SAFE_LINK_PROPS}>Default</Link>
+          <Link href={INPUT_LINK_HREF} variant="muted" {...SAFE_LINK_PROPS}>
             Muted
           </Link>
-          <Link href="#" variant="subtle">
+          <Link href={MODAL_LINK_HREF} variant="subtle" {...SAFE_LINK_PROPS}>
             Subtle
           </Link>
         </div>
@@ -51,13 +58,13 @@ export const linkDoc = {
     title: "Subrayado",
     description: `Opciones: ${QUICKIT_LINK_UNDERLINES.join(", ")}.`,
     preview: <div className="flex flex-wrap gap-4">
-          <Link href="#" underline="always">
+          <Link href={DOCS_LINK_HREF} underline="always" {...SAFE_LINK_PROPS}>
             Siempre
           </Link>
-          <Link href="#" underline="hover">
+          <Link href={INPUT_LINK_HREF} underline="hover" {...SAFE_LINK_PROPS}>
             Hover
           </Link>
-          <Link href="#" underline="none">
+          <Link href={MODAL_LINK_HREF} underline="none" {...SAFE_LINK_PROPS}>
             Nunca
           </Link>
         </div>
@@ -66,40 +73,40 @@ export const linkDoc = {
     title: "Apariencia de botón",
     description: "`appearance=\"button\"` habilita shape, size y variantes de Button.",
     preview: <div className="flex flex-wrap gap-3">
-          <Link href="#" appearance="button" color="neutral">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="neutral" {...SAFE_LINK_PROPS}>
             Neutral
           </Link>
-          <Link href="#" appearance="button" color="slate">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="slate" {...SAFE_LINK_PROPS}>
             Slate
           </Link>
-          <Link href="#" appearance="button" color="zinc">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="zinc" {...SAFE_LINK_PROPS}>
             Zinc
           </Link>
-          <Link href="#" appearance="button" color="primary">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="primary" {...SAFE_LINK_PROPS}>
             Primary
           </Link>
-          <Link href="#" appearance="button" color="brand">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="brand" {...SAFE_LINK_PROPS}>
             Brand
           </Link>
-          <Link href="#" appearance="button" color="success">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="success" {...SAFE_LINK_PROPS}>
             Success
           </Link>
-          <Link href="#" appearance="button" color="danger">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="danger" {...SAFE_LINK_PROPS}>
             Danger
           </Link>
-          <Link href="#" appearance="button" color="warning">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="warning" {...SAFE_LINK_PROPS}>
             Warning
           </Link>
-          <Link href="#" appearance="button" color="info">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="info" {...SAFE_LINK_PROPS}>
             Info
           </Link>
-          <Link href="#" appearance="button" color="light">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="light" {...SAFE_LINK_PROPS}>
             Light
           </Link>
-          <Link href="#" appearance="button" color="dark">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="dark" {...SAFE_LINK_PROPS}>
             Dark
           </Link>
-          <Link href="#" appearance="button" color="black">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" color="black" {...SAFE_LINK_PROPS}>
             Black
           </Link>
         </div>
@@ -108,10 +115,10 @@ export const linkDoc = {
     title: "Icon button",
     description: "Cuando solo hay icono, añade aria-label o title.",
     preview: <div className="flex flex-wrap gap-3">
-          <Link href="#" appearance="button" shape="circle" color="neutral" aria-label="Abrir menú">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" shape="circle" color="neutral" aria-label="Abrir menú" {...SAFE_LINK_PROPS}>
             ⋯
           </Link>
-          <Link href="#" appearance="button" shape="square" color="neutral" aria-label="Subir">
+          <Link href={SETTINGS_LINK_HREF} appearance="button" shape="square" color="neutral" aria-label="Subir" {...SAFE_LINK_PROPS}>
             ↑
           </Link>
         </div>
@@ -169,6 +176,6 @@ export const linkDoc = {
       defaultValue: "auto",
       description: "Habilita el motion de presión."
     }],
-    notes: ["Link acepta atributos nativos de HTMLAnchorElement.", "Piensa el componente como dos contratos: texto navegable y link con apariencia de botón.", "Si `appearance` es `button` y `shape` es `square` o `circle`, define `aria-label`, `aria-labelledby` o `title`."]
+    notes: ["Link acepta atributos nativos de HTMLAnchorElement.", "Piensa el componente como dos contratos: texto navegable y link con apariencia de botón.", "Los ejemplos usan rutas reales pero cancelan la navegación en el preview para no sacarte de la documentación.", "Si `appearance` es `button` y `shape` es `square` o `circle`, define `aria-label`, `aria-labelledby` o `title`."]
   }]
 };

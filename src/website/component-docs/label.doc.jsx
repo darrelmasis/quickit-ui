@@ -25,9 +25,9 @@ export function LabelUsage() {
     id: "ejemplos-formcontrol",
     title: "Con FormControl",
     description: "El indicador de requerido se activa automáticamente si el campo es required.",
-    preview: <FormControl required>
-          <Label htmlFor="label-required">Nombre</Label>
-          <Input id="label-required" placeholder="Elena Ruiz" />
+    preview: <FormControl controlId="label-required" required>
+          <Label>Nombre</Label>
+          <Input placeholder="Elena Ruiz" />
           <FormControl.Description>Este campo es obligatorio.</FormControl.Description>
         </FormControl>
   }, {

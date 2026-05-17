@@ -70,9 +70,9 @@ export function InputUsage() {
     id: "ejemplos-formcontrol",
     title: "Con FormControl",
     description: "Útil para mensajes de error y required.",
-    preview: <FormControl invalid required>
-          <Label htmlFor="doc-email">Correo</Label>
-          <Input id="doc-email" type="email" placeholder="tu@email.com" />
+    preview: <FormControl controlId="doc-email" invalid required>
+          <Label>Correo</Label>
+          <Input type="email" placeholder="tu@email.com" />
           <FormControl.Message>El correo es obligatorio.</FormControl.Message>
         </FormControl>
   }, {
@@ -174,6 +174,6 @@ export function InputUsage() {
       defaultValue: "undefined",
       description: "Se dispara al cambiar visibilidad."
     }],
-    notes: ["Input acepta atributos nativos de HTMLInputElement (type, value, onChange, disabled, readOnly, name, autoComplete).", "type=\"search\" activa clearButton automáticamente; type=\"password\" activa passwordToggle. Puedes sobrescribirlo con props.", "Ctrl + Espacio limpia el input cuando hay contenido."]
+    notes: ["Input acepta atributos nativos de HTMLInputElement (type, value, onChange, disabled, readOnly, name, autoComplete).", "Dentro de FormControl, prefiere `controlId` + `<Label>` sin repetir manualmente `htmlFor`/`id` salvo que necesites wiring explícito.", "type=\"search\" activa clearButton automáticamente; type=\"password\" activa passwordToggle. Puedes sobrescribirlo con props.", "Ctrl + Espacio limpia el input cuando hay contenido."]
   }]
 };

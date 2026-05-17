@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { FormControl, Label, Select } from "@/lib";
+import { useState } from "react";
 const SELECT_PREVIEW_CODE = `import { Select } from "quickit-ui";
 
 export function SelectPreview() {
@@ -17,6 +18,16 @@ function SelectPreviewCanvas() {
         <option value="active">Activo</option>
         <option value="paused">Pausado</option>
       </Select>
+    </div>;
+}
+function ControlledSelectPreview() {
+  const [value, setValue] = useState("active");
+  return <div className="space-y-2">
+      <Select value={value} onValueChange={setValue}>
+        <option value="active">Activo</option>
+        <option value="paused">Pausado</option>
+      </Select>
+      <p className="text-xs text-neutral-500 dark:text-neutral-400">Valor actual: {value}</p>
     </div>;
 }
 export const selectDoc = {
@@ -55,10 +66,10 @@ export function SelectUsage() {
     id: "ejemplos-formcontrol",
     title: "Con Label",
     description: "Úsalo dentro de FormControl para estados y mensajes.",
-    preview: <FormControl required>
+    preview: <FormControl controlId="doc-select-form" required>
             <div className="mt-3">
-              <Label htmlFor="doc-select-form">Estado</Label>
-              <Select id="doc-select-form" placeholder="Selecciona estado">
+              <Label>Estado</Label>
+              <Select placeholder="Selecciona estado">
                 <option value="active">Activo</option>
                 <option value="paused">Pausado</option>
               </Select>
@@ -76,10 +87,7 @@ export function SelectUsage() {
     id: "ejemplos-controlado",
     title: "Controlado",
     description: "Escucha onValueChange cuando necesitas reaccionar.",
-    preview: <Select defaultValue="active" onValueChange={value => value}>
-          <option value="active">Activo</option>
-          <option value="paused">Pausado</option>
-        </Select>
+    preview: <ControlledSelectPreview />
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -144,6 +152,6 @@ export function SelectUsage() {
       defaultValue: "undefined",
       description: "Callback con el valor."
     }],
-    notes: ["Select acepta <option> como hijos para definir opciones.", "Si pasas `name`, el valor se serializa con un hidden input y el botón visible conserva la experiencia accesible del select custom.", "Para lógica de negocio usa `onValueChange`; deja `onChange` para adaptadores que esperen un evento estilo DOM."]
+    notes: ["Select acepta <option> como hijos para definir opciones.", "Dentro de FormControl, usa `controlId` y deja que el Label se asocie por contexto salvo que necesites wiring manual.", "Si pasas `name`, el valor se serializa con un hidden input y el botón visible conserva la experiencia accesible del select custom.", "Para lógica de negocio usa `onValueChange`; deja `onChange` para adaptadores que esperen un evento estilo DOM."]
   }]
 };

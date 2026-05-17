@@ -47,7 +47,7 @@ export function CheckboxUsage() {
   }, {
     id: "ejemplos-colores",
     title: "Colores",
-    description: "Aplica colores semánticos.",
+    description: "Aplica colores del sistema visual.",
     preview: <div className="grid gap-2">
           <Checkbox color="neutral" label="Neutral" defaultChecked />
           <Checkbox color="brand" label="Brand" defaultChecked />

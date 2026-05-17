@@ -47,7 +47,7 @@ export function RadioUsage() {
   }, {
     id: "ejemplos-colores",
     title: "Colores",
-    description: "Aplica colores semánticos.",
+    description: "Aplica colores del sistema visual.",
     preview: <div className="grid gap-2">
           <Radio color="neutral" label="Neutral" defaultChecked />
           <Radio color="brand" label="Brand" defaultChecked />

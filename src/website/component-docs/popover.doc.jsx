@@ -134,7 +134,7 @@ export function PopoverUsage() {
       name: "autoCloseMs",
       type: "number",
       defaultValue: "0",
-      description: "Cierra automáticamente después de ms."
+      description: "Cierra automáticamente después de ms. Útil sobre todo en contenido informativo no interactivo."
     }, {
       name: "color",
       type: "\"default\" | QuickitSemanticColor",
@@ -151,6 +151,6 @@ export function PopoverUsage() {
       defaultValue: "2000",
       description: "Controla el stacking."
     }],
-    notes: ["`trigger=\"hover\"` está pensado para contenido no interactivo.", "Si el contenido contiene botones, links o inputs, usa `trigger=\"click\"` o `manual` junto con `interactive`."]
+    notes: ["`trigger=\"hover\"` está pensado para contenido no interactivo.", "Si el contenido contiene botones, links o inputs, usa `trigger=\"click\"` o `manual` junto con `interactive`.", "Si quieres ayuda breve y no accionable, normalmente `Tooltip` comunica mejor la intención que `Popover`."]
   }]
 };

@@ -39,12 +39,12 @@ import {
 import {
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_BUTTON_VARIANTS,
+  QUICKIT_BRAND_COLORS,
   QUICKIT_CONTROL_SIZES,
-  QUICKIT_SEMANTIC_COLORS,
   QUICKIT_LINK_TEXT_VARIANTS,
   QUICKIT_LINK_UNDERLINES,
-  QUICKIT_COMPACT_CONTROL_SIZES,
-  QUICKIT_ACCENT_COLORS,
+  QUICKIT_NEUTRAL_COLORS,
+  QUICKIT_STATUS_COLORS,
 } from "@/lib/tokens";
 import {
   WEBSITE_ROUTES,
@@ -63,12 +63,20 @@ import {
   WEBSITE_HOOK_EXAMPLES,
   INSTALL_COMMAND,
   STYLES_SNIPPET,
+  TAILWIND_STYLES_SNIPPET,
+  BRAND_OVERRIDE_SNIPPET,
   QUICKIT_PROVIDER_SNIPPET,
   THEME_PROVIDER_SNIPPET,
   THEME_TOGGLE_SNIPPET,
   THEME_READ_SNIPPET,
   THEME_FOUC_VITE_SNIPPET,
   THEME_FOUC_NEXT_SNIPPET,
+  COMPONENT_IMPORT_SNIPPET,
+  UTILS_CN_SNIPPET,
+  UTILS_SCROLL_SNIPPET,
+  UTILS_REFS_SNIPPET,
+  UTILS_TOKENS_SNIPPET,
+  UTILS_THEME_SNIPPET,
 } from "@/website/docs-content";
 import { COMPONENT_DOCS } from "@/website/component-docs";
 import {
@@ -157,6 +165,160 @@ function NotesList({ notes }) {
   );
 }
 
+function TokenGroupsList({ groups }) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {groups.map((group) => (
+        <div
+          key={group.label}
+          className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800"
+        >
+          <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+            {group.label}
+          </h4>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {group.values.map((value) => (
+              <TokenGroupValue key={`${group.label}-${value}`} value={value} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const TOKEN_COLOR_SWATCH_CLASSES = {
+  neutral: "border-neutral-200 bg-neutral-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100",
+  slate: "border-slate-200 bg-slate-100 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100",
+  zinc: "border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100",
+  primary: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
+  brand: "border-brand-200 bg-brand-100 text-brand-800 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-100",
+  success: "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-100",
+  danger: "border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
+  warning: "border-amber-200 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
+  info: "border-sky-200 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-100",
+  light: "border-neutral-200 bg-white text-neutral-900 dark:border-neutral-700 dark:bg-neutral-100 dark:text-neutral-950",
+  dark: "border-neutral-800 bg-neutral-900 text-white dark:border-neutral-500 dark:bg-neutral-900 dark:text-neutral-50",
+  black: "border-black bg-black text-white dark:border-neutral-400 dark:bg-black dark:text-white",
+};
+
+const TOKEN_COLOR_GROUPS = [
+  {
+    id: "tokens-color-identidad",
+    title: "Identidad y acción",
+    description: "`primary` y `brand` cubren intención principal y marca. `brand` es el slot que puedes reemplazar por tu paleta.",
+    colors: ["primary", "brand"],
+  },
+  {
+    id: "tokens-color-estados",
+    title: "Estados semánticos",
+    description: "Estos colores sí comunican significado de estado: éxito, error, advertencia o información.",
+    colors: ["success", "danger", "warning", "info"],
+  },
+  {
+    id: "tokens-color-neutrales",
+    title: "Neutrales",
+    description: "Neutrales para superficies, jerarquía visual y acciones sin intención semántica fuerte.",
+    colors: ["neutral", "slate", "zinc", "light", "dark", "black"],
+  },
+];
+
+const TOKEN_COLOR_VALUES = new Set([
+  ...QUICKIT_BRAND_COLORS,
+  ...QUICKIT_STATUS_COLORS,
+  ...QUICKIT_NEUTRAL_COLORS,
+]);
+
+function TokenGroupValue({ value }) {
+  if (TOKEN_COLOR_VALUES.has(value)) {
+    return <TokenColorChip color={value} />;
+  }
+
+  if (QUICKIT_CONTROL_SIZES.includes(value)) {
+    return <TokenSizeSample size={value} />;
+  }
+
+  if (QUICKIT_BUTTON_SHAPES.includes(value)) {
+    return <TokenShapeSample shape={value} />;
+  }
+
+  if (QUICKIT_BUTTON_VARIANTS.includes(value)) {
+    return <TokenVariantSample variant={value} />;
+  }
+
+  if (QUICKIT_LINK_TEXT_VARIANTS.includes(value)) {
+    return <TokenLinkVariantSample variant={value} />;
+  }
+
+  if (QUICKIT_LINK_UNDERLINES.includes(value)) {
+    return <TokenUnderlineSample underline={value} />;
+  }
+
+  return (
+    <Badge color="neutral" variant="soft">
+      {value}
+    </Badge>
+  );
+}
+
+function TokenColorChip({ color }) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-medium ${TOKEN_COLOR_SWATCH_CLASSES[color] ?? TOKEN_COLOR_SWATCH_CLASSES.neutral}`}
+    >
+      {color}
+    </span>
+  );
+}
+
+function TokenSizeSample({ size }) {
+  return (
+    <Button size={size} variant="outline" color="neutral">
+      {size}
+    </Button>
+  );
+}
+
+function TokenShapeSample({ shape }) {
+  const compact = shape === "square" || shape === "circle";
+
+  return (
+    <Button
+      size="md"
+      shape={shape}
+      variant="outline"
+      color="neutral"
+      aria-label={compact ? `Shape ${shape}` : undefined}
+    >
+      {compact ? shape.slice(0, 1).toUpperCase() : shape}
+    </Button>
+  );
+}
+
+function TokenVariantSample({ variant }) {
+  return (
+    <Button size="sm" variant={variant} color="brand">
+      {variant}
+    </Button>
+  );
+}
+
+function TokenLinkVariantSample({ variant }) {
+  return (
+    <Link href="/docs/components/link" variant={variant} onClick={(event) => event.preventDefault()}>
+      {variant}
+    </Link>
+  );
+}
+
+function TokenUnderlineSample({ underline }) {
+  return (
+    <Link href="/docs/components/link" underline={underline} onClick={(event) => event.preventDefault()}>
+      {underline}
+    </Link>
+  );
+}
+
 function ReviewNotesList({ notes }) {
   return (
     <div className="space-y-3">
@@ -231,6 +393,10 @@ function getComponentSections(slug) {
 
   if (doc.props?.length) {
     sections.push({ id: "api", label: "API" });
+  }
+
+  if (doc.tokenGroups?.length) {
+    sections.push({ id: "tokens-y-variantes", label: "Tokens y variantes" });
   }
 
   if (doc.notes?.length) {
@@ -449,15 +615,27 @@ function GenericSectionPage({ sectionId }) {
         >
           <div className="space-y-6">
             <WebsiteCodeBlock code={INSTALL_COMMAND} language="bash" />
+            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              Si tu app no usa Tailwind, importa los estilos de Quickit una sola vez. Ese archivo contiene los estilos base de componentes, tokens <code className="font-mono text-xs">brand</code>, variables CSS y variantes dark compiladas.
+            </div>
             <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
+            <WebsiteCodeBlock code={COMPONENT_IMPORT_SNIPPET} language="jsx" />
+            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              Si tu app también usa Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code> y después <code className="font-mono text-xs">tailwindcss</code>. Así Tailwind y los tokens de tu app quedan al final de la cascada y pueden sobrescribir lo necesario.
+            </div>
+            <WebsiteCodeBlock code={TAILWIND_STYLES_SNIPPET} language="css" />
+            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              <code className="font-mono text-xs">brand</code> es reemplazable. Declara tu escala dentro de <code className="font-mono text-xs">@theme</code> al final del archivo para que <code className="font-mono text-xs">color="brand"</code> use la identidad visual de tu producto.
+            </div>
+            <WebsiteCodeBlock code={BRAND_OVERRIDE_SNIPPET} language="css" />
           </div>
         </WebsiteSection>
       </Show>
 
-      <Show when={sectionId === "migracion-1-0-7"}>
+      <Show when={sectionId === "migracion"}>
         <WebsiteSection
-          id="migracion-1-0-7"
-          title="Migración a 1.0.9"
+          id="migracion"
+          title={`Migración a ${QUICKIT_V1_MIGRATION.toVersion}`}
           description={QUICKIT_V1_MIGRATION.summary}
         >
           <div className="space-y-8">
@@ -731,104 +909,208 @@ function GenericSectionPage({ sectionId }) {
         <WebsiteSection
           id="tokens"
           title="Tokens"
-          description="Listas base de tamaños, colores y radios que Quickit usa para mantener consistencia entre componentes."
+          description="Referencia visual rápida de colores, tamaños, shapes y variants disponibles en Quickit."
         >
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="space-y-6">
             <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3
-                id="tokens-semanticos"
+                id="tokens-colores"
                 className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
               >
-                Colores semánticos
+                Colores de componentes
               </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {QUICKIT_SEMANTIC_COLORS.map((color) => (
-                  <span
-                    key={color}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {color}
-                  </span>
+              <div className="mt-4 grid gap-5 md:grid-cols-3">
+                {TOKEN_COLOR_GROUPS.map((group) => (
+                  <div key={group.id} id={group.id} className="scroll-mt-28">
+                    <h4 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+                      {group.title}
+                    </h4>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {group.colors.map((color) => (
+                        <TokenColorChip key={color} color={color} />
+                      ))}
+                    </div>
+                  </div>
                 ))}
+              </div>
+              <div
+                id="tokens-brand"
+                className="mt-5 scroll-mt-28 rounded-xl border border-brand-200 bg-brand-50/60 p-4 text-sm leading-7 text-brand-900 dark:border-brand-900/60 dark:bg-brand-950/20 dark:text-brand-100"
+              >
+                <p>
+                  <strong>brand es reemplazable.</strong> En proyectos con Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code>, luego <code className="font-mono text-xs">tailwindcss</code> y declara <code className="font-mono text-xs">--color-brand-50</code> a <code className="font-mono text-xs">--color-brand-950</code> dentro de <code className="font-mono text-xs">@theme</code> al final del archivo.
+                </p>
+                <div className="mt-3">
+                  <WebsiteCodeBlock code={BRAND_OVERRIDE_SNIPPET} language="css" />
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-500">
+                El tipo público aún se llama <code className="font-mono">QuickitSemanticColor</code> por compatibilidad, aunque la taxonomía visual separa identidad, estados y neutrales.
+              </p>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+                <h3
+                  id="tokens-accent"
+                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                >
+                  Colecciones exportadas
+                </h3>
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+                      Brand / acción
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {QUICKIT_BRAND_COLORS.map((color) => (
+                        <TokenColorChip key={color} color={color} />
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+                      Estados
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {QUICKIT_STATUS_COLORS.map((color) => (
+                        <TokenColorChip key={color} color={color} />
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+                      Neutrales
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {QUICKIT_NEUTRAL_COLORS.map((color) => (
+                        <TokenColorChip key={color} color={color} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+                <h3
+                  id="tokens-tamaños"
+                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                >
+                  Tamaños
+                </h3>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {QUICKIT_CONTROL_SIZES.map((size) => (
+                    <TokenSizeSample key={size} size={size} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+                <h3
+                  id="tokens-shapes"
+                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                >
+                  Shapes
+                </h3>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {QUICKIT_BUTTON_SHAPES.map((shape) => (
+                    <TokenShapeSample key={shape} shape={shape} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+                <h3
+                  id="tokens-variants"
+                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                >
+                  Button variants
+                </h3>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {QUICKIT_BUTTON_VARIANTS.map((variant) => (
+                    <TokenVariantSample key={variant} variant={variant} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800 lg:col-span-2">
+                <h3
+                  id="tokens-link"
+                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                >
+                  Link
+                </h3>
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  {QUICKIT_LINK_TEXT_VARIANTS.map((variant) => (
+                    <TokenLinkVariantSample key={variant} variant={variant} />
+                  ))}
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  {QUICKIT_LINK_UNDERLINES.map((underline) => (
+                    <TokenUnderlineSample key={underline} underline={underline} />
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3
-                id="tokens-accent"
-                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
-              >
-                Colores accent
+          </div>
+        </WebsiteSection>
+      </Show>
+
+      <Show when={sectionId === "utilidades"}>
+        <WebsiteSection
+          id="utilidades"
+          title="Utilidades"
+          description="Quickit también exporta helpers de clases, radios, scroll, refs, tema y resolución de tokens para construir wrappers o componentes propios sin copiar lógica interna."
+        >
+          <div className="space-y-10">
+            <div id="utilidades-clases" className="scroll-mt-28 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                Clases y radios
               </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {QUICKIT_ACCENT_COLORS.map((color) => (
-                  <span
-                    key={color}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {color}
-                  </span>
-                ))}
-              </div>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Usa <code className="font-mono text-xs">cn</code>, <code className="font-mono text-xs">getControlRadius</code> y <code className="font-mono text-xs">getAvatarRadius</code> cuando construyas wrappers que deban seguir la geometría visual de Quickit.
+              </p>
+              <WebsiteCodeBlock code={UTILS_CN_SNIPPET} language="jsx" />
             </div>
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3
-                id="tokens-tamaños"
-                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
-              >
-                Tamaños de control
+
+            <div id="utilidades-scroll" className="scroll-mt-28 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                Bloqueo de scroll
               </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {QUICKIT_CONTROL_SIZES.map((size) => (
-                  <span
-                    key={size}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {size}
-                  </span>
-                ))}
-              </div>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <code className="font-mono text-xs">lockAppScroll</code> y <code className="font-mono text-xs">unlockAppScroll</code> sirven para overlays o paneles custom que no usan `Modal` o `Drawer` pero necesitan el mismo comportamiento de bloqueo del body.
+              </p>
+              <WebsiteCodeBlock code={UTILS_SCROLL_SNIPPET} language="jsx" />
             </div>
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <h3
-                id="tokens-shapes"
-                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
-              >
-                Shapes y variants
+
+            <div id="utilidades-refs" className="scroll-mt-28 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                Merge de refs
               </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {QUICKIT_BUTTON_SHAPES.map((shape) => (
-                  <span
-                    key={shape}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {shape}
-                  </span>
-                ))}
-                {QUICKIT_BUTTON_VARIANTS.map((variant) => (
-                  <span
-                    key={variant}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {variant}
-                  </span>
-                ))}
-                {QUICKIT_LINK_TEXT_VARIANTS.map((variant) => (
-                  <span
-                    key={variant}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {variant}
-                  </span>
-                ))}
-                {QUICKIT_LINK_UNDERLINES.map((variant) => (
-                  <span
-                    key={variant}
-                    className="rounded-full border border-neutral-200 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-300"
-                  >
-                    {variant}
-                  </span>
-                ))}
-              </div>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <code className="font-mono text-xs">useMergeRefs</code> evita helpers ad hoc cuando un wrapper necesita combinar su ref local con la ref del consumidor.
+              </p>
+              <WebsiteCodeBlock code={UTILS_REFS_SNIPPET} language="jsx" />
+            </div>
+
+            <div id="utilidades-tokens" className="scroll-mt-28 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                Resolución de tokens
+              </h3>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <code className="font-mono text-xs">resolveQuickitToken</code> e <code className="font-mono text-xs">isQuickitTokenValue</code> son útiles cuando aceptas configuraciones dinámicas y quieres normalizarlas contra las listas oficiales de Quickit.
+              </p>
+              <WebsiteCodeBlock code={UTILS_TOKENS_SNIPPET} language="jsx" />
+            </div>
+
+            <div id="utilidades-tema" className="scroll-mt-28 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                Tema resuelto
+              </h3>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <code className="font-mono text-xs">resolveQuickitThemeMode</code> normaliza valores dinámicos a <code className="font-mono text-xs">light</code> o <code className="font-mono text-xs">dark</code>. No detecta <code className="font-mono text-xs">system</code> por sí sola; para eso usa <code className="font-mono text-xs">QuickitThemeProvider</code> o <code className="font-mono text-xs">useQuickitThemeController</code>.
+              </p>
+              <WebsiteCodeBlock code={UTILS_THEME_SNIPPET} language="jsx" />
             </div>
           </div>
         </WebsiteSection>
@@ -908,6 +1190,16 @@ function ComponentPage({ component }) {
           <WebsiteSection id="uso" title="Uso">
             <WebsiteCodeBlock code={doc.usageCode} language="jsx" />
           </WebsiteSection>
+
+          <Show when={doc.tokenGroups?.length}>
+            <WebsiteSection
+              id="tokens-y-variantes"
+              title="Tokens y variantes"
+              description="Resumen rápido de tamaños, variantes, colores o shapes útiles antes de entrar a la tabla completa de props."
+            >
+              <TokenGroupsList groups={doc.tokenGroups} />
+            </WebsiteSection>
+          </Show>
 
           <Show when={doc.props?.length}>
             <WebsiteSection
@@ -1029,9 +1321,9 @@ function getGenericSections(sectionId) {
   if (sectionId === "instalacion") {
     return [{ id: "instalacion", label: "Instalación" }];
   }
-  if (sectionId === "migracion-1-0-7") {
+  if (sectionId === "migracion") {
     return [
-      { id: "migracion-1-0-7", label: "Migración 1.0.9" },
+      { id: "migracion", label: `Migración ${QUICKIT_V1_MIGRATION.toVersion}` },
       { id: "migracion-paso-1", label: "Actualiza el paquete" },
       { id: "migracion-paso-2", label: "Simplifica Breadcrumb" },
       { id: "migracion-paso-3", label: "Usa APIs compuestas" },
@@ -1062,10 +1354,23 @@ function getGenericSections(sectionId) {
   if (sectionId === "tokens") {
     return [
       { id: "tokens", label: "Tokens" },
-      { id: "tokens-semanticos", label: "Colores semánticos" },
-      { id: "tokens-accent", label: "Colores accent" },
-      { id: "tokens-tamaños", label: "Tamaños de control" },
-      { id: "tokens-shapes", label: "Shapes y variants" },
+      { id: "tokens-colores", label: "Colores de componentes" },
+      { id: "tokens-brand", label: "Reemplazar brand" },
+      { id: "tokens-accent", label: "Accent" },
+      { id: "tokens-tamaños", label: "Tamaños" },
+      { id: "tokens-shapes", label: "Shapes" },
+      { id: "tokens-variants", label: "Button variants" },
+      { id: "tokens-link", label: "Link" },
+    ];
+  }
+  if (sectionId === "utilidades") {
+    return [
+      { id: "utilidades", label: "Utilidades" },
+      { id: "utilidades-clases", label: "Clases y radios" },
+      { id: "utilidades-scroll", label: "Bloqueo de scroll" },
+      { id: "utilidades-refs", label: "Merge de refs" },
+      { id: "utilidades-tokens", label: "Resolución de tokens" },
+      { id: "utilidades-tema", label: "Tema resuelto" },
     ];
   }
   if (sectionId === "componentes") {
