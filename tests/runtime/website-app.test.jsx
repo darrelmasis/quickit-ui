@@ -94,6 +94,21 @@ describe("WebsiteApp", () => {
         name: /la forma más/i,
       }),
     ).toBeTruthy();
+    expect(
+      screen.getByRole("link", { name: /abrir quickit ui en npm/i }),
+    ).toBeTruthy();
+    expect(
+      screen
+        .getByRole("link", { name: /abrir quickit ui en npm/i })
+        .getAttribute("href"),
+    ).toBe("https://www.npmjs.com/package/quickit-ui");
+    expect(
+      screen
+        .getByRole("link", {
+          name: /abrir repositorio de quickit ui en github/i,
+        })
+        .getAttribute("href"),
+    ).toBe("https://github.com/darrelmasis/quickit-ui");
   }, 15000);
 
   it("renders the avatar docs page without invalid component types", async () => {

@@ -4,6 +4,7 @@ import {
   Button,
   CommandPalette,
   For,
+  Link,
   Show,
   useQuickitThemeController,
 } from "@/lib";
@@ -41,6 +42,22 @@ function MoonIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function GithubIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="size-4" aria-hidden="true">
+      <path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.5v-1.9c-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.55-1.14-4.55-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.96c.85 0 1.7.12 2.5.34 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.92-2.34 4.78-4.57 5.04.36.32.68.95.68 1.92v2.78c0 .28.18.6.69.5A10.14 10.14 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z" />
+    </svg>
+  );
+}
+
+function NpmIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="size-4" aria-hidden="true">
+      <path d="M3 7h18v10H12v-2H9v2H3V7Zm2 2v6h2v-4h2v4h2V9H5Zm8 0v6h2v-4h2v4h2V9h-6Z" />
     </svg>
   );
 }
@@ -120,6 +137,36 @@ export default function WebsiteHeader({ activePath }) {
             >
               Buscar
             </Button>
+
+            <Link
+              href="https://www.npmjs.com/package/quickit-ui"
+              target="_blank"
+              appearance="button"
+              size="sm"
+              shape="circle"
+              color="neutral"
+              variant="outline"
+              activeMotion={false}
+              aria-label="Abrir Quickit UI en npm"
+              title="npm"
+            >
+              <NpmIcon />
+            </Link>
+
+            <Link
+              href="https://github.com/darrelmasis/quickit-ui"
+              target="_blank"
+              appearance="button"
+              size="sm"
+              shape="circle"
+              color="neutral"
+              variant="outline"
+              activeMotion={false}
+              aria-label="Abrir repositorio de Quickit UI en GitHub"
+              title="GitHub"
+            >
+              <GithubIcon />
+            </Link>
 
             <Button
               size="sm"
