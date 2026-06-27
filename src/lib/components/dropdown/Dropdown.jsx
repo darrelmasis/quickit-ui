@@ -352,7 +352,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
         FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
-        "z-50 min-w-[8rem] overflow-hidden",
+        "z-[9999] min-w-[8rem] overflow-hidden",
         className,
       )}
       {...floatingProps}

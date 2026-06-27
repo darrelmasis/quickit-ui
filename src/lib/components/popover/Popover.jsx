@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 const POPOVER_PRIMITIVES = {
   wrapper: "inline-flex",
   panel: [
-    "z-50 w-max max-w-[20rem] break-words rounded-[1rem] border px-3 py-2",
+    "z-[9999] w-max max-w-[20rem] break-words rounded-[1rem] border px-3 py-2",
     "text-sm leading-6 outline-none",
   ].join(" "),
 };
