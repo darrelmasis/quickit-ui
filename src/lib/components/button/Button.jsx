@@ -254,24 +254,20 @@ const Button = forwardRef(function Button(
     >
       {resolvedRipple ? rippleLayer : null}
 
-      <span
-        aria-hidden={loading || undefined}
-        className={cn(
-          "relative z-[1] inline-flex items-center gap-2 flex-grow-1 justify-center min-w-0 truncate",
-          loading && "invisible",
-        )}
-      >
-        {baseContent}
-      </span>
-
       {loading ? (
-        <span className="absolute inset-0 z-10 inline-flex items-center justify-center gap-2 min-w-0 truncate">
+        <span className="relative z-[1] inline-flex items-center justify-center gap-2 shrink-0 truncate">
           {spinner ? (
             <SpinnerIcon className="size-4 shrink-0 animate-spin motion-reduce:animate-none" />
           ) : null}
           {showLoadingText ? <span className="truncate">{loadingContent}</span> : null}
         </span>
-      ) : null}
+      ) : (
+        <span
+          className="relative z-[1] inline-flex items-center gap-2 flex-grow-1 justify-center min-w-0 truncate"
+        >
+          {baseContent}
+        </span>
+      )}
     </button>
   );
 });
