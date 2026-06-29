@@ -10,7 +10,7 @@ import {
 
 export const ACTION_CONTROL_BASE_CLASSES = [
   "relative inline-flex items-center justify-center border font-medium",
-  "cursor-pointer gap-2 transition-[background-color,border-color,color,transform,filter] duration-200",
+  "cursor-pointer transition-[background-color,border-color,color,transform,filter] duration-200",
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
   "disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-60",
 ].join(" ");
