@@ -199,16 +199,16 @@ export const QUICKIT_V1_RELEASE = {
 
 export const QUICKIT_V1_MIGRATION = {
   fromVersion: "0.2.4",
-  toVersion: "1.0.12",
+  toVersion: "1.0.17",
   summary:
-    "La migración desde 0.2.4 a 1.0.12 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas, el entry final de estilos, el orden de imports con Tailwind CSS 4 y los contratos actuales de formularios/tokens.",
+    "La migración desde 0.2.4 a 1.0.17 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas, el entry final de estilos, el orden de imports con Tailwind CSS 4 y los contratos actuales de formularios/tokens.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube directamente a `quickit-ui@1.0.12` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
+        "Sube directamente a `quickit-ui@1.0.17` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
       beforeCode: "npm install quickit-ui@0.2.4",
-      afterCode: "npm install quickit-ui@1.0.12",
+      afterCode: "npm install quickit-ui@1.0.17",
       language: "bash",
     },
     {
