@@ -57,7 +57,7 @@ function GithubIcon() {
 function NpmIcon() {
   return (
     <svg viewBox="0 0 250 250" className="size-4" aria-hidden="true">
-      <path fill="currentColor" d="M0,200h100V50h50v150h50V0H0V200z" stroke-width="5" stroke="currentColor" />
+      <path fill="currentColor" d="M0,200h100V50h50v150h50V0H0V200z" strokeWidth="5" stroke="currentColor" />
     </svg>
   );
 }

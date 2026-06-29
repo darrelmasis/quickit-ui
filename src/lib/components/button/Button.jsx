@@ -223,7 +223,6 @@ const Button = forwardRef(function Button(
         ),
         resolvedRipple && "qi-ripple-host isolate overflow-hidden",
         resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
-        BUTTON_PRIMITIVES.spacing,
         BUTTON_PRIMITIVES.disabled,
         fullWidth && "w-full",
         isActive && BUTTON_VISUAL_STATE_CLASSES.active,
