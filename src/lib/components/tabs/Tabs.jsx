@@ -1,4 +1,4 @@
-import { useCallback, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
@@ -15,10 +15,11 @@ const TABS_ROOT_PRIMITIVES = {
 
 const TABS_LIST_PRIMITIVES = {
   base: [
-    "inline-flex items-center gap-1 border",
-    "w-fit",
+    "flex items-center gap-1 border",
+    "w-fit max-w-full",
   ].join(" "),
-  horizontal: "flex-row",
+  horizontal:
+    "flex-row overflow-x-auto snap-x snap-mandatory [scroll-snap-stop:always] [&::-webkit-scrollbar]:hidden",
   vertical: "flex-col items-stretch",
 };
 
@@ -182,9 +183,47 @@ export function TabsList({ children, className }) {
   const { orientation, size } = useTabsContext("TabsList");
   const { theme } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
+  const listRef = useRef(null);
+  const [scrollState, setScrollState] = useState({ left: false, right: false });
+
+  const checkScroll = useCallback(() => {
+    const el = listRef.current;
+    if (!el || orientation !== "horizontal") return;
+    setScrollState({
+      left: el.scrollLeft > 4,
+      right: el.scrollLeft < el.scrollWidth - el.clientWidth - 4,
+    });
+  }, [orientation]);
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el || orientation !== "horizontal") return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    const ro = new ResizeObserver(checkScroll);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      ro.disconnect();
+    };
+  }, [checkScroll]);
+
+  const fadeMask = useMemo(() => {
+    if (orientation !== "horizontal") return undefined;
+    const f = 16;
+    if (!scrollState.left && !scrollState.right) return undefined;
+    if (scrollState.left && scrollState.right) {
+      return `linear-gradient(to right, transparent ${f}px, black ${f * 2}px, black calc(100% - ${f * 2}px), transparent calc(100% - ${f}px))`;
+    }
+    if (scrollState.left) {
+      return `linear-gradient(to right, transparent ${f}px, black ${f * 2}px, black 100%)`;
+    }
+    return `linear-gradient(to right, black 0%, black calc(100% - ${f * 2}px), transparent calc(100% - ${f}px))`;
+  }, [orientation, scrollState]);
 
   return (
     <div
+      ref={listRef}
       role="tablist"
       aria-orientation={orientation}
       data-size={size}
@@ -195,6 +234,11 @@ export function TabsList({ children, className }) {
         ui.list,
         className,
       )}
+      style={
+        fadeMask
+          ? { maskImage: fadeMask, WebkitMaskImage: fadeMask }
+          : undefined
+      }
     >
       {children}
     </div>
@@ -219,6 +263,17 @@ export function TabsTrigger({
   const { theme, focusRing: focusRingEnabled } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const isSelected = selectedValue === value;
+  const triggerRef = useRef(null);
+
+  useEffect(() => {
+    if (isSelected && triggerRef.current?.scrollIntoView) {
+      triggerRef.current.scrollIntoView({
+        behavior: "instant",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [isSelected]);
 
   const handleKeyDown = (event) => {
     const container = event.currentTarget.parentElement;
@@ -273,6 +328,7 @@ export function TabsTrigger({
 
   return (
     <button
+      ref={triggerRef}
       type="button"
       role="tab"
       id={`${baseId}-trigger-${value}`}
@@ -292,6 +348,7 @@ export function TabsTrigger({
           TABS_TRIGGER_PRIMITIVES.base,
         ),
         TABS_SIZE_CLASSES[size].trigger,
+        "snap-algin-center",
         orientation === "vertical" && TABS_TRIGGER_PRIMITIVES.vertical,
         resolveQuickitFocusRingClasses(
           focusRingEnabled,
