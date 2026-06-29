@@ -293,7 +293,7 @@ const Input = forwardRef(function Input(
           {showClearButton ? (
             <button
               type="button"
-              tabIndex={resolvedDisabled ? -1 : 0}
+              tabIndex={-1}
               aria-label={clearButtonLabel}
               disabled={resolvedDisabled}
               title={clearButtonLabel}
@@ -319,7 +319,7 @@ const Input = forwardRef(function Input(
           {shouldEnablePasswordToggle ? (
             <button
               type="button"
-              tabIndex={resolvedDisabled ? -1 : 0}
+              tabIndex={-1}
               aria-label={passwordVisible ? hidePasswordLabel : showPasswordLabel}
               aria-pressed={passwordVisible}
               disabled={resolvedDisabled}

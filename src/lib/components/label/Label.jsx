@@ -52,7 +52,7 @@ const Label = forwardRef(function Label(
       id={resolvedId}
       htmlFor={resolvedHtmlFor}
       className={cn(
-        "inline-block font-medium tracking-[-0.01em]",
+        "inline-block self-start font-medium tracking-[-0.01em]",
         LABEL_THEME_CLASSES[theme],
         LABEL_SIZE_CLASSES[size] ?? LABEL_SIZE_CLASSES.md,
         className,
