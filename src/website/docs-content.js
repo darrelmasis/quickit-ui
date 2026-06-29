@@ -177,19 +177,23 @@ export default function RootLayout({ children }) {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.0.12",
-  date: "17 de mayo de 2026",
+  version: "1.0.17",
+  date: "29 de junio de 2026",
   summary:
-    "Quickit UI 1.0.12 cierra una pasada compatible de hardening sobre accesibilidad, formularios, tokens, tipos públicos y documentación, y aclara el contrato de estilos con Tailwind CSS 4.",
+    "Quickit UI 1.0.17 trae mejoras de responsividad, accesibilidad y pulido visual en componentes core: Tabs responsive con scroll snap, Button loading sin overlay, Label sin estirarse al ancho completo y corrección de duplicados de gap.",
   highlights: [
-    "`Range`, `Combobox`, `CommandPalette`, `Radio` y `Switch` quedan mejor alineados con formularios, accesibilidad y composición real.",
-    "La documentación distingue acentos, estados semánticos y neutrales sin romper `QuickitSemanticColor`.",
-    "La release queda validada con build, pruebas y `npm pack --dry-run` sobre el paquete final.",
+    "`Tabs` ahora desplaza los triggers con scroll snap step-by-step y un fade mask lateral cuando desbordan.",
+    "`Button` reemplazó el overlay absoluto por render condicional durante loading y añadió `truncate` para textos largos.",
+    "`Label` ya no ocupa todo el ancho del contenedor: el clic solo se activa sobre su texto.",
   ],
   notableChanges: [
-    "Se agregan colecciones de tokens más precisas: `QUICKIT_STATUS_COLORS`, `QUICKIT_BRAND_COLORS` y `QUICKIT_NEUTRAL_COLORS`.",
-    "`Combobox` soporta labels ricos mediante `textValue`; `Range` serializa ambos extremos en modo doble; `CommandPalette` evita colisiones de IDs.",
-    "El entry `quickit-ui/styles.css` sigue siendo el punto de entrada documentado para integrar tokens y estilos globales.",
+    "`TabsList` usa `scroll-snap-stop:always` con fade mask vía `maskImage` para un scroll pausado y predecible.",
+    "`Button loading` elimina el overlay absoluto; ahora renderiza solo el contenido de carga inline. Soporta `loadingText` y extractTextContent como fallback.",
+    "`Input` quitó `tabIndex` en `passwordToggle` y `clearButton` para evitar foco innecesario.",
+    "`Label` agregó `self-start` para no estirarse en un contenedor flex-col.",
+    "`Button` eliminó `gap-2` redundante del `<button>` exterior (el `<span>` interior ya lo manejaba).",
+    "Header de documentación: logo npm corregido, icono GitHub actualizado, toggle de tema sin borde y logo npm responsive (solo la N).",
+    "Documentación: ripple habilitado globalmente vía `pressEffect='ripple'` en QuickitThemeProvider.",
   ],
 };
 
