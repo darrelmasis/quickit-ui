@@ -596,7 +596,7 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
-  { id: "migracion", label: "Migración 0.2.4 → 1.0.12" },
+  { id: "migracion", label: "Migración 0.2.4 → 1.0.17" },
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },
