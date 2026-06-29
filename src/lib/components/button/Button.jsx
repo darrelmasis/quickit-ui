@@ -1,8 +1,9 @@
-import { forwardRef } from "react";
+import { Children, forwardRef, isValidElement } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { SpinnerIcon } from "@/lib/assets/icons";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
+
 import {
   ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
   ACTION_CONTROL_BASE_CLASSES,
@@ -21,6 +22,21 @@ import {
   resolveRippleStyleFromElement,
   useRippleEffect,
 } from "@/lib/components/_shared/use-ripple-effect";
+
+function extractTextContent(children) {
+  let text = "";
+  function walk(node) {
+    if (typeof node === "string" || typeof node === "number") {
+      text += String(node);
+    } else if (Array.isArray(node)) {
+      node.forEach(walk);
+    } else if (isValidElement(node) && node.props?.children) {
+      walk(node.props.children);
+    }
+  }
+  walk(children);
+  return text || undefined;
+}
 
 const BUTTON_PRIMITIVES = {
   spacing: "gap-2",
@@ -110,7 +126,7 @@ const Button = forwardRef(function Button(
   const showLoadingText =
     !isSmall && resolvedShape !== "square" && resolvedShape !== "circle";
   const baseContent = children ?? loadingText;
-  const loadingContent = loadingText ?? children;
+  const loadingContent = loadingText ?? extractTextContent(children);
   const resolvedSizeClasses =
     ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
     ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md ??
@@ -241,7 +257,7 @@ const Button = forwardRef(function Button(
       <span
         aria-hidden={loading || undefined}
         className={cn(
-          "relative z-[1] inline-flex items-center gap-2 flex-grow-1 justify-center",
+          "relative z-[1] inline-flex items-center gap-2 flex-grow-1 justify-center min-w-0 truncate",
           loading && "invisible",
         )}
       >
@@ -249,11 +265,11 @@ const Button = forwardRef(function Button(
       </span>
 
       {loading ? (
-        <span className="absolute inset-0 z-10 inline-flex items-center justify-center gap-2">
+        <span className="absolute inset-0 z-10 inline-flex items-center justify-center gap-2 min-w-0 truncate">
           {spinner ? (
-            <SpinnerIcon className="size-4 animate-spin motion-reduce:animate-none" />
+            <SpinnerIcon className="size-4 shrink-0 animate-spin motion-reduce:animate-none" />
           ) : null}
-          {showLoadingText ? <span>{loadingContent}</span> : null}
+          {showLoadingText ? <span className="truncate">{loadingContent}</span> : null}
         </span>
       ) : null}
     </button>
