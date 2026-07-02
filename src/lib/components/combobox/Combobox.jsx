@@ -12,13 +12,11 @@ import {
   flip,
   offset,
   shift,
-  size,
   useDismiss,
   useFloating,
   useInteractions,
   useListNavigation,
   useRole,
-  useTransitionStyles,
 } from "@floating-ui/react";
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
@@ -32,13 +30,13 @@ import {
   resolveFormFieldColor,
 } from "@/lib/components/_shared/form-field";
 import {
-  FLOATING_LIST_ITEM_PRIMITIVES,
   FLOATING_LIST_ITEM_THEME_CLASSES,
   FLOATING_LIST_SURFACE_PRIMITIVES,
   FLOATING_LIST_SURFACE_THEME_CLASSES,
-  getFloatingClosedTransform,
-  getFloatingPlacementOrigin,
+  getFloatingListItemClasses,
   resolveFloatingListTheme,
+  useFloatingTransition,
+  useMatchFloatingWidth,
 } from "@/lib/components/_shared/floating-list";
 
 const COMBOBOX_PRIMITIVES = {
@@ -58,8 +56,6 @@ const COMBOBOX_PRIMITIVES = {
 };
 
 const COMBOBOX_PLACEMENT = "bottom-start";
-const COMBOBOX_OPEN_DURATION = 140;
-const COMBOBOX_CLOSE_DURATION = 100;
 
 const COMBOBOX_SIZE_CLASSES = {
   sm: "h-9",
@@ -271,13 +267,7 @@ const Combobox = forwardRef(function Combobox(
       offset(8),
       flip({ padding: 8 }),
       shift({ padding: 8 }),
-      size({
-        apply({ rects, elements }) {
-          Object.assign(elements.floating.style, {
-            width: `${rects.reference.width}px`,
-          });
-        },
-      }),
+      useMatchFloatingWidth(),
     ],
     whileElementsMounted: autoUpdate,
   });
@@ -294,23 +284,9 @@ const Combobox = forwardRef(function Combobox(
   });
   const interactions = useInteractions([dismiss, role, listNavigation]);
 
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: { open: COMBOBOX_OPEN_DURATION, close: COMBOBOX_CLOSE_DURATION },
-    initial: ({ side }) => ({
-      opacity: 0,
-      transform: getFloatingClosedTransform(side),
-    }),
-    open: {
-      opacity: 1,
-      transform: "translate(0px, 0px) scale(1)",
-    },
-    close: ({ side }) => ({
-      opacity: 0,
-      transform: getFloatingClosedTransform(side),
-    }),
-    common: {
-      transformOrigin: getFloatingPlacementOrigin(COMBOBOX_PLACEMENT),
-    },
+  const { isMounted, styles: transitionStyles } = useFloatingTransition(context, {
+    duration: { open: 140, close: 100 },
+    placement: COMBOBOX_PLACEMENT,
   });
 
   const floatingRef = useCallback(
@@ -455,20 +431,12 @@ const Combobox = forwardRef(function Combobox(
                 role="option"
                 aria-selected={selected}
                 disabled={option.disabled}
-                className={cn(
-                  FLOATING_LIST_ITEM_PRIMITIVES.base,
-                  resolveQuickitFocusRingClasses(
-                    focusRingEnabled,
-                    FLOATING_LIST_ITEM_PRIMITIVES.base,
-                  ),
-                  resolveQuickitFocusRingClasses(
-                    focusRingEnabled,
-                    FLOATING_LIST_ITEM_THEME_CLASSES[theme].default,
-                  ),
-                  selected && FLOATING_LIST_ITEM_THEME_CLASSES[theme].selected,
-                  option.disabled &&
-                    FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
-                )}
+                className={getFloatingListItemClasses({
+                  focusRingEnabled,
+                  theme,
+                  selected,
+                  disabled: option.disabled,
+                })}
                 {...getOptionProps(option, index)}
               >
                 <span className="min-w-0 flex-1 truncate">{option.label}</span>

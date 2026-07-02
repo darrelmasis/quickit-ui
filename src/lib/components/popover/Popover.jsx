@@ -1,7 +1,7 @@
 import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef, useState } from "react";
 import {
-  FloatingArrow,
   FloatingPortal,
+  FloatingArrow,
   arrow,
   autoUpdate,
   flip,
@@ -15,11 +15,13 @@ import {
   useHover,
   useInteractions,
   useRole,
-  useTransitionStyles,
 } from "@floating-ui/react";
 import { useQuickitControlState } from "@/lib/theme";
-import { useMergeRefs } from "@/lib/utils/use-merge-refs";
-import { cn } from "@/lib/utils";
+import { cn, useMergeRefs } from "@/lib/utils";
+import {
+  getFloatingPlacementOrigin,
+  useFloatingTransition,
+} from "@/lib/components/_shared/floating-list";
 
 const POPOVER_PRIMITIVES = {
   wrapper: "inline-flex",
@@ -166,57 +168,11 @@ const POPOVER_THEME_CLASSES = {
   },
 };
 
-function getPlacementOrigin(placement) {
-  switch (placement) {
-    case "top-start":
-      return "bottom left";
-    case "top-end":
-      return "bottom right";
-    case "top":
-      return "bottom center";
-    case "bottom-start":
-      return "top left";
-    case "bottom-end":
-      return "top right";
-    case "bottom":
-      return "top center";
-    case "left-start":
-      return "top right";
-    case "left-end":
-      return "bottom right";
-    case "left":
-      return "right center";
-    case "right-start":
-      return "top left";
-    case "right-end":
-      return "bottom left";
-    case "right":
-      return "left center";
-    default:
-      return "top center";
-  }
-}
-
 const HOVER_DELAY_PRESETS = {
   fast: { open: 40, close: 120 },
   normal: { open: 80, close: 220 },
   slow: { open: 150, close: 350 },
 };
-
-function getClosedTransform(side) {
-  switch (side) {
-    case "top":
-      return "translateY(4px) scale(0.98)";
-    case "bottom":
-      return "translateY(-4px) scale(0.98)";
-    case "left":
-      return "translateX(4px) scale(0.98)";
-    case "right":
-      return "translateX(-4px) scale(0.98)";
-    default:
-      return "scale(0.98)";
-  }
-}
 
 function isTriggerDisabled(element) {
   return Boolean(
@@ -318,23 +274,9 @@ export default function Popover({
     },
     [refs],
   );
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
+  const { isMounted, styles: transitionStyles } = useFloatingTransition(context, {
     duration: { open: 120, close: 90 },
-    initial: ({ side }) => ({
-      opacity: 0,
-      transform: getClosedTransform(side),
-    }),
-    open: {
-      opacity: 1,
-      transform: "translate(0px, 0px) scale(1)",
-    },
-    close: ({ side }) => ({
-      opacity: 0,
-      transform: getClosedTransform(side),
-    }),
-    common: {
-      transformOrigin: getPlacementOrigin(placement),
-    },
+    placement,
   });
 
   useEffect(() => {
@@ -391,7 +333,7 @@ export default function Popover({
           "data-state": open ? "open" : "closed",
         })),
       ref: mergedChildRef,
-      className: cn(children.props.className),
+      className: cn(children.props.className, className),
     })
   ) : (
     <span
@@ -402,7 +344,7 @@ export default function Popover({
         : getReferenceProps({ "data-state": open ? "open" : "closed" }))}
     >
       {cloneElement(children, {
-        className: cn(children.props.className),
+        className: cn(children.props.className, className),
       })}
     </span>
   );

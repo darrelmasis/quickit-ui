@@ -1,4 +1,7 @@
+import { useTransitionStyles } from "@floating-ui/react";
 import { resolveQuickitThemeMode } from "@/lib/theme/quickit-theme-context";
+import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
+import { cn } from "@/lib/utils/cn";
 
 export const FLOATING_LIST_SURFACE_PRIMITIVES = {
   layout:
@@ -111,4 +114,58 @@ export function getFloatingArrowColors(theme) {
   return theme === "dark"
     ? { fill: "#09090b", stroke: "#27272a" }
     : { fill: "#ffffff", stroke: "#e2e8f0" };
+}
+
+export function useFloatingTransition(context, { duration, placement }) {
+  return useTransitionStyles(context, {
+    duration,
+    initial: ({ side }) => ({
+      opacity: 0,
+      transform: getFloatingClosedTransform(side),
+    }),
+    open: {
+      opacity: 1,
+      transform: "translate(0px, 0px) scale(1)",
+    },
+    close: ({ side }) => ({
+      opacity: 0,
+      transform: getFloatingClosedTransform(side),
+    }),
+    common: {
+      transformOrigin: getFloatingPlacementOrigin(placement),
+    },
+  });
+}
+
+export function useMatchFloatingWidth() {
+  return {
+    apply({ rects, elements }) {
+      Object.assign(elements.floating.style, {
+        width: `${rects.reference.width}px`,
+      });
+    },
+  };
+}
+
+export function getFloatingListItemClasses({
+  focusRingEnabled,
+  theme,
+  variant = "default",
+  selected,
+  disabled,
+}) {
+  const itemTheme =
+    variant === "danger"
+      ? FLOATING_LIST_ITEM_THEME_CLASSES[theme].danger
+      : FLOATING_LIST_ITEM_THEME_CLASSES[theme].default;
+  return cn(
+    FLOATING_LIST_ITEM_PRIMITIVES.base,
+    resolveQuickitFocusRingClasses(
+      focusRingEnabled,
+      FLOATING_LIST_ITEM_PRIMITIVES.base,
+    ),
+    resolveQuickitFocusRingClasses(focusRingEnabled, itemTheme),
+    selected && FLOATING_LIST_ITEM_THEME_CLASSES[theme].selected,
+    disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
+  );
 }

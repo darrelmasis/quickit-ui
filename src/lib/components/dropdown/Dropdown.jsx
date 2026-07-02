@@ -22,24 +22,19 @@ import {
   useHover,
   useInteractions,
   useRole,
-  useTransitionStyles,
 } from "@floating-ui/react";
 import { useQuickitControlState } from "@/lib/theme";
-import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, useMergeRefs } from "@/lib/utils";
 import {
-  FLOATING_LIST_ITEM_PRIMITIVES,
   FLOATING_LIST_ITEM_THEME_CLASSES,
   FLOATING_LIST_SURFACE_PRIMITIVES,
   FLOATING_LIST_SURFACE_THEME_CLASSES,
-  getFloatingClosedTransform,
-  getFloatingPlacementOrigin,
+  getFloatingListItemClasses,
   resolveFloatingListTheme,
+  useFloatingTransition,
 } from "@/lib/components/_shared/floating-list";
 import { DropdownContext, useDropdownContext } from "./dropdown-context";
 
-const DROPDOWN_OPEN_DURATION = 140;
-const DROPDOWN_CLOSE_DURATION = 100;
 const DROPDOWN_ITEM_SELECTOR = '[data-qi-dropdown-item="true"]';
 
 function getDropdownItems(container) {
@@ -153,23 +148,9 @@ export function Dropdown({
 
   const interactions = useInteractions([click, hover, dismiss, role]);
 
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: { open: DROPDOWN_OPEN_DURATION, close: DROPDOWN_CLOSE_DURATION },
-    initial: ({ side }) => ({
-      opacity: 0,
-      transform: getFloatingClosedTransform(side),
-    }),
-    open: {
-      opacity: 1,
-      transform: "translate(0px, 0px) scale(1)",
-    },
-    close: ({ side }) => ({
-      opacity: 0,
-      transform: getFloatingClosedTransform(side),
-    }),
-    common: {
-      transformOrigin: getFloatingPlacementOrigin(placement),
-    },
+  const { isMounted, styles: transitionStyles } = useFloatingTransition(context, {
+    duration: { open: 140, close: 100 },
+    placement,
   });
 
   const contextValue = useMemo(
@@ -455,11 +436,6 @@ export const DropdownItem = forwardRef(function DropdownItem(
   const Component = as ?? (href ? "a" : "button");
   const isButton = Component === "button";
   const isAnchor = Component === "a";
-  const itemTheme =
-    variant === "danger"
-      ? FLOATING_LIST_ITEM_THEME_CLASSES[theme].danger
-      : FLOATING_LIST_ITEM_THEME_CLASSES[theme].default;
-
   const focusSiblingItem = useCallback(
     (currentItem, direction) => {
       const items = getNavigableDropdownItems(getContentRef());
@@ -502,15 +478,14 @@ export const DropdownItem = forwardRef(function DropdownItem(
       aria-disabled={disabled || undefined}
       href={isAnchor ? href : undefined}
       disabled={isButton ? disabled : undefined}
-      tabIndex={disabled ? -1 : -1}
+      tabIndex={-1}
       className={cn(
-        FLOATING_LIST_ITEM_PRIMITIVES.base,
-        resolveQuickitFocusRingClasses(
+        getFloatingListItemClasses({
           focusRingEnabled,
-          FLOATING_LIST_ITEM_PRIMITIVES.base,
-        ),
-        resolveQuickitFocusRingClasses(focusRingEnabled, itemTheme),
-        disabled && FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled,
+          theme,
+          variant,
+          disabled,
+        }),
         className,
       )}
       {...getItemProps({
