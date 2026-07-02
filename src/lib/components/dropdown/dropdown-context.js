@@ -1,11 +1,4 @@
-import { createContext, useContext } from "react";
+import { createSafeContext } from "@/lib/utils/create-safe-context";
 
-export const DropdownContext = createContext(null);
-
-export function useDropdownContext(component) {
-  const context = useContext(DropdownContext);
-  if (!context) {
-    throw new Error(`${component} debe usarse dentro de Dropdown`);
-  }
-  return context;
-}
+export const [DropdownContext, useDropdownContext] =
+  createSafeContext("Dropdown");

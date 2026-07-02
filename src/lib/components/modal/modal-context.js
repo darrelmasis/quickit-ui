@@ -1,13 +1,3 @@
-import { createContext, useContext } from "react";
+import { createSafeContext } from "@/lib/utils/create-safe-context";
 
-export const ModalContext = createContext(null);
-
-export function useModalContext(componentName) {
-  const context = useContext(ModalContext);
-
-  if (!context) {
-    throw new Error(`${componentName} debe usarse dentro de <Modal>.`);
-  }
-
-  return context;
-}
+export const [ModalContext, useModalContext] = createSafeContext("Modal");

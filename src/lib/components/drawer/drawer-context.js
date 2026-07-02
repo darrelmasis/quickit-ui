@@ -1,13 +1,3 @@
-import { createContext, useContext } from "react";
+import { createSafeContext } from "@/lib/utils/create-safe-context";
 
-export const DrawerContext = createContext(null);
-
-export function useDrawerContext(componentName) {
-  const context = useContext(DrawerContext);
-
-  if (!context) {
-    throw new Error(`${componentName} debe usarse dentro de <Drawer>.`);
-  }
-
-  return context;
-}
+export const [DrawerContext, useDrawerContext] = createSafeContext("Drawer");
