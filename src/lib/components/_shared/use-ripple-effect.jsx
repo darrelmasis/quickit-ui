@@ -108,6 +108,63 @@ export function resolveRippleStyleFromElement(element, fallback) {
       };
 }
 
+export function useRippleHandlers(
+  rippleUi,
+  { handlePointerDown, handleKeyDown },
+  externalHandlers = {},
+) {
+  const extPointerDown = externalHandlers.onPointerDown;
+  const extKeyDown = externalHandlers.onKeyDown;
+
+  const onPointerDown = useCallback(
+    (event) => {
+      extPointerDown?.(event);
+
+      if (!event.defaultPrevented) {
+        const runtimeRipple = resolveRippleStyleFromElement(
+          event.currentTarget,
+          rippleUi,
+        );
+        event.currentTarget.style.setProperty(
+          "--qi-ripple-color",
+          runtimeRipple.color,
+        );
+        event.currentTarget.style.setProperty(
+          "--qi-ripple-opacity",
+          `${runtimeRipple.opacity}`,
+        );
+        handlePointerDown(event);
+      }
+    },
+    [extPointerDown, handlePointerDown, rippleUi],
+  );
+
+  const onKeyDown = useCallback(
+    (event) => {
+      extKeyDown?.(event);
+
+      if (!event.defaultPrevented) {
+        const runtimeRipple = resolveRippleStyleFromElement(
+          event.currentTarget,
+          rippleUi,
+        );
+        event.currentTarget.style.setProperty(
+          "--qi-ripple-color",
+          runtimeRipple.color,
+        );
+        event.currentTarget.style.setProperty(
+          "--qi-ripple-opacity",
+          `${runtimeRipple.opacity}`,
+        );
+        handleKeyDown(event);
+      }
+    },
+    [extKeyDown, handleKeyDown, rippleUi],
+  );
+
+  return { onPointerDown, onKeyDown };
+}
+
 export function useRippleEffect({
   centered = false,
   duration = 650,

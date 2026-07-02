@@ -17,8 +17,8 @@ import {
   resolveActionVariant,
 } from "@/lib/components/_shared/action-control";
 import {
-  resolveRippleStyleFromElement,
   useRippleEffect,
+  useRippleHandlers,
 } from "@/lib/components/_shared/use-ripple-effect";
 
 const LINK_PRIMITIVES = {
@@ -179,12 +179,16 @@ const Link = forwardRef(function Link(
     resolvedVariant,
     resolvedButtonColor,
   );
-  const { handleKeyDown: handleRippleKeyDown, handlePointerDown: handleRipplePointerDown, rippleLayer } =
-    useRippleEffect({
-      duration: 780,
-      enabled: appearance === "button" && resolvedRipple && !disabled,
-      opacity: rippleUi.opacity,
-    });
+  const rippleEffect = useRippleEffect({
+    duration: 780,
+    enabled: appearance === "button" && resolvedRipple && !disabled,
+    opacity: rippleUi.opacity,
+  });
+  const rippleHandlers = useRippleHandlers(
+    rippleUi,
+    { handlePointerDown: rippleEffect.handlePointerDown, handleKeyDown: rippleEffect.handleKeyDown },
+    { onPointerDown, onKeyDown },
+  );
 
   if (appearance !== "button") {
     const resolvedTextVariant = LINK_TEXT_VARIANT_CLASSES[variant]
@@ -194,6 +198,7 @@ const Link = forwardRef(function Link(
     return (
       <a
         ref={ref}
+        {...props}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         target={target}
@@ -209,7 +214,6 @@ const Link = forwardRef(function Link(
           className,
         )}
         {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
-        {...props}
       >
         {children}
       </a>
@@ -219,12 +223,12 @@ const Link = forwardRef(function Link(
   return (
     <a
       ref={ref}
+      {...props}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       target={target}
       title={title}
       rel={resolveExternalLinkRel(target, rel)}
-      {...props}
       className={cn(
         resolveQuickitFocusRingClasses(
           focusRingEnabled,
@@ -252,44 +256,8 @@ const Link = forwardRef(function Link(
         "--qi-ripple-opacity": rippleUi.opacity,
         ...style,
       }}
-      onPointerDown={(event) => {
-        onPointerDown?.(event);
-
-        if (!event.defaultPrevented) {
-          const runtimeRipple = resolveRippleStyleFromElement(
-            event.currentTarget,
-            rippleUi,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-color",
-            runtimeRipple.color,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-opacity",
-            `${runtimeRipple.opacity}`,
-          );
-          handleRipplePointerDown(event);
-        }
-      }}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-
-        if (!event.defaultPrevented) {
-          const runtimeRipple = resolveRippleStyleFromElement(
-            event.currentTarget,
-            rippleUi,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-color",
-            runtimeRipple.color,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-opacity",
-            `${runtimeRipple.opacity}`,
-          );
-          handleRippleKeyDown(event);
-        }
-      }}
+      onPointerDown={rippleHandlers.onPointerDown}
+      onKeyDown={rippleHandlers.onKeyDown}
       onClick={(event) => {
         onClick?.(event);
 
@@ -299,7 +267,7 @@ const Link = forwardRef(function Link(
       }}
       {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
     >
-      {resolvedRipple ? rippleLayer : null}
+      {resolvedRipple ? rippleEffect.rippleLayer : null}
       <span className="relative z-[1] inline-flex items-center gap-2">
         {children}
       </span>

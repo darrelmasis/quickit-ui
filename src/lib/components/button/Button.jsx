@@ -19,8 +19,8 @@ import {
   resolveActionVariant,
 } from "@/lib/components/_shared/action-control";
 import {
-  resolveRippleStyleFromElement,
   useRippleEffect,
+  useRippleHandlers,
 } from "@/lib/components/_shared/use-ripple-effect";
 
 function extractTextContent(children) {
@@ -149,19 +149,21 @@ const Button = forwardRef(function Button(
       xl: 940,
       "2xl": 1020,
     }[resolvedSize] ?? 780;
-  const {
-    handleKeyDown: handleRippleKeyDown,
-    handlePointerDown: handleRipplePointerDown,
-    rippleLayer,
-  } = useRippleEffect({
+  const rippleEffect = useRippleEffect({
     duration: rippleDuration,
     enabled: resolvedRipple && !isDisabled,
     opacity: rippleOpacity,
   });
+  const rippleHandlers = useRippleHandlers(
+    rippleUi,
+    { handlePointerDown: rippleEffect.handlePointerDown, handleKeyDown: rippleEffect.handleKeyDown },
+    { onPointerDown, onKeyDown },
+  );
 
   return (
     <button
       ref={ref}
+      {...props}
       type={type}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
@@ -176,46 +178,8 @@ const Button = forwardRef(function Button(
         "--qi-ripple-opacity": rippleOpacity,
         ...style,
       }}
-      onPointerDown={(event) => {
-        onPointerDown?.(event);
-
-        if (!event.defaultPrevented) {
-          // Recalculamos el color en tiempo real para que el ripple contraste
-          // con la superficie final, incluso si el botón cambia por hover/active.
-          const runtimeRipple = resolveRippleStyleFromElement(
-            event.currentTarget,
-            rippleUi,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-color",
-            runtimeRipple.color,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-opacity",
-            `${runtimeRipple.opacity}`,
-          );
-          handleRipplePointerDown(event);
-        }
-      }}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-
-        if (!event.defaultPrevented) {
-          const runtimeRipple = resolveRippleStyleFromElement(
-            event.currentTarget,
-            rippleUi,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-color",
-            runtimeRipple.color,
-          );
-          event.currentTarget.style.setProperty(
-            "--qi-ripple-opacity",
-            `${runtimeRipple.opacity}`,
-          );
-          handleRippleKeyDown(event);
-        }
-      }}
+      onPointerDown={rippleHandlers.onPointerDown}
+      onKeyDown={rippleHandlers.onKeyDown}
       className={cn(
         resolveQuickitFocusRingClasses(
           focusRingEnabled,
@@ -249,9 +213,8 @@ const Button = forwardRef(function Button(
           ),
         className,
       )}
-      {...props}
     >
-      {resolvedRipple ? rippleLayer : null}
+      {resolvedRipple ? rippleEffect.rippleLayer : null}
 
       {loading ? (
         <span className="relative z-[1] inline-flex items-center justify-center gap-2 shrink-0 truncate">
