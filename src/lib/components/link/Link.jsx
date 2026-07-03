@@ -3,30 +3,26 @@ import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
-  ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
-  ACTION_CONTROL_BASE_CLASSES,
-  ACTION_CONTROL_SIZE_CLASSES,
-  ACTION_CONTROL_THEME_CLASSES,
-  getActionControlRadius,
-  resolveActionActivePseudoClasses,
-  resolveActionActiveStateClasses,
   resolveActionColor,
-  resolveActionRippleStyles,
   resolveActionShape,
   resolveActionSize,
   resolveActionVariant,
+  getActionControlRadius,
+  ACTION_CONTROL_BASE_CLASSES,
+  ACTION_CONTROL_SIZE_CLASSES,
+  ACTION_CONTROL_THEME_CLASSES,
+  ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
+  resolveActionActivePseudoClasses,
+  resolveActionActiveStateClasses,
+  resolveActionRippleStyles,
 } from "@/lib/components/_shared/action-control";
 import {
   useRippleEffect,
   useRippleHandlers,
 } from "@/lib/components/_shared/use-ripple-effect";
 
-const LINK_PRIMITIVES = {
-  base: [
-    "qi-link inline-flex items-center gap-1.5 font-medium transition-all duration-200 outline-none",
-    "focus-visible:ring-4 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-  ].join(" "),
-};
+const LINK_BASE =
+  "qi-link inline-flex items-center gap-1.5 font-medium transition-all duration-200 outline-none focus-visible:ring-4 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 const LINK_TEXT_VARIANT_CLASSES = {
   default: "",
@@ -144,53 +140,25 @@ const Link = forwardRef(function Link(
     ripple: resolvedRipple,
     pressEffect: resolvedPressEffect,
   } = useQuickitControlState("link", {
+    pressEffect,
+    ripple,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     children,
-    pressEffect,
-    ripple,
     shape,
     title,
     ...props,
   });
+
   const ui = LINK_THEME_CLASSES[theme];
   const resolvedColor = ui.color[color] ? color : "primary";
-  const resolvedDecorationKey =
-    LINK_UNDERLINE_TO_DECORATION[underline] ?? LINK_UNDERLINE_TO_DECORATION.hover;
-  const resolvedDecoration = ui.decoration[resolvedDecorationKey]
-    ? resolvedDecorationKey
-    : "hover";
-  const resolvedShape = resolveActionShape(shape);
-  const resolvedSize = resolveActionSize(size);
-  const resolvedVariant = resolveActionVariant(theme, variant);
-  const resolvedButtonColor = resolveActionColor(theme, resolvedVariant, color);
-  const resolvedRadiusClass = getActionControlRadius(resolvedShape, resolvedSize);
-  const resolvedSizeClasses =
-    ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
-    ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md ??
-    ACTION_CONTROL_SIZE_CLASSES.default.md;
-  const motionAllowedByShape =
-    resolvedShape !== "square" && resolvedShape !== "circle";
-  const resolvedActiveMotion =
-    activeMotion ??
-    (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
-  const rippleUi = resolveActionRippleStyles(
-    theme,
-    resolvedVariant,
-    resolvedButtonColor,
-  );
-  const rippleEffect = useRippleEffect({
-    duration: 780,
-    enabled: appearance === "button" && resolvedRipple && !disabled,
-    opacity: rippleUi.opacity,
-  });
-  const rippleHandlers = useRippleHandlers(
-    rippleUi,
-    { handlePointerDown: rippleEffect.handlePointerDown, handleKeyDown: rippleEffect.handleKeyDown },
-    { onPointerDown, onKeyDown },
-  );
 
   if (appearance !== "button") {
+    const resolvedDecorationKey =
+      LINK_UNDERLINE_TO_DECORATION[underline] ?? LINK_UNDERLINE_TO_DECORATION.hover;
+    const resolvedDecoration = ui.decoration[resolvedDecorationKey]
+      ? resolvedDecorationKey
+      : "hover";
     const resolvedTextVariant = LINK_TEXT_VARIANT_CLASSES[variant]
       ? variant
       : "default";
@@ -205,7 +173,7 @@ const Link = forwardRef(function Link(
         rel={resolveExternalLinkRel(target, rel)}
         title={title}
         className={cn(
-          resolveQuickitFocusRingClasses(focusRingEnabled, LINK_PRIMITIVES.base),
+          resolveQuickitFocusRingClasses(focusRingEnabled, LINK_BASE),
           LINK_SIZE_CLASSES[size] ?? LINK_SIZE_CLASSES.md,
           LINK_TEXT_VARIANT_CLASSES[resolvedTextVariant],
           resolveQuickitFocusRingClasses(focusRingEnabled, ui.color[resolvedColor]),
@@ -220,6 +188,33 @@ const Link = forwardRef(function Link(
     );
   }
 
+  const resolvedVariant = resolveActionVariant(theme, variant);
+  const resolvedButtonColor = resolveActionColor(theme, resolvedVariant, color);
+  const resolvedShape = resolveActionShape(shape);
+  const resolvedSize = resolveActionSize(size);
+  const resolvedRadiusClass = getActionControlRadius(resolvedShape, resolvedSize);
+  const resolvedSizeClasses =
+    ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
+    ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md ??
+    ACTION_CONTROL_SIZE_CLASSES.default.md;
+  const motionAllowedByShape =
+    resolvedShape !== "square" && resolvedShape !== "circle";
+  const resolvedActiveMotion =
+    activeMotion ??
+    (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
+  const rippleUi = resolveActionRippleStyles(theme, resolvedVariant, resolvedButtonColor);
+  const rippleEffect = useRippleEffect({
+    duration: 780,
+    enabled: resolvedRipple && !disabled,
+    opacity: rippleUi.opacity,
+  });
+  const rippleHandlers = useRippleHandlers(
+    rippleUi,
+    { handlePointerDown: rippleEffect.handlePointerDown, handleKeyDown: rippleEffect.handleKeyDown },
+    { onPointerDown, onKeyDown },
+  );
+  const isDisabled = disabled;
+
   return (
     <a
       ref={ref}
@@ -227,13 +222,10 @@ const Link = forwardRef(function Link(
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       target={target}
-      title={title}
       rel={resolveExternalLinkRel(target, rel)}
+      title={title}
       className={cn(
-        resolveQuickitFocusRingClasses(
-          focusRingEnabled,
-          ACTION_CONTROL_BASE_CLASSES,
-        ),
+        resolveQuickitFocusRingClasses(focusRingEnabled, ACTION_CONTROL_BASE_CLASSES),
         resolvedRipple && "qi-ripple-host isolate overflow-hidden",
         resolvedActiveMotion && ACTION_CONTROL_ACTIVE_MOTION_CLASSES,
         fullWidth && "w-full",
@@ -248,7 +240,7 @@ const Link = forwardRef(function Link(
         resolveActionActivePseudoClasses(theme, resolvedVariant, resolvedButtonColor),
         active &&
           resolveActionActiveStateClasses(theme, resolvedVariant, resolvedButtonColor),
-        disabled && "pointer-events-none opacity-50",
+        isDisabled && "pointer-events-none opacity-50",
         className,
       )}
       style={{
@@ -260,15 +252,14 @@ const Link = forwardRef(function Link(
       onKeyDown={rippleHandlers.onKeyDown}
       onClick={(event) => {
         onClick?.(event);
-
-        if (disabled) {
+        if (isDisabled) {
           event.preventDefault();
         }
       }}
-      {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
+      {...(isDisabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
     >
       {resolvedRipple ? rippleEffect.rippleLayer : null}
-      <span className="relative z-[1] inline-flex items-center gap-2">
+      <span className="relative z-[1] inline-flex items-center gap-2 justify-center min-w-0 truncate">
         {children}
       </span>
     </a>

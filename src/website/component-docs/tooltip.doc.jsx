@@ -14,18 +14,26 @@ export const tooltipDoc = {
   previewCode: TOOLTIP_PREVIEW_CODE,
   preview: <TooltipPreviewCanvas />,
   installCode: `import { Tooltip } from "quickit-ui";`,
-  usageCode: `import { Tooltip } from "quickit-ui";
-
-export function TooltipUsage() {
-  return <Tooltip content="Ayuda rápida">Hover aquí</Tooltip>;
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Tooltip simple con texto.",
+    preview: <Tooltip content="Esto es un tooltip">Pasa el mouse</Tooltip>,
+    code: `import { Tooltip } from "quickit-ui";
+
+export function TooltipBasico() {
+  return <Tooltip content="Esto es un tooltip">Pasa el mouse</Tooltip>;
+}`
+  }, {
     id: "ejemplos-placement",
     title: "Placement",
     description: "Cambia la posición con placement.",
-    preview: <Tooltip content="Ayuda arriba" placement="top">
-          Tooltip arriba
-        </Tooltip>
+    preview: <Tooltip content="Posición arriba" placement="top">Arriba</Tooltip>,
+    code: `import { Tooltip } from "quickit-ui";
+
+export function TooltipPlacement() {
+  return <Tooltip content="Posición arriba" placement="top">Arriba</Tooltip>;
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -50,38 +58,8 @@ export function TooltipUsage() {
       defaultValue: "true",
       description: "Muestra flecha."
     }, {
-      name: "arrowWidth",
-      type: "number",
-      defaultValue: "12",
-      description: "Ancho de la flecha."
-    }, {
-      name: "arrowHeight",
-      type: "number",
-      defaultValue: "6",
-      description: "Alto de la flecha."
-    }, {
-      name: "arrowTipRadius",
-      type: "number",
-      defaultValue: "1.5",
-      description: "Radio de la punta."
-    }, {
-      name: "arrowStrokeWidth",
-      type: "number",
-      defaultValue: "0.75",
-      description: "Grosor del borde."
-    }, {
-      name: "arrowFill",
-      type: "string",
-      defaultValue: "undefined",
-      description: "Color de relleno del arrow."
-    }, {
-      name: "arrowStroke",
-      type: "string",
-      defaultValue: "undefined",
-      description: "Color del borde del arrow."
-    }, {
       name: "color",
-      type: "\"default\" | QuickitSemanticColor",
+      type: `"default" | QuickitSemanticColor`,
       defaultValue: `"default"`,
       description: "Paleta del floating."
     }, {
@@ -95,6 +73,6 @@ export function TooltipUsage() {
       defaultValue: "2000",
       description: "Controla el stacking."
     }],
-    notes: ["Tooltip fuerza `trigger=\"hover\"` e `interactive={false}`; para contenido accionable usa `Popover`.", "Mantén el contenido corto y descriptivo para no convertir el tooltip en un mini diálogo.", "Si necesitas controlar apertura/cierre desde estado, usa `Popover` en modo `manual` en lugar de tratar `Tooltip` como overlay genérico."]
+    notes: ["Tooltip fuerza trigger=\"hover\" e interactive=false; para contenido accionable usa Popover.", "Mantén el contenido corto y descriptivo."]
   }]
 };

@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils/cn";
 
 export const FLOATING_LIST_SURFACE_PRIMITIVES = {
   layout:
-    "z-[9999] flex min-w-[12rem] flex-col gap-1 list-none rounded-[1rem] border p-1 outline-none",
+    "z-[9999] flex min-w-[12rem] flex-col gap-1 list-none rounded-2xl border p-1 outline-none",
 };
 
 export const FLOATING_LIST_ITEM_PRIMITIVES = {
   base: [
-    "flex w-full items-center gap-2 rounded-[0.75rem] px-3 py-2 text-left cursor-pointer",
+    "flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left cursor-pointer",
     "text-sm font-medium transition-colors outline-none",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px]",
   ].join(" "),
@@ -139,10 +139,10 @@ export function useFloatingTransition(context, { duration, placement }) {
 
 export function useMatchFloatingWidth() {
   return {
-    apply({ rects, elements }) {
-      Object.assign(elements.floating.style, {
-        width: `${rects.reference.width}px`,
-      });
+    name: "matchWidth",
+    fn({ x, y, rects, elements }) {
+      elements.floating.style.width = `${rects.reference.width}px`;
+      return { x, y };
     },
   };
 }

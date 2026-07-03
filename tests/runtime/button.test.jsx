@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Button, Link } from "@/lib";
+import { Button } from "@/lib";
 import { renderWithProvider } from "./test-utils";
 
 describe("action controls", () => {
@@ -25,24 +25,22 @@ describe("action controls", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it("shares shape API with Link button appearance", () => {
+  it("applies shape classes to buttons", () => {
     renderWithProvider(
-      <Link
-        href="#"
-        appearance="button"
+      <Button
         shape="square"
         color="neutral"
         aria-label="Abrir panel"
       >
         +
-      </Link>,
+      </Button>,
     );
 
-    const link = screen.getByRole("link", { name: "Abrir panel" });
+    const button = screen.getByRole("button", { name: "Abrir panel" });
 
-    expect(link.className).toContain("size-11");
-    expect(link.className).toContain("border");
-    expect(link.className).not.toContain("active:translate-y-px");
+    expect(button.className).toContain("size-11");
+    expect(button.className).toContain("border");
+    expect(button.className).not.toContain("active:translate-y-px");
   });
 
   it("disables active motion by default on square buttons", () => {
@@ -64,49 +62,28 @@ describe("action controls", () => {
     expect(circleButton.className).not.toContain("active:translate-y-px");
   });
 
-  it("applies active color classes to button states and button-like links", () => {
+  it("applies active color classes to button states", () => {
     renderWithProvider(
-      <div>
-        <Button variant="outline" color="neutral" active>
-          Activo
-        </Button>
-        <Link
-          href="#"
-          appearance="button"
-          variant="outline"
-          color="neutral"
-        >
-          Ir
-        </Link>
-      </div>,
+      <Button variant="outline" color="neutral" active>
+        Activo
+      </Button>,
     );
 
     const button = screen.getByRole("button", { name: "Activo" });
-    const link = screen.getByRole("link", { name: "Ir" });
 
     expect(button.className).toContain("bg-neutral-300");
     expect(button.className).toContain("border-neutral-600");
-    expect(link.className).toContain("active:bg-neutral-300");
-    expect(link.className).toContain("active:border-neutral-600");
   });
 
   it("switches the default press effect from transform to ripple through QuickitProvider", () => {
     renderWithProvider(
-      <div>
-        <Button color="neutral">Guardar</Button>
-        <Link href="#" appearance="button" color="neutral">
-          Ir
-        </Link>
-      </div>,
+      <Button color="neutral">Guardar</Button>,
       { pressEffect: "ripple" },
     );
 
     const button = screen.getByRole("button", { name: "Guardar" });
-    const link = screen.getByRole("link", { name: "Ir" });
 
     expect(button.className).not.toContain("active:translate-y-px");
-    expect(link.className).not.toContain("active:translate-y-px");
     expect(button.className).toContain("qi-ripple-host");
-    expect(link.className).toContain("qi-ripple-host");
   });
 });

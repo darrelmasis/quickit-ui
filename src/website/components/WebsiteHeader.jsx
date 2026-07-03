@@ -76,7 +76,7 @@ export default function WebsiteHeader({ activePath }) {
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-white/88 backdrop-blur-xl dark:bg-neutral-950/88">
+    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/88 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-950/88">
       <div className={WEBSITE_SHELL}>
         <div className="flex h-[60px] items-center gap-4">
           <a

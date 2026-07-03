@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import { CheckIcon, MinusIcon } from "@/lib/assets/icons";
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
-import { cn } from "@/lib/utils";
+import { cn, getCheckboxRadius } from "@/lib/utils";
 import { useFormControl } from "@/lib/components/form-control";
 
 const CHECKBOX_PRIMITIVES = {
@@ -19,11 +19,11 @@ const CHECKBOX_PRIMITIVES = {
 
 const CHECKBOX_SIZE_CLASSES = {
   sm: {
-    box: "size-4 rounded-[0.375rem]",
+    box: "size-4",
     icon: "size-3",
   },
   md: {
-    box: "size-5 rounded-[0.425rem]",
+    box: "size-5",
     icon: "size-3.5",
   },
 };
@@ -207,6 +207,7 @@ const Checkbox = forwardRef(function Checkbox(
           className={cn(
             resolveQuickitFocusRingClasses(focusRingEnabled, CHECKBOX_PRIMITIVES.box),
             CHECKBOX_SIZE_CLASSES[resolvedSize].box,
+            getCheckboxRadius(resolvedSize),
             ui.box.idle,
             ui.box.focus,
             ui.box.colors[resolvedColor],

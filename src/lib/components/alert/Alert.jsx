@@ -202,6 +202,7 @@ const Alert = forwardRef(function Alert(
     color = "info",
     defaultOpen = true,
     description,
+    dismissButtonProps,
     dismissible = false,
     dismissLabel = "Cerrar alerta",
     icon,
@@ -381,9 +382,10 @@ const Alert = forwardRef(function Alert(
             color="neutral"
             shape="square"
             size="sm"
-            className={ALERT_PRIMITIVES.dismiss}
+            className={cn(ALERT_PRIMITIVES.dismiss, dismissButtonProps?.className)}
             aria-label={dismissLabel}
             onClick={() => requestClose("manual")}
+            {...dismissButtonProps}
           >
             <CloseIcon className="size-4" />
           </Button>

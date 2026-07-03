@@ -4,6 +4,7 @@ import {
   isValidElement,
   useCallback,
   useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -18,11 +19,11 @@ import {
 } from "@/lib/components/_shared/overlay-focus";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
+import { QUICKIT_EASE_DEFAULT } from "@/lib/tokens";
 import { ModalContext, useModalContext } from "./modal-context";
 
 const ANIMATION_DURATION = 220;
 const OVERLAY_DURATION = 180;
-let modalIdCounter = 0;
 let modalZIndexCounter = 50;
 const modalStack = [];
 
@@ -60,7 +61,7 @@ function isTriggerDisabled(element) {
 
 const MODAL_PRIMITIVES = {
   overlay:
-    "fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+    `fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-[180ms] ease-[${QUICKIT_EASE_DEFAULT}]`,
   viewport:
     "fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none",
   dialog: [
@@ -111,10 +112,8 @@ export function Modal({
   const [registeredDescriptionIds, setRegisteredDescriptionIds] = useState([]);
   const previousFocusedElementRef = useRef(null);
   const triggerElementRef = useRef(null);
-  const [modalId] = useState(() => {
-    modalIdCounter += 1;
-    return modalIdCounter;
-  });
+  const modalIdId = useId();
+  const modalId = modalIdId;
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
   const titleId = `qi-modal-title-${modalId}`;
@@ -464,7 +463,7 @@ export function ModalContent({ children, className }) {
             opacity: visible ? 1 : 0,
             transformOrigin: "center center",
             transition:
-              "transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+              `transform 220ms ${QUICKIT_EASE_DEFAULT}, opacity 180ms ${QUICKIT_EASE_DEFAULT}`,
           }}
           role="dialog"
           aria-modal={blockingOverlay ? "true" : undefined}
@@ -582,30 +581,32 @@ export function ModalAction({
   closeOnClick = true,
   color = "primary",
   onClick,
+  renderButton,
   size = "md",
   variant = "solid",
   ...props
 }) {
   const { close } = useModalContext("ModalAction");
+  const buttonProps = {
+    variant,
+    color,
+    size,
+    className,
+    onClick: async (event) => {
+      await onClick?.(event);
 
-  return (
-    <Button
-      variant={variant}
-      color={color}
-      size={size}
-      className={className}
-      onClick={async (event) => {
-        await onClick?.(event);
+      if (closeOnClick && !event.defaultPrevented) {
+        close();
+      }
+    },
+    ...props,
+  };
 
-        if (closeOnClick && !event.defaultPrevented) {
-          close();
-        }
-      }}
-      {...props}
-    >
-      {children}
-    </Button>
-  );
+  if (renderButton) {
+    return renderButton(buttonProps, children);
+  }
+
+  return <Button {...buttonProps}>{children}</Button>;
 }
 
 Modal.Trigger = ModalTrigger;

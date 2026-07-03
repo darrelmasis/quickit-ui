@@ -25,51 +25,67 @@ export const inputGroupDoc = {
   description: "Agrupa inputs, addons y acciones dentro de un mismo contenedor.",
   previewCode: INPUT_GROUP_PREVIEW_CODE,
   preview: <InputGroupPreviewCanvas />,
-  installCode: `import { InputGroup, Input } from "quickit-ui";`,
-  usageCode: `import { InputGroup, Input } from "quickit-ui";
+  installCode: `import { InputGroup } from "quickit-ui";`,
+  examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "InputGroup con addon y action.",
+    preview: <div className="w-full max-w-md">
+        <InputGroup attached>
+          <InputGroup.Addon align="inline-start">https://</InputGroup.Addon>
+          <Input placeholder="quickit.dev" />
+          <InputGroup.Action>Ir</InputGroup.Action>
+        </InputGroup>
+      </div>,
+    code: `import { Input, InputGroup } from "quickit-ui";
 
-export function InputGroupUsage() {
+export function InputGroupBasico() {
   return (
     <InputGroup attached>
-      <InputGroup.Addon align="start">https://</InputGroup.Addon>
+      <InputGroup.Addon align="inline-start">https://</InputGroup.Addon>
       <Input placeholder="quickit.dev" />
       <InputGroup.Action>Ir</InputGroup.Action>
     </InputGroup>
   );
-}`,
-  examples: [{
+}`
+  }, {
     id: "ejemplos-layout",
     title: "Layouts",
     description: "Usa layout inline o grid con columns.",
     preview: <div className="grid gap-4">
-            <InputGroup layout="inline" attached>
-              <InputGroup.Addon align="inline-start">+1</InputGroup.Addon>
-              <Input placeholder="Teléfono" />
-            </InputGroup>
-            <InputGroup layout="grid" columns={2} attached>
-              <InputGroup.Item>
-                <Input placeholder="Nombre" />
-              </InputGroup.Item>
-              <InputGroup.Item>
-                <Input placeholder="Apellido" />
-              </InputGroup.Item>
-            </InputGroup>
-          </div>
-  }, {
-    id: "ejemplos-acciones",
-    title: "Acciones y addons",
-    description: "Combina addons y botones internos.",
-    preview: <div className="grid gap-4">
-            <InputGroup attached>
-              <InputGroup.Addon align="inline-start">@</InputGroup.Addon>
-              <Input placeholder="usuario" />
-              <InputGroup.Action variant="outline">Verificar</InputGroup.Action>
-            </InputGroup>
-            <InputGroup attached>
-              <InputGroup.Addon align="inline-start">https://</InputGroup.Addon>
-              <Input placeholder="quickit.dev" />
-            </InputGroup>
-          </div>
+          <InputGroup layout="inline" attached>
+            <InputGroup.Addon align="inline-start">+1</InputGroup.Addon>
+            <Input placeholder="Teléfono" />
+          </InputGroup>
+          <InputGroup layout="grid" columns={2} attached>
+            <InputGroup.Item>
+              <Input placeholder="Nombre" />
+            </InputGroup.Item>
+            <InputGroup.Item>
+              <Input placeholder="Apellido" />
+            </InputGroup.Item>
+          </InputGroup>
+        </div>,
+    code: `import { Input, InputGroup } from "quickit-ui";
+
+export function InputGroupLayout() {
+  return (
+    <div className="grid gap-4">
+      <InputGroup layout="inline" attached>
+        <InputGroup.Addon align="inline-start">+1</InputGroup.Addon>
+        <Input placeholder="Teléfono" />
+      </InputGroup>
+      <InputGroup layout="grid" columns={2} attached>
+        <InputGroup.Item>
+          <Input placeholder="Nombre" />
+        </InputGroup.Item>
+        <InputGroup.Item>
+          <Input placeholder="Apellido" />
+        </InputGroup.Item>
+      </InputGroup>
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -77,7 +93,7 @@ export function InputGroupUsage() {
       name: "attached",
       type: "boolean",
       defaultValue: "false",
-      description: "Une los elementos en una sola cápsula."
+      description: "Une los elementos en una cápsula."
     }, {
       name: "layout",
       type: `"inline" | "grid"`,
@@ -87,7 +103,7 @@ export function InputGroupUsage() {
       name: "columns",
       type: "number | string",
       defaultValue: "undefined",
-      description: "Define columnas para layout grid."
+      description: "Columnas para layout grid."
     }, {
       name: "color",
       type: "QuickitSemanticColor",
@@ -107,8 +123,8 @@ export function InputGroupUsage() {
       name: "fullWidth",
       type: "boolean",
       defaultValue: "true",
-      description: "Hace el grupo 100% ancho."
+      description: "100% ancho."
     }],
-    notes: ["InputGroup.Item soporta grow (boolean) y span (number) para layout grid.", "InputGroup.Addon soporta align: start | center | end | inline-start | inline-end.", "InputGroup.Action es un Button compacto con variant, size y activeMotion (desactivado por defecto). Los nombres planos (InputGroupItem, etc.) siguen exportados."]
+    notes: ["InputGroup.Item soporta grow y span para grid.", "InputGroup.Addon soporta align: start, center, end, inline-start, inline-end.", "InputGroup.Action es un Button compacto."]
   }]
 };

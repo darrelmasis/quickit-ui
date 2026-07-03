@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Stepper } from "@/lib";
 export const stepperDoc = {
   name: "Stepper",
@@ -27,19 +28,53 @@ export function StepperPreview() {
     description: "Método de pago"
   }]} />,
   installCode: `import { Stepper } from "quickit-ui";`,
-  usageCode: `import { Stepper } from "quickit-ui";
+  examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Stepper horizontal con descripciones.",
+    preview: <Stepper activeStep={1} steps={[
+          { title: "Cuenta", description: "Datos básicos" },
+          { title: "Plan", description: "Elige tu plan" },
+          { title: "Pago", description: "Método de pago" },
+        ]} />,
+    code: `import { Stepper } from "quickit-ui";
 
-export function StepperUsage() {
+export function StepperBasico() {
+  return (
+    <Stepper
+      activeStep={1}
+      steps={[
+        { title: "Cuenta", description: "Datos básicos" },
+        { title: "Plan", description: "Elige tu plan" },
+        { title: "Pago", description: "Método de pago" },
+      ]}
+    />
+  );
+}`
+  }, {
+    id: "ejemplos-vertical",
+    title: "Vertical",
+    description: "Disposición vertical con navegación.",
+    preview: <Stepper orientation="vertical" activeStep={0} onStepChange={() => {}} steps={[
+          { title: "Uno", description: "Descripción del paso uno" },
+          { title: "Dos", description: "Descripción del paso dos" },
+        ]} />,
+    code: `import { Stepper } from "quickit-ui";
+
+export function StepperVertical() {
   return (
     <Stepper
       orientation="vertical"
       activeStep={0}
-      onStepChange={(i) => {}}
-      steps={[{ title: "Uno" }, { title: "Dos" }]}
+      onStepChange={(i) => console.log(i)}
+      steps={[
+        { title: "Uno", description: "Descripción del paso uno" },
+        { title: "Dos", description: "Descripción del paso dos" },
+      ]}
     />
   );
-}`,
-  examples: [{
+}`
+  }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
@@ -56,13 +91,13 @@ export function StepperUsage() {
       name: "onStepChange",
       type: "(index: number) => void",
       defaultValue: "undefined",
-      description: "Si se define, los pasos son botones navegables."
+      description: "Habilita navegación por click."
     }, {
       name: "orientation",
       type: `"horizontal" | "vertical"`,
       defaultValue: `"horizontal"`,
       description: "Disposición del stepper."
     }],
-    notes: ["Pasa `onStepChange` para habilitar navegación por click en los pasos.", "Sin `onStepChange`, Stepper se usa como indicador estático de progreso.", "Mantén `activeStep` dentro del rango real de `steps`."]
+    notes: ["Pasa onStepChange para navegación por click.", "Sin onStepChange, Stepper es un indicador estático."]
   }]
 };

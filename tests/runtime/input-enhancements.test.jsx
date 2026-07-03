@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -103,6 +103,50 @@ describe("enhanced input actions", () => {
 
     expect(input.value).toBe("");
     expect(onClear).toHaveBeenCalledTimes(1);
+  });
+
+  it("repeats number steps while a number button is pressed", () => {
+    vi.useFakeTimers();
+
+    try {
+      const onIncrement = vi.fn();
+
+      renderWithProvider(
+        <Input
+          type="number"
+          numberButtons
+          defaultValue={0}
+          onIncrement={onIncrement}
+          placeholder="Cantidad"
+        />,
+      );
+
+      const input = screen.getByPlaceholderText("Cantidad");
+      const increment = screen.getByRole("button", { name: "Incrementar" });
+
+      fireEvent.pointerDown(increment, { button: 0, pointerId: 1 });
+
+      expect(input.value).toBe("1");
+      expect(onIncrement).toHaveBeenCalledTimes(1);
+
+      act(() => {
+        vi.advanceTimersByTime(425);
+      });
+
+      expect(Number(input.value)).toBeGreaterThan(1);
+
+      const valueAfterHold = input.value;
+
+      fireEvent.pointerUp(increment, { pointerId: 1 });
+
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(input.value).toBe(valueAfterHold);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("renders left and right embedded elements inside the input", () => {

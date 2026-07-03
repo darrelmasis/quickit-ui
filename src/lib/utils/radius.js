@@ -1,3 +1,8 @@
+export const CHECKBOX_RADIUS_BY_SIZE = {
+  sm: "rounded",
+  md: "rounded-md",
+};
+
 export const CONTROL_RADIUS_BY_SIZE = {
   sm: "rounded-[0.625rem]",
   md: "rounded-[0.75rem]",
@@ -33,6 +38,10 @@ export const DEFAULT_CONTROL_RADIUS = CONTROL_RADIUS_BY_SIZE.md;
 
 export function getControlRadius(size = "md") {
   return CONTROL_RADIUS_BY_SIZE[size] ?? DEFAULT_CONTROL_RADIUS;
+}
+
+export function getCheckboxRadius(size = "md") {
+  return CHECKBOX_RADIUS_BY_SIZE[size] ?? CHECKBOX_RADIUS_BY_SIZE.md;
 }
 
 export function getAvatarRadius(shape = "circle", size = "md") {

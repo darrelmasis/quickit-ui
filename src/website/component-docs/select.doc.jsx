@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { FormControl, Label, Select } from "@/lib";
+import { QUICKIT_CONTROL_SIZES, QUICKIT_SEMANTIC_COLORS } from "@/lib/tokens";
 import { useState } from "react";
 const SELECT_PREVIEW_CODE = `import { Select } from "quickit-ui";
 
@@ -36,58 +37,166 @@ export const selectDoc = {
   previewCode: SELECT_PREVIEW_CODE,
   preview: <SelectPreviewCanvas />,
   installCode: `import { Select } from "quickit-ui";`,
-  usageCode: `import { Select } from "quickit-ui";
+  examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Select simple con placeholder.",
+    preview: <div className="w-full max-w-xs">
+        <Select placeholder="Selecciona estado">
+          <option value="active">Activo</option>
+          <option value="paused">Pausado</option>
+          <option value="blocked">Bloqueado</option>
+        </Select>
+      </div>,
+    code: `import { Select } from "quickit-ui";
 
-export function SelectUsage() {
+export function SelectBasico() {
   return (
-    <Select placeholder="Estado">
+    <Select placeholder="Selecciona estado">
       <option value="active">Activo</option>
       <option value="paused">Pausado</option>
       <option value="blocked">Bloqueado</option>
     </Select>
   );
-}`,
-  examples: [{
+}`
+  }, {
     id: "ejemplos-tamanos",
     title: "Tamaños",
-    description: "sm, md, lg.",
+    description: `Sizes disponibles: ${QUICKIT_CONTROL_SIZES.join(", ")}.`,
     preview: <div className="grid gap-3 sm:grid-cols-2">
-            <Select size="sm" placeholder="Small">
-              <option value="1">Opción</option>
-            </Select>
-            <Select size="md" placeholder="Medium">
-              <option value="1">Opción</option>
-            </Select>
-            <Select size="lg" placeholder="Large">
-              <option value="1">Opción</option>
-            </Select>
-          </div>
+          <Select size="sm" placeholder="Small">
+            <option value="1">Opción</option>
+          </Select>
+          <Select size="md" placeholder="Medium">
+            <option value="1">Opción</option>
+          </Select>
+          <Select size="lg" placeholder="Large">
+            <option value="1">Opción</option>
+          </Select>
+        </div>,
+    code: `import { Select } from "quickit-ui";
+
+export function SelectTamanos() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Select size="sm" placeholder="Small">
+        <option value="1">Opción</option>
+      </Select>
+      <Select size="md" placeholder="Medium">
+        <option value="1">Opción</option>
+      </Select>
+      <Select size="lg" placeholder="Large">
+        <option value="1">Opción</option>
+      </Select>
+    </div>
+  );
+}`
   }, {
-    id: "ejemplos-formcontrol",
-    title: "Con Label",
-    description: "Úsalo dentro de FormControl para estados y mensajes.",
-    preview: <FormControl controlId="doc-select-form" required>
-            <div className="mt-3">
-              <Label>Estado</Label>
-              <Select placeholder="Selecciona estado">
-                <option value="active">Activo</option>
-                <option value="paused">Pausado</option>
-              </Select>
-            </div>
-            <FormControl.Description>Este dato se usa en reportes.</FormControl.Description>
-        </FormControl>
+    id: "ejemplos-colores",
+    title: "Colores",
+    description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
+    preview: <div className="grid gap-3 sm:grid-cols-2">
+          <Select color="neutral" placeholder="Neutral">
+            <option value="1">Opción</option>
+          </Select>
+          <Select color="brand" placeholder="Brand">
+            <option value="1">Opción</option>
+          </Select>
+          <Select color="danger" placeholder="Danger">
+            <option value="1">Opción</option>
+          </Select>
+        </div>,
+    code: `import { Select } from "quickit-ui";
+
+export function SelectColores() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Select color="neutral" placeholder="Neutral">
+        <option value="1">Opción</option>
+      </Select>
+      <Select color="brand" placeholder="Brand">
+        <option value="1">Opción</option>
+      </Select>
+      <Select color="danger" placeholder="Danger">
+        <option value="1">Opción</option>
+      </Select>
+    </div>
+  );
+}`
   }, {
-    id: "ejemplos-disabled",
-    title: "Disabled",
-    description: "Deshabilita el select para evitar interacción.",
-    preview: <Select disabled placeholder="No disponible">
-          <option value="1">Opción</option>
-        </Select>
+    id: "ejemplos-estados",
+    title: "Estados",
+    description: "disabled, invalid.",
+    preview: <div className="grid gap-3 sm:grid-cols-2">
+          <Select disabled placeholder="No disponible">
+            <option value="1">Opción</option>
+          </Select>
+          <Select invalid placeholder="Campo inválido">
+            <option value="1">Opción</option>
+          </Select>
+        </div>,
+    code: `import { Select } from "quickit-ui";
+
+export function SelectEstados() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Select disabled placeholder="No disponible">
+        <option value="1">Opción</option>
+      </Select>
+      <Select invalid placeholder="Campo inválido">
+        <option value="1">Opción</option>
+      </Select>
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-controlado",
     title: "Controlado",
-    description: "Escucha onValueChange cuando necesitas reaccionar.",
-    preview: <ControlledSelectPreview />
+    description: "Escucha onValueChange cuando necesitas reaccionar al valor.",
+    preview: <ControlledSelectPreview />,
+    code: `import { Select } from "quickit-ui";
+import { useState } from "react";
+
+export function SelectControlado() {
+  const [value, setValue] = useState("active");
+  return (
+    <div className="space-y-2">
+      <Select value={value} onValueChange={setValue}>
+        <option value="active">Activo</option>
+        <option value="paused">Pausado</option>
+      </Select>
+      <p className="text-xs text-neutral-500">
+        Valor actual: {value}
+      </p>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-formcontrol",
+    title: "Con FormControl",
+    description: "Usa FormControl para label, descripción y estado.",
+    preview: <FormControl controlId="doc-select-form" required>
+          <Label>Estado</Label>
+          <Select placeholder="Selecciona estado">
+            <option value="active">Activo</option>
+            <option value="paused">Pausado</option>
+          </Select>
+          <FormControl.Description>Este dato se usa en reportes.</FormControl.Description>
+        </FormControl>,
+    code: `import { FormControl, Label, Select } from "quickit-ui";
+
+export function SelectFormControl() {
+  return (
+    <FormControl controlId="estado" required>
+      <Label>Estado</Label>
+      <Select placeholder="Selecciona estado">
+        <option value="active">Activo</option>
+        <option value="paused">Pausado</option>
+      </Select>
+      <FormControl.Description>Este dato se usa en reportes.</FormControl.Description>
+    </FormControl>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -152,6 +261,6 @@ export function SelectUsage() {
       defaultValue: "undefined",
       description: "Callback con el valor."
     }],
-    notes: ["Select acepta <option> como hijos para definir opciones.", "Dentro de FormControl, usa `controlId` y deja que el Label se asocie por contexto salvo que necesites wiring manual.", "Si pasas `name`, el valor se serializa con un hidden input y el botón visible conserva la experiencia accesible del select custom.", "Para lógica de negocio usa `onValueChange`; deja `onChange` para adaptadores que esperen un evento estilo DOM."]
+    notes: ["Select acepta <option> como hijos para definir opciones.", "Dentro de FormControl, usa `controlId` y deja que el Label se asocie por contexto.", "Si pasas `name`, el valor se serializa con un hidden input.", "Para lógica de negocio usa `onValueChange`; deja `onChange` para adaptadores."]
   }]
 };

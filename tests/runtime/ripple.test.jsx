@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { Button, Link, QuickitProvider, useQuickitRipple } from "@/lib";
+import { Button, QuickitProvider, useQuickitRipple } from "@/lib";
 
 function RippleReadout() {
   const buttonRipple = useQuickitRipple("button");
@@ -21,23 +21,15 @@ describe("ripple configuration", () => {
 
     render(
       <QuickitProvider>
-        <div>
-          <Button color="neutral">Guardar</Button>
-          <Link href="#docs" appearance="button" color="neutral">
-            Ver docs
-          </Link>
-        </div>
+        <Button color="neutral">Guardar</Button>
       </QuickitProvider>,
     );
 
     const button = screen.getByRole("button", { name: "Guardar" });
-    const link = screen.getByRole("link", { name: "Ver docs" });
 
     await user.click(button);
-    await user.click(link);
 
     expect(button.querySelector(".qi-ripple")).toBeNull();
-    expect(link.querySelector(".qi-ripple")).toBeNull();
   });
 
   it("enables ripple from QuickitProvider when pressEffect is ripple", async () => {
@@ -48,27 +40,18 @@ describe("ripple configuration", () => {
         <div>
           <RippleReadout />
           <Button color="neutral">Guardar</Button>
-          <Link href="#docs" appearance="button" color="neutral">
-            Ver docs
-          </Link>
         </div>
       </QuickitProvider>,
     );
 
     const button = screen.getByRole("button", { name: "Guardar" });
-    const link = screen.getByRole("link", { name: "Ver docs" });
 
     expect(screen.getByText("button ripple: true")).toBeTruthy();
-    expect(screen.getByText("link ripple: true")).toBeTruthy();
+    expect(screen.getByText("link ripple: false")).toBeTruthy();
 
     await user.click(button);
     await waitFor(() => {
       expect(button.querySelector(".qi-ripple")).not.toBeNull();
-    });
-
-    await user.click(link);
-    await waitFor(() => {
-      expect(link.querySelector(".qi-ripple")).not.toBeNull();
     });
   });
 
@@ -85,9 +68,6 @@ describe("ripple configuration", () => {
           <Button color="neutral" pressEffect="ripple">
             Boton con ripple
           </Button>
-          <Link href="#docs" appearance="button" color="neutral">
-            Link sin ripple global
-          </Link>
           <Button color="neutral" ripple={false}>
             Boton sin ripple
           </Button>
@@ -96,7 +76,6 @@ describe("ripple configuration", () => {
     );
 
     const button = screen.getByRole("button", { name: "Boton con ripple" });
-    const link = screen.getByRole("link", { name: "Link sin ripple global" });
     const disabledButton = screen.getByRole("button", { name: "Boton sin ripple" });
 
     expect(screen.getByText("button ripple: true")).toBeTruthy();
@@ -107,10 +86,8 @@ describe("ripple configuration", () => {
       expect(button.querySelector(".qi-ripple")).not.toBeNull();
     });
 
-    await user.click(link);
     await user.click(disabledButton);
 
-    expect(link.querySelector(".qi-ripple")).toBeNull();
     expect(disabledButton.querySelector(".qi-ripple")).toBeNull();
   });
 });

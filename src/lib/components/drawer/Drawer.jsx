@@ -4,6 +4,7 @@ import {
   isValidElement,
   useCallback,
   useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -18,11 +19,11 @@ import {
 } from "@/lib/components/_shared/overlay-focus";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
+import { QUICKIT_EASE_DEFAULT } from "@/lib/tokens";
 import { DrawerContext, useDrawerContext } from "./drawer-context";
 
 const ANIMATION_DURATION = 160;
 const OVERLAY_DURATION = 180;
-let drawerIdCounter = 0;
 let drawerZIndexCounter = 60;
 const drawerStack = [];
 
@@ -47,11 +48,11 @@ const PLACEMENTS = {
 
 const DRAWER_PRIMITIVES = {
   overlay:
-    "fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+    `fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-[180ms] ease-[${QUICKIT_EASE_DEFAULT}]`,
   viewport: "fixed inset-0 pointer-events-none",
   panel: [
     "pointer-events-auto absolute flex w-full flex-col overflow-hidden border",
-    "bg-white text-neutral-950 shadow-2xl transform-gpu will-change-transform",
+    "bg-white text-neutral-950 transform-gpu will-change-transform",
   ].join(" "),
   header:
     "flex items-start justify-between gap-4 border-b px-5 py-4 flex-shrink-0",
@@ -139,10 +140,7 @@ export function Drawer({
   const [registeredDescriptionIds, setRegisteredDescriptionIds] = useState([]);
   const previousFocusedElementRef = useRef(null);
   const triggerElementRef = useRef(null);
-  const [drawerId] = useState(() => {
-    drawerIdCounter += 1;
-    return drawerIdCounter;
-  });
+  const drawerId = useId();
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
   const titleId = `qi-drawer-title-${drawerId}`;
@@ -493,7 +491,7 @@ export function DrawerContent({ children, className }) {
             transform,
             opacity: visible ? 1 : 0.72,
             transition:
-              "transform 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+              `transform 240ms ${QUICKIT_EASE_DEFAULT}, opacity 180ms ${QUICKIT_EASE_DEFAULT}`,
           }}
           role="dialog"
           aria-modal="true"
@@ -611,30 +609,32 @@ export function DrawerAction({
   closeOnClick = true,
   color = "primary",
   onClick,
+  renderButton,
   size = "md",
   variant = "solid",
   ...props
 }) {
   const { close } = useDrawerContext("DrawerAction");
+  const buttonProps = {
+    variant,
+    color,
+    size,
+    className,
+    onClick: async (event) => {
+      await onClick?.(event);
 
-  return (
-    <Button
-      variant={variant}
-      color={color}
-      size={size}
-      className={className}
-      onClick={async (event) => {
-        await onClick?.(event);
+      if (closeOnClick && !event.defaultPrevented) {
+        close();
+      }
+    },
+    ...props,
+  };
 
-        if (closeOnClick && !event.defaultPrevented) {
-          close();
-        }
-      }}
-      {...props}
-    >
-      {children}
-    </Button>
-  );
+  if (renderButton) {
+    return renderButton(buttonProps, children);
+  }
+
+  return <Button {...buttonProps}>{children}</Button>;
 }
 
 Drawer.Trigger = DrawerTrigger;

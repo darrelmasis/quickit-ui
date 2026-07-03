@@ -24,12 +24,25 @@ export const progressDoc = {
   previewCode: PROGRESS_PREVIEW_CODE,
   preview: <ProgressPreviewCanvas />,
   installCode: `import { Progress } from "quickit-ui";`,
-  usageCode: `import { Progress } from "quickit-ui";
-
-export function ProgressUsage() {
-  return <Progress value={45} max={100} />;
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Progress simple con value.",
+    preview: <div className="w-full max-w-md space-y-3">
+          <Progress value={45} />
+          <Progress value={78} />
+        </div>,
+    code: `import { Progress } from "quickit-ui";
+
+export function ProgressBasico() {
+  return (
+    <div className="space-y-3">
+      <Progress value={45} />
+      <Progress value={78} />
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-colores",
     title: "Colores",
     description: "Selecciona color por semántica.",
@@ -37,7 +50,38 @@ export function ProgressUsage() {
           <Progress value={30} color="neutral" />
           <Progress value={60} color="brand" />
           <Progress value={80} color="success" />
-        </div>
+        </div>,
+    code: `import { Progress } from "quickit-ui";
+
+export function ProgressColores() {
+  return (
+    <div className="space-y-3">
+      <Progress value={30} color="neutral" />
+      <Progress value={60} color="brand" />
+      <Progress value={80} color="success" />
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-tamanos",
+    title: "Tamaños",
+    description: "Altura sm, md, lg.",
+    preview: <div className="space-y-3">
+          <Progress value={40} size="sm" />
+          <Progress value={60} size="md" />
+          <Progress value={80} size="lg" />
+        </div>,
+    code: `import { Progress } from "quickit-ui";
+
+export function ProgressTamanos() {
+  return (
+    <div className="space-y-3">
+      <Progress value={40} size="sm" />
+      <Progress value={60} size="md" />
+      <Progress value={80} size="lg" />
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -67,6 +111,6 @@ export function ProgressUsage() {
       defaultValue: `"md"`,
       description: "Altura del progreso."
     }],
-    notes: ["Usa un rango válido con `max > min` para evitar semántica accesible incoherente.", "Si necesitas estados de carga accesibles, anúncialos en el contenedor y deja `Progress` como indicador visual."]
+    notes: ["Usa max > min para valor accesible coherente."]
   }]
 };

@@ -31,6 +31,9 @@ const POPOVER_PRIMITIVES = {
   ].join(" "),
 };
 
+const TOOLTIP_BASE_CLASSES =
+  "!max-w-[16rem] !rounded-[0.875rem] !px-2.5 !py-1.5 !text-xs !leading-5";
+
 const POPOVER_THEME_CLASSES = {
   light: {
     default: {
@@ -202,8 +205,16 @@ export default function Popover({
   showArrow = true,
   trigger = "hover",
   usePortal = true,
+  variant = "popover",
   zIndex = 2000,
 }) {
+  const isTooltip = variant === "tooltip";
+
+  if (isTooltip) {
+    trigger = "hover";
+    interactive = false;
+    showArrow = true;
+  }
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const isOpenControlled = controlledOpen !== undefined;
   const open = isOpenControlled ? controlledOpen : uncontrolledOpen;
@@ -366,6 +377,7 @@ export default function Popover({
       className={cn(
         POPOVER_PRIMITIVES.panel,
         palette.panel,
+        isTooltip && TOOLTIP_BASE_CLASSES,
         className,
       )}
       style={{

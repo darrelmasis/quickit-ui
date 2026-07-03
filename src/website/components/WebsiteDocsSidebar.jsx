@@ -49,10 +49,10 @@ export default function WebsiteDocsSidebar({
   );
 
   return (
-    <aside className="hidden self-start lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-3 lg:[scrollbar-width:thin] lg:[scrollbar-color:rgb(163_163_163)_transparent] lg:[&::-webkit-scrollbar]:w-2 lg:[&::-webkit-scrollbar-track]:bg-transparent lg:[&::-webkit-scrollbar-thumb]:rounded-full lg:[&::-webkit-scrollbar-thumb]:border-2 lg:[&::-webkit-scrollbar-thumb]:border-transparent lg:[&::-webkit-scrollbar-thumb]:bg-neutral-300 lg:[&::-webkit-scrollbar-thumb]:bg-clip-content lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:lg:[scrollbar-color:rgb(115_115_115)_transparent] dark:lg:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600">
-      <div className="space-y-8">
+    <aside className="hidden border-r border-neutral-200 dark:border-neutral-800 lg:fixed lg:top-[61px] lg:block lg:h-[calc(100vh-61px)] lg:overflow-y-auto pl-4 sm:pl-6 xl:pl-8 lg:pr-3 lg:[scrollbar-width:thin] lg:[scrollbar-color:rgb(163_163_163)_transparent] lg:[&::-webkit-scrollbar]:w-2 lg:[&::-webkit-scrollbar-track]:bg-transparent lg:[&::-webkit-scrollbar-thumb]:rounded-full lg:[&::-webkit-scrollbar-thumb]:border-2 lg:[&::-webkit-scrollbar-thumb]:border-transparent lg:[&::-webkit-scrollbar-thumb]:bg-neutral-300 lg:[&::-webkit-scrollbar-thumb]:bg-clip-content lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:lg:[scrollbar-color:rgb(115_115_115)_transparent] dark:lg:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:lg:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600">
+      <div className="space-y-8 py-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white">
             Documentación
           </p>
           <nav className="mt-4 space-y-1">
@@ -163,14 +163,14 @@ export default function WebsiteDocsSidebar({
         </div>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white">
             Componentes
           </p>
           <div className="mt-4 space-y-4">
             <For each={componentGroups}>
               {(group, groupIndex) => (
                 <div key={`${group.title}-${groupIndex}`}>
-                  <p className="px-3 text-xs font-medium text-neutral-500 dark:text-neutral-500">
+                  <p className="px-3 text-xs font-medium text-white">
                     {group.title}
                   </p>
                   <div className="mt-2 space-y-1 px-3">

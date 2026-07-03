@@ -46,8 +46,8 @@ export function useQuickitControlState(component, props = {}) {
   useEffect(() => {
     if (process.env.NODE_ENV === "production" || !component) return;
     
-    // Solo aplica a componentes tipo 'button' o 'link' que podrían ser icon-only
-    if (component !== "button" && component !== "link") return;
+    // Solo aplica a componentes que podrían ser icon-only
+    if (component !== "button") return;
 
     const hasLabel = ariaLabel || ariaLabelledBy || title;
     const isIconOnly = shape === "square" || shape === "circle";

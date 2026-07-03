@@ -17,12 +17,37 @@ export const skeletonDoc = {
   previewCode: SKELETON_PREVIEW_CODE,
   preview: <SkeletonPreviewCanvas />,
   installCode: `import { Skeleton } from "quickit-ui";`,
-  usageCode: `import { Skeleton } from "quickit-ui";
-
-export function SkeletonUsage() {
-  return <Skeleton shape="rect" />;
-}`,
   examples: [{
+    id: "ejemplos-variantes",
+    title: "Variantes",
+    description: "Line, rect y circle.",
+    preview: <div className="grid gap-3 sm:grid-cols-3">
+          <Skeleton shape="line" />
+          <Skeleton shape="rect" />
+          <Skeleton shape="circle" />
+        </div>,
+    code: `import { Skeleton } from "quickit-ui";
+
+export function SkeletonVariantes() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-3">
+      <Skeleton shape="line" />
+      <Skeleton shape="rect" />
+      <Skeleton shape="circle" />
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-static",
+    title: "Sin animación",
+    description: "animated=false para estados estáticos.",
+    preview: <Skeleton shape="rect" animated={false} />,
+    code: `import { Skeleton } from "quickit-ui";
+
+export function SkeletonStatic() {
+  return <Skeleton shape="rect" animated={false} />;
+}`
+  }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
@@ -36,19 +61,5 @@ export function SkeletonUsage() {
       defaultValue: "true",
       description: "Habilita la animación shimmer."
     }]
-  }, {
-    id: "ejemplos-variantes",
-    title: "Variantes",
-    description: "Line, rect y circle.",
-    preview: <div className="grid gap-3 sm:grid-cols-3">
-          <Skeleton shape="line" />
-          <Skeleton shape="rect" />
-          <Skeleton shape="circle" />
-        </div>
-  }, {
-    id: "ejemplos-static",
-    title: "Sin animación",
-    description: "animated=false para estados estáticos.",
-    preview: <Skeleton shape="rect" animated={false} />
   }]
 };

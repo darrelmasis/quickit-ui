@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Checkbox, FormControl, Input, Label } from "@/lib";
 export const labelDoc = {
   name: "Label",
@@ -11,36 +12,60 @@ export function LabelPreview() {
       <Label htmlFor="label-preview">Correo</Label>
     </div>,
   installCode: `import { Label } from "quickit-ui";`,
-  usageCode: `import { FormControl, Label, Input } from "quickit-ui";
-
-export function LabelUsage() {
-  return (
-    <FormControl controlId="email" required>
-      <Label>Correo</Label>
-      <Input type="email" />
-    </FormControl>
-  );
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Label simple con htmlFor.",
+    preview: <Label htmlFor="label-basic">Correo electrónico</Label>,
+    code: `import { Label } from "quickit-ui";
+
+export function LabelBasico() {
+  return <Label htmlFor="email">Correo electrónico</Label>;
+}`
+  }, {
     id: "ejemplos-formcontrol",
     title: "Con FormControl",
-    description: "El indicador de requerido se activa automáticamente si el campo es required.",
+    description: "El indicador de requerido se activa automáticamente.",
     preview: <FormControl controlId="label-required" required>
           <Label>Nombre</Label>
           <Input placeholder="Elena Ruiz" />
           <FormControl.Description>Este campo es obligatorio.</FormControl.Description>
-        </FormControl>
+        </FormControl>,
+    code: `import { FormControl, Input, Label } from "quickit-ui";
+
+export function LabelFormControl() {
+  return (
+    <FormControl controlId="nombre" required>
+      <Label>Nombre</Label>
+      <Input placeholder="Elena Ruiz" />
+      <FormControl.Description>Este campo es obligatorio.</FormControl.Description>
+    </FormControl>
+  );
+}`
   }, {
     id: "ejemplos-opcional",
     title: "Optional y requiredIndicator",
-    description: "`optional` muestra un texto auxiliar. `requiredIndicator` personaliza el marcador cuando el campo viene como requerido desde FormControl.",
+    description: "optional muestra texto auxiliar.",
     preview: <div className="flex flex-wrap gap-6">
           <Label optional>Descripción</Label>
-          <FormControl controlId="label-required-indicator" required>
+          <FormControl controlId="label-indicator" required>
             <Label requiredIndicator="Obligatorio">Correo</Label>
             <Input type="email" placeholder="correo@quickit.dev" />
           </FormControl>
-        </div>
+        </div>,
+    code: `import { FormControl, Input, Label } from "quickit-ui";
+
+export function LabelOptional() {
+  return (
+    <div className="flex flex-wrap gap-6">
+      <Label optional>Descripción</Label>
+      <FormControl controlId="correo" required>
+        <Label requiredIndicator="Obligatorio">Correo</Label>
+        <Input type="email" placeholder="correo@quickit.dev" />
+      </FormControl>
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-custom",
     title: "Control externo",
@@ -48,7 +73,17 @@ export function LabelUsage() {
     preview: <div className="flex items-center gap-3">
           <Checkbox id="label-checkbox" />
           <Label htmlFor="label-checkbox">Acepto términos</Label>
-        </div>
+        </div>,
+    code: `import { Checkbox, Label } from "quickit-ui";
+
+export function LabelExterno() {
+  return (
+    <div className="flex items-center gap-3">
+      <Checkbox id="terminos" />
+      <Label htmlFor="terminos">Acepto términos</Label>
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -56,23 +91,23 @@ export function LabelUsage() {
       name: "htmlFor",
       type: "string",
       defaultValue: "context",
-      description: "Asocia el label con un control. Si está dentro de FormControl usa su controlId."
+      description: "Asocia el label con un control."
     }, {
       name: "optional",
       type: "boolean",
       defaultValue: "false",
-      description: "Muestra un indicador de opcional."
+      description: "Muestra indicador de opcional."
     }, {
       name: "requiredIndicator",
       type: "ReactNode | false",
       defaultValue: `"*"`,
-      description: "Personaliza u oculta el indicador cuando FormControl está en `required`."
+      description: "Personaliza el marcador requerido."
     }, {
       name: "size",
       type: `"sm" | "md"`,
       defaultValue: `"md"`,
-      description: "Tamaño tipográfico del label."
+      description: "Tamaño tipográfico."
     }],
-    notes: ["Label acepta atributos nativos de HTMLLabelElement.", "Si `optional` es true, no se renderiza el indicador de requerido.", "Fuera de FormControl, `requiredIndicator` no fuerza por sí solo un marcador; úsalo como personalización del estado requerido contextual."]
+    notes: ["Label acepta atributos nativos de HTMLLabelElement.", "Si optional es true, no se renderiza indicador de requerido."]
   }]
 };

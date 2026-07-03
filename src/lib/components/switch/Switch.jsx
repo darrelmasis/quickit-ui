@@ -51,7 +51,7 @@ const SWITCH_THEME_CLASSES = {
       black: "border-slate-950 bg-slate-950",
     },
     invalid: "border-rose-300 bg-rose-50 focus-visible:outline-rose-400 focus-visible:ring-rose-400/45",
-    thumb: "border-slate-200 bg-white shadow-[0_1px_1px_rgba(15,23,42,0.14)]",
+    thumb: "border-slate-200 bg-white",
     thumbChecked: {
       warning: "border-slate-950 bg-slate-950",
       light: "border-slate-950 bg-slate-950",
@@ -74,7 +74,7 @@ const SWITCH_THEME_CLASSES = {
       black: "border-zinc-950 bg-zinc-950 text-white",
     },
     invalid: "border-rose-500/70 bg-rose-500/18 focus-visible:outline-rose-400",
-    thumb: "border-zinc-300/70 bg-zinc-100 shadow-[0_1px_1px_rgba(0,0,0,0.32)]",
+    thumb: "border-zinc-300/70 bg-zinc-100",
     thumbChecked: {
       black: "border-white bg-white",
       neutral: "border-zinc-950 bg-zinc-950",

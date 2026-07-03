@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Show } from "@/lib";
-const LOGIC_SHOW_PREVIEW_CODE = `import { Show } from "quickit-ui";
+const SHOW_PREVIEW_CODE = `import { Show } from "quickit-ui";
 
 export function ShowPreview({ isReady }) {
   return (
@@ -9,34 +9,51 @@ export function ShowPreview({ isReady }) {
     </Show>
   );
 }`;
-function LogicShowPreviewCanvas() {
+function ShowPreviewCanvas() {
   return <Show when={true} fallback="Cargando...">
       Contenido listo
     </Show>;
 }
 export const showDoc = {
   name: "Show",
-  description: "Render condicional simple con fallback usando la truthiness nativa de JavaScript.",
-  previewCode: LOGIC_SHOW_PREVIEW_CODE,
-  preview: <LogicShowPreviewCanvas />,
+  description: "Render condicional simple con fallback usando truthiness nativa.",
+  previewCode: SHOW_PREVIEW_CODE,
+  preview: <ShowPreviewCanvas />,
   installCode: `import { Show } from "quickit-ui";`,
-  usageCode: `import { Show } from "quickit-ui";
-
-export function ShowUsage({ isReady }) {
-  return (
-    <Show when={isReady} fallback="Cargando...">
-      Contenido listo
-    </Show>
-  );
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Muestra contenido cuando when es truthy, fallback en caso contrario.",
+    preview: <div className="space-y-4">
+          <Show when={true} fallback="Cargando...">
+            <p className="text-sm">Contenido listo</p>
+          </Show>
+          <Show when={false} fallback="Cargando...">
+            <p className="text-sm">No se ve</p>
+          </Show>
+        </div>,
+    code: `import { Show } from "quickit-ui";
+
+export function ShowBasico() {
+  return (
+    <div className="space-y-4">
+      <Show when={true} fallback="Cargando...">
+        <p className="text-sm">Contenido listo</p>
+      </Show>
+      <Show when={false} fallback="Cargando...">
+        <p className="text-sm">No se ve</p>
+      </Show>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
       name: "when",
       type: "T",
       defaultValue: "required",
-      description: "Valor evaluado por truthiness. `0`, `\"\"`, `false`, `null` y `undefined` renderizan el fallback."
+      description: "Valor evaluado por truthiness."
     }, {
       name: "children",
       type: "ReactNode | (value) => ReactNode",
@@ -48,6 +65,6 @@ export function ShowUsage({ isReady }) {
       defaultValue: "undefined",
       description: "Contenido alterno."
     }],
-    notes: ["`Show` no hace comparación booleana estricta: usa la truthiness normal de JavaScript.", "Si quieres renderizar con `0` o `\"\"` como valores válidos, conviértelos antes a una condición explícita."]
+    notes: ["Show usa truthiness nativa de JavaScript.", "Para valores como 0 o \"\" como válidos, convierte a condición explícita."]
   }]
 };

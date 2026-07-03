@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { cn, getControlRadius } from "@/lib/utils";
 import {
-  QUICKIT_ACCENT_COLORS,
+  QUICKIT_SEMANTIC_COLORS,
   QUICKIT_COMPACT_CONTROL_SIZES,
   resolveQuickitToken,
 } from "@/lib/tokens";
@@ -28,6 +28,9 @@ const BADGE_THEME_CLASSES = {
       danger: "border-rose-600 bg-rose-600 text-white",
       warning: "border-amber-400 bg-amber-400 text-neutral-950",
       info: "border-cyan-600 bg-cyan-600 text-white",
+      light: "border-stone-300 bg-stone-300 text-neutral-950",
+      dark: "border-zinc-800 bg-zinc-800 text-white",
+      black: "border-black bg-black text-white",
     },
     soft: {
       neutral: "border-slate-200 bg-slate-50 text-slate-800",
@@ -39,6 +42,9 @@ const BADGE_THEME_CLASSES = {
       danger: "border-rose-200 bg-rose-50 text-rose-800",
       warning: "border-amber-200 bg-amber-50 text-amber-800",
       info: "border-cyan-200 bg-cyan-50 text-cyan-800",
+      light: "border-stone-200 bg-stone-50 text-stone-700",
+      dark: "border-zinc-800 bg-zinc-900 text-white",
+      black: "border-neutral-950 bg-neutral-950 text-white",
     },
     outline: {
       neutral: "border-slate-300 bg-transparent text-slate-800",
@@ -50,6 +56,9 @@ const BADGE_THEME_CLASSES = {
       danger: "border-rose-300 bg-transparent text-rose-800",
       warning: "border-amber-300 bg-transparent text-amber-800",
       info: "border-cyan-300 bg-transparent text-cyan-800",
+      light: "border-stone-300 bg-transparent text-stone-700",
+      dark: "border-zinc-800 bg-transparent text-white",
+      black: "border-zinc-950 bg-transparent text-black",
     },
   },
   dark: {
@@ -63,6 +72,9 @@ const BADGE_THEME_CLASSES = {
       danger: "border-rose-300 bg-rose-300 text-neutral-950",
       warning: "border-amber-300 bg-amber-300 text-neutral-950",
       info: "border-cyan-300 bg-cyan-300 text-neutral-950",
+      light: "border-stone-200 bg-stone-200 text-zinc-950",
+      dark: "border-zinc-800 bg-zinc-800 text-white",
+      black: "border-neutral-950 bg-neutral-950 text-white",
     },
     soft: {
       neutral: "border-zinc-700 bg-zinc-950 text-zinc-200",
@@ -74,6 +86,9 @@ const BADGE_THEME_CLASSES = {
       danger: "border-rose-800 bg-rose-950 text-rose-100",
       warning: "border-amber-800 bg-amber-950 text-amber-100",
       info: "border-cyan-800 bg-cyan-950 text-cyan-100",
+      light: "border-stone-700 bg-stone-800 text-stone-100",
+      dark: "border-zinc-800 bg-zinc-950 text-white",
+      black: "border-neutral-950 bg-neutral-950 text-white",
     },
     outline: {
       neutral: "border-zinc-700 bg-transparent text-zinc-100",
@@ -85,6 +100,9 @@ const BADGE_THEME_CLASSES = {
       danger: "border-rose-500/50 bg-transparent text-rose-300",
       warning: "border-amber-500/50 bg-transparent text-amber-300",
       info: "border-cyan-500/50 bg-transparent text-cyan-300",
+      light: "border-stone-500/50 bg-transparent text-stone-200",
+      dark: "border-zinc-800 bg-transparent text-white",
+      black: "border-neutral-950 bg-transparent text-white",
     },
   },
 };
@@ -108,7 +126,7 @@ const Badge = forwardRef(function Badge(
   const palette =
     BADGE_THEME_CLASSES[theme][variant] ?? BADGE_THEME_CLASSES[theme].soft;
   const resolvedColor = resolveQuickitToken(
-    QUICKIT_ACCENT_COLORS,
+    QUICKIT_SEMANTIC_COLORS,
     color,
     "neutral",
   );

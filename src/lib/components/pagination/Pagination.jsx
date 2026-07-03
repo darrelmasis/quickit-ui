@@ -48,6 +48,7 @@ export function Pagination({
   disabled = false,
   onPageChange,
   page: controlledPage,
+  renderButton,
   siblingCount = 1,
 }) {
   const { isMobile } = useBreakpoint();
@@ -86,6 +87,11 @@ export function Pagination({
     }
   };
 
+  const defaultRenderButton = (props, children) => (
+    <Button {...props}>{children}</Button>
+  );
+  const btn = renderButton || defaultRenderButton;
+
   return (
     <nav
       aria-label="Pagination"
@@ -94,18 +100,19 @@ export function Pagination({
         className,
       )}
     >
-      <Button
-        aria-label="Página anterior"
-        title="Página anterior"
-        shape="square"
-        variant="outline"
-        color={color}
-        size="sm"
-        disabled={disabled || safeCount === 0 || currentPage === 1}
-        onClick={() => setPage(currentPage - 1)}
-      >
-        <ChevronRightIcon className="size-4 rotate-180" />
-      </Button>
+      {btn(
+        {
+          "aria-label": "Página anterior",
+          title: "Página anterior",
+          shape: "square",
+          variant: "outline",
+          color,
+          size: "sm",
+          disabled: disabled || safeCount === 0 || currentPage === 1,
+          onClick: () => setPage(currentPage - 1),
+        },
+        <ChevronRightIcon className="size-4 rotate-180" />,
+      )}
 
       <div
         className={cn(
@@ -114,43 +121,49 @@ export function Pagination({
         )}
       >
         {items.map((item, index) =>
-          typeof item === "number" ? (
-            <Button
-              key={item}
-              shape="square"
-              size="sm"
-              variant={item === currentPage ? "solid" : "outline"}
-              color={color}
-              aria-label={
-                item === currentPage
-                  ? `Página actual, ${item}`
-                  : `Ir a la página ${item}`
-              }
-              aria-current={item === currentPage ? "page" : undefined}
-              onClick={() => setPage(item)}
-            >
-              {item}
-            </Button>
-          ) : (
-            <span key={`${item}-${index}`} className="px-1 text-sm opacity-70">
-              ...
-            </span>
-          ),
+          typeof item === "number"
+            ? btn(
+                {
+                  key: item,
+                  shape: "square",
+                  size: "sm",
+                  variant: item === currentPage ? "solid" : "outline",
+                  color,
+                  "aria-label":
+                    item === currentPage
+                      ? `Página actual, ${item}`
+                      : `Ir a la página ${item}`,
+                  "aria-current":
+                    item === currentPage ? "page" : undefined,
+                  onClick: () => setPage(item),
+                },
+                item,
+              )
+            : (
+              <span
+                key={`${item}-${index}`}
+                className="px-1 text-sm opacity-70"
+              >
+                ...
+              </span>
+            ),
         )}
       </div>
 
-      <Button
-        aria-label="Página siguiente"
-        title="Página siguiente"
-        shape="square"
-        variant="outline"
-        color={color}
-        size="sm"
-        disabled={disabled || safeCount === 0 || currentPage === safeCount}
-        onClick={() => setPage(currentPage + 1)}
-      >
-        <ChevronRightIcon className="size-4" />
-      </Button>
+      {btn(
+        {
+          "aria-label": "Página siguiente",
+          title: "Página siguiente",
+          shape: "square",
+          variant: "outline",
+          color,
+          size: "sm",
+          disabled:
+            disabled || safeCount === 0 || currentPage === safeCount,
+          onClick: () => setPage(currentPage + 1),
+        },
+        <ChevronRightIcon className="size-4" />,
+      )}
 
       {isMobile && safeCount > 0 ? (
         <p className="basis-full text-center text-xs font-medium text-neutral-500 dark:text-neutral-400">

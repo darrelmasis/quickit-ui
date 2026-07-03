@@ -21,6 +21,9 @@ export const INPUT_PRIMITIVES = {
     "disabled:cursor-not-allowed disabled:opacity-60",
     "[&::-webkit-search-cancel-button]:appearance-none",
     "[&::-webkit-search-decoration]:appearance-none",
+    "[&::-webkit-inner-spin-button]:appearance-none",
+    "[&::-webkit-outer-spin-button]:appearance-none",
+    "[-moz-appearance:textfield]",
   ].join(" "),
   shell: "relative min-w-0 w-full",
   group: "relative min-w-0",
@@ -209,9 +212,21 @@ export const INPUT_ACTION_ICON_SIZE_CLASSES = {
   lg: "size-4",
 };
 
+export const INPUT_NUMBER_BUTTON_WIDTH_CLASSES = {
+  sm: "w-7",
+  md: "w-8",
+  lg: "w-9",
+};
+
+export const INPUT_NUMBER_BUTTON_ICON_SIZE_CLASSES = {
+  sm: "size-2.5",
+  md: "size-3",
+  lg: "size-3.5",
+};
+
 export const INPUT_SIDE_ELEMENT_SIZE_CLASSES = {
-  sm: "text-[0.875rem]",
-  md: "text-[0.95rem]",
+  sm: "text-sm",
+  md: "text-sm",
   lg: "text-base",
 };
 
@@ -276,124 +291,124 @@ export const INPUT_GROUP_ALIGNMENT_CLASSES = {
 export const INPUT_GROUP_THEME_CLASSES = {
   light: {
     neutral: {
-      frame: "border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.06)]",
+      frame: "border-slate-300",
       separator: "bg-slate-300",
       focus: "focus-within:ring-slate-400/50",
     },
     slate: {
-      frame: "border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.06)]",
+      frame: "border-slate-300",
       separator: "bg-slate-300",
       focus: "focus-within:ring-slate-400/50",
     },
     zinc: {
-      frame: "border-zinc-300 shadow-[0_1px_2px_rgba(24,24,27,0.06)]",
+      frame: "border-zinc-300",
       separator: "bg-zinc-300",
       focus: "focus-within:ring-zinc-400/50",
     },
     primary: {
-      frame: "border-sky-300/90 shadow-[0_1px_2px_rgba(14,165,233,0.08)]",
+      frame: "border-sky-300/90",
       separator: "bg-sky-300/90",
       focus: "focus-within:ring-sky-400/45",
     },
     brand: {
-      frame: "border-brand-300/90 shadow-[0_1px_2px_rgba(112,56,255,0.08)]",
+      frame: "border-brand-300/90",
       separator: "bg-brand-300/90",
       focus: "focus-within:ring-brand-400/45",
     },
     success: {
-      frame: "border-emerald-300/90 shadow-[0_1px_2px_rgba(16,185,129,0.08)]",
+      frame: "border-emerald-300/90",
       separator: "bg-emerald-300/90",
       focus: "focus-within:ring-emerald-400/45",
     },
     danger: {
-      frame: "border-rose-300/90 shadow-[0_1px_2px_rgba(244,63,94,0.08)]",
+      frame: "border-rose-300/90",
       separator: "bg-rose-300/90",
       focus: "focus-within:ring-rose-400/45",
     },
     warning: {
-      frame: "border-amber-300/90 shadow-[0_1px_2px_rgba(245,158,11,0.08)]",
+      frame: "border-amber-300/90",
       separator: "bg-amber-300/90",
       focus: "focus-within:ring-amber-400/45",
     },
     info: {
-      frame: "border-cyan-300/90 shadow-[0_1px_2px_rgba(6,182,212,0.08)]",
+      frame: "border-cyan-300/90",
       separator: "bg-cyan-300/90",
       focus: "focus-within:ring-cyan-400/45",
     },
     light: {
-      frame: "border-stone-300 shadow-[0_1px_2px_rgba(120,113,108,0.06)]",
+      frame: "border-stone-300",
       separator: "bg-stone-300",
       focus: "focus-within:ring-stone-400/45",
     },
     dark: {
-      frame: "border-zinc-800 shadow-[0_1px_2px_rgba(24,24,27,0.22)]",
+      frame: "border-zinc-800",
       separator: "bg-zinc-800",
       focus: "focus-within:ring-zinc-700/32",
     },
     black: {
-      frame: "border-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.28)]",
+      frame: "border-zinc-950",
       separator: "bg-zinc-950",
       focus: "focus-within:ring-zinc-700/32",
     },
   },
   dark: {
     neutral: {
-      frame: "border-zinc-700 shadow-[0_1px_2px_rgba(0,0,0,0.38)]",
+      frame: "border-zinc-700",
       separator: "bg-zinc-700",
       focus: "focus-within:ring-zinc-500/32",
     },
     slate: {
-      frame: "border-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.36)]",
+      frame: "border-slate-700",
       separator: "bg-slate-700",
       focus: "focus-within:ring-slate-600/30",
     },
     zinc: {
-      frame: "border-zinc-700 shadow-[0_1px_2px_rgba(0,0,0,0.36)]",
+      frame: "border-zinc-700",
       separator: "bg-zinc-700",
       focus: "focus-within:ring-zinc-600/30",
     },
     primary: {
-      frame: "border-sky-500/55 shadow-[0_1px_2px_rgba(14,165,233,0.14)]",
+      frame: "border-sky-500/55",
       separator: "bg-sky-500/55",
       focus: "focus-within:ring-sky-400/30",
     },
     brand: {
-      frame: "border-brand-500/55 shadow-[0_1px_2px_rgba(112,56,255,0.16)]",
+      frame: "border-brand-500/55",
       separator: "bg-brand-500/55",
       focus: "focus-within:ring-brand-400/30",
     },
     success: {
-      frame: "border-emerald-500/55 shadow-[0_1px_2px_rgba(16,185,129,0.14)]",
+      frame: "border-emerald-500/55",
       separator: "bg-emerald-500/55",
       focus: "focus-within:ring-emerald-400/30",
     },
     danger: {
-      frame: "border-rose-500/55 shadow-[0_1px_2px_rgba(244,63,94,0.14)]",
+      frame: "border-rose-500/55",
       separator: "bg-rose-500/55",
       focus: "focus-within:ring-rose-400/30",
     },
     warning: {
-      frame: "border-amber-500/55 shadow-[0_1px_2px_rgba(245,158,11,0.14)]",
+      frame: "border-amber-500/55",
       separator: "bg-amber-500/55",
       focus: "focus-within:ring-amber-400/30",
     },
     info: {
-      frame: "border-cyan-500/55 shadow-[0_1px_2px_rgba(6,182,212,0.14)]",
+      frame: "border-cyan-500/55",
       separator: "bg-cyan-500/55",
       focus: "focus-within:ring-cyan-400/30",
     },
     light: {
-      frame: "border-stone-300/70 shadow-[0_1px_2px_rgba(245,245,244,0.08)]",
+      frame: "border-stone-300/70",
       separator: "bg-stone-300/70",
       focus: "focus-within:ring-stone-300/30",
     },
     dark: {
-      frame: "border-zinc-700 shadow-[0_1px_2px_rgba(0,0,0,0.4)]",
+      frame: "border-zinc-700",
       separator: "bg-zinc-700",
       focus: "focus-within:ring-zinc-600/35",
     },
     black: {
-      frame: "border-zinc-600 shadow-[0_1px_2px_rgba(0,0,0,0.42)]",
+      frame: "border-zinc-600",
       separator: "bg-zinc-600",
       focus: "focus-within:ring-zinc-500/35",
     },

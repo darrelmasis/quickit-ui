@@ -11,112 +11,21 @@ import { useInputGroup } from "@/lib/components/input/input-group.context";
 import { ChevronDownIcon, ChevronRightIcon } from "@/lib/assets/icons";
 import { resolveFormFieldColor } from "@/lib/components/_shared/form-field";
 import { cn } from "@/lib/utils";
-
-function startOfDay(d) {
-  const next = new Date(d);
-  next.setHours(0, 0, 0, 0);
-  return next;
-}
-
-function isSameDay(a, b) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function isSameMonth(a, b) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
-}
-
-function isSameYear(a, b) {
-  return a.getFullYear() === b.getFullYear();
-}
-
-function clampDate(d, min, max) {
-  if (min && d < min) {
-    return new Date(min);
-  }
-  if (max && d > max) {
-    return new Date(max);
-  }
-  return d;
-}
-
-function dayTime(d) {
-  return startOfDay(d).getTime();
-}
-
-function startOfMonth(d) {
-  return new Date(d.getFullYear(), d.getMonth(), 1);
-}
-
-function endOfMonth(d) {
-  return new Date(d.getFullYear(), d.getMonth() + 1, 0);
-}
-
-function startOfYear(d) {
-  return new Date(d.getFullYear(), 0, 1);
-}
-
-function endOfYear(d) {
-  return new Date(d.getFullYear(), 11, 31);
-}
-
-function monthOutsideRange(d, min, max) {
-  const start = startOfMonth(d);
-  const end = endOfMonth(d);
-  return (min && end < min) || (max && start > max) || false;
-}
-
-function yearOutsideRange(d, min, max) {
-  const start = startOfYear(d);
-  const end = endOfYear(d);
-  return (min && end < min) || (max && start > max) || false;
-}
-
-function isStrictlyBetween(date, a, b) {
-  const t = dayTime(date);
-  const lo = Math.min(dayTime(a), dayTime(b));
-  const hi = Math.max(dayTime(a), dayTime(b));
-  return t > lo && t < hi;
-}
-
-function parseSingleValue(raw) {
-  if (raw == null || raw === "") {
-    return null;
-  }
-
-  const parsed = new Date(raw);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return null;
-  }
-
-  return startOfDay(parsed);
-}
-
-function parseRangeValue(raw) {
-  if (raw == null) {
-    return { from: null, to: null };
-  }
-  const from = raw.from != null ? parseSingleValue(raw.from) : null;
-  const to = raw.to != null ? parseSingleValue(raw.to) : null;
-  return { from, to };
-}
-
-function serializeDateValue(value) {
-  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
-    return "";
-  }
-
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, "0");
-  const day = String(value.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
+import {
+  clampDate,
+  dayTime,
+  isSameDay,
+  isSameMonth,
+  isSameYear,
+  isStrictlyBetween,
+  monthOutsideRange,
+  parseRangeValue,
+  parseSingleValue,
+  serializeDateValue,
+  startOfDay,
+  startOfMonth,
+  yearOutsideRange,
+} from "./date-utils";
 
 const WEEKDAYS = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"];
 const MONTH_LABELS = Array.from({ length: 12 }, (_, monthIndex) =>

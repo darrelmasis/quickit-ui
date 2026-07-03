@@ -1,29 +1,18 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Tabs } from "@/lib";
+import { QUICKIT_CONTROL_SIZES, QUICKIT_SEMANTIC_COLORS } from "@/lib/tokens";
 const TABS_PREVIEW_CODE = `import { Tabs } from "quickit-ui";
 
 export function TabsPreview() {
   return (
-    <>
-      <Tabs defaultValue="overview">
-        <Tabs.List>
-          <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-          <Tabs.Trigger value="stats">Stats</Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="overview">Resumen</Tabs.Content>
-        <Tabs.Content value="stats">Métricas</Tabs.Content>
-      </Tabs>
-      <Tabs defaultValue="overview" size="sm">
-        <Tabs.List>
-          <Tabs.Trigger value="overview">Resumen</Tabs.Trigger>
-          <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
-          <Tabs.Trigger value="billing">Pago</Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="overview">Contenido corto.</Tabs.Content>
-        <Tabs.Content value="team">Miembros.</Tabs.Content>
-        <Tabs.Content value="billing">Métodos.</Tabs.Content>
-      </Tabs>
-    </>
+    <Tabs defaultValue="overview">
+      <Tabs.List>
+        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        <Tabs.Trigger value="stats">Stats</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="overview">Resumen</Tabs.Content>
+      <Tabs.Content value="stats">Métricas</Tabs.Content>
+    </Tabs>
   );
 }`;
 function TabsPreviewCanvas() {
@@ -36,16 +25,6 @@ function TabsPreviewCanvas() {
         <Tabs.Content value="overview">Resumen</Tabs.Content>
         <Tabs.Content value="stats">Métricas</Tabs.Content>
       </Tabs>
-      <Tabs defaultValue="overview" size="sm">
-        <Tabs.List>
-          <Tabs.Trigger value="overview">Resumen</Tabs.Trigger>
-          <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
-          <Tabs.Trigger value="billing">Pago</Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="overview">Contenido corto.</Tabs.Content>
-        <Tabs.Content value="team">Miembros.</Tabs.Content>
-        <Tabs.Content value="billing">Métodos.</Tabs.Content>
-      </Tabs>
     </div>;
 }
 export const tabsDoc = {
@@ -54,9 +33,23 @@ export const tabsDoc = {
   previewCode: TABS_PREVIEW_CODE,
   preview: <TabsPreviewCanvas />,
   installCode: `import { Tabs } from "quickit-ui";`,
-  usageCode: `import { Tabs } from "quickit-ui";
+  examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Tabs simples con contenido.",
+    preview: <div className="w-full max-w-md">
+        <Tabs defaultValue="overview">
+          <Tabs.List>
+            <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+            <Tabs.Trigger value="stats">Stats</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="overview">Resumen de la cuenta.</Tabs.Content>
+          <Tabs.Content value="stats">Métricas de uso.</Tabs.Content>
+        </Tabs>
+      </div>,
+    code: `import { Tabs } from "quickit-ui";
 
-export function TabsUsage() {
+export function TabsBasico() {
   return (
     <Tabs defaultValue="overview">
       <Tabs.List>
@@ -67,8 +60,48 @@ export function TabsUsage() {
       <Tabs.Content value="stats">Métricas</Tabs.Content>
     </Tabs>
   );
-}`,
-  examples: [{
+}`
+  }, {
+    id: "ejemplos-tamanos",
+    title: "Tamaños",
+    description: `Sizes disponibles: ${QUICKIT_CONTROL_SIZES.join(", ")}.`,
+    preview: <div className="space-y-4">
+          <Tabs defaultValue="a" size="sm">
+            <Tabs.List><Tabs.Trigger value="a">Small</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
+            <Tabs.Content value="a">Contenido small.</Tabs.Content>
+            <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+          </Tabs>
+          <Tabs defaultValue="a" size="md">
+            <Tabs.List><Tabs.Trigger value="a">Medium</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
+            <Tabs.Content value="a">Contenido medium.</Tabs.Content>
+            <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+          </Tabs>
+        </div>,
+    code: `import { Tabs } from "quickit-ui";
+
+export function TabsTamanos() {
+  return (
+    <div className="space-y-4">
+      <Tabs defaultValue="a" size="sm">
+        <Tabs.List>
+          <Tabs.Trigger value="a">Small</Tabs.Trigger>
+          <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="a">Contenido small.</Tabs.Content>
+        <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+      </Tabs>
+      <Tabs defaultValue="a" size="md">
+        <Tabs.List>
+          <Tabs.Trigger value="a">Medium</Tabs.Trigger>
+          <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="a">Contenido medium.</Tabs.Content>
+        <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+      </Tabs>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-orientacion",
     title: "Orientación vertical",
     description: "Tabs puede orientarse verticalmente.",
@@ -79,7 +112,21 @@ export function TabsUsage() {
           </Tabs.List>
           <Tabs.Content value="overview">Resumen</Tabs.Content>
           <Tabs.Content value="stats">Métricas</Tabs.Content>
-        </Tabs>
+        </Tabs>,
+    code: `import { Tabs } from "quickit-ui";
+
+export function TabsVertical() {
+  return (
+    <Tabs defaultValue="overview" orientation="vertical">
+      <Tabs.List>
+        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        <Tabs.Trigger value="stats">Stats</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="overview">Resumen</Tabs.Content>
+      <Tabs.Content value="stats">Métricas</Tabs.Content>
+    </Tabs>
+  );
+}`
   }, {
     id: "ejemplos-manual",
     title: "Activación manual",
@@ -91,46 +138,39 @@ export function TabsUsage() {
           </Tabs.List>
           <Tabs.Content value="overview">Resumen</Tabs.Content>
           <Tabs.Content value="stats">Métricas</Tabs.Content>
-        </Tabs>
+        </Tabs>,
+    code: `import { Tabs } from "quickit-ui";
+
+export function TabsManual() {
+  return (
+    <Tabs defaultValue="overview" activationMode="manual">
+      <Tabs.List>
+        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        <Tabs.Trigger value="stats">Stats</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="overview">Resumen</Tabs.Content>
+      <Tabs.Content value="stats">Métricas</Tabs.Content>
+    </Tabs>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
-      name: "defaultValue",
-      type: "string",
-      defaultValue: "undefined",
-      description: "Tab inicial."
+      name: "defaultValue", type: "string", defaultValue: "undefined", description: "Tab inicial."
     }, {
-      name: "value",
-      type: "string",
-      defaultValue: "undefined",
-      description: "Controla el tab activo."
+      name: "value", type: "string", defaultValue: "undefined", description: "Controla el tab activo."
     }, {
-      name: "onValueChange",
-      type: "(value: string) => void",
-      defaultValue: "undefined",
-      description: "Callback al cambiar tab."
+      name: "onValueChange", type: "(value) => void", defaultValue: "undefined", description: "Callback al cambiar tab."
     }, {
-      name: "orientation",
-      type: `"horizontal" | "vertical"`,
-      defaultValue: `"horizontal"`,
-      description: "Orientación de la lista."
+      name: "orientation", type: `"horizontal" | "vertical"`, defaultValue: `"horizontal"`, description: "Orientación."
     }, {
-      name: "activationMode",
-      type: `"automatic" | "manual"`,
-      defaultValue: `"automatic"`,
-      description: "Modo de activación con teclado."
+      name: "activationMode", type: `"automatic" | "manual"`, defaultValue: `"automatic"`, description: "Modo de activación con teclado."
     }, {
-      name: "size",
-      type: "QuickitTabSize",
-      defaultValue: `"md"`,
-      description: "Tamaño visual del tab."
+      name: "size", type: "QuickitTabSize", defaultValue: `"md"`, description: "Tamaño visual."
     }, {
-      name: "color",
-      type: "QuickitSemanticColor",
-      defaultValue: `"neutral"`,
-      description: "Color activo."
+      name: "color", type: "QuickitSemanticColor", defaultValue: `"neutral"`, description: "Color activo."
     }],
-    notes: ["Tabs.Trigger requiere prop value (TabsTrigger sigue exportado con nombre).", "Tabs.Content acepta forceMount.", "Pasa siempre `defaultValue` o `value` para que exista un tab seleccionado desde el primer render.", "Si necesitas handlers o atributos nativos extra en `Tabs.Trigger`, comprueba la versión de runtime que estás consumiendo porque la superficie HTML aún se está consolidando."]
+    notes: ["Tabs.Trigger requiere prop value.", "Tabs.Content acepta forceMount.", "Pasa siempre defaultValue o value para que exista un tab seleccionado desde el primer render."]
   }]
 };

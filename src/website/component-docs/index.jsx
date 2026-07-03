@@ -1,4 +1,5 @@
 import { buttonDoc } from "@/website/component-docs/button.doc";
+import { buttonGroupDoc } from "@/website/component-docs/button-group.doc";
 import { linkDoc } from "@/website/component-docs/link.doc";
 import { badgeDoc } from "@/website/component-docs/badge.doc";
 import { alertDoc } from "@/website/component-docs/alert.doc";
@@ -38,6 +39,7 @@ import { forDoc } from "@/website/component-docs/for.doc";
 import { animateDoc } from "@/website/component-docs/animate.doc";
 export const COMPONENT_DOCS = {
   "button": buttonDoc,
+  "button-group": buttonGroupDoc,
   "link": linkDoc,
   "badge": badgeDoc,
   "alert": alertDoc,

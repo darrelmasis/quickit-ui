@@ -18,7 +18,7 @@ const RANGE_PRIMITIVES = {
   track: "relative h-2 w-full grow overflow-hidden rounded-full border",
   range: "absolute",
   thumb: [
-    "block size-5 rounded-full border bg-white shadow-sm ring-offset-white",
+    "block size-5 rounded-full border bg-white ring-offset-white",
     "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
   ].join(" "),
@@ -676,7 +676,7 @@ const Range = forwardRef(function Range(
                       RANGE_PRIMITIVES.thumb,
                     ),
                     ui.thumb,
-                    hoveredThumb === "start" && "shadow-md",
+                    hoveredThumb === "start" && "",
                   )}
                 />
               </span>
@@ -690,7 +690,7 @@ const Range = forwardRef(function Range(
                   RANGE_PRIMITIVES.thumb,
                 ),
                 ui.thumb,
-                hoveredThumb === "start" && "shadow-md",
+                hoveredThumb === "start" && "",
                 "absolute z-10",
                 isVertical
                   ? "left-1/2 -translate-x-1/2"
@@ -733,7 +733,7 @@ const Range = forwardRef(function Range(
                       RANGE_PRIMITIVES.thumb,
                     ),
                     ui.thumb,
-                    hoveredThumb === "end" && "shadow-md",
+                    hoveredThumb === "end" && "",
                   )}
                 />
               </span>
@@ -747,7 +747,7 @@ const Range = forwardRef(function Range(
                   RANGE_PRIMITIVES.thumb,
                 ),
                 ui.thumb,
-                hoveredThumb === "end" && "shadow-md",
+                hoveredThumb === "end" && "",
                 "absolute z-10",
                 isVertical
                   ? "left-1/2 -translate-x-1/2"

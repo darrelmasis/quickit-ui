@@ -769,10 +769,16 @@ export const WEBSITE_COMPONENT_GROUPS = [
         name: "Badge",
         description: "Etiqueta compacta para estado, categoría o recuento.",
       },
+      {
+        slug: "button-group",
+        name: "ButtonGroup",
+        isNew: true,
+        description: "Agrupa botones en un contenedor visual conectado.",
+      },
     ],
   },
   {
-    title: "Formularios",
+    title: "Campos",
     items: [
       {
         slug: "form-control",
@@ -790,17 +796,6 @@ export const WEBSITE_COMPONENT_GROUPS = [
         description: "Campo base con support para search, password y addons.",
       },
       {
-        slug: "input-group",
-        name: "InputGroup",
-        description: "Contenedor para inputs, addons y acciones acopladas.",
-      },
-      {
-        slug: "range",
-        name: "Range",
-        isNew: true,
-        description: "Slider nativo con tokens de color y tamaño.",
-      },
-      {
         slug: "textarea",
         name: "Textarea",
         description: "Área de texto multi línea alineada con Input.",
@@ -813,20 +808,7 @@ export const WEBSITE_COMPONENT_GROUPS = [
       {
         slug: "combobox",
         name: "Combobox",
-        isNew: true,
         description: "Lista filtrable con campo de búsqueda integrado.",
-      },
-      {
-        slug: "date-picker",
-        name: "DatePicker",
-        isNew: true,
-        description: "Selector de fecha con calendario en popover.",
-      },
-      {
-        slug: "time-picker",
-        name: "TimePicker",
-        isNew: true,
-        description: "Selector de hora con listas de horas y minutos.",
       },
       {
         slug: "checkbox",
@@ -842,6 +824,76 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "switch",
         name: "Switch",
         description: "Toggle visual para estados activado/desactivado.",
+      },
+      {
+        slug: "range",
+        name: "Range",
+        description: "Slider nativo con tokens de color y tamaño.",
+      },
+    ],
+  },
+  {
+    title: "Visuales",
+    items: [
+      {
+        slug: "avatar",
+        name: "Avatar",
+        description: "Avatar base con grupo, presencia, initials y chip.",
+      },
+      {
+        slug: "progress",
+        name: "Progress",
+        description: "Indicador de progreso lineal con color y tamaño.",
+      },
+      {
+        slug: "skeleton",
+        name: "Skeleton",
+        description: "Marcador de carga para line, rect y circle.",
+      },
+    ],
+  },
+  {
+    title: "Lógicas",
+    items: [
+      {
+        slug: "show",
+        name: "Show",
+        description: "Render condicional simple con fallback.",
+      },
+      {
+        slug: "render-switch",
+        name: "RenderSwitch",
+        description: "Control declarativo para varios estados posibles.",
+      },
+      {
+        slug: "for",
+        name: "For",
+        description: "Iteración declarativa con fallback vacío.",
+      },
+      {
+        slug: "animate",
+        name: "Animate",
+        description: "Ciclo declarativo de entrada/salida para animaciones simples.",
+      },
+    ],
+  },
+  {
+    title: "Selectores compuestos",
+    items: [
+      {
+        slug: "input-group",
+        name: "InputGroup",
+        description: "Contenedor para inputs, addons y acciones acopladas.",
+      },
+      {
+        slug: "date-picker",
+        name: "DatePicker",
+        description: "Selector de fecha con calendario en popover.",
+      },
+      {
+        slug: "time-picker",
+        name: "TimePicker",
+        description: "Selector de hora con listas de horas y minutos.",
       },
     ],
   },
@@ -871,7 +923,6 @@ export const WEBSITE_COMPONENT_GROUPS = [
       {
         slug: "stepper",
         name: "Stepper",
-        isNew: true,
         description: "Pasos numerados para flujos guiados.",
       },
     ],
@@ -887,7 +938,6 @@ export const WEBSITE_COMPONENT_GROUPS = [
       {
         slug: "drawer",
         name: "Drawer",
-        isNew: true,
         description: "Panel lateral o inferior con overlay y acciones.",
       },
       {
@@ -908,8 +958,27 @@ export const WEBSITE_COMPONENT_GROUPS = [
       {
         slug: "command-palette",
         name: "CommandPalette",
-        isNew: true,
         description: "Paleta de comandos con búsqueda y atajo Ctrl+K.",
+      },
+    ],
+  },
+  {
+    title: "Estado",
+    items: [
+      {
+        slug: "alert",
+        name: "Alert",
+        description: "Mensaje inline con dismiss manual y auto-dismiss opcional.",
+      },
+      {
+        slug: "toaster",
+        name: "Toaster",
+        description: "Toasts con portal; monta `<Toaster />` y usa `toast()`.",
+      },
+      {
+        slug: "empty-state",
+        name: "EmptyState",
+        description: "Estado vacío con título, descripción y acciones.",
       },
     ],
   },
@@ -919,71 +988,7 @@ export const WEBSITE_COMPONENT_GROUPS = [
       {
         slug: "data-table",
         name: "DataTable",
-        isNew: true,
         description: "Tabla con ordenación por columnas y cabecera sticky.",
-      },
-    ],
-  },
-  {
-    title: "Estado e identidad",
-    items: [
-      {
-        slug: "alert",
-        name: "Alert",
-        isNew: true,
-        description: "Mensaje inline con dismiss manual y auto-dismiss opcional.",
-      },
-      {
-        slug: "avatar",
-        name: "Avatar",
-        description: "Avatar base con grupo, presencia, initials y chip.",
-      },
-      {
-        slug: "progress",
-        name: "Progress",
-        isNew: true,
-        description: "Indicador de progreso lineal con color y tamaño.",
-      },
-      {
-        slug: "toaster",
-        name: "Toaster",
-        isNew: true,
-        description: "Toasts con portal; monta `<Toaster />` y usa `toast()`.",
-      },
-      {
-        slug: "empty-state",
-        name: "EmptyState",
-        description: "Estado vacío con título, descripción y acciones.",
-      },
-      {
-        slug: "skeleton",
-        name: "Skeleton",
-        description: "Marcador de carga para line, rect y circle.",
-      },
-    ],
-  },
-  {
-    title: "Utilidades lógicas",
-    items: [
-      {
-        slug: "show",
-        name: "Show",
-        description: "Render condicional simple con fallback.",
-      },
-      {
-        slug: "render-switch",
-        name: "RenderSwitch",
-        description: "Control declarativo para varios estados posibles.",
-      },
-      {
-        slug: "for",
-        name: "For",
-        description: "Iteración declarativa con fallback vacío.",
-      },
-      {
-        slug: "animate",
-        name: "Animate",
-        description: "Ciclo declarativo de entrada/salida para animaciones simples.",
       },
     ],
   },

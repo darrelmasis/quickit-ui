@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { For } from "@/lib";
-const LOGIC_FOR_PREVIEW_CODE = `import { For } from "quickit-ui";
+const FOR_PREVIEW_CODE = `import { For } from "quickit-ui";
 
 export function ForPreview({ items }) {
   return (
@@ -9,33 +9,44 @@ export function ForPreview({ items }) {
     </For>
   );
 }`;
-function LogicForPreviewCanvas() {
-  return <For each={[{
-    id: 1,
-    label: "Primero"
-  }, {
-    id: 2,
-    label: "Segundo"
-  }]}>
+function ForPreviewCanvas() {
+  return <For each={[{ id: 1, label: "Primero" }, { id: 2, label: "Segundo" }]}>
       {item => <div key={item.id}>{item.label}</div>}
     </For>;
 }
 export const forDoc = {
   name: "For",
   description: "Iteración declarativa con fallback vacío.",
-  previewCode: LOGIC_FOR_PREVIEW_CODE,
-  preview: <LogicForPreviewCanvas />,
+  previewCode: FOR_PREVIEW_CODE,
+  preview: <ForPreviewCanvas />,
   installCode: `import { For } from "quickit-ui";`,
-  usageCode: `import { For } from "quickit-ui";
-
-export function ForUsage({ items }) {
-  return (
-    <For each={items} fallback="Sin datos">
-      {(item) => <div key={item.id}>{item.label}</div>}
-    </For>
-  );
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Itera un array con fallback cuando está vacío.",
+    preview: <div className="space-y-4">
+          <For each={[{ id: 1, label: "Primero" }, { id: 2, label: "Segundo" }]}>
+            {item => <div key={item.id} className="text-sm">{item.label}</div>}
+          </For>
+          <For each={[]} fallback={<p className="text-sm text-neutral-500">Sin datos</p>}>
+            {item => <div key={item.id} className="text-sm">{item.label}</div>}
+          </For>
+        </div>,
+    code: `import { For } from "quickit-ui";
+
+export function ForBasico() {
+  return (
+    <div className="space-y-4">
+      <For each={[{ id: 1, label: "Primero" }, { id: 2, label: "Segundo" }]}>
+        {(item) => <div key={item.id} className="text-sm">{item.label}</div>}
+      </For>
+      <For each={[]} fallback={<p className="text-sm text-neutral-500">Sin datos</p>}>
+        {(item) => <div key={item.id} className="text-sm">{item.label}</div>}
+      </For>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
@@ -52,8 +63,8 @@ export function ForUsage({ items }) {
       name: "fallback",
       type: "ReactNode | (items) => ReactNode",
       defaultValue: "undefined",
-      description: "Render cuando no hay items."
+      description: "Render sin items."
     }],
-    notes: ["`For` no genera keys por ti; devuelve nodos con `key` estable dentro del render de cada item."]
+    notes: ["For no genera keys por ti; define key dentro del render de cada item."]
   }]
 };

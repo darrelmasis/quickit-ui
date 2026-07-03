@@ -98,6 +98,8 @@ export const QUICKIT_TAB_SIZES = Object.freeze([
   "lg",
 ]);
 
+export const QUICKIT_EASE_DEFAULT = "cubic-bezier(0.22, 1, 0.36, 1)";
+
 export const QUICKIT_BREAKPOINTS = Object.freeze({
   sm: 640,
   md: 768,

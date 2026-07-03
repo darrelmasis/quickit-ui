@@ -1,4 +1,5 @@
 export * from './avatar'
+export * from './button-group'
 export * from './accordion'
 export * from './alert'
 export * from './badge'

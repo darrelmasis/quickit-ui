@@ -9,22 +9,23 @@ function CommandPaletteDocPreview() {
       </Button>
       <CommandPalette open={open} onOpenChange={setOpen} shortcutEnabled={false} groups={[{
       heading: "Acciones",
-      items: [{
-        id: "home",
-        label: "Ir al inicio",
-        onSelect: () => {}
-      }, {
-        id: "search",
-        label: "Buscar",
-        keywords: ["find", "buscar"],
-        onSelect: () => {}
-      }]
+      items: [{ id: "home", label: "Ir al inicio", onSelect: () => {} }, { id: "search", label: "Buscar", keywords: ["find", "buscar"], onSelect: () => {} }]
+    }]} />
+    </div>;
+}
+function CommandPaletteBasicoEjemplo() {
+  const [open, setOpen] = useState(false);
+  return <div className="space-y-3">
+      <Button type="button" onClick={() => setOpen(true)}>Abrir paleta</Button>
+      <CommandPalette open={open} onOpenChange={setOpen} shortcutEnabled={false} groups={[{
+      heading: "Acciones",
+      items: [{ id: "home", label: "Ir al inicio", onSelect: () => {} }, { id: "search", label: "Buscar", onSelect: () => {} }]
     }]} />
     </div>;
 }
 export const commandPaletteDoc = {
   name: "CommandPalette",
-  description: "Paleta de comandos con búsqueda, basada en `Modal`. Puede registrar atajo Ctrl+K / Cmd+K como paleta principal de la página.",
+  description: "Paleta de comandos con búsqueda basada en Modal. Atajo Ctrl+K / Cmd+K.",
   previewCode: `import { CommandPalette } from "quickit-ui";
 
 export function CommandPalettePreview() {
@@ -38,77 +39,77 @@ export function CommandPalettePreview() {
 }`,
   preview: <CommandPaletteDocPreview />,
   installCode: `import { CommandPalette } from "quickit-ui";`,
-  usageCode: `import { useState } from "react";
+  examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Paleta de comandos con grupos e items.",
+    preview: <CommandPaletteBasicoEjemplo />,
+    code: `import { useState } from "react";
 import { Button, CommandPalette } from "quickit-ui";
 
-export function CommandPaletteUsage() {
+export function CommandPaletteBasico() {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <Button onClick={() => setOpen(true)}>Abrir paleta</Button>
+    <div className="space-y-3">
+      <Button type="button" onClick={() => setOpen(true)}>
+        Abrir paleta
+      </Button>
       <CommandPalette
         open={open}
         onOpenChange={setOpen}
         groups={[
           {
             heading: "Acciones",
-            items: [{ id: "x", label: "Salir", onSelect: () => {} }],
+            items: [
+              { id: "home", label: "Ir al inicio", onSelect: () => {} },
+              { id: "search", label: "Buscar", onSelect: () => {} },
+            ],
           },
         ]}
       />
-    </>
+    </div>
   );
-}`,
-  examples: [{
+}`
+  }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
       name: "open / onOpenChange",
       type: "boolean / función",
       defaultValue: "undefined",
-      description: "Control del modal de la paleta."
+      description: "Control del modal."
     }, {
       name: "groups",
       type: "{ heading?, items: { id, label, keywords?, onSelect? }[] }[]",
       defaultValue: "[]",
-      description: "Comandos agrupados y filtrables por texto o keywords."
+      description: "Comandos agrupados y filtrables."
     }, {
       name: "title",
       type: "ReactNode",
       defaultValue: `"Comandos"`,
-      description: "Título del modal en el header de la paleta."
+      description: "Título del header."
     }, {
       name: "placeholder",
       type: "string",
       defaultValue: `"Buscar comando…"`,
-      description: "Placeholder del input de búsqueda."
+      description: "Placeholder del input."
     }, {
       name: "emptyText",
       type: "string",
       defaultValue: `"Sin resultados"`,
-      description: "Texto mostrado cuando ningún item coincide con la búsqueda."
-    }, {
-      name: "headerTrailing",
-      type: "ReactNode",
-      defaultValue: "undefined",
-      description: "Contenido opcional alineado a la derecha del header."
-    }, {
-      name: "shortcutLabel",
-      type: "string",
-      defaultValue: `"Ctrl+K"`,
-      description: "Texto mostrado junto al título (solo informativo)."
+      description: "Texto sin coincidencias."
     }, {
       name: "shortcutEnabled",
       type: "boolean",
       defaultValue: "true",
-      description: "Registra el atajo global Ctrl+K / Cmd+K. Desactívalo en instancias secundarias o demos embebidas."
+      description: "Registra atajo global Ctrl+K."
     }, {
       name: "autoFocusOnOpen",
       type: "boolean",
       defaultValue: "true",
-      description: "Enfoca y selecciona el input de búsqueda al abrir la paleta."
+      description: "Enfoca input al abrir."
     }],
-    notes: ["El atajo global se registra mientras el componente está montado.", "La librería evita que se abran todas a la vez: solo una instancia dueña del shortcut responde al atajo global.", "Cada instancia genera IDs internos únicos para `aria-controls` y `aria-activedescendant`, incluso si repites ids de comandos en grupos distintos.", "Aun así, la recomendación práctica es tener una sola paleta global por página y usar `shortcutEnabled={false}` en instancias secundarias o previews.", "En demos embebidas dentro de docs o dashboards con varios overlays, suele convenir abrirla con un botón y desactivar el shortcut global localmente."]
+    notes: ["El atajo global se registra mientras el componente está montado.", "Usa shortcutEnabled={false} en instancias secundarias.", "Recomendación: una sola paleta global por página."]
   }]
 };

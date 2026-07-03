@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Default, Match, RenderSwitch } from "@/lib";
-const LOGIC_SWITCH_PREVIEW_CODE = `import { RenderSwitch, Match, Default } from "quickit-ui";
+const RENDER_SWITCH_PREVIEW_CODE = `import { RenderSwitch, Match, Default } from "quickit-ui";
 
-export function SwitchPreview({ status }) {
+export function RenderSwitchPreview({ status }) {
   return (
     <RenderSwitch value={status}>
       <Match when="success">Todo bien</Match>
@@ -11,7 +11,7 @@ export function SwitchPreview({ status }) {
     </RenderSwitch>
   );
 }`;
-function LogicSwitchPreviewCanvas() {
+function RenderSwitchPreviewCanvas() {
   return <RenderSwitch value="success">
       <Match when="success">Todo bien</Match>
       <Match when="error">Algo falló</Match>
@@ -21,21 +21,30 @@ function LogicSwitchPreviewCanvas() {
 export const renderSwitchDoc = {
   name: "RenderSwitch",
   description: "Control declarativo para varios estados posibles.",
-  previewCode: LOGIC_SWITCH_PREVIEW_CODE,
-  preview: <LogicSwitchPreviewCanvas />,
+  previewCode: RENDER_SWITCH_PREVIEW_CODE,
+  preview: <RenderSwitchPreviewCanvas />,
   installCode: `import { RenderSwitch, Match, Default } from "quickit-ui";`,
-  usageCode: `import { RenderSwitch, Match, Default } from "quickit-ui";
+  examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "RenderSwitch con Match y Default.",
+    preview: <RenderSwitch value="success">
+          <Match when="success">Todo bien</Match>
+          <Match when="error">Algo falló</Match>
+          <Default>En espera</Default>
+        </RenderSwitch>,
+    code: `import { Default, Match, RenderSwitch } from "quickit-ui";
 
-export function SwitchUsage({ status }) {
+export function RenderSwitchBasico() {
   return (
-    <RenderSwitch value={status}>
+    <RenderSwitch value="success">
       <Match when="success">Todo bien</Match>
       <Match when="error">Algo falló</Match>
       <Default>En espera</Default>
     </RenderSwitch>
   );
-}`,
-  examples: [{
+}`
+  }, {
     id: "ejemplos-props",
     title: "Props",
     props: [{
@@ -49,6 +58,6 @@ export function SwitchUsage({ status }) {
       defaultValue: "undefined",
       description: "Contenido si no hay Match/Default."
     }],
-    notes: ["Match acepta when como valor, array o función.", "Default define el contenido por defecto.", "`Match` y `Default` deben renderizarse como hijos directos de `RenderSwitch` para que el componente pueda resolverlos correctamente."]
+    notes: ["Match acepta when como valor, array o función.", "Default define el contenido por defecto.", "Match y Default deben ser hijos directos de RenderSwitch."]
   }]
 };

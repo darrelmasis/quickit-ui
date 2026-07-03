@@ -192,8 +192,6 @@ export const BreadcrumbCurrent = forwardRef(function BreadcrumbCurrent(
   );
 });
 
-export const BreadcrumbPage = BreadcrumbCurrent;
-
 export const BreadcrumbSeparator = forwardRef(function BreadcrumbSeparator(
   { children, className, ...props },
   ref,
@@ -214,37 +212,11 @@ export const BreadcrumbSeparator = forwardRef(function BreadcrumbSeparator(
   );
 });
 
-export const BreadcrumbEllipsis = ({
-  className,
-  ...props
-}) => {
-  const { theme } = useQuickitControlState("breadcrumb");
-  const ui = BREADCRUMB_THEME_CLASSES[theme];
-
-  return (
-    <span
-      role="presentation"
-      aria-hidden="true"
-      className={cn(
-        "flex h-9 w-9 items-center justify-center",
-        ui.text,
-        className,
-      )}
-      {...props}
-    >
-      <span className="sr-only">Más opciones</span>
-      ...
-    </span>
-  );
-};
-
 Breadcrumb.Item = BreadcrumbItem;
 Breadcrumb.List = BreadcrumbList;
 Breadcrumb.Link = BreadcrumbLink;
-Breadcrumb.Page = BreadcrumbPage;
 Breadcrumb.Current = BreadcrumbCurrent;
 Breadcrumb.Separator = BreadcrumbSeparator;
-Breadcrumb.Ellipsis = BreadcrumbEllipsis;
 
 export { Breadcrumb };
 export default Breadcrumb;

@@ -48,7 +48,6 @@ import {
 } from "@/lib/tokens";
 import {
   WEBSITE_ROUTES,
-  WEBSITE_SHELL,
   getWebsiteComponentRoute,
 } from "@/website/site-config";
 import {
@@ -86,7 +85,6 @@ import {
 } from "@/website/docs-navigation";
 import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 import WebsiteDocsSidebar from "@/website/components/WebsiteDocsSidebar";
-import WebsitePageToc from "@/website/components/WebsitePageToc";
 import WebsitePreviewTabs from "@/website/components/WebsitePreviewTabs";
 import WebsiteSection from "@/website/components/WebsiteSection";
 
@@ -388,7 +386,6 @@ function getComponentSections(slug) {
   const sections = [
     { id: "ejemplo-visual", label: "Ejemplo visual y código" },
     { id: "instalacion", label: "Instalación" },
-    { id: "uso", label: "Uso" },
   ];
 
   if (doc.props?.length) {
@@ -1187,10 +1184,6 @@ function ComponentPage({ component }) {
             <WebsiteCodeBlock code={doc.installCode} language="jsx" />
           </WebsiteSection>
 
-          <WebsiteSection id="uso" title="Uso">
-            <WebsiteCodeBlock code={doc.usageCode} language="jsx" />
-          </WebsiteSection>
-
           <Show when={doc.tokenGroups?.length}>
             <WebsiteSection
               id="tokens-y-variantes"
@@ -1242,7 +1235,15 @@ function ComponentPage({ component }) {
                     {example.title}
                   </h3>
                   {example.preview ? (
-                    <div className="mt-4">{example.preview}</div>
+                    <div className="mt-4">
+                      {example.code ? (
+                        <WebsitePreviewTabs code={example.code}>
+                          {example.preview}
+                        </WebsitePreviewTabs>
+                      ) : (
+                        example.preview
+                      )}
+                    </div>
                   ) : null}
                   {example.description ? (
                     <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
@@ -1300,7 +1301,7 @@ function ComponentNotFoundPage({ componentSlug }) {
           válida de la librería.
         </p>
         <div className="mt-4">
-          <Link href={WEBSITE_ROUTES.components} appearance="button" color="neutral">
+          <Link href={WEBSITE_ROUTES.components}>
             Ver componentes
           </Link>
         </div>
@@ -1409,9 +1410,9 @@ export default function DocsPage({ currentPath }) {
   }
 
   return (
-    <main className={`${WEBSITE_SHELL} pb-20 pt-10 sm:pt-14`}>
+    <main className="pb-20">
       <Toaster />
-      <div className="grid gap-12 lg:grid-cols-[18rem_minmax(0,1fr)] xl:grid-cols-[18rem_minmax(0,1fr)_14rem] lg:gap-16 min-w-0">
+      <div className="grid lg:grid-cols-[14rem_minmax(0,1fr)] min-w-0">
         <WebsiteDocsSidebar
           currentComponentSlug={currentComponent?.slug}
           sections={WEBSITE_DOC_OVERVIEW_SECTIONS}
@@ -1419,7 +1420,7 @@ export default function DocsPage({ currentPath }) {
           currentPath={currentPath}
         />
 
-        <article className="min-w-0 w-full max-w-3xl justify-self-center">
+        <article className="min-w-0 w-full px-4 sm:px-6 xl:px-8 pl-8 xl:pl-10 py-6 lg:col-start-2">
           <RenderSwitch value={mode}>
             <Match when="component">
               {currentComponent ? (
@@ -1440,7 +1441,6 @@ export default function DocsPage({ currentPath }) {
           </RenderSwitch>
         </article>
 
-        <WebsitePageToc sections={tocSections} />
       </div>
     </main>
   );

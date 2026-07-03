@@ -1,9 +1,7 @@
-import { useEffect, useId, useMemo, useState, useCallback, useRef } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Modal from "@/lib/components/modal/Modal";
 import Input from "@/lib/components/input/Input";
 import { cn } from "@/lib/utils";
-
-const SHORTCUT_REGISTRY = [];
 
 function normalizeSearchText(value) {
   if (typeof value === "string" || typeof value === "number") {
@@ -54,7 +52,6 @@ export function CommandPalette({
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef(null);
-  const shortcutIdRef = useRef(Symbol("qi-command-palette-shortcut"));
   const generatedId = useId();
   const baseId = `qi-command-palette-${generatedId.replace(/:/g, "")}`;
   const listboxId = `${baseId}-listbox`;
@@ -103,28 +100,7 @@ export function CommandPalette({
       return;
     }
 
-    const shortcutId = shortcutIdRef.current;
-    SHORTCUT_REGISTRY.push(shortcutId);
-
-    return () => {
-      const nextIndex = SHORTCUT_REGISTRY.indexOf(shortcutId);
-
-      if (nextIndex !== -1) {
-        SHORTCUT_REGISTRY.splice(nextIndex, 1);
-      }
-    };
-  }, [shortcutEnabled]);
-
-  useEffect(() => {
-    if (!shortcutEnabled) {
-      return;
-    }
-
     const onKey = (event) => {
-      if (SHORTCUT_REGISTRY[0] !== shortcutIdRef.current) {
-        return;
-      }
-
       const target = event.target;
 
       if (

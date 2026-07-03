@@ -1,10 +1,5 @@
 import Popover from "@/lib/components/popover/Popover";
 
-const TOOLTIP_BASE_CLASSES = [
-  "!max-w-[16rem] !rounded-[0.875rem] !px-2.5 !py-1.5",
-  "!text-xs !leading-5",
-].join(" ");
-
 export default function Tooltip({
   children,
   className = "",
@@ -13,24 +8,17 @@ export default function Tooltip({
   placement = "top",
   ...props
 }) {
-  const popoverProps = { ...props };
-  delete popoverProps.autoCloseMs;
-  delete popoverProps.interactive;
-  delete popoverProps.trigger;
-
   return (
     <Popover
+      variant="tooltip"
       content={content}
       color={color}
       placement={placement}
-      trigger="hover"
-      interactive={false}
-      showArrow
       arrowWidth={12}
       arrowHeight={6}
       arrowTipRadius={1.5}
-      className={[TOOLTIP_BASE_CLASSES, className].filter(Boolean).join(" ")}
-      {...popoverProps}
+      className={className}
+      {...props}
     >
       {children}
     </Popover>

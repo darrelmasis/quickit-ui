@@ -1,9 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 import { FormControl, Label, Textarea } from "@/lib";
-const TEXTAREA_PREVIEW_CODE = `import { Textarea } from "quickit-ui";
+import { QUICKIT_CONTROL_SIZES } from "@/lib/tokens";
+const TEXTAREA_PREVIEW_CODE = `import { Label, Textarea } from "quickit-ui";
 
 export function TextareaPreview() {
-  return <Textarea placeholder="Notas..." />;
+  return (
+    <div>
+      <Label htmlFor="notas">Notas</Label>
+      <Textarea id="notas" placeholder="Escribe algo..." />
+    </div>
+  );
 }`;
 function TextareaPreviewCanvas() {
   return <div className="w-full max-w-md space-y-3">
@@ -17,12 +23,39 @@ export const textareaDoc = {
   previewCode: TEXTAREA_PREVIEW_CODE,
   preview: <TextareaPreviewCanvas />,
   installCode: `import { Textarea } from "quickit-ui";`,
-  usageCode: `import { Textarea } from "quickit-ui";
-
-export function TextareaUsage() {
-  return <Textarea rows={4} placeholder="Escribe algo..." />;
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Textarea simple con placeholder.",
+    preview: <div className="w-full max-w-md">
+        <Textarea placeholder="Escribe algo..." />
+      </div>,
+    code: `import { Textarea } from "quickit-ui";
+
+export function TextareaBasico() {
+  return <Textarea placeholder="Escribe algo..." />;
+}`
+  }, {
+    id: "ejemplos-tamanos",
+    title: "Tamaños",
+    description: `Sizes disponibles: ${QUICKIT_CONTROL_SIZES.join(", ")}.`,
+    preview: <div className="grid gap-3 sm:grid-cols-2">
+          <Textarea size="sm" placeholder="Small" />
+          <Textarea size="md" placeholder="Medium" />
+          <Textarea size="lg" placeholder="Large" />
+        </div>,
+    code: `import { Textarea } from "quickit-ui";
+
+export function TextareaTamanos() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Textarea size="sm" placeholder="Small" />
+      <Textarea size="md" placeholder="Medium" />
+      <Textarea size="lg" placeholder="Large" />
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-formcontrol",
     title: "Con FormControl",
     description: "Ideal para estados inválidos y descripción.",
@@ -31,7 +64,19 @@ export function TextareaUsage() {
           <Textarea minRows={4} placeholder="Describe el problema..." />
           <FormControl.Description>Se enviará al equipo de soporte.</FormControl.Description>
           <FormControl.Message>El mensaje es obligatorio.</FormControl.Message>
-        </FormControl>
+        </FormControl>,
+    code: `import { FormControl, Label, Textarea } from "quickit-ui";
+
+export function TextareaFormControl() {
+  return (
+    <FormControl controlId="mensaje" invalid required>
+      <Label>Mensaje</Label>
+      <Textarea minRows={4} placeholder="Describe el problema..." />
+      <FormControl.Description>Se enviará al equipo de soporte.</FormControl.Description>
+      <FormControl.Message>El mensaje es obligatorio.</FormControl.Message>
+    </FormControl>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -44,12 +89,12 @@ export function TextareaUsage() {
       name: "minRows",
       type: "number",
       defaultValue: "3",
-      description: "Define las filas iniciales cuando no pasas `rows`; no activa autosize."
+      description: "Define las filas iniciales cuando no pasas rows."
     }, {
       name: "rows",
       type: "number",
       defaultValue: "undefined",
-      description: "Controla directamente el atributo nativo `rows`."
+      description: "Controla el atributo nativo rows."
     }, {
       name: "shape",
       type: `"square" | "pill"`,
@@ -57,9 +102,9 @@ export function TextareaUsage() {
       description: "Radio visual del campo."
     }, {
       name: "size",
-      type: `"sm" | "md" | "lg" | "xl" | "2xl"`,
+      type: `"sm" | "md" | "lg"`,
       defaultValue: `"md"`,
-      description: "Escala el radio del control para mantener coherencia con otros fields."
+      description: "Escala el radio del control."
     }, {
       name: "invalid",
       type: "boolean",
@@ -71,6 +116,6 @@ export function TextareaUsage() {
       defaultValue: "false",
       description: "Marca como requerido."
     }],
-    notes: ["Textarea acepta atributos nativos de HTMLTextAreaElement.", "Dentro de FormControl, usa `controlId` si quieres que Label, descripción y mensajes se conecten sin repetir ids manuales.", "Si necesitas altura variable según contenido, hoy debes implementarla fuera del componente; `minRows` no hace autosize."]
+    notes: ["Textarea acepta atributos nativos de HTMLTextAreaElement.", "Dentro de FormControl, usa controlId para conectar Label y mensajes automáticamente.", "Si necesitas autosize, debes implementarlo fuera del componente."]
   }]
 };

@@ -12,9 +12,7 @@ export function DrawerPreview() {
         <Drawer.Header>
           <Drawer.Title>Actividad</Drawer.Title>
         </Drawer.Header>
-        <Drawer.Body>
-          Contenido del drawer.
-        </Drawer.Body>
+        <Drawer.Body>Contenido del drawer.</Drawer.Body>
         <Drawer.Actions>
           <Drawer.Action variant="outline">Cerrar</Drawer.Action>
         </Drawer.Actions>
@@ -44,48 +42,44 @@ export const drawerDoc = {
   previewCode: DRAWER_PREVIEW_CODE,
   preview: <DrawerPreviewCanvas />,
   installCode: `import { Drawer } from "quickit-ui";`,
-  usageCode: `import { Drawer, Button } from "quickit-ui";
-
-export function DrawerUsage() {
-  return (
-    <Drawer placement="right">
-      <Drawer.Trigger>
-        <Button>Ver detalles</Button>
-      </Drawer.Trigger>
-      <Drawer.Content>
-        <Drawer.Header>
-          <Drawer.Title>Actividad</Drawer.Title>
-        </Drawer.Header>
-        <Drawer.Body>Contenido del drawer.</Drawer.Body>
-        <Drawer.Actions>
-          <Drawer.Action variant="outline">Cerrar</Drawer.Action>
-        </Drawer.Actions>
-      </Drawer.Content>
-    </Drawer>
-  );
-}`,
   examples: [{
     id: "ejemplos-placements",
     title: "Placements",
     description: "Right, left, bottom y top.",
     preview: <div className="grid gap-3 sm:grid-cols-2">
           <Drawer placement="right">
-            <Drawer.Trigger>
-              <Button size="sm" variant="outline">Right</Button>
-            </Drawer.Trigger>
-            <Drawer.Content>
-              <Drawer.Body>Drawer right</Drawer.Body>
-            </Drawer.Content>
+            <Drawer.Trigger><Button size="sm" variant="outline" color="neutral">Right</Button></Drawer.Trigger>
+            <Drawer.Content><Drawer.Body>Drawer right</Drawer.Body></Drawer.Content>
           </Drawer>
           <Drawer placement="bottom">
-            <Drawer.Trigger>
-              <Button size="sm" variant="outline">Bottom</Button>
-            </Drawer.Trigger>
-            <Drawer.Content>
-              <Drawer.Body>Drawer bottom</Drawer.Body>
-            </Drawer.Content>
+            <Drawer.Trigger><Button size="sm" variant="outline" color="neutral">Bottom</Button></Drawer.Trigger>
+            <Drawer.Content><Drawer.Body>Drawer bottom</Drawer.Body></Drawer.Content>
           </Drawer>
-        </div>
+        </div>,
+    code: `import { Button, Drawer } from "quickit-ui";
+
+export function DrawerPlacements() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Drawer placement="right">
+        <Drawer.Trigger>
+          <Button size="sm" variant="outline" color="neutral">Right</Button>
+        </Drawer.Trigger>
+        <Drawer.Content>
+          <Drawer.Body>Drawer right</Drawer.Body>
+        </Drawer.Content>
+      </Drawer>
+      <Drawer placement="bottom">
+        <Drawer.Trigger>
+          <Button size="sm" variant="outline" color="neutral">Bottom</Button>
+        </Drawer.Trigger>
+        <Drawer.Content>
+          <Drawer.Body>Drawer bottom</Drawer.Body>
+        </Drawer.Content>
+      </Drawer>
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -98,7 +92,7 @@ export function DrawerUsage() {
       name: "size",
       type: "string",
       defaultValue: "auto",
-      description: "Clase para ancho/alto máximo del panel."
+      description: "Clase para ancho/alto máximo."
     }, {
       name: "open",
       type: "boolean",
@@ -108,38 +102,33 @@ export function DrawerUsage() {
       name: "defaultOpen",
       type: "boolean",
       defaultValue: "false",
-      description: "Apertura inicial no controlada."
+      description: "Apertura inicial."
     }, {
       name: "onOpenChange",
       type: "(open) => void",
       defaultValue: "undefined",
-      description: "Callback al cambiar open."
+      description: "Callback de apertura."
     }, {
       name: "closeOnEscape",
       type: "boolean",
       defaultValue: "true",
-      description: "Permite cerrar el drawer con Escape cuando es el panel superior."
-    }, {
-      name: "onBeforeClose",
-      type: "() => boolean | Promise<boolean | void>",
-      defaultValue: "undefined",
-      description: "Bloquea el cierre si retorna false."
+      description: "Cerrar con Escape."
     }, {
       name: "outsideClick",
       type: "boolean",
       defaultValue: "true",
-      description: "Cierra al hacer click fuera."
+      description: "Cierra al click fuera."
     }, {
       name: "showCloseButton",
       type: "boolean",
       defaultValue: "true",
-      description: "Muestra el botón de cierre dentro de Drawer.Header."
+      description: "Botón de cierre."
     }, {
-      name: "zIndex",
-      type: "number",
-      defaultValue: "auto",
-      description: "Override del z-index."
+      name: "onBeforeClose",
+      type: "() => boolean | Promise<boolean | void>",
+      defaultValue: "undefined",
+      description: "Bloquea cierre si retorna false."
     }],
-    notes: ["Drawer.Trigger acepta `asChild` para componer con `Button` u otro elemento sin anidar botones.", "Drawer.Header incluye botón de cerrar cuando `showCloseButton` es `true`.", "Si el handler de `Drawer.Action` hace `event.preventDefault()`, el drawer no se cierra aunque `closeOnClick` siga activo.", "Elige `placement=\"bottom\"` o `top` cuando el contenido sea más cercano a un sheet móvil; para navegación lateral o detalle contextual, `right` y `left` suelen ser más naturales."]
+    notes: ["Drawer.Trigger acepta asChild para componer con Button.", "Para navegación lateral usa placement right/left; para sheet móvil usa bottom/top."]
   }]
 };

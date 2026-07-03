@@ -13,7 +13,7 @@ import {
 const ACCORDION_THEME_CLASSES = {
   light: {
     item:
-      "border-slate-200 bg-white text-slate-950 shadow-[0_1px_2px_rgba(15,23,42,0.05)]",
+      "border-slate-200 bg-white text-slate-950",
     trigger:
       "text-slate-950 hover:bg-slate-50 hover:text-slate-700 focus-visible:outline-slate-300",
     triggerOpen: "bg-slate-50/90 text-slate-950",
@@ -23,7 +23,7 @@ const ACCORDION_THEME_CLASSES = {
   },
   dark: {
     item:
-      "border-zinc-800 bg-zinc-950 text-stone-50 shadow-[0_1px_2px_rgba(0,0,0,0.32)]",
+      "border-zinc-800 bg-zinc-950 text-stone-50",
     trigger:
       "text-stone-50 hover:bg-zinc-900/80 hover:text-stone-200 focus-visible:outline-zinc-700",
     triggerOpen: "bg-zinc-900/90 text-stone-50",

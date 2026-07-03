@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Alert, Button } from "@/lib";
+import { QUICKIT_SEMANTIC_COLORS } from "@/lib/tokens";
 
 const ALERT_PREVIEW_CODE = `import { Alert, Button } from "quickit-ui";
 
@@ -8,7 +9,7 @@ export function AlertPreview() {
     <Alert color="warning" dismissible>
       <Alert.Title>Tu método de pago vence pronto</Alert.Title>
       <Alert.Description>
-        Actualiza la tarjeta antes del 24 de abril para evitar interrupciones en tu plan.
+        Actualiza la tarjeta antes del 24 de abril.
       </Alert.Description>
       <Alert.Actions>
         <Button size="sm" color="warning" variant="outline">Después</Button>
@@ -35,33 +36,40 @@ function AlertPreviewCanvas() {
 
 export const alertDoc = {
   name: "Alert",
-  description:
-    "Mensaje persistente en línea para confirmaciones, advertencias o estados que deben seguir visibles dentro del layout.",
+  description: "Mensaje persistente en línea para confirmaciones, advertencias o estados.",
   previewCode: ALERT_PREVIEW_CODE,
   preview: <AlertPreviewCanvas />,
   installCode: `import { Alert, Button } from "quickit-ui";`,
-  usageCode: `import { Alert, Button } from "quickit-ui";
-
-export function AlertUsage() {
-  return (
-    <Alert color="info" dismissible>
-      <Alert.Title>La verificación del dominio sigue pendiente</Alert.Title>
-      <Alert.Description>
-        Añade el registro TXT y vuelve a comprobar la configuración cuando termine la propagación DNS.
-      </Alert.Description>
-      <Alert.Actions>
-        <Button size="sm" color="info" variant="outline">Ver guía</Button>
-        <Button size="sm" color="info">Comprobar ahora</Button>
-      </Alert.Actions>
-    </Alert>
-  );
-}`,
   examples: [
+    {
+      id: "ejemplos-colores",
+      title: "Colores",
+      description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
+      preview: (
+        <div className="space-y-3">
+          <Alert color="info" title="Información" description="Este es un mensaje informativo." />
+          <Alert color="success" title="Operación exitosa" description="Los cambios se guardaron correctamente." />
+          <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
+          <Alert color="danger" title="Error" description="No se pudo completar la operación." />
+        </div>
+      ),
+      code: `import { Alert } from "quickit-ui";
+
+export function AlertColores() {
+  return (
+    <div className="space-y-3">
+      <Alert color="info" title="Información" description="Mensaje informativo." />
+      <Alert color="success" title="Operación exitosa" description="Cambios guardados." />
+      <Alert color="warning" title="Advertencia" description="Revisa los datos." />
+      <Alert color="danger" title="Error" description="Operación fallida." />
+    </div>
+  );
+}`
+    },
     {
       id: "ejemplos-shorthand",
       title: "Shorthand",
-      description:
-        "Para confirmaciones simples puedes usar title, description y actions sin escribir los subcomponentes.",
+      description: "Usa title, description y actions sin escribir los subcomponentes.",
       preview: (
         <Alert
           color="success"
@@ -70,78 +78,78 @@ export function AlertUsage() {
           actions={<Button size="sm" color="success">Ver actividad</Button>}
         />
       ),
+      code: `import { Alert, Button } from "quickit-ui";
+
+export function AlertShorthand() {
+  return (
+    <Alert
+      color="success"
+      title="Sincronización completada"
+      description="Los cambios están disponibles."
+      actions={<Button size="sm" color="success">Ver actividad</Button>}
+    />
+  );
+}`
     },
     {
       id: "ejemplos-auto-dismiss",
       title: "Auto dismiss",
-      description:
-        "Útil para confirmaciones breves dentro de una vista, como copiar un enlace o aplicar una acción rápida.",
+      description: "Se cierra automáticamente después del tiempo indicado.",
       preview: (
         <Alert
           color="brand"
           autoDismiss={5000}
           dismissible
-          title="El enlace de invitación fue copiado"
-          description="Puedes compartirlo ahora con el resto del equipo."
+          title="Enlace copiado"
+          description="Puedes compartirlo con el equipo."
         />
       ),
+      code: `import { Alert } from "quickit-ui";
+
+export function AlertAutoDismiss() {
+  return (
+    <Alert
+      color="brand"
+      autoDismiss={5000}
+      dismissible
+      title="Enlace copiado"
+      description="Puedes compartirlo con el equipo."
+    />
+  );
+}`
     },
     {
       id: "ejemplos-props",
       title: "Props",
       props: [
         {
-          name: "color",
-          type: "QuickitSemanticColor",
-          defaultValue: `"info"`,
-          description: "Define la paleta visual principal de la alerta.",
+          name: "color", type: "QuickitSemanticColor", defaultValue: `"info"`, description: "Define la paleta visual."
         },
         {
-          name: "variant",
-          type: `"soft" | "outline" | "solid"`,
-          defaultValue: `"soft"`,
-          description: "Controla el tratamiento visual del contenedor.",
+          name: "variant", type: `"soft" | "outline" | "solid"`, defaultValue: `"soft"`, description: "Tratamiento visual del contenedor."
         },
         {
-          name: "dismissible",
-          type: "boolean",
-          defaultValue: "false",
-          description: "Muestra un botón para cerrar la alerta manualmente.",
+          name: "dismissible", type: "boolean", defaultValue: "false", description: "Muestra botón para cerrar."
         },
         {
-          name: "autoDismiss",
-          type: "number",
-          defaultValue: "undefined",
-          description: "Cierra automáticamente la alerta después del tiempo indicado en milisegundos.",
+          name: "autoDismiss", type: "number", defaultValue: "undefined", description: "Cierra automáticamente tras N ms."
         },
         {
-          name: "pauseOnHover",
-          type: "boolean",
-          defaultValue: "true",
-          description: "Pausa el auto dismiss mientras el usuario hace hover o foco dentro del contenido.",
+          name: "pauseOnHover", type: "boolean", defaultValue: "true", description: "Pausa auto dismiss al hacer hover."
         },
         {
-          name: "open",
-          type: "boolean",
-          defaultValue: "undefined",
-          description: "Permite controlar la visibilidad desde el componente padre.",
+          name: "open", type: "boolean", defaultValue: "undefined", description: "Controla la visibilidad."
         },
         {
-          name: "onOpenChange",
-          type: "(open: boolean) => void",
-          defaultValue: "undefined",
-          description: "Se ejecuta cuando la alerta solicita cerrarse.",
+          name: "onOpenChange", type: "(open) => void", defaultValue: "undefined", description: "Callback de cambio de visibilidad."
         },
         {
-          name: "onDismiss",
-          type: "(reason: \"manual\" | \"auto\") => void",
-          defaultValue: "undefined",
-          description: "Informa si el cierre fue manual o automático.",
+          name: "onDismiss", type: "(reason) => void", defaultValue: "undefined", description: "Informa si el cierre fue manual o auto."
         },
       ],
       notes: [
-        "Alert.Title, Alert.Description y Alert.Actions son la ruta recomendada cuando necesitas layout personalizado.",
-        "No mezcles `children` con `title`, `description` y `actions`: el contenido compuesto sustituye por completo el shorthand.",
+        "Alert.Title, Alert.Description y Alert.Actions son la ruta compuesta recomendada.",
+        "No mezcles children con title, description y actions.",
       ],
     },
   ],

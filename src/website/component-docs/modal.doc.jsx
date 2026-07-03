@@ -40,42 +40,42 @@ export const modalDoc = {
   previewCode: MODAL_PREVIEW_CODE,
   preview: <ModalPreviewCanvas />,
   installCode: `import { Modal } from "quickit-ui";`,
-  usageCode: `import { Modal } from "quickit-ui";
-
-export function ModalUsage() {
-  return (
-    <Modal>
-      <Modal.Trigger>Eliminar</Modal.Trigger>
-      <Modal.Content>
-        <Modal.Header>
-          <Modal.Title>Eliminar proyecto</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Esta acción no se puede deshacer.</Modal.Body>
-        <Modal.Actions>
-          <Modal.Action variant="outline">Cancelar</Modal.Action>
-          <Modal.Action color="danger">Eliminar</Modal.Action>
-        </Modal.Actions>
-      </Modal.Content>
-    </Modal>
-  );
-}`,
   examples: [{
-    id: "ejemplos-actions",
-    title: "Acciones",
-    description: "Modal.Action hereda props de Button.",
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Modal con trigger, body y acciones.",
     preview: <Modal>
-          <Modal.Trigger>Confirmar</Modal.Trigger>
+          <Modal.Trigger>Abrir modal</Modal.Trigger>
           <Modal.Content>
             <Modal.Header>
               <Modal.Title>Confirmar</Modal.Title>
             </Modal.Header>
             <Modal.Body>¿Deseas continuar?</Modal.Body>
-            <Modal.Actions placement="end">
+            <Modal.Actions>
               <Modal.Action variant="outline">Cancelar</Modal.Action>
               <Modal.Action color="brand">Continuar</Modal.Action>
             </Modal.Actions>
           </Modal.Content>
-        </Modal>
+        </Modal>,
+    code: `import { Modal } from "quickit-ui";
+
+export function ModalBasico() {
+  return (
+    <Modal>
+      <Modal.Trigger>Abrir modal</Modal.Trigger>
+      <Modal.Content>
+        <Modal.Header>
+          <Modal.Title>Confirmar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>¿Deseas continuar?</Modal.Body>
+        <Modal.Actions>
+          <Modal.Action variant="outline">Cancelar</Modal.Action>
+          <Modal.Action color="brand">Continuar</Modal.Action>
+        </Modal.Actions>
+      </Modal.Content>
+    </Modal>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -98,12 +98,7 @@ export function ModalUsage() {
       name: "closeOnEscape",
       type: "boolean",
       defaultValue: "true",
-      description: "Permite cerrar el modal con Escape cuando es el overlay superior."
-    }, {
-      name: "blockingOverlay",
-      type: "boolean",
-      defaultValue: "true",
-      description: "Si es false, el backdrop no bloquea clics bajo el overlay."
+      description: "Cerrar con Escape."
     }, {
       name: "outsideClick",
       type: "boolean",
@@ -113,23 +108,23 @@ export function ModalUsage() {
       name: "showCloseButton",
       type: "boolean",
       defaultValue: "true",
-      description: "Muestra el botón de cierre en Modal.Header."
+      description: "Botón de cierre en Header."
     }, {
       name: "maxWidth",
       type: "string",
       defaultValue: `"max-w-md"`,
-      description: "Ancho máximo del panel (clase Tailwind)."
+      description: "Ancho máximo del panel."
+    }, {
+      name: "blockingOverlay",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Si false, el backdrop no bloquea clics."
     }, {
       name: "onBeforeClose",
       type: "() => boolean | Promise<boolean>",
       defaultValue: "undefined",
-      description: "Hook antes de cerrar (retorna false para cancelar)."
-    }, {
-      name: "zIndex",
-      type: "number",
-      defaultValue: "undefined",
-      description: "Controla el stacking (auto si no se define)."
+      description: "Hook antes de cerrar."
     }],
-    notes: ["Modal.Action hereda props de Button y acepta closeOnClick.", "Si el handler de `Modal.Action` hace `event.preventDefault()`, el modal no se cierra aunque `closeOnClick` siga en true.", "Usa `blockingOverlay={false}` solo cuando realmente quieras permitir interacción con el fondo; para confirmaciones y formularios suele convenir mantener el patrón modal clásico."]
+    notes: ["Modal.Action hereda props de Button.", "Modal.Action con closeOnClick cierra el modal al hacer clic."]
   }]
 };

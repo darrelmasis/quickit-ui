@@ -16,16 +16,30 @@ export const paginationDoc = {
   previewCode: PAGINATION_PREVIEW_CODE,
   preview: <PaginationPreviewCanvas />,
   installCode: `import { Pagination } from "quickit-ui";`,
-  usageCode: `import { Pagination } from "quickit-ui";
-
-export function PaginationUsage() {
-  return <Pagination count={12} onPageChange={(page) => console.log(page)} />;
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Paginación no controlada.",
+    preview: <div className="flex justify-center">
+          <Pagination count={10} />
+        </div>,
+    code: `import { Pagination } from "quickit-ui";
+
+export function PaginationBasico() {
+  return <Pagination count={10} />;
+}`
+  }, {
     id: "ejemplos-controlado",
     title: "Controlado",
-    description: "Usa page y onPageChange cuando el estado vive fuera.",
-    preview: <Pagination count={10} page={3} onPageChange={() => {}} />
+    description: "Usa page y onPageChange.",
+    preview: <div className="flex justify-center">
+          <Pagination count={10} page={3} onPageChange={() => {}} />
+        </div>,
+    code: `import { Pagination } from "quickit-ui";
+
+export function PaginationControlado() {
+  return <Pagination count={10} page={3} onPageChange={(page) => console.log(page)} />;
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -53,7 +67,7 @@ export function PaginationUsage() {
       name: "siblingCount",
       type: "number",
       defaultValue: "1",
-      description: "Cantidad de páginas adyacentes visibles."
+      description: "Páginas adyacentes visibles."
     }, {
       name: "disabled",
       type: "boolean",
@@ -65,6 +79,6 @@ export function PaginationUsage() {
       defaultValue: `"neutral"`,
       description: "Color del control."
     }],
-    notes: ["`count`, `page` y `defaultPage` deben representar un rango válido; valores fuera de rango se ajustan internamente.", "`siblingCount` debe ser mayor o igual a 0."]
+    notes: ["count, page y defaultPage deben representar un rango válido.", "siblingCount debe ser >= 0."]
   }]
 };

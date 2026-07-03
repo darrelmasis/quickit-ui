@@ -20,7 +20,7 @@ const RADIO_SIZE_CLASSES = {
 
 const RADIO_THEME_CLASSES = {
   light: {
-    box: "border-slate-300 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.08)] peer-hover:border-slate-400 peer-hover:bg-slate-50",
+    box: "border-slate-300 bg-white peer-hover:border-slate-400 peer-hover:bg-slate-50",
     focus:
       "peer-focus-visible:outline-slate-500 peer-focus-visible:ring-slate-400/45 peer-focus-visible:ring-offset-white",
     colors: {
@@ -77,7 +77,7 @@ const RADIO_THEME_CLASSES = {
     invalidDot: "bg-white",
   },
   dark: {
-    box: "border-zinc-700 bg-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.34)] peer-hover:border-zinc-600 peer-hover:bg-zinc-900",
+    box: "border-zinc-700 bg-zinc-950 peer-hover:border-zinc-600 peer-hover:bg-zinc-900",
     focus:
       "peer-focus-visible:outline-zinc-400 peer-focus-visible:ring-zinc-400/35 peer-focus-visible:ring-offset-[#09090b]",
     colors: {

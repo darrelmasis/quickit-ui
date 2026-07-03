@@ -64,6 +64,7 @@ export function DashboardTableFlow() {
         <Button size="sm" variant="outline" color="neutral">
           Exportar CSV
         </Button>
+        <Button color="brand">Nuevo flujo</Button>
       </div>
 
       <div className="grid gap-2 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">

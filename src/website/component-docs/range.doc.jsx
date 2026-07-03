@@ -4,21 +4,17 @@ const RANGE_PREVIEW_CODE = `import { Range } from "quickit-ui";
 
 export function RangePreview() {
   return (
-    <div className="space-y-4">
-      <Range defaultValue={40} />
-      <Range
-        range
-        defaultValue={[20, 75]}
-        color="brand"
-        showValueTooltip
-      />
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-neutral-500">Valor único</p>
+        <Range defaultValue={40} />
+      </div>
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-neutral-500">Rango (inicio/fin)</p>
+        <Range range defaultValue={[20, 75]} color="brand" />
+      </div>
       <div className="h-40">
-        <Range
-          orientation="vertical"
-          defaultValue={60}
-          step={10}
-          className="h-full"
-        />
+        <Range orientation="vertical" defaultValue={60} step={10} className="h-full" />
       </div>
     </div>
   );
@@ -26,21 +22,15 @@ export function RangePreview() {
 function RangePreviewCanvas() {
   return <div className="w-full max-w-md space-y-6">
       <div className="space-y-2">
-        <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
-          Valor único
-        </p>
+        <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Valor único</p>
         <Range defaultValue={40} />
       </div>
       <div className="space-y-2">
-        <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
-          Rango (inicio/fin)
-        </p>
+        <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Rango (inicio/fin)</p>
         <Range range defaultValue={[20, 75]} color="brand" />
       </div>
       <div className="space-y-2">
-        <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
-          Vertical + rueda del mouse
-        </p>
+        <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Vertical</p>
         <div className="h-40">
           <Range orientation="vertical" defaultValue={60} step={10} className="h-full" />
         </div>
@@ -53,73 +43,87 @@ export const rangeDoc = {
   previewCode: RANGE_PREVIEW_CODE,
   preview: <RangePreviewCanvas />,
   installCode: `import { Range } from "quickit-ui";`,
-  usageCode: `import { Range } from "quickit-ui";
-
-export function RangeUsage() {
-  return (
-    <div className="space-y-4">
-      <Range defaultValue={50} min={0} max={100} step={5} />
-      <Range
-        range
-        name="priceMin"
-        endName="priceMax"
-        defaultValue={[20, 80]}
-        min={0}
-        max={100}
-        startLabel="Precio mínimo"
-        endLabel="Precio máximo"
-        showValueTooltip
-      />
-      <div className="h-40">
-        <Range
-          orientation="vertical"
-          defaultValue={50}
-          step={10}
-          className="h-full"
-        />
-      </div>
-    </div>
-  );
-}`,
   examples: [{
+    id: "ejemplos-basico",
+    title: "Básico",
+    description: "Slider de valor único.",
+    preview: <div className="w-full max-w-md">
+        <Range defaultValue={50} min={0} max={100} step={5} />
+      </div>,
+    code: `import { Range } from "quickit-ui";
+
+export function RangeBasico() {
+  return (
+    <Range defaultValue={50} min={0} max={100} step={5} />
+  );
+}`
+  }, {
     id: "ejemplos-colores",
     title: "Colores",
     description: "Usa tokens semánticos para mantener consistencia.",
     preview: <div className="space-y-3">
           <Range defaultValue={10} color="neutral" />
-          <Range defaultValue={20} color="slate" />
-          <Range defaultValue={30} color="zinc" />
-          <Range defaultValue={40} color="primary" />
-          <Range defaultValue={50} color="brand" />
-          <Range defaultValue={60} color="success" />
-          <Range defaultValue={70} color="danger" />
-          <Range defaultValue={80} color="warning" />
-          <Range defaultValue={90} color="info" />
-        </div>
+          <Range defaultValue={20} color="primary" />
+          <Range defaultValue={30} color="brand" />
+          <Range defaultValue={40} color="success" />
+          <Range defaultValue={50} color="danger" />
+        </div>,
+    code: `import { Range } from "quickit-ui";
+
+export function RangeColores() {
+  return (
+    <div className="space-y-3">
+      <Range defaultValue={10} color="neutral" />
+      <Range defaultValue={20} color="primary" />
+      <Range defaultValue={30} color="brand" />
+      <Range defaultValue={40} color="success" />
+      <Range defaultValue={50} color="danger" />
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-doble-thumb",
     title: "Rango doble (inicio/fin)",
-    description: "Activa `range` para renderizar dos thumbs y seleccionar un intervalo.",
+    description: "Activa range para renderizar dos thumbs y seleccionar un intervalo.",
     preview: <div className="space-y-4">
           <Range range defaultValue={[15, 65]} />
-          <Range
-            range
-            name="priceMin"
-            endName="priceMax"
-            defaultValue={[30, 90]}
-            color="brand"
-            startLabel="Precio mínimo"
-            endLabel="Precio máximo"
-            showValueTooltip
-          />
-        </div>
+          <Range range name="priceMin" endName="priceMax" defaultValue={[30, 90]} color="brand" startLabel="Precio mínimo" endLabel="Precio máximo" showValueTooltip />
+        </div>,
+    code: `import { Range } from "quickit-ui";
+
+export function RangeDoble() {
+  return (
+    <div className="space-y-4">
+      <Range range defaultValue={[15, 65]} />
+      <Range
+        range
+        name="priceMin"
+        endName="priceMax"
+        defaultValue={[30, 90]}
+        color="brand"
+        startLabel="Precio mínimo"
+        endLabel="Precio máximo"
+        showValueTooltip
+      />
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-vertical",
     title: "Vertical y rueda del mouse",
-    description: "Con `orientation=\"vertical\"` puedes cambiar también con la rueda (por defecto activo).",
+    description: "Con orientation=\"vertical\" puedes cambiar con la rueda (por defecto activo).",
     preview: <div className="h-44">
           <Range orientation="vertical" defaultValue={50} step={10} className="h-full" />
-        </div>
+        </div>,
+    code: `import { Range } from "quickit-ui";
+
+export function RangeVertical() {
+  return (
+    <div className="h-44">
+      <Range orientation="vertical" defaultValue={50} step={10} className="h-full" />
+    </div>
+  );
+}`
   }, {
     id: "ejemplos-props",
     title: "Props",
@@ -157,22 +161,12 @@ export function RangeUsage() {
       name: "name",
       type: "string",
       defaultValue: "undefined",
-      description: "Nombre del input nativo. En modo doble serializa el valor inicial del rango."
+      description: "Nombre del input nativo."
     }, {
       name: "endName",
       type: "string",
       defaultValue: "`name + \"End\"`",
       description: "Nombre del hidden input que serializa el valor final en modo doble."
-    }, {
-      name: "startName",
-      type: "string",
-      defaultValue: "`name`",
-      description: "Nombre explícito del hidden input que serializa el valor inicial en modo doble."
-    }, {
-      name: "startLabel / endLabel",
-      type: "ReactNode",
-      defaultValue: `"Valor mínimo" / "Valor máximo"`,
-      description: "Labels accesibles de cada thumb en modo doble."
     }, {
       name: "range",
       type: "boolean",
@@ -192,48 +186,18 @@ export function RangeUsage() {
       name: "showValueTooltip",
       type: "boolean",
       defaultValue: "true",
-      description: "Muestra tooltip con el valor actual en el/los thumb(s)."
-    }, {
-      name: "tooltipHideDelay",
-      type: "number",
-      defaultValue: "900",
-      description: "Tiempo en ms que el tooltip permanece visible después de terminar la interacción."
-    }, {
-      name: "tooltipOffset",
-      type: "number",
-      defaultValue: "12",
-      description: "Separación principal entre tooltip y thumb."
-    }, {
-      name: "tooltipCrossOffset",
-      type: "number",
-      defaultValue: "0",
-      description: "Ajuste transversal del tooltip respecto al thumb."
-    }, {
-      name: "tooltipPlacement",
-      type: "Placement",
-      defaultValue: "auto (`top` horizontal, `right` vertical)",
-      description: "Lado preferido del tooltip con fallback automático."
-    }, {
-      name: "tooltipFormatter",
-      type: "(value: number, thumb: \"start\" | \"end\") => ReactNode",
-      defaultValue: "undefined",
-      description: "Formatea el contenido del tooltip (útil para prefijos, unidades o inicio/fin)."
-    }, {
-      name: "getAriaValueText",
-      type: "(value: number, thumb: \"start\" | \"end\") => string",
-      defaultValue: "undefined",
-      description: "Texto para `aria-valuetext` de lectores de pantalla; por defecto usa el tooltip si es string/número."
+      description: "Muestra tooltip con el valor actual."
     }, {
       name: "onChange",
       type: "(event) => void",
       defaultValue: "undefined",
-      description: "Evento del input nativo en modo simple. En modo doble no es el callback recomendado."
+      description: "Evento del input nativo en modo simple."
     }, {
       name: "onValueChange",
       type: "(value: number | [number, number]) => void",
       defaultValue: "undefined",
       description: "Callback de valor normalizado."
     }],
-    notes: ["En modo simple el componente se comporta cerca de un `input[type=\"range\"]` estilizado y respeta `name` para formularios.", "En modo doble se montan dos inputs range internos con labels accesibles de mínimo y máximo; si pasas `name`, Quickit serializa dos hidden inputs: `name` y `endName`.", "Con orientación vertical, el valor bajo queda abajo y el alto arriba; el fill siempre cubre el tramo seleccionado.", "`aria-valuetext` mejora la lectura del valor en SR cuando usas `getAriaValueText` o un `tooltipFormatter` textual.", "Si no quieres tooltips visibles durante interacción, desactiva `showValueTooltip`; no afecta el control nativo del slider."]
+    notes: ["En modo simple se comporta como input[type=\"range\"] estilizado.", "En modo doble se montan dos inputs range internos con labels accesibles.", "Con orientación vertical, el valor bajo queda abajo y el alto arriba.", "Si no quieres tooltips visibles, desactiva showValueTooltip."]
   }]
 };

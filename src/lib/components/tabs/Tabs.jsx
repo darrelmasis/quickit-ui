@@ -7,6 +7,7 @@ import {
   QUICKIT_TAB_SIZES,
   resolveQuickitToken,
 } from "@/lib/tokens";
+import { QUICKIT_EASE_DEFAULT } from "@/lib/tokens";
 import { TabsContext, useTabsContext } from "./tabs-context";
 
 const TABS_ROOT_PRIMITIVES = {
@@ -15,7 +16,7 @@ const TABS_ROOT_PRIMITIVES = {
 
 const TABS_LIST_PRIMITIVES = {
   base: [
-    "flex items-center gap-1 border",
+    "relative flex items-center gap-1 border",
     "w-fit max-w-full",
   ].join(" "),
   horizontal:
@@ -25,8 +26,8 @@ const TABS_LIST_PRIMITIVES = {
 
 const TABS_TRIGGER_PRIMITIVES = {
   base: [
-    "inline-flex items-center justify-center border border-transparent font-medium",
-    "transition-colors outline-none cursor-pointer",
+    "relative z-[1] inline-flex items-center justify-center font-medium",
+    "outline-none cursor-pointer border-0",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-50",
   ].join(" "),
@@ -35,20 +36,20 @@ const TABS_TRIGGER_PRIMITIVES = {
 
 const TABS_SIZE_CLASSES = {
   xs: {
-    list: "min-h-9 rounded-[0.9rem] p-1",
-    trigger: "min-w-[4.75rem] rounded-[0.7rem] px-2.5 py-1 text-xs",
+    list: "min-h-9 rounded-[0.875rem] p-1",
+    trigger: "min-w-[4.75rem] rounded-xl px-2.5 py-1 text-xs",
   },
   sm: {
     list: "min-h-10 rounded-xl p-1",
     trigger: "min-w-[5.5rem] rounded-lg px-3 py-1.5 text-sm",
   },
   md: {
-    list: "min-h-11 rounded-[1rem] p-1",
-    trigger: "min-w-[6.5rem] rounded-[0.8rem] px-3.5 py-2 text-sm",
+    list: "min-h-11 rounded-2xl p-1",
+    trigger: "min-w-[6.5rem] rounded-xl px-3.5 py-2 text-sm",
   },
   lg: {
-    list: "min-h-12 rounded-[1.1rem] p-1.5",
-    trigger: "min-w-[7.5rem] rounded-[0.95rem] px-4 py-2.5 text-base",
+    list: "min-h-12 rounded-2xl p-1.5",
+    trigger: "min-w-[7.5rem] rounded-2xl px-4 py-2.5 text-base",
   },
 };
 
@@ -60,40 +61,68 @@ const TABS_THEME_CLASSES = {
   light: {
     list: "border-slate-200 bg-slate-100/80",
     triggerIdle:
-      "text-slate-600 hover:bg-white hover:text-slate-950 focus-visible:outline-slate-300",
+      "text-slate-500 hover:text-slate-950 focus-visible:outline-slate-300",
     triggerActive: {
-      neutral: "border-slate-200 bg-slate-50 text-slate-900",
-      slate: "border-slate-200 bg-slate-50 text-slate-900",
-      zinc: "border-zinc-200 bg-zinc-50 text-zinc-900",
-      primary: "border-sky-200 bg-sky-50 text-sky-800",
-      brand: "border-brand-200 bg-brand-50 text-brand-800",
-      success: "border-emerald-200 bg-emerald-50 text-emerald-800",
-      danger: "border-rose-200 bg-rose-50 text-rose-800",
-      warning: "border-amber-200 bg-amber-50 text-amber-800",
-      info: "border-cyan-200 bg-cyan-50 text-cyan-800",
-      light: "border-slate-200 bg-slate-50 text-slate-700",
-      dark: "border-zinc-800 bg-zinc-900 text-white",
-      black: "border-slate-950 bg-slate-950 text-white",
+      neutral: "text-slate-900",
+      slate: "text-slate-900",
+      zinc: "text-zinc-900",
+      primary: "text-sky-800",
+      brand: "text-brand-800",
+      success: "text-emerald-800",
+      danger: "text-rose-800",
+      warning: "text-amber-800",
+      info: "text-cyan-800",
+      light: "text-slate-700",
+      dark: "text-white",
+      black: "text-white",
+    },
+    bubbleActive: {
+      neutral: "border-slate-200 bg-white",
+      slate: "border-slate-200 bg-white",
+      zinc: "border-zinc-200 bg-white",
+      primary: "border-sky-200 bg-sky-50",
+      brand: "border-brand-200 bg-brand-50",
+      success: "border-emerald-200 bg-emerald-50",
+      danger: "border-rose-200 bg-rose-50",
+      warning: "border-amber-200 bg-amber-50",
+      info: "border-cyan-200 bg-cyan-50",
+      light: "border-slate-200 bg-white",
+      dark: "border-zinc-800 bg-zinc-900",
+      black: "border-slate-950 bg-slate-950",
     },
     content: "text-slate-600",
   },
   dark: {
     list: "border-zinc-800 bg-zinc-900/80",
     triggerIdle:
-      "text-stone-300 hover:bg-zinc-950 hover:text-stone-50 focus-visible:outline-zinc-700",
+      "text-stone-400 hover:text-stone-50 focus-visible:outline-zinc-700",
     triggerActive: {
-      neutral: "border-neutral-700 bg-neutral-800 text-neutral-100",
-      slate: "border-slate-700 bg-slate-800 text-slate-100",
-      zinc: "border-zinc-700 bg-zinc-800 text-zinc-100",
-      primary: "border-sky-800 bg-sky-950 text-sky-200",
-      brand: "border-brand-800 bg-brand-950 text-brand-200",
-      success: "border-emerald-800 bg-emerald-950 text-emerald-200",
-      danger: "border-rose-800 bg-rose-950 text-rose-200",
-      warning: "border-amber-800 bg-amber-950 text-amber-200",
-      info: "border-cyan-800 bg-cyan-950 text-cyan-200",
-      light: "border-neutral-600 bg-neutral-800 text-neutral-50",
-      dark: "border-zinc-800 bg-zinc-950 text-white",
-      black: "border-slate-950 bg-black text-white",
+      neutral: "text-neutral-100",
+      slate: "text-slate-100",
+      zinc: "text-zinc-100",
+      primary: "text-sky-200",
+      brand: "text-brand-200",
+      success: "text-emerald-200",
+      danger: "text-rose-200",
+      warning: "text-amber-200",
+      info: "text-cyan-200",
+      light: "text-neutral-50",
+      dark: "text-white",
+      black: "text-white",
+    },
+    bubbleActive: {
+      neutral: "border-neutral-700 bg-neutral-800",
+      slate: "border-slate-700 bg-slate-800",
+      zinc: "border-zinc-700 bg-zinc-800",
+      primary: "border-sky-800 bg-sky-950",
+      brand: "border-brand-800 bg-brand-950",
+      success: "border-emerald-800 bg-emerald-950",
+      danger: "border-rose-800 bg-rose-950",
+      warning: "border-amber-800 bg-amber-950",
+      info: "border-cyan-800 bg-cyan-950",
+      light: "border-neutral-600 bg-neutral-800",
+      dark: "border-zinc-800 bg-zinc-950",
+      black: "border-slate-950 bg-black",
     },
     content: "text-stone-300",
   },
@@ -180,11 +209,33 @@ export function Tabs({
 }
 
 export function TabsList({ children, className }) {
-  const { orientation, size } = useTabsContext("TabsList");
+  const { color, orientation, size, value } = useTabsContext("TabsList");
   const { theme } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const listRef = useRef(null);
   const [scrollState, setScrollState] = useState({ left: false, right: false });
+  const [indicatorStyle, setIndicatorStyle] = useState(null);
+
+  const measureIndicator = useCallback(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const activeTab = list.querySelector('[role="tab"][data-state="active"]');
+    if (!activeTab) {
+      setIndicatorStyle(null);
+      return;
+    }
+    const listRect = list.getBoundingClientRect();
+    const tabRect = activeTab.getBoundingClientRect();
+    setIndicatorStyle({
+      width: tabRect.width,
+      height: tabRect.height,
+      transform: `translateX(${tabRect.left - listRect.left}px) translateY(${tabRect.top - listRect.top}px)`,
+    });
+  }, []);
+
+  useEffect(() => {
+    measureIndicator();
+  }, [measureIndicator, value]);
 
   const checkScroll = useCallback(() => {
     const el = listRef.current;
@@ -199,14 +250,21 @@ export function TabsList({ children, className }) {
     const el = listRef.current;
     if (!el || orientation !== "horizontal") return;
     checkScroll();
-    el.addEventListener("scroll", checkScroll, { passive: true });
-    const ro = new ResizeObserver(checkScroll);
+    const handleScroll = () => {
+      checkScroll();
+      measureIndicator();
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    const ro = new ResizeObserver(() => {
+      checkScroll();
+      measureIndicator();
+    });
     ro.observe(el);
     return () => {
-      el.removeEventListener("scroll", checkScroll);
+      el.removeEventListener("scroll", handleScroll);
       ro.disconnect();
     };
-  }, [checkScroll]);
+  }, [checkScroll, measureIndicator]);
 
   const fadeMask = useMemo(() => {
     if (orientation !== "horizontal") return undefined;
@@ -240,6 +298,22 @@ export function TabsList({ children, className }) {
           : undefined
       }
     >
+      {indicatorStyle && (
+        <div
+          className={cn(
+            `absolute z-0 border transition-all duration-300 ease-[${QUICKIT_EASE_DEFAULT}]`,
+            TABS_SIZE_CLASSES[size].trigger,
+            ui.bubbleActive[color],
+          )}
+          style={{
+            top: 0,
+            left: 0,
+            ...indicatorStyle,
+            transitionProperty: "transform, width, height",
+          }}
+          aria-hidden="true"
+        />
+      )}
       {children}
     </div>
   );
@@ -348,7 +422,7 @@ export function TabsTrigger({
           TABS_TRIGGER_PRIMITIVES.base,
         ),
         TABS_SIZE_CLASSES[size].trigger,
-        "snap-algin-center",
+        "snap-align-center",
         orientation === "vertical" && TABS_TRIGGER_PRIMITIVES.vertical,
         resolveQuickitFocusRingClasses(
           focusRingEnabled,
