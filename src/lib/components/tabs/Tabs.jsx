@@ -229,7 +229,8 @@ export function TabsList({ children, className }) {
     setIndicatorStyle({
       width: tabRect.width,
       height: tabRect.height,
-      transform: `translateX(${tabRect.left - listRect.left}px) translateY(${tabRect.top - listRect.top}px)`,
+      top: tabRect.top - listRect.top - list.clientTop,
+      left: tabRect.left - listRect.left - list.clientLeft,
     });
   }, []);
 
@@ -306,10 +307,8 @@ export function TabsList({ children, className }) {
             ui.bubbleActive[color],
           )}
           style={{
-            top: 0,
-            left: 0,
             ...indicatorStyle,
-            transitionProperty: "transform, width, height",
+            transitionProperty: "top, left, width, height",
           }}
           aria-hidden="true"
         />
