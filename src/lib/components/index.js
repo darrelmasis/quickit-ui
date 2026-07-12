@@ -10,7 +10,7 @@ export { Checkbox } from "./checkbox/Checkbox";
 export { Combobox } from "./combobox/Combobox";
 export { CommandPalette } from "./command-palette/CommandPalette";
 export { default as Container } from "./container/Container";
-export { Card, CardHeader, CardBody, CardFooter } from "./card/Card";
+export { Card } from "./card/Card";
 export { Divider } from "./divider/Divider";
 export { DataTable } from "./data-table/DataTable";
 export { DatePicker } from "./date-picker/DatePicker";

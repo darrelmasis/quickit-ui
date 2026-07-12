@@ -55,5 +55,5 @@ Card.Header = CardHeader;
 Card.Body = CardBody;
 Card.Footer = CardFooter;
 
-export { Card, CardHeader, CardBody, CardFooter };
+export { Card };
 export default Card;

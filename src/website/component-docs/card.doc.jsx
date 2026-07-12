@@ -1,23 +1,23 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Card, CardBody, CardHeader, CardFooter, Button } from "@/lib";
+import { Card, Button } from "@/lib";
 
-const CARD_PREVIEW_CODE = `import { Card, CardBody, CardHeader, CardFooter, Button } from "quickit-ui";
+const CARD_PREVIEW_CODE = `import { Card, Button } from "quickit-ui";
 
 export function CardPreview() {
   return (
     <Card>
-      <CardHeader>
+      <Card.Header>
         <h3 className="text-lg font-semibold">Título de la tarjeta</h3>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Body>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           Contenido principal de la tarjeta.
         </p>
-      </CardBody>
-      <CardFooter>
+      </Card.Body>
+      <Card.Footer>
         <Button size="sm" variant="ghost">Cancelar</Button>
         <Button size="sm">Guardar</Button>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }`;
@@ -25,18 +25,18 @@ export function CardPreview() {
 function CardPreviewCanvas() {
   return (
     <Card>
-      <CardHeader>
+      <Card.Header>
         <h3 className="text-lg font-semibold">Título de la tarjeta</h3>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Body>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           Contenido principal de la tarjeta.
         </p>
-      </CardBody>
-      <CardFooter>
+      </Card.Body>
+      <Card.Footer>
         <Button size="sm" variant="ghost">Cancelar</Button>
         <Button size="sm">Guardar</Button>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }
@@ -46,7 +46,7 @@ export const cardDoc = {
   description: "Contenedor versátil con header, body y footer. Ideal para secciones, paneles y agrupación de contenido.",
   previewCode: CARD_PREVIEW_CODE,
   preview: <CardPreviewCanvas />,
-  installCode: `import { Card, CardHeader, CardBody, CardFooter } from "quickit-ui";`,
+  installCode: `import { Card } from "quickit-ui";`,
   examples: [
     {
       id: "ejemplos-basico",
@@ -61,21 +61,21 @@ export const cardDoc = {
       description: "Usa solo Card.Body si no necesitas header ni footer.",
       preview: (
         <Card>
-          <CardBody>
+          <Card.Body>
             <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Una tarjeta simple con solo contenido.
             </p>
-          </CardBody>
+          </Card.Body>
         </Card>
       ),
-      code: `import { Card, CardBody } from "quickit-ui";
+      code: `import { Card } from "quickit-ui";
 
 export function CardSoloBody() {
   return (
     <Card>
-      <CardBody>
+      <Card.Body>
         <p>Una tarjeta simple con solo contenido.</p>
-      </CardBody>
+      </Card.Body>
     </Card>
   );
 }`,

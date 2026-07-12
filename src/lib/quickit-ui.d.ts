@@ -1605,21 +1605,18 @@ export declare const Container: React.ForwardRefExoticComponent<
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
 export interface CardSectionProps
   extends React.HTMLAttributes<HTMLDivElement> {}
-export declare const CardHeader: React.ForwardRefExoticComponent<
-  CardSectionProps & React.RefAttributes<HTMLDivElement>
->;
-export declare const CardBody: React.ForwardRefExoticComponent<
-  CardSectionProps & React.RefAttributes<HTMLDivElement>
->;
-export declare const CardFooter: React.ForwardRefExoticComponent<
-  CardSectionProps & React.RefAttributes<HTMLDivElement>
->;
 export type CardComponent = React.ForwardRefExoticComponent<
   CardProps & React.RefAttributes<HTMLDivElement>
 > & {
-  Header: typeof CardHeader;
-  Body: typeof CardBody;
-  Footer: typeof CardFooter;
+  Header: React.ForwardRefExoticComponent<
+    CardSectionProps & React.RefAttributes<HTMLDivElement>
+  >;
+  Body: React.ForwardRefExoticComponent<
+    CardSectionProps & React.RefAttributes<HTMLDivElement>
+  >;
+  Footer: React.ForwardRefExoticComponent<
+    CardSectionProps & React.RefAttributes<HTMLDivElement>
+  >;
 };
 export declare const Card: CardComponent;
 

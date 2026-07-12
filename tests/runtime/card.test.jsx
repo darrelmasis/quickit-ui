@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Card, CardBody, CardHeader, CardFooter, Button } from "@/lib";
+import { Card, Button } from "@/lib";
 import { renderWithProvider } from "./test-utils";
 
 describe("Card", () => {
@@ -12,9 +12,9 @@ describe("Card", () => {
   it("renders header subcomponent", () => {
     renderWithProvider(
       <Card>
-        <CardHeader>
+        <Card.Header>
           <h3>Título</h3>
-        </CardHeader>
+        </Card.Header>
       </Card>,
     );
     expect(screen.getByText("Título")).toBeTruthy();
@@ -23,7 +23,7 @@ describe("Card", () => {
   it("renders body subcomponent", () => {
     renderWithProvider(
       <Card>
-        <CardBody>Cuerpo</CardBody>
+        <Card.Body>Cuerpo</Card.Body>
       </Card>,
     );
     expect(screen.getByText("Cuerpo")).toBeTruthy();
@@ -32,9 +32,9 @@ describe("Card", () => {
   it("renders footer subcomponent with actions", () => {
     renderWithProvider(
       <Card>
-        <CardFooter>
+        <Card.Footer>
           <Button size="sm">Aceptar</Button>
-        </CardFooter>
+        </Card.Footer>
       </Card>,
     );
     expect(screen.getByText("Aceptar")).toBeTruthy();
