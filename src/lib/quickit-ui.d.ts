@@ -8,24 +8,17 @@ import type {
 
 export declare const QUICKIT_SEMANTIC_COLORS: readonly [
   "neutral",
-  "slate",
-  "zinc",
   "primary",
-  "brand",
   "success",
   "danger",
   "warning",
   "info",
   "light",
   "dark",
-  "black",
 ];
 export declare const QUICKIT_ACCENT_COLORS: readonly [
   "neutral",
-  "slate",
-  "zinc",
   "primary",
-  "brand",
   "success",
   "danger",
   "warning",
@@ -37,14 +30,10 @@ export declare const QUICKIT_STATUS_COLORS: readonly [
   "warning",
   "info",
 ];
-export declare const QUICKIT_BRAND_COLORS: readonly ["primary", "brand"];
 export declare const QUICKIT_NEUTRAL_COLORS: readonly [
   "neutral",
-  "slate",
-  "zinc",
   "light",
   "dark",
-  "black",
 ];
 export declare const QUICKIT_CONTROL_SIZES: readonly [
   "sm",
@@ -58,6 +47,7 @@ export declare const QUICKIT_BUTTON_VARIANTS: readonly [
   "solid",
   "outline",
   "ghost",
+  "soft",
 ];
 export declare const QUICKIT_BUTTON_SHAPES: readonly [
   "default",
@@ -81,7 +71,7 @@ export declare const QUICKIT_LINK_UNDERLINES: readonly [
   "hover",
   "none",
 ];
-export declare const QUICKIT_TAB_SIZES: readonly ["xs", "sm", "md", "lg"];
+export declare const QUICKIT_TAB_SIZES: readonly ["xs", "sm", "md", "lg", "xl", "2xl"];
 export declare const QUICKIT_BREAKPOINTS: Readonly<{
   sm: 640;
   md: 768;
@@ -128,7 +118,6 @@ export type QuickitThemeOption = (typeof QUICKIT_THEME_OPTIONS)[number];
 export type QuickitSemanticColor = (typeof QUICKIT_SEMANTIC_COLORS)[number];
 export type QuickitAccentColor = (typeof QUICKIT_ACCENT_COLORS)[number];
 export type QuickitStatusColor = (typeof QUICKIT_STATUS_COLORS)[number];
-export type QuickitBrandColor = (typeof QUICKIT_BRAND_COLORS)[number];
 export type QuickitNeutralColor = (typeof QUICKIT_NEUTRAL_COLORS)[number];
 export type QuickitControlSize = (typeof QUICKIT_CONTROL_SIZES)[number];
 export type QuickitCompactControlSize =
@@ -155,6 +144,38 @@ export type QuickitRippleComponent =
   (typeof QUICKIT_RIPPLE_COMPONENTS)[number];
 export type QuickitPressEffect =
   (typeof QUICKIT_PRESS_EFFECTS)[number];
+
+export declare const ACTION_CONTROL_THEME_CLASSES: Readonly<
+  Record<
+    QuickitThemeMode,
+    Readonly<Record<QuickitButtonVariant, Readonly<Record<QuickitSemanticColor, string>>>>
+  >
+>;
+export declare const ACTION_CONTROL_ACTIVE_THEME_CLASSES: typeof ACTION_CONTROL_THEME_CLASSES;
+export declare const FORM_FIELD_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const FORM_FIELD_AUTOFILL_TOKENS: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const BADGE_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const ALERT_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const LINK_TEXT_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const LABEL_THEME_CLASSES: Readonly<Record<QuickitThemeMode, string>>;
+export declare const PROGRESS_THEME_CLASSES: Readonly<Record<string, unknown>>;
+export declare const DATA_TABLE_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const SKELETON_THEME_CLASSES: Readonly<Record<QuickitThemeMode, string>>;
+export declare const TABS_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const CHECKBOX_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const RADIO_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const SWITCH_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const ACCORDION_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const BREADCRUMB_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const COMBOBOX_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const DRAWER_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const EMPTY_STATE_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const FORM_CONTROL_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const MODAL_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const POPOVER_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const RANGE_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const SELECT_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+
 export interface QuickitBreakpoints {
   sm: number;
   md: number;
@@ -313,6 +334,7 @@ type ButtonBaseProps = Omit<
 export interface ButtonProps extends ButtonBaseProps {
   active?: boolean;
   activeMotion?: boolean;
+  align?: "left" | "center" | "right";
   color?: QuickitSemanticColor;
   fullWidth?: boolean;
   loading?: boolean;
@@ -349,6 +371,26 @@ export interface LinkProps extends LinkBaseProps {
 export declare const Link: React.ForwardRefExoticComponent<
   LinkProps & React.RefAttributes<HTMLAnchorElement>
 >;
+
+export type ButtonGroupOrientation = "horizontal" | "vertical";
+
+export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  fullWidth?: boolean;
+  orientation?: ButtonGroupOrientation;
+  size?: QuickitControlSize;
+}
+export interface ButtonGroupDividerProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  orientation?: ButtonGroupOrientation;
+}
+export declare const ButtonGroupDivider: React.FC<ButtonGroupDividerProps>;
+export interface ButtonGroupComponent
+  extends React.ForwardRefExoticComponent<
+    ButtonGroupProps & React.RefAttributes<HTMLDivElement>
+  > {
+  Divider: typeof ButtonGroupDivider;
+}
+export declare const ButtonGroup: ButtonGroupComponent;
 
 type BadgeBaseProps = Omit<React.HTMLAttributes<HTMLSpanElement>, "color">;
 
@@ -733,8 +775,10 @@ export interface SelectProps
   contentClassName?: string;
   defaultValue?: string | number;
   disabled?: boolean;
+  emptyText?: string;
   id?: string;
   invalid?: boolean;
+  loading?: boolean;
   name?: string;
   onChange?: (event: QuickitSelectChangeEvent) => void;
   onValueChange?: (value: string) => void;
@@ -1343,6 +1387,7 @@ export interface ComboboxProps
   clearIcon?: React.ReactNode;
   defaultValue?: string | number;
   emptyText?: string;
+  loading?: boolean;
   name?: string;
     onChange?: (event: QuickitComboboxChangeEvent) => void;
     onClear?: () => void;
@@ -1499,6 +1544,8 @@ export interface DataTableProps<Row = Record<string, unknown>> {
   columns?: readonly DataTableColumn<Row>[];
   data?: readonly Row[];
   defaultSort?: DataTableSortState | null;
+  emptyText?: string;
+  loading?: boolean;
   onSortChange?: (sort: DataTableSortState | null) => void;
   rowKey?: (row: Row, index: number) => React.Key;
   sort?: DataTableSortState | null;
@@ -1541,3 +1588,29 @@ export interface CommandPaletteProps {
 export declare function CommandPalette(
   props: CommandPaletteProps,
 ): React.JSX.Element;
+
+export type QuickitContainerSize = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+export type QuickitContainerPadding = "none" | "sm" | "md" | "lg" | "xl";
+
+export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+  as?: React.ElementType;
+  center?: boolean;
+  padding?: QuickitContainerPadding;
+  size?: QuickitContainerSize;
+}
+export declare const Container: React.ForwardRefExoticComponent<
+  ContainerProps & React.RefAttributes<HTMLDivElement>
+>;
+
+export interface AnimateProps {
+  children?: React.ReactNode;
+  duration?: number;
+  show: boolean;
+}
+export declare function Animate(props: AnimateProps): React.JSX.Element;
+
+export declare function lockAppScroll(): void;
+export declare function unlockAppScroll(): void;
+export declare function useMergeRefs<T = HTMLElement>(
+  ...refs: (React.Ref<T> | null | undefined)[]
+): React.RefCallback<T>;
