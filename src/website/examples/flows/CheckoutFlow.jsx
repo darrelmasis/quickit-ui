@@ -5,7 +5,7 @@ export function CheckoutFlow() {
   const [activeStep, setActiveStep] = useState(1);
 
   return (
-    <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+    <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
       <h3 className="font-semibold">Checkout de suscripción</h3>
       <Stepper
         activeStep={activeStep}
@@ -45,7 +45,7 @@ export function CheckoutFlow() {
         </Button>
         <Modal>
           <Modal.Trigger asChild>
-            <Button color="brand">Pagar y activar</Button>
+            <Button color="primary">Pagar y activar</Button>
           </Modal.Trigger>
           <Modal.Content>
             <Modal.Header>
@@ -56,7 +56,7 @@ export function CheckoutFlow() {
             </Modal.Body>
             <Modal.Actions>
               <Modal.Action variant="outline">Cancelar</Modal.Action>
-              <Modal.Action color="brand">Confirmar pago</Modal.Action>
+              <Modal.Action color="primary">Confirmar pago</Modal.Action>
             </Modal.Actions>
           </Modal.Content>
         </Modal>

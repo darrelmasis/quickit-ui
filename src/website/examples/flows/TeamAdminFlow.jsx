@@ -8,14 +8,14 @@ export function TeamAdminFlow() {
   ];
 
   return (
-    <div className="space-y-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+    <div className="flex flex-col gap-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Administración de equipo</h3>
-        <Button size="sm" color="brand">
+        <Button size="sm" color="primary">
           Invitar miembro
         </Button>
       </div>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         {users.map((user) => (
           <div
             key={user.id}

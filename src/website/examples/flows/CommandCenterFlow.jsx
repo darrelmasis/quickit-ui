@@ -5,13 +5,13 @@ export function CommandCenterFlow() {
   const [openPalette, setOpenPalette] = useState(false);
 
   return (
-    <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+    <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
       <h3 className="font-semibold">Command center</h3>
       <p className="text-sm text-neutral-600 dark:text-neutral-400">
         Acciones rápidas para equipos que trabajan con teclado y workflows largos.
       </p>
       <div className="flex flex-wrap gap-2">
-        <Button color="brand" onClick={() => setOpenPalette(true)}>
+        <Button color="primary" onClick={() => setOpenPalette(true)}>
           Abrir paleta
         </Button>
         <Tooltip content="Notifica al usuario con feedback inmediato">

@@ -3,10 +3,10 @@ import { Alert, Badge, Button, Checkbox, FormControl, Input, Label, Link } from 
 export function OnboardingAuthFlow() {
   return (
     <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold">Login de workspace</h3>
-          <Badge color="brand" variant="soft">
+          <Badge color="primary" variant="soft">
             2FA
           </Badge>
         </div>
@@ -25,12 +25,12 @@ export function OnboardingAuthFlow() {
             Recuperar acceso
           </Link>
         </div>
-        <Button color="brand" fullWidth>
+        <Button color="primary" fullWidth>
           Entrar
         </Button>
       </div>
 
-      <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Alta de nuevo workspace</h3>
         <Input placeholder="Nombre del equipo" />
         <Input placeholder="Subdominio" />

@@ -8,9 +8,9 @@ export function SettingsThemeFlow() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Preferencias de interfaz</h3>
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Modo de tema</p>
           <div className="flex gap-4">
             <Radio
@@ -36,7 +36,7 @@ export function SettingsThemeFlow() {
             />
           </div>
         </div>
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Densidad</p>
           <Select value={density} onValueChange={setDensity}>
             <option value="compact">Compacta</option>
@@ -51,7 +51,7 @@ export function SettingsThemeFlow() {
         />
       </div>
 
-      <div className="space-y-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Acciones</h3>
         <Alert
           color="info"
@@ -77,7 +77,7 @@ export function SettingsThemeFlow() {
             </Modal.Actions>
           </Modal.Content>
         </Modal>
-        <Button color="brand" fullWidth>
+        <Button color="primary" fullWidth>
           Guardar cambios
         </Button>
       </div>

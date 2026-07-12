@@ -4,7 +4,7 @@ import { CopyIcon } from "@/lib/assets/icons";
 export function NotificationsInboxFlow() {
   return (
     <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="space-y-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <div className="flex flex-col gap-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Inbox operativo</h3>
         <Alert
           color="warning"
@@ -12,7 +12,7 @@ export function NotificationsInboxFlow() {
           title="Webhook con retraso"
           description="Se detectó latencia en eventos de facturación."
         />
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           {[
             { id: 1, title: "Nuevo signup", kind: "success" },
             { id: 2, title: "Pago rechazado", kind: "danger" },
@@ -31,7 +31,7 @@ export function NotificationsInboxFlow() {
         </div>
       </div>
 
-      <div className="space-y-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
+      <div className="flex flex-col gap-3 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <h3 className="font-semibold">Estado vacío + acciones</h3>
         <EmptyState align="center">
           <EmptyState.Icon>
@@ -56,7 +56,7 @@ export function NotificationsInboxFlow() {
             >
               Refrescar
             </Button>
-            <Button size="sm" color="brand">
+            <Button size="sm" color="primary">
               Configurar reglas
             </Button>
           </EmptyState.Actions>

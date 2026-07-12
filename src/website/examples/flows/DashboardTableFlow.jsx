@@ -31,7 +31,7 @@ export function DashboardTableFlow() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <div className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
         <div className="grid gap-3 lg:grid-cols-[1.2fr_0.9fr_0.7fr_auto]">
           <InputGroup attached>
@@ -53,7 +53,7 @@ export function DashboardTableFlow() {
             <option value="active">Activos</option>
             <option value="blocked">Bloqueados</option>
           </Select>
-          <Button color="brand">Nuevo flujo</Button>
+          <Button color="primary">Nuevo flujo</Button>
         </div>
       </div>
 
@@ -64,7 +64,7 @@ export function DashboardTableFlow() {
         <Button size="sm" variant="outline" color="neutral">
           Exportar CSV
         </Button>
-        <Button color="brand">Nuevo flujo</Button>
+        <Button color="primary">Nuevo flujo</Button>
       </div>
 
       <div className="grid gap-2 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
