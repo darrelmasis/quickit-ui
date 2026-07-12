@@ -21,7 +21,7 @@ const TABS_LIST_PRIMITIVES = {
     "w-fit max-w-full",
   ].join(" "),
   horizontal:
-    "flex-row overflow-x-auto snap-x snap-mandatory [scroll-snap-stop:always] [&::-webkit-scrollbar]:hidden",
+    "flex-row overflow-x-auto snap-x snap-mandatory [scroll-snap-stop:always] scrollbar-hidden",
   vertical: "flex-col items-stretch",
 };
 
@@ -37,28 +37,28 @@ const TABS_TRIGGER_PRIMITIVES = {
 
 const TABS_SIZE_CLASSES = {
   xs: {
-    list: "rounded-[0.875rem] p-1",
-    trigger: "h-6 min-w-[4.75rem] rounded-xl px-2.5 text-xs",
+    list: "rounded-[var(--qi-radius-lg)] p-1",
+    trigger: "h-6 min-w-[4.75rem] rounded-[var(--qi-radius)] px-2.5 text-xs",
   },
   sm: {
-    list: "rounded-xl p-1",
-    trigger: "h-9 min-w-[5.5rem] rounded-lg px-3 text-sm",
+    list: "rounded-[var(--qi-radius)] p-1",
+    trigger: "h-9 min-w-[5.5rem] rounded-[var(--qi-radius-xs)] px-3 text-sm",
   },
   md: {
-    list: "rounded-2xl p-1",
-    trigger: "h-11 min-w-[6.5rem] rounded-xl px-3.5 text-sm",
+    list: "rounded-[var(--qi-radius-xl)] p-1",
+    trigger: "h-11 min-w-[6.5rem] rounded-[var(--qi-radius)] px-3.5 text-sm",
   },
   lg: {
-    list: "rounded-2xl p-1.5",
-    trigger: "h-12 min-w-[7.5rem] rounded-2xl px-4 text-base",
+    list: "rounded-[var(--qi-radius-xl)] p-1.5",
+    trigger: "h-12 min-w-[7.5rem] rounded-[var(--qi-radius-xl)] px-4 text-base",
   },
   xl: {
-    list: "rounded-3xl p-1.5",
-    trigger: "h-14 min-w-[8.5rem] rounded-2xl px-6 text-lg",
+    list: "rounded-[var(--qi-radius-2xl)] p-1.5",
+    trigger: "h-14 min-w-[8.5rem] rounded-[var(--qi-radius-xl)] px-6 text-lg",
   },
   "2xl": {
-    list: "rounded-3xl p-2",
-    trigger: "h-16 min-w-[9.5rem] rounded-3xl px-7 text-lg",
+    list: "rounded-[var(--qi-radius-2xl)] p-2",
+    trigger: "h-16 min-w-[9.5rem] rounded-[var(--qi-radius-2xl)] px-7 text-lg",
   },
 };
 

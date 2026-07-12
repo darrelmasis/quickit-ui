@@ -58,7 +58,9 @@ export function QuickitThemeProvider({
   defaultTheme = "system",
   focusRing = true,
   pressEffect = "transform",
+  customScrollbar = true,
   ripple = true,
+  radius = "sm",
   storageKey = QUICKIT_THEME_STORAGE_KEY,
 }) {
   const [theme, setThemeState] = useState(() =>
@@ -139,7 +141,9 @@ export function QuickitThemeProvider({
         theme={resolvedTheme}
         focusRing={focusRing}
         pressEffect={pressEffect}
+        customScrollbar={customScrollbar}
         ripple={ripple}
+        radius={radius}
       >
         {children}
       </QuickitProvider>

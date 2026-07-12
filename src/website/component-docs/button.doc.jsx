@@ -25,7 +25,8 @@ export const buttonDoc = {
     title: "Variantes",
     description: `Variantes disponibles: ${QUICKIT_BUTTON_VARIANTS.join(", ")}.`,
     preview: <div className="flex flex-wrap gap-3">
-          <Button color="neutral">Solid</Button>
+          <Button color="neutral">Soft</Button>
+          <Button color="neutral" variant="solid">Solid</Button>
           <Button color="neutral" variant="outline">Outline</Button>
           <Button color="neutral" variant="ghost">Ghost</Button>
         </div>,
@@ -34,7 +35,8 @@ export const buttonDoc = {
 export function ButtonVariantes() {
   return (
     <div className="flex flex-wrap gap-3">
-      <Button color="neutral">Solid</Button>
+      <Button color="neutral">Soft</Button>
+      <Button color="neutral" variant="solid">Solid</Button>
       <Button color="neutral" variant="outline">Outline</Button>
       <Button color="neutral" variant="ghost">Ghost</Button>
     </div>

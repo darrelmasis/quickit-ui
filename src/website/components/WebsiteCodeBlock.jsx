@@ -33,7 +33,7 @@ export default function WebsiteCodeBlock({
           </Button>
         </Tooltip>
       </div>
-      <pre className={`overflow-x-auto px-4 py-4 text-sm leading-relaxed [scrollbar-width:thin] [scrollbar-color:rgb(163_163_163)_transparent] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent [&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:bg-clip-content [&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:[scrollbar-color:rgb(115_115_115)_transparent] dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600`}>
+      <pre className="overflow-x-auto px-4 py-4 text-sm leading-relaxed scrollbar-themed">
         <Highlight theme={codeTheme} code={(code ?? "").trimEnd()} language={language}>
           {({ className, getLineProps, getTokenProps, tokens }) => (
             <code className={`grid gap-0 ${className}`}>
@@ -42,7 +42,7 @@ export default function WebsiteCodeBlock({
                 return (
                   <div
                     key={`line-${index}`}
-                    className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4"
+                    className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-6"
                     {...lineProps}
                   >
                     <span
@@ -50,7 +50,7 @@ export default function WebsiteCodeBlock({
                     >
                       {index + 1}
                     </span>
-                    <span className="whitespace-pre">
+                    <span className="whitespace-pre pl-4">
                       {line.map((token, tokenIndex) => {
                         const { key: _tokenKey, ...tokenProps } = getTokenProps({ token });
                         return (

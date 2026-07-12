@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
-import { Highlight, themes } from "prism-react-renderer";
+import { useMemo, useState } from "react";
 import {
   Accordion,
   Alert,
@@ -38,12 +37,11 @@ import {
   TimePicker,
   Toaster,
   Tooltip,
-  useQuickitTheme,
 } from "@/lib";
 import { toast } from "@/lib/components/toaster/toast-store";
 import { cn } from "@/lib/utils";
-import { CheckStrokeIcon, CopyIcon } from "@/lib/assets/icons";
 import { WEBSITE_COMPONENT_GROUPS } from "@/website/docs-content";
+import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 
 const SIZE_OPTIONS_FULL = ["sm", "md", "lg", "xl", "2xl"];
 const SIZE_OPTIONS_LG = ["sm", "md", "lg"];
@@ -55,7 +53,16 @@ const PROP_TYPES = {
   size: { label: "Tamaño", options: SIZE_OPTIONS_FULL },
   color: {
     label: "Color",
-    options: ["primary", "neutral", "success", "warning", "danger", "info"],
+    options: [
+      "primary",
+      "neutral",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "light",
+      "dark",
+    ],
   },
   variant: { label: "Variante", options: VARIANT_OPTIONS_SOG },
   disabled: { label: "Desactivado", type: "boolean" },
@@ -599,146 +606,6 @@ function PropControls({ config, currentProps, onChange, onReset }) {
   );
 }
 
-function CodeSnippet({ slug, props }) {
-  const theme = useQuickitTheme();
-  const isDark = theme === "dark";
-  const codeTheme = isDark ? themes.nightOwl : themes.nightOwlLight;
-
-  const tagName =
-    WEBSITE_COMPONENT_GROUPS.flatMap((g) => g.items).find(
-      (i) => i.slug === slug,
-    )?.name || slug;
-
-  const visibleProps = Object.entries(props).filter(
-    ([k, v]) => v !== DEFAULTS[k] && v !== false && v !== "",
-  );
-  const propsStr = visibleProps
-    .map(([k, v]) => {
-      if (v === true) return k;
-      return `${k}="${v}"`;
-    })
-    .join(" ");
-
-  const hasChildren = Object.prototype.hasOwnProperty.call(
-    CHILDREN_EXAMPLES,
-    slug,
-  );
-
-  const childrenText = hasChildren
-    ? CHILDREN_EXAMPLES[slug]
-        .split("\n")
-        .map((line) => `  ${line}`)
-        .join("\n")
-    : "";
-
-  const code = hasChildren
-    ? `import { ${tagName} } from "quickit-ui"\n\n<${tagName}${propsStr ? ` ${propsStr}` : ""}>\n${childrenText}\n</${tagName}>`
-    : `import { ${tagName} } from "quickit-ui"\n\n<${tagName}${propsStr ? ` ${propsStr}` : ""} />`;
-
-  const [copied, setCopied] = useState(false);
-  const copy = useCallback(() => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  }, [code]);
-
-  return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-2xl border",
-        isDark
-          ? "border-neutral-800 bg-neutral-950"
-          : "border-neutral-200 bg-neutral-50",
-      )}
-    >
-      <div
-        className={cn(
-          "flex items-center justify-between border-b px-4 py-3",
-          isDark ? "border-white/10" : "border-neutral-200",
-        )}
-      >
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
-          JSX
-        </span>
-        <Tooltip
-          content={copied ? "Copiado" : "Copiar código"}
-          placement="top"
-          showArrow={false}
-        >
-          <Button
-            aria-label={copied ? "Copiado" : "Copiar código"}
-            shape="circle"
-            size="md"
-            variant="ghost"
-            color="neutral"
-            onClick={copy}
-            activeMotion={false}
-          >
-            {copied ? (
-              <CheckStrokeIcon className="size-5" />
-            ) : (
-              <CopyIcon className="size-5" />
-            )}
-          </Button>
-        </Tooltip>
-      </div>
-      <pre
-        className={cn(
-          "overflow-x-auto px-4 py-4 text-sm leading-7",
-          "[scrollbar-width:thin] [scrollbar-color:rgb(163_163_163)_transparent]",
-          "[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2",
-          "[&::-webkit-scrollbar-track]:bg-transparent",
-          "[&::-webkit-scrollbar-thumb]:rounded-full",
-          "[&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent",
-          "[&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:bg-clip-content",
-          "[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400",
-          "dark:[scrollbar-color:rgb(115_115_115)_transparent]",
-          "dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700",
-          "dark:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600",
-        )}
-      >
-        <Highlight theme={codeTheme} code={code.trimEnd()} language="jsx">
-          {({ className, getLineProps, getTokenProps, tokens }) => (
-            <code className={cn("grid gap-0", className)}>
-              {tokens.map((line, index) => {
-                const { key: _lk, ...lineProps } = getLineProps({ line });
-                return (
-                  <div
-                    key={`line-${index}`}
-                    className="grid grid-cols-[3.25rem_minmax(0,1fr)] gap-7"
-                    {...lineProps}
-                  >
-                    <span
-                      className={cn(
-                        "select-none text-right text-neutral-400 dark:text-neutral-500",
-                      )}
-                    >
-                      {index + 1}
-                    </span>
-                    <span className="whitespace-pre">
-                      {line.map((token, tokenIndex) => {
-                        const { key: _tk, ...tokenProps } = getTokenProps({
-                          token,
-                        });
-                        return (
-                          <span
-                            key={`token-${index}-${tokenIndex}`}
-                            {...tokenProps}
-                          />
-                        );
-                      })}
-                    </span>
-                  </div>
-                );
-              })}
-            </code>
-          )}
-        </Highlight>
-      </pre>
-    </div>
-  );
-}
-
 export default function PlaygroundPage() {
   const [selected, setSelected] = useState(() => {
     if (typeof window === "undefined") return "button";
@@ -774,99 +641,205 @@ export default function PlaygroundPage() {
     return result;
   }, [config, props]);
 
+  const [filter, setFilter] = useState("");
+  const filteredGroups = useMemo(() => {
+    const withPreview = (item) => ({
+      ...item,
+      hasPreview: !!COMPONENT_CONFIG[item.slug],
+    });
+    if (!filter)
+      return WEBSITE_COMPONENT_GROUPS.map((g) => ({
+        ...g,
+        items: g.items
+          .filter((item) => COMPONENT_CONFIG[item.slug])
+          .map(withPreview),
+      })).filter((g) => g.items.length > 0);
+    const q = filter.toLowerCase();
+    return WEBSITE_COMPONENT_GROUPS.map((g) => ({
+      ...g,
+      items: g.items
+        .filter(
+          (item) =>
+            item.name.toLowerCase().includes(q) || item.slug.includes(q),
+        )
+        .map(withPreview),
+    })).filter((g) => g.items.length > 0);
+  }, [filter]);
+
   const updateProp = (name, value) =>
     setProps((prev) => ({ ...prev, [name]: value }));
 
+  const generatedCode = useMemo(() => {
+    const info = componentInfo;
+    const tagName = info?.name || selected;
+    const visibleProps = Object.entries(currentProps);
+    const propsStr = visibleProps
+      .map(([k, v]) => {
+        if (v === true) return k;
+        return `${k}="${v}"`;
+      })
+      .join(" ");
+    const hasChildren = CHILDREN_EXAMPLES[selected];
+    if (hasChildren) {
+      const childrenText = hasChildren
+        .split("\n")
+        .map((line) => `  ${line}`)
+        .join("\n");
+      return `import { ${tagName} } from "quickit-ui"\n\n<${tagName}${propsStr ? ` ${propsStr}` : ""}>\n${childrenText}\n</${tagName}>`;
+    }
+    return `import { ${tagName} } from "quickit-ui"\n\n<${tagName}${propsStr ? ` ${propsStr}` : ""} />`;
+  }, [selected, currentProps, componentInfo]);
+
   return (
     <main className="pb-16">
-      <Container size="md" className="min-h-0 pt-6 lg:pt-10">
-        <div className="flex flex-col gap-8">
-          <Combobox
-            value={selected}
-            onValueChange={selectComponent}
-            options={ALL_ITEMS.map((item) => ({
-              value: item.slug,
-              label: item.name,
-              disabled: !item.hasPreview,
-            }))}
-            placeholder="Buscar o seleccionar un componente…"
-            emptyText="No hay componentes que coincidan"
-            className="w-full"
-            size="lg"
-          />
-
-          {componentInfo ? (
-            <>
-              <header className="flex flex-col gap-2">
-                <h1 className="scroll-m-20 text-3xl font-bold tracking-tight text-neutral-950 dark:text-neutral-50">
-                  {componentInfo.name}
-                </h1>
-                <Show when={componentInfo.description}>
-                  <p className="text-base leading-7 text-neutral-500 dark:text-neutral-400">
-                    {componentInfo.description}
-                  </p>
-                </Show>
-              </header>
-
-              <Show
-                when={!isLogic}
-                fallback={
-                  <Alert
-                    color="neutral"
-                    variant="soft"
-                    title="Componente lógico"
-                    description={`${componentInfo.name} no tiene vista previa. Úsalo de forma declarativa en tu JSX.`}
-                  />
-                }
-              >
-                {config ? (
-                  <div className="flex min-h-[200px] items-center justify-center overflow-auto rounded-xl border-2 border-dashed border-neutral-200 bg-white p-8 dark:border-neutral-800 dark:bg-neutral-950">
-                    {config.preview(currentProps)}
-                  </div>
-                ) : (
-                  <EmptyState
-                    title="Sin vista previa"
-                    description={`${componentInfo.name} tiene una API compleja o necesita contexto de ejecución. Revisa la documentación.`}
-                  />
-                )}
-              </Show>
-
-              <PropControls
-                config={config}
-                currentProps={currentProps}
-                onChange={updateProp}
-                onReset={resetProps}
+      <div className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] min-w-0">
+        <aside className="hidden border-r border-neutral-200 dark:border-neutral-800 lg:fixed lg:top-14 lg:block lg:h-[calc(100vh-3.5rem)] lg:w-60 lg:overflow-y-auto scrollbar-hidden [mask-image:linear-gradient(transparent_0px,#000_32px,#000_calc(100%-32px),transparent)]">
+          <div className="p-3 pb-8 pt-8">
+            <div className="mb-4">
+              <Input
+                type="search"
+                placeholder="Filtrar componentes..."
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                clearButton
               />
-
-              <Show when={config && !isLogic}>
-                <CodeSnippet slug={selected} props={currentProps} />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <Show when={!!filter && filteredGroups.length === 0}>
+                <p className="px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">
+                  Sin resultados
+                </p>
               </Show>
-            </>
-          ) : (
-            <EmptyState
-              title="Selecciona un componente"
-              description="Elige un componente del buscador de arriba para ver su vista previa, configurar sus propiedades y copiar el código generado."
-              icon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-neutral-400"
+              <For each={filteredGroups}>
+                {(group, gIdx) => (
+                  <div key={gIdx} className="flex flex-col gap-0.5">
+                    <p className="px-3 py-2 text-[0.6875rem] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                      {group.title}
+                    </p>
+                    <For each={group.items}>
+                      {(item, iIdx) => (
+                        <Link
+                          key={`${item.slug}-${iIdx}`}
+                          href={`#${item.slug}`}
+                          und
+                          onClick={(e) => {
+                            e.preventDefault();
+                            selectComponent(item.slug);
+                          }}
+                          className={cn(
+                            "relative flex h-8 items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
+                            selected === item.slug
+                              ? "bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
+                              : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100",
+                            !item.hasPreview && "cursor-not-allowed opacity-40",
+                          )}
+                        >
+                          <span className="flex items-center gap-2">
+                            {item.name}
+                          </span>
+                        </Link>
+                      )}
+                    </For>
+                  </div>
+                )}
+              </For>
+            </div>
+          </div>
+        </aside>
+
+        <Container
+          size="full"
+          center={false}
+          className="min-w-0 px-4 sm:px-6 lg:col-start-2 pt-6 lg:pt-10"
+        >
+          <div className="mx-auto max-w-5xl flex flex-col gap-8">
+            {/* <Combobox
+              value={selected}
+              onValueChange={selectComponent}
+              options={ALL_ITEMS.map((item) => ({
+                value: item.slug,
+                label: item.name,
+                disabled: !item.hasPreview,
+              }))}
+              placeholder="Buscar o seleccionar un componente…"
+              emptyText="No hay componentes que coincidan"
+              className="w-full"
+              size="lg"
+            /> */}
+
+            {componentInfo ? (
+              <>
+                <header className="flex flex-col gap-2">
+                  <h1 className="scroll-m-20 text-3xl font-bold tracking-tight text-neutral-950 dark:text-neutral-50">
+                    {componentInfo.name}
+                  </h1>
+                  <Show when={componentInfo.description}>
+                    <p className="text-base leading-7 text-neutral-500 dark:text-neutral-400">
+                      {componentInfo.description}
+                    </p>
+                  </Show>
+                </header>
+
+                <Show
+                  when={!isLogic}
+                  fallback={
+                    <Alert
+                      color="neutral"
+                      variant="soft"
+                      title="Componente lógico"
+                      description={`${componentInfo.name} no tiene vista previa. Úsalo de forma declarativa en tu JSX.`}
+                    />
+                  }
                 >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              }
-            />
-          )}
-        </div>
-      </Container>
+                  {config ? (
+                    <div className="flex min-h-[200px] items-center justify-center overflow-auto rounded-xl border-2 border-dashed border-neutral-200 bg-white p-8 dark:border-neutral-800 dark:bg-neutral-950">
+                      {config.preview(currentProps)}
+                    </div>
+                  ) : (
+                    <EmptyState
+                      title="Sin vista previa"
+                      description={`${componentInfo.name} tiene una API compleja o necesita contexto de ejecución. Revisa la documentación.`}
+                    />
+                  )}
+                </Show>
+
+                <PropControls
+                  config={config}
+                  currentProps={currentProps}
+                  onChange={updateProp}
+                  onReset={resetProps}
+                />
+
+                <Show when={config && !isLogic}>
+                  <WebsiteCodeBlock code={generatedCode} language="jsx" />
+                </Show>
+              </>
+            ) : (
+              <EmptyState
+                title="Selecciona un componente"
+                description="Elige un componente del buscador de arriba para ver su vista previa, configurar sus propiedades y copiar el código generado."
+                icon={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-neutral-400"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                  </svg>
+                }
+              />
+            )}
+          </div>
+        </Container>
+      </div>
     </main>
   );
 }

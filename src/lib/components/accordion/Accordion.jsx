@@ -148,7 +148,7 @@ export const AccordionItem = forwardRef(function AccordionItem({ children, class
       <div
         ref={ref}
         className={cn(
-          "overflow-hidden rounded-[1rem] border transition-[border-color,background-color,box-shadow] duration-200",
+          "overflow-hidden rounded-[var(--qi-radius-xl)] border transition-[border-color,background-color,box-shadow] duration-200",
           ui.item,
           className,
         )}

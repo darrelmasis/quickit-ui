@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { EMPTY_STATE_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 const EMPTY_STATE_PRIMITIVES = {
-  root: "flex w-full flex-col rounded-2xl border border-dashed p-6 sm:p-8",
+  root: "flex w-full flex-col rounded-[var(--qi-radius-xl)] border border-dashed p-6 sm:p-8",
   align: {
     center: "items-center justify-center text-center",
     start: "items-start justify-center text-left",

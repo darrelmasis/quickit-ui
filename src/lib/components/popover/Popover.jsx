@@ -23,13 +23,13 @@ import { useFloatingTransition } from "@/lib/components/_shared/floating-list";
 const POPOVER_PRIMITIVES = {
   wrapper: "inline-flex",
   panel: [
-    "z-[9999] w-max max-w-[20rem] break-words rounded-[1rem] border px-3 py-2",
+    "z-[9999] w-max max-w-[20rem] break-words rounded-[var(--qi-radius-xl)] border px-3 py-2",
     "text-sm leading-6 outline-none",
   ].join(" "),
 };
 
 const TOOLTIP_BASE_CLASSES =
-  "!max-w-[16rem] !rounded-[0.875rem] !px-2.5 !py-1.5 !text-xs !leading-5";
+  "!max-w-[16rem] !rounded-[var(--qi-radius-lg)] !px-2.5 !py-1.5 !text-xs !leading-5";
 
 import { POPOVER_THEME_CLASSES } from "@/lib/theme/theme-classes";
 

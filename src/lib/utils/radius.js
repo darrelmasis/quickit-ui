@@ -4,33 +4,33 @@ export const CHECKBOX_RADIUS_BY_SIZE = {
 };
 
 export const CONTROL_RADIUS_BY_SIZE = {
-  sm: "rounded-[0.625rem]",
-  md: "rounded-[0.75rem]",
-  lg: "rounded-[0.875rem]",
-  xl: "rounded-[1rem]",
-  "2xl": "rounded-[1.125rem]",
+  sm: "rounded-[var(--qi-radius-xs)]",
+  md: "rounded-[var(--qi-radius)]",
+  lg: "rounded-[var(--qi-radius-lg)]",
+  xl: "rounded-[var(--qi-radius-xl)]",
+  "2xl": "rounded-[var(--qi-radius-2xl)]",
 };
 
 export const AVATAR_RADIUS_BY_SIZE = {
   sm: {
-    rounded: "rounded-[0.75rem]",
-    square: "rounded-[0.5rem]",
+    rounded: "rounded-[var(--qi-radius)]",
+    square: "rounded-[var(--qi-radius-xs)]",
   },
   md: {
-    rounded: "rounded-[0.875rem]",
-    square: "rounded-[0.625rem]",
+    rounded: "rounded-[var(--qi-radius-lg)]",
+    square: "rounded-[var(--qi-radius-xs)]",
   },
   lg: {
-    rounded: "rounded-[1rem]",
-    square: "rounded-[0.75rem]",
+    rounded: "rounded-[var(--qi-radius-xl)]",
+    square: "rounded-[var(--qi-radius)]",
   },
   xl: {
-    rounded: "rounded-[1.125rem]",
-    square: "rounded-[0.875rem]",
+    rounded: "rounded-[var(--qi-radius-2xl)]",
+    square: "rounded-[var(--qi-radius-lg)]",
   },
   "2xl": {
-    rounded: "rounded-[1.25rem]",
-    square: "rounded-[1rem]",
+    rounded: "rounded-[var(--qi-radius-3xl)]",
+    square: "rounded-[var(--qi-radius-xl)]",
   },
 };
 

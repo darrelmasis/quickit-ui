@@ -127,7 +127,7 @@ export const ACTION_CONTROL_THEME_CLASSES = {
         "border-amber-500/40 bg-amber-500/15 text-amber-300 hover:border-amber-400 hover:bg-amber-400 hover:text-neutral-950 focus-visible:outline-amber-400",
       info: "border-cyan-500/40 bg-cyan-500/15 text-cyan-300 hover:border-cyan-500 hover:bg-cyan-500 hover:text-neutral-950 focus-visible:outline-cyan-300",
       light:
-        "border-neutral-400/50 bg-neutral-100 text-neutral-300 hover:border-neutral-200 hover:bg-neutral-200 hover:text-neutral-900 focus-visible:outline-neutral-300",
+        "border-neutral-400/50 bg-neutral-100 text-neutral-700 hover:border-neutral-200 hover:bg-neutral-200 hover:text-neutral-900 focus-visible:outline-neutral-300",
       dark: "border-neutral-700 bg-neutral-900 text-neutral-200 hover:border-neutral-800 hover:bg-neutral-800 hover:text-white focus-visible:outline-neutral-500",
     },
   },

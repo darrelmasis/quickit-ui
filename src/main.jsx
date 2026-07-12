@@ -10,6 +10,7 @@ createRoot(document.getElementById('root')).render(
     <QuickitThemeProvider
       defaultTheme="system"
       pressEffect="transform"
+      radius="md"
       storageKey={WEBSITE_THEME_STORAGE_KEY}
     >
       <WebsiteApp />

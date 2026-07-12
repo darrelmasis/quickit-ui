@@ -10,6 +10,8 @@ export const QuickitThemeContext = createContext({
     enabled: true,
   },
   pressEffect: "transform",
+  customScrollbar: true,
+  radius: "0.75rem",
   theme: "light",
 });
 

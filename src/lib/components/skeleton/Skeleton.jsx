@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const SKELETON_SHAPE_CLASSES = {
   line: "h-4 w-full rounded-full",
-  rect: "h-24 w-full rounded-[1rem]",
+  rect: "h-24 w-full rounded-[var(--qi-radius-xl)]",
   circle: "size-12 rounded-full",
 };
 

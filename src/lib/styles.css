@@ -179,3 +179,96 @@
     transition-timing-function: linear;
   }
 }
+
+/* ─── Scrollbar Themed ──────────────────────────────────────────────────── */
+:root {
+  --qi-radius: 0.75rem;
+  --qi-radius-xs: calc(var(--qi-radius) * 0.833);
+  --qi-radius-lg: calc(var(--qi-radius) * 1.167);
+  --qi-radius-xl: calc(var(--qi-radius) * 1.333);
+  --qi-radius-2xl: calc(var(--qi-radius) * 1.5);
+  --qi-radius-3xl: calc(var(--qi-radius) * 1.667);
+
+  --qi-scroll-thumb: #a3a3a3;
+  --qi-scroll-thumb-hover: #737373;
+  --qi-scroll-track: transparent;
+}
+
+.dark {
+  --qi-scroll-thumb: #525252;
+  --qi-scroll-thumb-hover: #737373;
+  --qi-scroll-track: transparent;
+}
+
+@utility scrollbar-themed {
+  scrollbar-width: thin;
+  scrollbar-color: var(--qi-scroll-thumb) var(--qi-scroll-track);
+  scrollbar-gutter: stable;
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--qi-scroll-track);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    background-color: var(--qi-scroll-thumb);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--qi-scroll-thumb-hover);
+  }
+}
+
+/* ─── Scrollbar Global Themed ────────────────────────────────────────────── */
+[data-qi-custom-scrollbar] * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--qi-scroll-thumb) var(--qi-scroll-track);
+}
+
+[data-qi-custom-scrollbar] *::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+[data-qi-custom-scrollbar] *::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+[data-qi-custom-scrollbar] *::-webkit-scrollbar-track {
+  background: var(--qi-scroll-track);
+}
+
+[data-qi-custom-scrollbar] *::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  background-color: var(--qi-scroll-thumb);
+}
+
+[data-qi-custom-scrollbar] *::-webkit-scrollbar-thumb:hover {
+  background-color: var(--qi-scroll-thumb-hover);
+}
+
+@utility scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

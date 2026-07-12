@@ -113,7 +113,7 @@ const DataTable = forwardRef(function DataTable({
   return (
     <div
       className={cn(
-        "overflow-x-auto rounded-2xl border",
+        "overflow-x-auto rounded-[var(--qi-radius-xl)] border",
         skin.wrap,
         className,
       )}

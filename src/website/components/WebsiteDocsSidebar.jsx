@@ -32,6 +32,7 @@ function SidebarLink({ href, isActive, children }) {
   return (
     <Link
       href={href}
+      underline="none"
       className={cn(
         "relative flex h-8 w-full items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
         isActive
@@ -95,7 +96,7 @@ export default function WebsiteDocsSidebar({
   );
 
   return (
-    <aside className="hidden border-r border-neutral-200 dark:border-neutral-800 lg:fixed lg:top-14 lg:block lg:h-[calc(100vh-3.5rem)] lg:w-60 xl:w-64 lg:overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(transparent_0px,#000_32px,#000_calc(100%-32px),transparent)]">
+    <aside className="hidden border-r border-neutral-200 dark:border-neutral-800 lg:fixed lg:top-14 lg:block lg:h-[calc(100vh-3.5rem)] lg:w-60 xl:w-64 lg:overflow-y-auto scrollbar-hidden [mask-image:linear-gradient(transparent_0px,#000_32px,#000_calc(100%-32px),transparent)]">
       <div className="p-3 pb-8 pt-8">
         <div className="flex flex-col gap-6">
           <div>
@@ -197,7 +198,7 @@ export default function WebsiteDocsSidebar({
                               )}
                             >
                               <div className="min-h-0 overflow-hidden">
-                                <div className="flex flex-col gap-0.5 border-l border-neutral-200 pl-3 dark:border-neutral-800">
+                                <div className="flex flex-col gap-0.5 border-l border-neutral-200 pl-1 dark:border-neutral-800">
                                   <For each={childEntries}>
                                     {(child) => {
                                       const isCurrentChild =
@@ -206,6 +207,7 @@ export default function WebsiteDocsSidebar({
                                         <Link
                                           key={child.id}
                                           href={child.href}
+                                          underline="none"
                                           className={cn(
                                             "relative flex h-7 items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
                                             isCurrentChild
@@ -277,6 +279,7 @@ export default function WebsiteDocsSidebar({
                       <Link
                         key={`${item.slug}-${index}`}
                         href={getWebsiteComponentRoute(item.slug)}
+                        underline="none"
                         className={cn(
                           "relative flex h-8 items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
                           currentComponentSlug === item.slug

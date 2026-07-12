@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { resolveQuickitThemeMode } from "./quickit-theme-context";
+import { useQuickitCustomScrollbar } from "./custom-scrollbar";
 import { useQuickitFocusRing } from "./focus-ring";
 import { useQuickitRipple } from "./ripple";
 import { useQuickitPressEffect } from "./press-effect";
@@ -8,7 +9,7 @@ import { useQuickitTheme } from "./useQuickitTheme";
 /**
  * useQuickitControlState
  * 
- * Centraliza la resolución de políticas visuales (tema, foco, ripple, press effect)
+ * Centraliza la resolución de políticas visuales (tema, foco, ripple, press effect, custom scrollbar)
  * para reducir el boilerplate en los componentes y asegurar consistencia total.
  * 
  * @param {string} component - Nombre del componente (ej: "button", "input")
@@ -20,11 +21,12 @@ export function useQuickitControlState(component, props = {}) {
   const resolvedTheme = useMemo(() => resolveQuickitThemeMode(theme), [theme]);
   const ariaLabel = props["aria-label"];
   const ariaLabelledBy = props["aria-labelledby"];
-  const { children, focusRing, pressEffect, ripple, shape, title } = props;
+  const { children, customScrollbar, focusRing, pressEffect, ripple, shape, title } = props;
   
   const focusRingEnabled = useQuickitFocusRing(component);
   const rippleEnabled = useQuickitRipple(component);
   const providerPressEffect = useQuickitPressEffect();
+  const providerCustomScrollbar = useQuickitCustomScrollbar();
 
   const resolvedPressEffect = useMemo(() => {
     if (pressEffect === "ripple" || pressEffect === "transform") {
@@ -41,6 +43,10 @@ export function useQuickitControlState(component, props = {}) {
   const resolvedFocusRing = useMemo(() => {
     return focusRing !== undefined ? focusRing : focusRingEnabled;
   }, [focusRing, focusRingEnabled]);
+
+  const resolvedCustomScrollbar = useMemo(() => {
+    return customScrollbar !== undefined ? customScrollbar : providerCustomScrollbar;
+  }, [customScrollbar, providerCustomScrollbar]);
 
   // Validacion de accesibilidad solo en desarrollo para controles icon-only.
   useEffect(() => {
@@ -66,5 +72,6 @@ export function useQuickitControlState(component, props = {}) {
     focusRing: resolvedFocusRing,
     ripple: resolvedRipple,
     pressEffect: resolvedPressEffect,
+    customScrollbar: resolvedCustomScrollbar,
   };
 }

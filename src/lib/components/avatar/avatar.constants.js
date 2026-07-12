@@ -92,9 +92,9 @@ export const AVATAR_PRESENCE_STATUS_LABELS = {
 };
 
 export const USER_CHIP_SIZE_CLASSES = {
-  sm: { root: "gap-2 rounded-[0.9rem] px-2.5 py-2", title: "text-sm", description: "text-xs" },
-  md: { root: "gap-3 rounded-[1rem] px-3 py-2.5", title: "text-sm", description: "text-sm" },
-  lg: { root: "gap-3.5 rounded-[1.1rem] px-3.5 py-3", title: "text-base", description: "text-sm" },
-  xl: { root: "gap-4 rounded-[1.2rem] px-4 py-3.5", title: "text-base", description: "text-base" },
-  "2xl": { root: "gap-4 rounded-[1.25rem] px-4.5 py-4", title: "text-lg", description: "text-base" },
+  sm: { root: "gap-2 rounded-[var(--qi-radius-lg)] px-2.5 py-2", title: "text-sm", description: "text-xs" },
+  md: { root: "gap-3 rounded-[var(--qi-radius-xl)] px-3 py-2.5", title: "text-sm", description: "text-sm" },
+  lg: { root: "gap-3.5 rounded-[var(--qi-radius-2xl)] px-3.5 py-3", title: "text-base", description: "text-sm" },
+  xl: { root: "gap-4 rounded-[var(--qi-radius-3xl)] px-4 py-3.5", title: "text-base", description: "text-base" },
+  "2xl": { root: "gap-4 rounded-[var(--qi-radius-3xl)] px-4.5 py-4", title: "text-lg", description: "text-base" },
 };
