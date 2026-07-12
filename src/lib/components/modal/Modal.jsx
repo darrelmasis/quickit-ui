@@ -68,7 +68,7 @@ const MODAL_PRIMITIVES = {
     "fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none",
   dialog: [
     "pointer-events-auto flex max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden",
-    "rounded-[1.25rem] border transform-gpu will-change-transform",
+    "rounded-[var(--qi-radius-3xl)] border transform-gpu will-change-transform",
   ].join(" "),
   header:
     "flex items-start justify-between gap-4 border-b px-5 py-4 flex-shrink-0",
@@ -459,7 +459,7 @@ const ModalContent = forwardRef(function ModalContent({ children, className }, r
           role="dialog"
           aria-modal={blockingOverlay ? "true" : undefined}
           aria-labelledby={titleId || undefined}
-          aria-label={!titleId ? "Modal" : undefined}
+          aria-label={!titleId ? TXT.MODAL_FALLBACK_LABEL : undefined}
           aria-describedby={descriptionId || undefined}
           tabIndex={-1}
           onClick={(event) => event.stopPropagation()}

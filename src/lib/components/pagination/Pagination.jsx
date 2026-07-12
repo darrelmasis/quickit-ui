@@ -96,7 +96,7 @@ const Pagination = forwardRef(function Pagination({
   return (
     <nav
       ref={ref}
-      aria-label="Pagination"
+      aria-label={TXT.PAGINATION_LABEL}
       className={cn(
         "flex w-full flex-wrap items-center justify-center gap-2",
         className,

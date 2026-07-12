@@ -52,6 +52,9 @@ export const TimePicker = forwardRef(function TimePicker(
     required = false,
     size: sizeProp,
     value: controlledValue,
+    dialogLabel = TXT.TIME_DIALOG_LABEL,
+    cancelLabel = TXT.CANCEL,
+    applyLabel = TXT.APPLY,
     "aria-describedby": ariaDescribedByProp,
     "aria-labelledby": ariaLabelledByProp,
     ...rest
@@ -178,13 +181,13 @@ export const TimePicker = forwardRef(function TimePicker(
       "[&_.min-w-0]:text-center [&_.min-w-0]:font-medium [&_.min-w-0]:tabular-nums",
     ].join(" ");
   const selectContentClassName =
-    "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden";
+    "scrollbar-hidden";
 
   const content = (
     <div
       id={popupId}
       role="dialog"
-      aria-label="Selector de hora"
+      aria-label={dialogLabel}
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-1 text-neutral-900 dark:text-neutral-100",
         "text-neutral-900 dark:text-neutral-100",
@@ -367,7 +370,7 @@ export const TimePicker = forwardRef(function TimePicker(
             setOpen(false);
           }}
         >
-          Cancelar
+          {cancelLabel}
         </Button>
         <Button
           type="button"
@@ -377,7 +380,7 @@ export const TimePicker = forwardRef(function TimePicker(
           disabled={draftDisabled || resolvedDisabled}
           onClick={() => commitValue(draftValue)}
         >
-          Aplicar
+          {applyLabel}
         </Button>
       </div>
     </div>

@@ -27,7 +27,6 @@ import {
   yearOutsideRange,
 } from "./date-utils";
 import { TXT } from "@/lib/texts";
-
 const WEEKDAYS = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"];
 const MONTH_LABELS = Array.from({ length: 12 }, (_, monthIndex) =>
   new Date(2024, monthIndex, 1)
@@ -142,7 +141,7 @@ export const DatePicker = forwardRef(function DatePicker(
   const isRange = selectionMode === "between";
 
   const resolvedPlaceholder =
-    placeholder ?? (isRange ? "Fecha inicio – Fecha fin" : "Seleccionar fecha");
+    placeholder ?? (isRange ? TXT.DATE_RANGE_PLACEHOLDER : TXT.SELECT_DATE);
 
   const {
     colorUi,
@@ -385,23 +384,23 @@ export const DatePicker = forwardRef(function DatePicker(
         : `${yearPageStart} - ${yearPageStart + 11}`;
   const previousLabel =
     calendarView === "day"
-      ? "Mes anterior"
+      ? TXT.PREV_MONTH
       : calendarView === "month"
-        ? "Año anterior"
-        : "Bloque anterior de años";
+        ? TXT.PREV_YEAR
+        : TXT.PREV_YEARS;
   const nextLabel =
     calendarView === "day"
-      ? "Mes siguiente"
+      ? TXT.NEXT_MONTH
       : calendarView === "month"
-        ? "Año siguiente"
-        : "Bloque siguiente de años";
+        ? TXT.NEXT_YEAR
+        : TXT.NEXT_YEARS;
   const canStepUpView = calendarView !== "year";
 
   const calendarContent = (
     <div
       id={popupId}
       role="dialog"
-      aria-label={isRange ? "Selector de rango de fechas" : "Selector de fecha"}
+      aria-label={isRange ? TXT.RANGE_DIALOG_LABEL : TXT.DATE_DIALOG_LABEL}
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-2",
         "text-neutral-900 dark:text-neutral-100",

@@ -241,7 +241,7 @@ function CommandPalette({
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleInputKeyDown}
             placeholder={placeholder}
-            aria-label="Buscar en la paleta de comandos"
+            aria-label={TXT.SEARCH_COMMAND_ARIA}
             role="combobox"
             aria-expanded={resolvedOpen}
             aria-controls={resolvedOpen ? listboxId : undefined}
@@ -252,16 +252,7 @@ function CommandPalette({
           <div
             className={cn(
               "max-h-72 overflow-y-auto rounded-xl border border-current/10",
-              "[scrollbar-width:thin] [scrollbar-color:rgb(163_163_163)_transparent]",
-              "[&::-webkit-scrollbar]:w-2",
-              "[&::-webkit-scrollbar-track]:bg-transparent",
-              "[&::-webkit-scrollbar-thumb]:rounded-full",
-              "[&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent",
-              "[&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:bg-clip-content",
-              "[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400",
-              "dark:[scrollbar-color:rgb(115_115_115)_transparent]",
-              "dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700",
-              "dark:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600",
+              "scrollbar-themed",
             )}
           >
             {flatCount === 0 ? (

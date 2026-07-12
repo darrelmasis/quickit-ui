@@ -487,7 +487,7 @@ const DrawerContent = forwardRef(function DrawerContent({ children, className },
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId || undefined}
-          aria-label={!titleId ? "Drawer" : undefined}
+          aria-label={!titleId ? TXT.DRAWER_FALLBACK_LABEL : undefined}
           aria-describedby={descriptionId || undefined}
           tabIndex={-1}
           onClick={(event) => event.stopPropagation()}

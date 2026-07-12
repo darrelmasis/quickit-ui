@@ -47,11 +47,13 @@ const Input = forwardRef(function Input(
     clearButtonLabel = TXT.CLEAR_SEARCH,
     clearIcon,
     color: colorProp,
+    decrementLabel = TXT.DECREMENT,
     defaultPasswordVisible = false,
     disabled = false,
     hidePasswordIcon,
     hidePasswordLabel = "Ocultar contraseña",
     id,
+    incrementLabel = TXT.INCREMENT,
     invalid = false,
     leftElement,
     numberButtons = false,
@@ -419,9 +421,9 @@ const Input = forwardRef(function Input(
             <Button
               type="button"
               tabIndex={-1}
-              aria-label="Decrementar"
+              aria-label={decrementLabel}
               disabled={resolvedDisabled || !canDecrement}
-              title="Decrementar"
+              title={decrementLabel}
               variant="ghost"
               color={resolvedColor}
               shape="square"
@@ -451,9 +453,9 @@ const Input = forwardRef(function Input(
             <Button
               type="button"
               tabIndex={-1}
-              aria-label="Incrementar"
+              aria-label={incrementLabel}
               disabled={resolvedDisabled || !canIncrement}
-              title="Incrementar"
+              title={incrementLabel}
               variant="ghost"
               color={resolvedColor}
               shape="square"
@@ -486,9 +488,9 @@ const Input = forwardRef(function Input(
               <Button
                 type="button"
                 tabIndex={-1}
-                aria-label="Incrementar"
+                aria-label={incrementLabel}
                 disabled={resolvedDisabled || !canIncrement}
-                title="Incrementar"
+                title={incrementLabel}
                 variant="ghost"
                 color={resolvedColor}
                 shape="square"
@@ -512,9 +514,9 @@ const Input = forwardRef(function Input(
               <Button
                 type="button"
                 tabIndex={-1}
-                aria-label="Decrementar"
+                aria-label={decrementLabel}
                 disabled={resolvedDisabled || !canDecrement}
-                title="Decrementar"
+                title={decrementLabel}
                 variant="ghost"
                 color={resolvedColor}
                 shape="square"

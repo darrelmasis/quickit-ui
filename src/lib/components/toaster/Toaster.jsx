@@ -9,6 +9,7 @@ import {
 import Button from "@/lib/components/button/Button";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import { TXT } from "@/lib/texts";
 import {
   dismissToast,
   MAX_VISIBLE_TOASTS,
@@ -138,6 +139,7 @@ const Toaster = forwardRef(function Toaster(
     position = "bottom-right",
     visibleToasts: visibleToastsProp,
     gap,
+    closeButtonLabel = TXT.CLOSE_TOAST,
     expandOnHover = true,
     showCloseButton = true,
     defaultIcon,
@@ -361,7 +363,7 @@ const Toaster = forwardRef(function Toaster(
                         shape="square"
                         size="sm"
                         color="neutral"
-                        aria-label="Cerrar"
+                        aria-label={closeButtonLabel}
                         onClick={() => dismissToast(item.id)}
                         className="size-7 min-w-7 shrink-0 text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
                       >
