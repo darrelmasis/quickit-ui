@@ -54,7 +54,7 @@ describe("identity components", () => {
         description="Design lead"
         initials="ER"
         presence="online"
-        trailing={<Badge color="brand">Core</Badge>}
+        trailing={<Badge color="primary">Core</Badge>}
       />,
     );
 

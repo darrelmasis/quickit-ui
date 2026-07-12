@@ -9,6 +9,8 @@ import {
   Button,
   Checkbox,
   Combobox,
+  CommandPalette,
+  Container,
   DataTable,
   Default,
   Dropdown,
@@ -24,7 +26,7 @@ import {
   Link,
   Match,
   Modal,
-  QUICKIT_BRAND_COLORS,
+  QUICKIT_ACCENT_COLORS,
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_BREAKPOINTS,
   QUICKIT_CONTROL_SIZES,
@@ -62,7 +64,7 @@ import {
   type QuickitBreakpoint,
   type QuickitBreakpoints,
   type QuickitCheckedChangeEvent,
-  type QuickitBrandColor,
+  type QuickitAccentColor,
   type QuickitNeutralColor,
   type QuickitPressEffect,
   type QuickitPresenceStatus,
@@ -75,7 +77,7 @@ import {
 
 const color: QuickitSemanticColor = QUICKIT_SEMANTIC_COLORS[0];
 const statusColor: QuickitStatusColor = QUICKIT_STATUS_COLORS[0];
-const brandColor: QuickitBrandColor = QUICKIT_BRAND_COLORS[0];
+const accentColor: QuickitAccentColor = QUICKIT_ACCENT_COLORS[0];
 const neutralColor: QuickitNeutralColor = QUICKIT_NEUTRAL_COLORS[0];
 const buttonProps: ButtonProps = {
   color,
@@ -150,7 +152,7 @@ function ConsumerPreviewInner() {
         placeholder="Idioma"
       />
       <DataTable<DataTablePreviewRow>
-        color="brand"
+        color="primary"
         stickyHeader={false}
         columns={[
           {
@@ -190,7 +192,7 @@ function ConsumerPreviewInner() {
         leftElement={<span>S</span>}
       />
       <Input
-        color="brand"
+        color="primary"
         type="password"
         passwordToggle
         showPasswordLabel="Ver"
@@ -243,7 +245,7 @@ function ConsumerPreviewInner() {
         endLabel="Precio máximo"
         defaultValue={[10, 90]}
       />
-      <Select color="brand" defaultValue="docs">
+      <Select color="primary" defaultValue="docs">
         <option value="docs">Docs</option>
         <option value="tokens">Tokens</option>
       </Select>
@@ -296,6 +298,12 @@ function ConsumerPreviewInner() {
       </Modal>
       <Modal closeOnEscape outsideClick={false} showCloseButton />
       <Drawer closeOnEscape outsideClick={false} showCloseButton />
+      <Container size="lg" padding="md" center>
+        <CommandPalette
+          shortcutEnabled={false}
+          groups={[{ heading: "General", items: [{ id: "docs", label: "Docs" }] }]}
+        />
+      </Container>
     </QuickitProvider>
   );
 }

@@ -82,7 +82,7 @@ describe("choice controls", () => {
   it("aligns semantic surfaces and supports light/dark color variants", () => {
     renderWithProvider(
       <div>
-        <Checkbox label="Checkbox black" color="black" defaultChecked />
+        <Checkbox label="Checkbox dark" color="dark" defaultChecked />
         <Radio
           name="choice-theme"
           label="Radio light"
@@ -96,7 +96,7 @@ describe("choice controls", () => {
     );
 
     const checkboxVisual = screen
-      .getByRole("checkbox", { name: "Checkbox black" })
+      .getByRole("checkbox", { name: "Checkbox dark" })
       .nextElementSibling;
     const radioVisual = screen
       .getByRole("radio", { name: "Radio light" })
@@ -104,9 +104,9 @@ describe("choice controls", () => {
     const switchControl = screen.getByRole("switch", { name: "Switch light" });
     const invalidSwitch = screen.getByRole("switch", { name: "Switch invalid" });
 
-    expect(checkboxVisual.className).toContain("peer-checked:border-white");
-    expect(radioVisual.className).toContain("peer-checked:border-stone-200");
-    expect(switchControl.className).toContain("border-stone-200");
+    expect(checkboxVisual.className).toContain("peer-checked:border-neutral-300");
+    expect(radioVisual.className).toContain("peer-checked:border-neutral-200");
+    expect(switchControl.className).toContain("border-neutral-200");
     expect(invalidSwitch.className).toContain("border-rose-500/70");
   });
 });

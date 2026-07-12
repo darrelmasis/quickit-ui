@@ -8,7 +8,7 @@ describe("DataTable", () => {
   it("supports semantic colors and custom cell classes", () => {
     const { container } = renderWithProvider(
       <DataTable
-        color="brand"
+        color="primary"
         stickyHeader={false}
         columns={[
           {
@@ -28,7 +28,7 @@ describe("DataTable", () => {
       />,
     );
 
-    expect(container.firstChild?.className).toContain("border-brand-200");
+    expect(container.firstChild?.className).toContain("border-sky-200");
     expect(screen.getByRole("columnheader", { name: "Resumen" }).className).toContain(
       "normal-case",
     );

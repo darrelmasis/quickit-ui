@@ -8,26 +8,26 @@ describe("form field variants", () => {
     renderWithProvider(
       <div>
         <Input color="dark" placeholder="Buscar" />
-        <Input color="black" placeholder="Consola" />
+        <Input color="dark" placeholder="Consola" />
         <Textarea color="light" minRows={3} />
       </div>,
     );
 
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
-      "border-zinc-800",
+      "border-neutral-800",
     );
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
-      "focus-visible:ring-zinc-700/32",
+      "focus-visible:ring-neutral-700/32",
     );
     expect(screen.getByPlaceholderText("Consola").className).toContain(
-      "bg-zinc-950",
+      "bg-neutral-900",
     );
     expect(screen.getByPlaceholderText("Consola").className).toContain(
-      "focus-visible:ring-zinc-700/32",
+      "focus-visible:ring-neutral-700/32",
     );
-    expect(screen.getAllByRole("textbox")[2].className).toContain("bg-stone-50");
+    expect(screen.getAllByRole("textbox")[2].className).toContain("bg-neutral-50");
     expect(screen.getAllByRole("textbox")[2].className).toContain(
-      "focus-visible:ring-stone-400/45",
+      "focus-visible:ring-neutral-400/45",
     );
   });
 
@@ -35,7 +35,7 @@ describe("form field variants", () => {
     renderWithProvider(<Input placeholder="Neutral field" color="neutral" />);
 
     expect(screen.getByPlaceholderText("Neutral field").className).toContain(
-      "hover:border-slate-400",
+      "hover:border-neutral-400",
     );
     expect(screen.getByPlaceholderText("Neutral field").className).not.toContain(
       "hover:bg-",
@@ -45,17 +45,17 @@ describe("form field variants", () => {
   it("uses the selected color on select and keeps invalid state priority", () => {
     renderWithProvider(
       <div>
-        <Select color="brand" defaultValue="docs">
+        <Select color="primary" defaultValue="docs">
           <option value="docs">Docs</option>
           <option value="tokens">Tokens</option>
         </Select>
-        <Input color="brand" invalid defaultValue="Error" />
+        <Input color="primary" invalid defaultValue="Error" />
       </div>,
       { theme: "dark" },
     );
 
     expect(screen.getByRole("combobox").className).toContain(
-      "border-brand-500/55",
+      "border-sky-500/55",
     );
     expect(screen.getByDisplayValue("Error").className).toContain(
       "border-rose-500/70",
@@ -65,7 +65,7 @@ describe("form field variants", () => {
   it("assigns autofill tokens that follow theme and color", () => {
     renderWithProvider(
       <div>
-        <Input color="brand" placeholder="Correo" />
+        <Input color="primary" placeholder="Correo" />
         <Textarea color="neutral" minRows={3} placeholder="Notas" />
       </div>,
       { theme: "dark" },
@@ -73,15 +73,15 @@ describe("form field variants", () => {
 
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
       "--qi-field-autofill-bg",
-    )).toContain("var(--color-brand-500)");
+    )).toContain("var(--color-sky-500)");
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
       "--qi-field-autofill-border",
-    )).toBe("var(--color-brand-400)");
+    )).toBe("var(--color-sky-400)");
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
       "--qi-field-autofill-text",
-    )).toBe("var(--color-stone-50)");
+    )).toBe("var(--color-neutral-50)");
     expect(screen.getByPlaceholderText("Notas").style.getPropertyValue(
       "--qi-field-autofill-bg",
-    )).toBe("var(--color-zinc-900)");
+    )).toBe("var(--color-neutral-900)");
   });
 });
