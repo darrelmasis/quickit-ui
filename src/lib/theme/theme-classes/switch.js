@@ -1,0 +1,46 @@
+export const SWITCH_THEME_CLASSES = {
+  light: {
+    idle: "border-neutral-300 bg-neutral-100 hover:border-neutral-400 hover:bg-neutral-200/90 focus-visible:outline-neutral-500 focus-visible:ring-neutral-400/45",
+    checked: {
+      neutral: "border-neutral-700 bg-neutral-700",
+      primary: "border-sky-600 bg-sky-600",
+      success: "border-emerald-600 bg-emerald-600",
+      danger: "border-rose-600 bg-rose-600",
+      warning: "border-amber-500 bg-amber-500",
+      info: "border-cyan-600 bg-cyan-600",
+      light: "border-neutral-300 bg-neutral-300",
+      dark: "border-neutral-800 bg-neutral-800",
+    },
+    invalid: "border-rose-300 bg-rose-50 focus-visible:outline-rose-400 focus-visible:ring-rose-400/45",
+    thumb: "border-neutral-200 bg-white",
+    thumbChecked: {
+      warning: "border-neutral-950 bg-neutral-950",
+      light: "border-neutral-950 bg-neutral-950",
+    },
+  },
+  dark: {
+    idle: "border-neutral-700 bg-neutral-900/95 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-neutral-500",
+    checked: {
+      neutral: "border-neutral-100 bg-neutral-100 text-neutral-950",
+      primary: "border-sky-300 bg-sky-300 text-neutral-950",
+      success: "border-emerald-300 bg-emerald-300 text-neutral-950",
+      danger: "border-rose-300 bg-rose-300 text-neutral-950",
+      warning: "border-amber-300 bg-amber-300 text-neutral-950",
+      info: "border-cyan-300 bg-cyan-300 text-neutral-950",
+      light: "border-neutral-200 bg-neutral-200 text-neutral-950",
+      dark: "border-neutral-300 bg-neutral-300 text-neutral-950",
+    },
+    invalid: "border-rose-500/70 bg-rose-500/18 focus-visible:outline-rose-400",
+    thumb: "border-neutral-300/70 bg-neutral-100",
+    thumbChecked: {
+      neutral: "border-neutral-950 bg-neutral-950",
+      primary: "border-neutral-950 bg-neutral-950",
+      success: "border-neutral-950 bg-neutral-950",
+      danger: "border-neutral-950 bg-neutral-950",
+      warning: "border-neutral-950 bg-neutral-950",
+      info: "border-neutral-950 bg-neutral-950",
+      light: "border-neutral-950 bg-neutral-950",
+      dark: "border-neutral-950 bg-neutral-950",
+    },
+  },
+};
