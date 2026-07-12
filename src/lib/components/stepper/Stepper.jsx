@@ -1,39 +1,40 @@
+import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import { useQuickitControlState } from "@/lib/theme";
 import { CheckFillIcon } from "@/lib/assets/icons";
 
 const STEPPER_THEME = {
   light: {
-    line: "bg-slate-200",
-    lineActive: "bg-slate-700",
-    dot: "border-slate-300 bg-white text-slate-600",
+    line: "bg-neutral-200",
+    lineActive: "bg-neutral-700",
+    dot: "border-neutral-300 bg-white text-neutral-600",
     dotCurrent: "border-sky-600 bg-sky-50 text-sky-800 ring-2 ring-sky-500/30",
-    dotDone: "border-slate-700 bg-slate-700 text-white",
-    title: "text-slate-900",
-    desc: "text-slate-500",
+    dotDone: "border-neutral-700 bg-neutral-700 text-white",
+    title: "text-neutral-900",
+    desc: "text-neutral-500",
   },
   dark: {
-    line: "bg-zinc-700",
-    lineActive: "bg-zinc-200",
-    dot: "border-zinc-600 bg-zinc-950 text-zinc-300",
+    line: "bg-neutral-700",
+    lineActive: "bg-neutral-200",
+    dot: "border-neutral-600 bg-neutral-950 text-neutral-300",
     dotCurrent: "border-sky-400 bg-sky-950 text-sky-100 ring-2 ring-sky-400/30",
-    dotDone: "border-zinc-100 bg-zinc-100 text-zinc-900",
-    title: "text-zinc-50",
-    desc: "text-zinc-400",
+    dotDone: "border-neutral-100 bg-neutral-100 text-neutral-900",
+    title: "text-neutral-50",
+    desc: "text-neutral-400",
   },
 };
 
 /**
  * Pasos numerados con estado actual, completados y opcional navegación por click.
  */
-export function Stepper({
+const Stepper = forwardRef(function Stepper({
   steps = [],
   activeStep = 0,
   className,
   id,
   onStepChange,
   orientation = "horizontal",
-}) {
+}, ref) {
   const { theme } = useQuickitControlState("stepper");
   const ui = STEPPER_THEME[theme] ?? STEPPER_THEME.light;
   const isVertical = orientation === "vertical";
@@ -45,6 +46,7 @@ export function Stepper({
       className={cn("w-full", className)}
     >
       <ol
+        ref={ref}
         className={cn(
           "flex gap-0",
           isVertical ? "flex-col" : "flex-row items-start",
@@ -128,6 +130,7 @@ export function Stepper({
       </ol>
     </nav>
   );
-}
+});
 
+export { Stepper };
 export default Stepper;

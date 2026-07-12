@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { useQuickitControlState } from "@/lib/theme";
+import { LINK_TEXT_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
 import {
@@ -28,51 +29,6 @@ const LINK_TEXT_VARIANT_CLASSES = {
   default: "",
   muted: "opacity-85",
   subtle: "opacity-70",
-};
-
-const LINK_THEME_CLASSES = {
-  light: {
-    color: {
-      neutral: "text-slate-600 hover:text-slate-900 focus-visible:ring-slate-400/40",
-      slate: "text-slate-600 hover:text-slate-900 focus-visible:ring-slate-400/40",
-      zinc: "text-zinc-600 hover:text-zinc-900 focus-visible:ring-zinc-400/40",
-      primary: "text-sky-600 hover:text-sky-700 focus-visible:ring-sky-400/40",
-      brand: "text-brand-600 hover:text-brand-700 focus-visible:ring-brand-400/40",
-      success: "text-emerald-600 hover:text-emerald-700 focus-visible:ring-emerald-400/40",
-      danger: "text-rose-600 hover:text-rose-700 focus-visible:ring-rose-400/40",
-      warning: "text-amber-600 hover:text-amber-700 focus-visible:ring-amber-400/40",
-      info: "text-cyan-600 hover:text-cyan-700 focus-visible:ring-cyan-400/40",
-      light: "text-slate-400 hover:text-slate-200 focus-visible:ring-slate-300/40",
-      dark: "text-zinc-800 hover:text-zinc-950 focus-visible:ring-zinc-500/40",
-      black: "text-black hover:text-neutral-800 focus-visible:ring-neutral-400/40",
-    },
-    decoration: {
-      underline: "underline hover:no-underline underline-offset-4",
-      none: "no-underline",
-      hover: "no-underline hover:underline underline-offset-4",
-    },
-  },
-  dark: {
-    color: {
-      neutral: "text-stone-300 hover:text-stone-50 focus-visible:ring-stone-500/40",
-      slate: "text-slate-300 hover:text-slate-50 focus-visible:ring-slate-500/40",
-      zinc: "text-zinc-300 hover:text-zinc-50 focus-visible:ring-zinc-500/40",
-      primary: "text-sky-400 hover:text-sky-300 focus-visible:ring-sky-500/40",
-      brand: "text-brand-400 hover:text-brand-300 focus-visible:ring-brand-500/40",
-      success: "text-emerald-400 hover:text-emerald-300 focus-visible:ring-emerald-500/40",
-      danger: "text-rose-400 hover:text-rose-300 focus-visible:ring-rose-500/40",
-      warning: "text-amber-400 hover:text-amber-300 focus-visible:ring-amber-500/40",
-      info: "text-cyan-400 hover:text-cyan-300 focus-visible:ring-cyan-500/40",
-      light: "text-slate-200 hover:text-white focus-visible:ring-slate-100/40",
-      dark: "text-zinc-400 hover:text-zinc-200 focus-visible:ring-zinc-600/40",
-      black: "text-white hover:text-stone-200 focus-visible:ring-white/40",
-    },
-    decoration: {
-      underline: "underline hover:no-underline underline-offset-4",
-      none: "no-underline",
-      hover: "no-underline hover:underline underline-offset-4",
-    },
-  },
 };
 
 const LINK_UNDERLINE_TO_DECORATION = {
@@ -105,16 +61,77 @@ function resolveExternalLinkRel(target, rel) {
   return Array.from(parts).join(" ");
 }
 
-const Link = forwardRef(function Link(
+const LinkTextAppearance = forwardRef(function LinkTextAppearance(
+  {
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    children,
+    className,
+    color = "neutral",
+    disabled = false,
+    rel,
+    size = "md",
+    target,
+    title,
+    underline = "hover",
+    variant = "soft",
+    ...props
+  },
+  ref,
+) {
+  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("link", {
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    children,
+    title,
+    ...props,
+  });
+
+  const ui = LINK_TEXT_THEME_CLASSES[theme];
+  const resolvedColor = ui.color[color] ? color : "primary";
+  const resolvedDecorationKey =
+    LINK_UNDERLINE_TO_DECORATION[underline] ?? LINK_UNDERLINE_TO_DECORATION.hover;
+  const resolvedDecoration = ui.decoration[resolvedDecorationKey]
+    ? resolvedDecorationKey
+    : "hover";
+  const resolvedTextVariant = LINK_TEXT_VARIANT_CLASSES[variant]
+    ? variant
+    : "default";
+
+  return (
+    <a
+      ref={ref}
+      {...props}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      target={target}
+      rel={resolveExternalLinkRel(target, rel)}
+      title={title}
+      className={cn(
+        resolveQuickitFocusRingClasses(focusRingEnabled, LINK_BASE),
+        LINK_SIZE_CLASSES[size] ?? LINK_SIZE_CLASSES.md,
+        LINK_TEXT_VARIANT_CLASSES[resolvedTextVariant],
+        resolveQuickitFocusRingClasses(focusRingEnabled, ui.color[resolvedColor]),
+        ui.decoration[resolvedDecoration],
+        disabled && "pointer-events-none opacity-50",
+        className,
+      )}
+      {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
+    >
+      {children}
+    </a>
+  );
+});
+
+const LinkButtonAppearance = forwardRef(function LinkButtonAppearance(
   {
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     active = false,
     activeMotion,
-    appearance = "text",
     children,
     className,
-    color = "primary",
+    color = "neutral",
     disabled = false,
     fullWidth = false,
     onClick,
@@ -128,8 +145,7 @@ const Link = forwardRef(function Link(
     style,
     target,
     title,
-    underline = "hover",
-    variant = "default",
+    variant = "soft",
     ...props
   },
   ref,
@@ -149,44 +165,6 @@ const Link = forwardRef(function Link(
     title,
     ...props,
   });
-
-  const ui = LINK_THEME_CLASSES[theme];
-  const resolvedColor = ui.color[color] ? color : "primary";
-
-  if (appearance !== "button") {
-    const resolvedDecorationKey =
-      LINK_UNDERLINE_TO_DECORATION[underline] ?? LINK_UNDERLINE_TO_DECORATION.hover;
-    const resolvedDecoration = ui.decoration[resolvedDecorationKey]
-      ? resolvedDecorationKey
-      : "hover";
-    const resolvedTextVariant = LINK_TEXT_VARIANT_CLASSES[variant]
-      ? variant
-      : "default";
-
-    return (
-      <a
-        ref={ref}
-        {...props}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        target={target}
-        rel={resolveExternalLinkRel(target, rel)}
-        title={title}
-        className={cn(
-          resolveQuickitFocusRingClasses(focusRingEnabled, LINK_BASE),
-          LINK_SIZE_CLASSES[size] ?? LINK_SIZE_CLASSES.md,
-          LINK_TEXT_VARIANT_CLASSES[resolvedTextVariant],
-          resolveQuickitFocusRingClasses(focusRingEnabled, ui.color[resolvedColor]),
-          ui.decoration[resolvedDecoration],
-          disabled && "pointer-events-none opacity-50",
-          className,
-        )}
-        {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
-      >
-        {children}
-      </a>
-    );
-  }
 
   const resolvedVariant = resolveActionVariant(theme, variant);
   const resolvedButtonColor = resolveActionColor(theme, resolvedVariant, color);
@@ -264,6 +242,14 @@ const Link = forwardRef(function Link(
       </span>
     </a>
   );
+});
+
+const Link = forwardRef(function Link({ appearance = "text", ...props }, ref) {
+  if (appearance === "button") {
+    return <LinkButtonAppearance ref={ref} {...props} />;
+  }
+
+  return <LinkTextAppearance ref={ref} {...props} />;
 });
 
 export { Link };

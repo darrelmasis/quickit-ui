@@ -1,15 +1,17 @@
+import { forwardRef } from "react";
 import Popover from "@/lib/components/popover/Popover";
 
-export default function Tooltip({
+const Tooltip = forwardRef(function Tooltip({
   children,
   className = "",
   color = "default",
   content,
   placement = "top",
   ...props
-}) {
+}, ref) {
   return (
     <Popover
+      ref={ref}
       variant="tooltip"
       content={content}
       color={color}
@@ -23,4 +25,6 @@ export default function Tooltip({
       {children}
     </Popover>
   );
-}
+});
+
+export default Tooltip;

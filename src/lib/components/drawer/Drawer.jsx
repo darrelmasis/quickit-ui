@@ -1,6 +1,7 @@
 import {
   Children,
   cloneElement,
+  forwardRef,
   isValidElement,
   useCallback,
   useEffect,
@@ -18,8 +19,9 @@ import {
   trapFocusWithin,
 } from "@/lib/components/_shared/overlay-focus";
 import { useQuickitControlState } from "@/lib/theme";
-import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
+import { cn, lockAppScroll, unlockAppScroll, useMergeRefs } from "@/lib/utils";
 import { QUICKIT_EASE_DEFAULT } from "@/lib/tokens";
+import { TXT } from "@/lib/texts";
 import { DrawerContext, useDrawerContext } from "./drawer-context";
 
 const ANIMATION_DURATION = 160;
@@ -61,20 +63,7 @@ const DRAWER_PRIMITIVES = {
     "flex w-full gap-3 border-t px-5 py-4 flex-shrink-0",
 };
 
-const DRAWER_THEME_CLASSES = {
-  light: {
-    panel: "border-slate-200 bg-white text-slate-950",
-    muted: "text-slate-600",
-    header: "border-slate-200",
-    actions: "border-slate-200 bg-slate-50/70",
-  },
-  dark: {
-    panel: "border-zinc-800 bg-zinc-950 text-stone-50",
-    muted: "text-stone-300",
-    header: "border-zinc-800",
-    actions: "border-zinc-800 bg-zinc-900/70",
-  },
-};
+import { DRAWER_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 function getDrawerTransform(placement, isVisible) {
   if (isVisible) {
@@ -355,14 +344,14 @@ export function Drawer({
   return <DrawerContext.Provider value={value}>{children}</DrawerContext.Provider>;
 }
 
-export function DrawerTrigger({
+const DrawerTrigger = forwardRef(function DrawerTrigger({
   as = "button",
   asChild = false,
   children,
   className,
   disabled = false,
   ...props
-}) {
+}, ref) {
   const { open, setOpen, setTriggerElement } = useDrawerContext("DrawerTrigger");
 
   if (asChild) {
@@ -375,7 +364,6 @@ export function DrawerTrigger({
     }
 
     const childProps = {
-      ref: child.props.ref,
       className: cn(child.props.className, className),
       ...props,
     };
@@ -401,6 +389,7 @@ export function DrawerTrigger({
 
   return (
     <Component
+      ref={ref}
       {...props}
       className={cn("cursor-pointer", className)}
       disabled={disabled}
@@ -416,9 +405,10 @@ export function DrawerTrigger({
       {children}
     </Component>
   );
-}
+});
+export { DrawerTrigger };
 
-export function DrawerContent({ children, className }) {
+const DrawerContent = forwardRef(function DrawerContent({ children, className }, ref) {
   const {
     close,
     effectiveDescriptionId: descriptionId,
@@ -437,6 +427,7 @@ export function DrawerContent({ children, className }) {
   const sizeClass = size ?? resolvedPlacement.size;
   const transform = getDrawerTransform(placement, visible);
   const panelRef = useRef(null);
+  const drawerMergedRef = useMergeRefs(panelRef, ref);
 
   useEffect(() => {
     if (typeof window === "undefined" || !rendered) {
@@ -479,7 +470,7 @@ export function DrawerContent({ children, className }) {
         style={{ zIndex: instanceZIndex + 1 }}
       >
         <div
-          ref={panelRef}
+          ref={drawerMergedRef}
           className={cn(
             DRAWER_PRIMITIVES.panel,
             ui.panel,
@@ -496,6 +487,7 @@ export function DrawerContent({ children, className }) {
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId || undefined}
+          aria-label={!titleId ? "Drawer" : undefined}
           aria-describedby={descriptionId || undefined}
           tabIndex={-1}
           onClick={(event) => event.stopPropagation()}
@@ -511,7 +503,8 @@ export function DrawerContent({ children, className }) {
     </>,
     document.body,
   );
-}
+});
+export { DrawerContent };
 
 export function DrawerHeader({ children, className }) {
   const { close, showCloseButton } = useDrawerContext("DrawerHeader");
@@ -527,8 +520,8 @@ export function DrawerHeader({ children, className }) {
           variant="ghost"
           shape="square"
           size="sm"
-          color="slate"
-          aria-label="Cerrar drawer"
+          color="neutral"
+          aria-label={TXT.CLOSE_DRAWER}
           onClick={close}
           className="shrink-0"
           data-overlay-close="true"
@@ -603,17 +596,17 @@ export function DrawerActions({
   );
 }
 
-export function DrawerAction({
+const DrawerAction = forwardRef(function DrawerAction({
   children,
   className,
   closeOnClick = true,
-  color = "primary",
+  color = "neutral",
   onClick,
   renderButton,
   size = "md",
-  variant = "solid",
+  variant = "soft",
   ...props
-}) {
+}, ref) {
   const { close } = useDrawerContext("DrawerAction");
   const buttonProps = {
     variant,
@@ -634,8 +627,9 @@ export function DrawerAction({
     return renderButton(buttonProps, children);
   }
 
-  return <Button {...buttonProps}>{children}</Button>;
-}
+  return <Button ref={ref} {...buttonProps}>{children}</Button>;
+});
+export { DrawerAction };
 
 Drawer.Trigger = DrawerTrigger;
 Drawer.Content = DrawerContent;

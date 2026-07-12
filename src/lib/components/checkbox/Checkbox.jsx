@@ -1,9 +1,10 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { CheckIcon, MinusIcon } from "@/lib/assets/icons";
 import { useQuickitControlState } from "@/lib/theme";
+import { CHECKBOX_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getCheckboxRadius } from "@/lib/utils";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 
 const CHECKBOX_PRIMITIVES = {
   host: "flex cursor-pointer items-center gap-2.5",
@@ -25,77 +26,6 @@ const CHECKBOX_SIZE_CLASSES = {
   md: {
     box: "size-5",
     icon: "size-3.5",
-  },
-};
-
-const CHECKBOX_THEME_CLASSES = {
-  light: {
-    box: {
-      idle: "border-slate-300 bg-white hover:border-slate-400",
-      invalid: "border-rose-500 bg-white",
-      focus: "focus-visible:ring-slate-400/50 focus-visible:ring-offset-white",
-      colors: {
-        neutral:
-          "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-checked:text-white",
-        slate:
-          "peer-checked:border-slate-700 peer-checked:bg-slate-700 peer-checked:text-white",
-        zinc:
-          "peer-checked:border-zinc-700 peer-checked:bg-zinc-700 peer-checked:text-white",
-        primary:
-          "peer-checked:border-sky-600 peer-checked:bg-sky-600 peer-checked:text-white",
-        brand:
-          "peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-checked:text-white",
-        success:
-          "peer-checked:border-emerald-600 peer-checked:bg-emerald-600 peer-checked:text-white",
-        danger:
-          "peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-checked:text-white",
-        warning:
-          "peer-checked:border-amber-500 peer-checked:bg-amber-500 peer-checked:text-slate-950",
-        info:
-          "peer-checked:border-cyan-600 peer-checked:bg-cyan-600 peer-checked:text-white",
-        light:
-          "peer-checked:border-stone-300 peer-checked:bg-stone-300 peer-checked:text-slate-950",
-        dark:
-          "peer-checked:border-zinc-800 peer-checked:bg-zinc-800 peer-checked:text-white",
-        black:
-          "peer-checked:border-black peer-checked:bg-black peer-checked:text-white",
-      },
-    },
-    label: "text-slate-900",
-  },
-  dark: {
-    box: {
-      idle: "border-zinc-700 bg-zinc-950 hover:border-zinc-600",
-      invalid: "border-rose-500 bg-zinc-950",
-      focus: "focus-visible:ring-zinc-500/50 focus-visible:ring-offset-zinc-950",
-      colors: {
-        neutral:
-          "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-checked:text-zinc-950",
-        slate:
-          "peer-checked:border-slate-100 peer-checked:bg-slate-100 peer-checked:text-slate-950",
-        zinc:
-          "peer-checked:border-zinc-100 peer-checked:bg-zinc-100 peer-checked:text-zinc-950",
-        primary:
-          "peer-checked:border-sky-300 peer-checked:bg-sky-300 peer-checked:text-zinc-950",
-        brand:
-          "peer-checked:border-brand-300 peer-checked:bg-brand-300 peer-checked:text-zinc-950",
-        success:
-          "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-checked:text-zinc-950",
-        danger:
-          "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-checked:text-zinc-950",
-        warning:
-          "peer-checked:border-amber-300 peer-checked:bg-amber-300 peer-checked:text-zinc-950",
-        info:
-          "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-checked:text-zinc-950",
-        light:
-          "peer-checked:border-stone-200 peer-checked:bg-stone-200 peer-checked:text-zinc-950",
-        dark:
-          "peer-checked:border-zinc-300 peer-checked:bg-zinc-300 peer-checked:text-zinc-950",
-        black:
-          "peer-checked:border-white peer-checked:bg-white peer-checked:text-zinc-950",
-      },
-    },
-    label: "text-stone-50",
   },
 };
 

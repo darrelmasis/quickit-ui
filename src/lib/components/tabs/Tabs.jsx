@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useQuickitControlState } from "@/lib/theme";
+import { TABS_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
-import { cn } from "@/lib/utils";
+import { cn, useMergeRefs } from "@/lib/utils";
 import {
   QUICKIT_SEMANTIC_COLORS,
   QUICKIT_TAB_SIZES,
@@ -36,96 +37,33 @@ const TABS_TRIGGER_PRIMITIVES = {
 
 const TABS_SIZE_CLASSES = {
   xs: {
-    list: "min-h-9 rounded-[0.875rem] p-1",
-    trigger: "min-w-[4.75rem] rounded-xl px-2.5 py-1 text-xs",
+    list: "rounded-[0.875rem] p-1",
+    trigger: "h-6 min-w-[4.75rem] rounded-xl px-2.5 text-xs",
   },
   sm: {
-    list: "min-h-10 rounded-xl p-1",
-    trigger: "min-w-[5.5rem] rounded-lg px-3 py-1.5 text-sm",
+    list: "rounded-xl p-1",
+    trigger: "h-9 min-w-[5.5rem] rounded-lg px-3 text-sm",
   },
   md: {
-    list: "min-h-11 rounded-2xl p-1",
-    trigger: "min-w-[6.5rem] rounded-xl px-3.5 py-2 text-sm",
+    list: "rounded-2xl p-1",
+    trigger: "h-11 min-w-[6.5rem] rounded-xl px-3.5 text-sm",
   },
   lg: {
-    list: "min-h-12 rounded-2xl p-1.5",
-    trigger: "min-w-[7.5rem] rounded-2xl px-4 py-2.5 text-base",
+    list: "rounded-2xl p-1.5",
+    trigger: "h-12 min-w-[7.5rem] rounded-2xl px-4 text-base",
+  },
+  xl: {
+    list: "rounded-3xl p-1.5",
+    trigger: "h-14 min-w-[8.5rem] rounded-2xl px-6 text-lg",
+  },
+  "2xl": {
+    list: "rounded-3xl p-2",
+    trigger: "h-16 min-w-[9.5rem] rounded-3xl px-7 text-lg",
   },
 };
 
 const TABS_CONTENT_PRIMITIVES = {
   base: "mt-4 outline-none",
-};
-
-const TABS_THEME_CLASSES = {
-  light: {
-    list: "border-slate-200 bg-slate-100/80",
-    triggerIdle:
-      "text-slate-500 hover:text-slate-950 focus-visible:outline-slate-300",
-    triggerActive: {
-      neutral: "text-slate-900",
-      slate: "text-slate-900",
-      zinc: "text-zinc-900",
-      primary: "text-sky-800",
-      brand: "text-brand-800",
-      success: "text-emerald-800",
-      danger: "text-rose-800",
-      warning: "text-amber-800",
-      info: "text-cyan-800",
-      light: "text-slate-700",
-      dark: "text-white",
-      black: "text-white",
-    },
-    bubbleActive: {
-      neutral: "border-slate-200 bg-white",
-      slate: "border-slate-200 bg-white",
-      zinc: "border-zinc-200 bg-white",
-      primary: "border-sky-200 bg-sky-50",
-      brand: "border-brand-200 bg-brand-50",
-      success: "border-emerald-200 bg-emerald-50",
-      danger: "border-rose-200 bg-rose-50",
-      warning: "border-amber-200 bg-amber-50",
-      info: "border-cyan-200 bg-cyan-50",
-      light: "border-slate-200 bg-white",
-      dark: "border-zinc-800 bg-zinc-900",
-      black: "border-slate-950 bg-slate-950",
-    },
-    content: "text-slate-600",
-  },
-  dark: {
-    list: "border-zinc-800 bg-zinc-900/80",
-    triggerIdle:
-      "text-stone-400 hover:text-stone-50 focus-visible:outline-zinc-700",
-    triggerActive: {
-      neutral: "text-neutral-100",
-      slate: "text-slate-100",
-      zinc: "text-zinc-100",
-      primary: "text-sky-200",
-      brand: "text-brand-200",
-      success: "text-emerald-200",
-      danger: "text-rose-200",
-      warning: "text-amber-200",
-      info: "text-cyan-200",
-      light: "text-neutral-50",
-      dark: "text-white",
-      black: "text-white",
-    },
-    bubbleActive: {
-      neutral: "border-neutral-700 bg-neutral-800",
-      slate: "border-slate-700 bg-slate-800",
-      zinc: "border-zinc-700 bg-zinc-800",
-      primary: "border-sky-800 bg-sky-950",
-      brand: "border-brand-800 bg-brand-950",
-      success: "border-emerald-800 bg-emerald-950",
-      danger: "border-rose-800 bg-rose-950",
-      warning: "border-amber-800 bg-amber-950",
-      info: "border-cyan-800 bg-cyan-950",
-      light: "border-neutral-600 bg-neutral-800",
-      dark: "border-zinc-800 bg-zinc-950",
-      black: "border-slate-950 bg-black",
-    },
-    content: "text-stone-300",
-  },
 };
 
 function getEnabledTabs(container) {
@@ -134,7 +72,7 @@ function getEnabledTabs(container) {
   );
 }
 
-export function Tabs({
+const Tabs = forwardRef(function Tabs({
   activationMode = "automatic",
   children,
   className,
@@ -144,7 +82,7 @@ export function Tabs({
   orientation = "horizontal",
   size = "md",
   value: controlledValue,
-}) {
+}, ref) {
   const generatedId = useId();
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -198,6 +136,7 @@ export function Tabs({
   return (
     <TabsContext.Provider value={contextValue}>
       <div
+        ref={ref}
         data-orientation={resolvedOrientation}
         data-size={resolvedSize}
         className={cn(TABS_ROOT_PRIMITIVES.base, className)}
@@ -206,35 +145,35 @@ export function Tabs({
       </div>
     </TabsContext.Provider>
   );
-}
+});
 
-export function TabsList({ children, className }) {
+export const TabsList = forwardRef(function TabsList({ children, className }, ref) {
   const { color, orientation, size, value } = useTabsContext("TabsList");
   const { theme } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const listRef = useRef(null);
+  const indicatorRef = useRef(null);
   const [scrollState, setScrollState] = useState({ left: false, right: false });
-  const [indicatorStyle, setIndicatorStyle] = useState(null);
 
   const measureIndicator = useCallback(() => {
     const list = listRef.current;
-    if (!list) return;
+    const indicator = indicatorRef.current;
+    if (!list || !indicator) return;
     const activeTab = list.querySelector('[role="tab"][data-state="active"]');
     if (!activeTab) {
-      setIndicatorStyle(null);
+      indicator.style.display = "none";
       return;
     }
     const listRect = list.getBoundingClientRect();
     const tabRect = activeTab.getBoundingClientRect();
-    setIndicatorStyle({
-      width: tabRect.width,
-      height: tabRect.height,
-      top: tabRect.top - listRect.top - list.clientTop,
-      left: tabRect.left - listRect.left - list.clientLeft,
-    });
+    indicator.style.display = "block";
+    indicator.style.width = `${tabRect.width}px`;
+    indicator.style.height = `${tabRect.height}px`;
+    indicator.style.top = `${tabRect.top - listRect.top - list.clientTop}px`;
+    indicator.style.left = `${tabRect.left - listRect.left - list.clientLeft}px`;
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     measureIndicator();
   }, [measureIndicator, value]);
 
@@ -265,7 +204,7 @@ export function TabsList({ children, className }) {
       el.removeEventListener("scroll", handleScroll);
       ro.disconnect();
     };
-  }, [checkScroll, measureIndicator]);
+  }, [checkScroll, measureIndicator, orientation]);
 
   const fadeMask = useMemo(() => {
     if (orientation !== "horizontal") return undefined;
@@ -282,7 +221,7 @@ export function TabsList({ children, className }) {
 
   return (
     <div
-      ref={listRef}
+      ref={useMergeRefs(listRef, ref)}
       role="tablist"
       aria-orientation={orientation}
       data-size={size}
@@ -299,31 +238,27 @@ export function TabsList({ children, className }) {
           : undefined
       }
     >
-      {indicatorStyle && (
-        <div
-          className={cn(
-            `absolute z-0 border transition-all duration-300 ease-[${QUICKIT_EASE_DEFAULT}]`,
-            TABS_SIZE_CLASSES[size].trigger,
-            ui.bubbleActive[color],
-          )}
-          style={{
-            ...indicatorStyle,
-            transitionProperty: "top, left, width, height",
-          }}
-          aria-hidden="true"
-        />
-      )}
+      <div
+        ref={indicatorRef}
+        className={cn(
+          `absolute z-0 hidden border transition-all duration-300 ease-[${QUICKIT_EASE_DEFAULT}]`,
+          TABS_SIZE_CLASSES[size].trigger,
+          ui.bubbleActive[color],
+        )}
+        style={{ transitionProperty: "top, left, width, height" }}
+        aria-hidden="true"
+      />
       {children}
     </div>
   );
-}
+});
 
-export function TabsTrigger({
+export const TabsTrigger = forwardRef(function TabsTrigger({
   children,
   className,
   disabled = false,
   value,
-}) {
+}, ref) {
   const {
     activationMode,
     baseId,
@@ -401,7 +336,7 @@ export function TabsTrigger({
 
   return (
     <button
-      ref={triggerRef}
+      ref={useMergeRefs(triggerRef, ref)}
       type="button"
       role="tab"
       id={`${baseId}-trigger-${value}`}
@@ -433,14 +368,14 @@ export function TabsTrigger({
       {children}
     </button>
   );
-}
+});
 
-export function TabsContent({
+export const TabsContent = forwardRef(function TabsContent({
   children,
   className,
   forceMount = false,
   value,
-}) {
+}, ref) {
   const { baseId, value: selectedValue } = useTabsContext("TabsContent");
   const { theme } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
@@ -452,6 +387,7 @@ export function TabsContent({
 
   return (
     <div
+      ref={ref}
       role="tabpanel"
       id={`${baseId}-content-${value}`}
       aria-labelledby={`${baseId}-trigger-${value}`}
@@ -462,7 +398,7 @@ export function TabsContent({
       {children}
     </div>
   );
-}
+});
 
 Tabs.List = TabsList;
 Tabs.Trigger = TabsTrigger;

@@ -3,6 +3,7 @@ import {
   forwardRef,
   isValidElement,
   useCallback,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -23,7 +24,7 @@ import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { CheckFillIcon, ChevronDownIcon } from "@/lib/assets/icons";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 import { useInputGroup } from "@/lib/components/input/input-group.context";
 import {
   FORM_FIELD_THEME_CLASSES,
@@ -38,6 +39,7 @@ import {
   useFloatingTransition,
   useMatchFloatingWidth,
 } from "@/lib/components/_shared/floating-list";
+import { TXT } from "@/lib/texts";
 
 const SELECT_PRIMITIVES = {
   wrapper: "relative w-full",
@@ -60,14 +62,7 @@ const SELECT_SIZE_CLASSES = {
   lg: "h-12 text-base",
 };
 
-const SELECT_THEME_CLASSES = {
-  light: {
-    invalid: FORM_FIELD_THEME_CLASSES.light.invalid,
-  },
-  dark: {
-    invalid: FORM_FIELD_THEME_CLASSES.dark.invalid,
-  },
-};
+import { SELECT_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 function normalizeOptionValue(value) {
   if (value == null) {
@@ -165,8 +160,10 @@ const Select = forwardRef(function Select(
     size: controlSizeProp,
     defaultValue,
     disabled = false,
+    emptyText = TXT.EMPTY_OPTIONS,
     id,
     invalid = false,
+    loading = false,
     name,
     onChange,
     onValueChange,
@@ -210,9 +207,11 @@ const Select = forwardRef(function Select(
   );
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : null;
   const resolvedInvalid = invalid || field?.invalid;
-  const resolvedDisabled = disabled || field?.disabled;
+  const resolvedDisabled = disabled || field?.disabled || loading;
   const resolvedRequired = required || field?.required;
-  const resolvedId = id ?? field?.controlId;
+  const generatedId = useId();
+  const resolvedId = id ?? field?.controlId ?? generatedId;
+  const listboxId = `${resolvedId}-listbox`;
   const labelledBy = [ariaLabelledBy, field?.labelId]
     .filter(Boolean)
     .join(" ") || undefined;
@@ -341,11 +340,13 @@ const Select = forwardRef(function Select(
     },
   }), [handleOptionKeyDown, handleOptionMouseEnter, handleValueChange, interactions]);
 
-  const triggerLabel = selectedOption?.label ?? placeholder ?? "Selecciona una opción";
+  const triggerLabel = loading ? TXT.LOADING : (selectedOption?.label ?? placeholder ?? TXT.SELECT_OPTION);
 
   const content = isMounted ? (
     <ul
+      id={listboxId}
       ref={floatingRef}
+      role="listbox"
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
         FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
@@ -360,7 +361,12 @@ const Select = forwardRef(function Select(
         "aria-labelledby": resolvedId,
       })}
     >
-      {options.map((option, index) => {
+      {options.length === 0 ? (
+        <li role="presentation" className="px-3 py-2 text-sm text-current/50">
+          {emptyText}
+        </li>
+      ) : (
+        options.map((option, index) => {
         const selected = option.value === resolvedValue;
 
         return (
@@ -388,7 +394,8 @@ const Select = forwardRef(function Select(
             </button>
           </li>
         );
-      })}
+      })
+    )}
     </ul>
   ) : null;
 
@@ -417,6 +424,7 @@ const Select = forwardRef(function Select(
         aria-describedby={describedBy}
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls={open ? listboxId : undefined}
         aria-invalid={resolvedInvalid || undefined}
         aria-required={resolvedRequired || undefined}
         className={cn(

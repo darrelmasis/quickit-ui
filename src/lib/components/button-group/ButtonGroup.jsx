@@ -1,5 +1,6 @@
 import { Children, cloneElement, forwardRef, isValidElement } from "react";
-import { cn, getControlRadius } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import Button from "@/lib/components/button/Button";
 
 function ButtonGroupDivider({ orientation = "horizontal", className }) {
   return (
@@ -16,43 +17,118 @@ function ButtonGroupDivider({ orientation = "horizontal", className }) {
   );
 }
 
-function makeSideRadius(radius, side) {
-  const suffix = radius.replace("rounded-", "");
-  return `rounded-${side}-${suffix}`;
+function cornerClasses(index, total, orientation) {
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
+  const isH = orientation === "horizontal";
+
+  if (isH) {
+    if (isFirst) return "rounded-r-none";
+    if (isLast) return "rounded-l-none";
+    return "rounded-none";
+  }
+  if (isFirst) return "rounded-b-none";
+  if (isLast) return "rounded-t-none";
+  return "rounded-none";
 }
+
+const AUTO_DIVIDER_COLORS = {
+  solid: "bg-white/25 dark:bg-black/25",
+  ghost: "bg-neutral-200 dark:bg-neutral-700",
+};
 
 const ButtonGroup = forwardRef(function ButtonGroup(
   {
     children,
+    color,
+    variant = "soft",
     fullWidth = false,
     orientation = "horizontal",
-    size = "md",
+    size,
     className,
     ...props
   },
   ref,
 ) {
   const childrenArray = Children.toArray(children).filter(isValidElement);
-  const hasDivider = childrenArray.some(
+  const hasExplicitDividers = childrenArray.some(
     (child) => isValidElement(child) && child.type === ButtonGroupDivider,
   );
-  const radius = getControlRadius(size);
-  const borderColor = "border-neutral-200 dark:border-neutral-700";
+  const needsAutoDividers =
+    !hasExplicitDividers && variant in AUTO_DIVIDER_COLORS;
+  const isH = orientation === "horizontal";
 
-  function getButtonBorderClass(index) {
-    if (hasDivider) {
-      const nextChild = childrenArray[index + 1];
-      if (
-        !nextChild ||
-        (isValidElement(nextChild) && nextChild.type === ButtonGroupDivider)
-      ) {
-        return "";
+  const buttonCount = childrenArray.filter(
+    (child) => isValidElement(child) && child.type !== ButtonGroupDivider,
+  ).length;
+
+  function renderButton(child, buttonIndex) {
+    const isButton = child.type === Button;
+    const childProps = isButton
+      ? {
+          ...(size !== undefined && { size: child.props.size ?? size }),
+          ...(color !== undefined && { color: child.props.color ?? color }),
+          ...(variant !== undefined && { variant: child.props.variant ?? variant }),
+        }
+      : {};
+
+    return cloneElement(child, {
+      ...childProps,
+      className: cn(
+        "focus-visible:z-10",
+        cornerClasses(buttonIndex, buttonCount, orientation),
+        child.props.className,
+      ),
+    });
+  }
+
+  let rendered;
+  let buttonIndex = 0;
+
+  if (needsAutoDividers) {
+    const dividerColor = AUTO_DIVIDER_COLORS[variant];
+    rendered = [];
+    childrenArray.forEach((child) => {
+      if (!isValidElement(child)) {
+        rendered.push(child);
+        return;
       }
-    }
-    if (index === childrenArray.length - 1) return "";
-    return orientation === "vertical"
-      ? `border-b ${borderColor}`
-      : `border-r ${borderColor}`;
+      if (child.type === ButtonGroupDivider) {
+        rendered.push(cloneElement(child, { orientation }));
+        return;
+      }
+      if (buttonIndex > 0) {
+        rendered.push(
+          <div
+            key={`d-${buttonIndex}`}
+            aria-hidden="true"
+            className={cn(
+              isH ? "w-px self-stretch" : "h-px self-stretch w-full",
+              dividerColor,
+            )}
+          />,
+        );
+      }
+      rendered.push(renderButton(child, buttonIndex));
+      buttonIndex++;
+    });
+  } else {
+    rendered = childrenArray.map((child, index) => {
+      if (!isValidElement(child)) return child;
+      if (child.type === ButtonGroupDivider) {
+        return cloneElement(child, { orientation });
+      }
+      const btn = renderButton(child, buttonIndex);
+      buttonIndex++;
+      if (!isH) {
+        return index > 0
+          ? cloneElement(btn, { className: cn("-mt-px", btn.props.className) })
+          : btn;
+      }
+      return index > 0
+        ? cloneElement(btn, { className: cn("-ml-px", btn.props.className) })
+        : btn;
+    });
   }
 
   return (
@@ -60,46 +136,14 @@ const ButtonGroup = forwardRef(function ButtonGroup(
       ref={ref}
       role="group"
       className={cn(
-        "inline-flex overflow-hidden border border-neutral-200 dark:border-neutral-700",
-        radius,
-        orientation === "vertical" && "flex-col",
-        !hasDivider &&
-          orientation === "horizontal" &&
-          "divide-x divide-neutral-200 dark:divide-neutral-700",
-        !hasDivider &&
-          orientation === "vertical" &&
-          "divide-y divide-neutral-200 dark:divide-neutral-700",
+        "inline-flex",
+        orientation === "vertical" ? "flex-col" : "flex-row",
         fullWidth && "w-full [&>*]:flex-1",
         className,
       )}
       {...props}
     >
-      {Children.map(childrenArray, (child, index) => {
-        if (!isValidElement(child)) return child;
-
-        if (child.type === ButtonGroupDivider) {
-          return cloneElement(child, { orientation });
-        }
-
-        const isFirst = index === 0;
-        const isLast = index === childrenArray.length - 1;
-
-        return cloneElement(child, {
-          className: cn(
-            "rounded-none border-0",
-            getButtonBorderClass(index),
-            isFirst &&
-              (orientation === "vertical"
-                ? makeSideRadius(radius, "t")
-                : makeSideRadius(radius, "l")),
-            isLast &&
-              (orientation === "vertical"
-                ? makeSideRadius(radius, "b")
-                : makeSideRadius(radius, "r")),
-            child.props.className,
-          ),
-        });
-      })}
+      {rendered}
     </div>
   );
 });

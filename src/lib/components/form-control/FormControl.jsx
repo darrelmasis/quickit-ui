@@ -1,20 +1,11 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { forwardRef, useEffect, useId, useMemo, useState } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { FormControlContext, useFormControl } from "./form-control-context";
 
-const FORM_CONTROL_THEME_CLASSES = {
-  light: {
-    description: "text-slate-500",
-    message: "text-rose-600",
-  },
-  dark: {
-    description: "text-zinc-400",
-    message: "text-rose-400",
-  },
-};
+import { FORM_CONTROL_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
-export function FormControl({
+const FormControl = forwardRef(function FormControl({
   children,
   className,
   controlId: controlIdProp,
@@ -23,7 +14,7 @@ export function FormControl({
   invalid = false,
   required = false,
   ...props
-}) {
+}, ref) {
   const generatedId = useId();
   const controlId = controlIdProp ?? `qi-control-${generatedId}`;
   const [labelId, setLabelId] = useState(null);
@@ -60,6 +51,7 @@ export function FormControl({
   return (
     <FormControlContext.Provider value={value}>
       <div
+        ref={ref}
         id={id}
         role="group"
         className={cn("flex flex-col gap-2", className)}
@@ -69,9 +61,9 @@ export function FormControl({
       </div>
     </FormControlContext.Provider>
   );
-}
+});
 
-export function FormControlDescription({ children, className, id, ...props }) {
+export const FormControlDescription = forwardRef(function FormControlDescription({ children, className, id, ...props }, ref) {
   const field = useFormControl();
   const generatedId = useId();
   const resolvedId = id ?? field?.descriptionId ?? `qi-description-${generatedId}`;
@@ -94,6 +86,7 @@ export function FormControlDescription({ children, className, id, ...props }) {
 
   return (
     <p
+      ref={ref}
       id={resolvedId}
       className={cn("text-xs leading-relaxed", ui.description, className)}
       {...props}
@@ -101,9 +94,9 @@ export function FormControlDescription({ children, className, id, ...props }) {
       {children}
     </p>
   );
-}
+});
 
-export function FormControlErrorMessage({ children, className, id, ...props }) {
+export const FormControlErrorMessage = forwardRef(function FormControlErrorMessage({ children, className, id, ...props }, ref) {
   const field = useFormControl();
   const generatedId = useId();
   const resolvedId = id ?? field?.messageId ?? `qi-message-${generatedId}`;
@@ -130,6 +123,7 @@ export function FormControlErrorMessage({ children, className, id, ...props }) {
 
   return (
     <p
+      ref={ref}
       id={resolvedId}
       role="alert"
       className={cn("text-xs font-medium leading-relaxed", ui.message, className)}
@@ -138,7 +132,7 @@ export function FormControlErrorMessage({ children, className, id, ...props }) {
       {children}
     </p>
   );
-}
+});
 
 FormControl.Description = FormControlDescription;
 FormControl.Message = FormControlErrorMessage;
@@ -148,4 +142,5 @@ export {
   FormControlDescription as FormDescription,
   FormControlErrorMessage as FormMessage,
 };
+export { FormControl };
 export default FormControl;

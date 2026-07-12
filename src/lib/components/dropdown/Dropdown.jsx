@@ -418,7 +418,7 @@ export const DropdownItem = forwardRef(function DropdownItem(
     onClick,
     onKeyDown,
     onMouseEnter,
-    variant = "default",
+    variant = "soft",
     ...props
   },
   ref,

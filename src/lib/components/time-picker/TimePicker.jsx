@@ -25,8 +25,8 @@ import {
   normalizeTimeValue,
   parseTimeValue,
   resolveMinuteStep,
-  timeToMinutes,
 } from "./time-utils";
+import { TXT } from "@/lib/texts";
 
 /**
  * Selector de hora con popover compacto.
@@ -36,7 +36,7 @@ export const TimePicker = forwardRef(function TimePicker(
   {
     className,
     clearButton = true,
-    clearButtonLabel = "Limpiar hora",
+    clearButtonLabel = TXT.CLEAR_TIME,
     color: colorProp,
     defaultValue,
     disabled = false,
@@ -48,7 +48,7 @@ export const TimePicker = forwardRef(function TimePicker(
     minuteStep = 5,
     name,
     onChange,
-    placeholder = "Seleccionar hora",
+    placeholder = TXT.SELECT_TIME,
     required = false,
     size: sizeProp,
     value: controlledValue,
@@ -173,8 +173,8 @@ export const TimePicker = forwardRef(function TimePicker(
       : INPUT_ACTION_PADDING_CLASSES.element[size];
   const selectTriggerClassName =
     [
-      "h-10 rounded-xl border-slate-200/90 bg-white px-2.5 text-base font-medium text-slate-900 shadow-none",
-      "justify-center gap-2 hover:border-slate-300 dark:border-zinc-800 dark:bg-zinc-950 dark:text-stone-100 dark:hover:border-zinc-700",
+      "h-10 rounded-xl border-neutral-200/90 bg-white px-2.5 text-base font-medium text-neutral-900 shadow-none",
+      "justify-center gap-2 hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:hover:border-neutral-700",
       "[&_.min-w-0]:text-center [&_.min-w-0]:font-medium [&_.min-w-0]:tabular-nums",
     ].join(" ");
   const selectContentClassName =
@@ -186,8 +186,8 @@ export const TimePicker = forwardRef(function TimePicker(
       role="dialog"
       aria-label="Selector de hora"
       className={cn(
-        "w-[min(100vw-2rem,18rem)] p-1 text-slate-900 dark:text-stone-100",
-        "text-slate-900 dark:text-stone-100",
+        "w-[min(100vw-2rem,18rem)] p-1 text-neutral-900 dark:text-neutral-100",
+        "text-neutral-900 dark:text-neutral-100",
       )}
     >
       <div className="flex items-center justify-center gap-2 rounded-xl px-1 py-1">
@@ -245,7 +245,7 @@ export const TimePicker = forwardRef(function TimePicker(
           </Select>
         </div>
 
-        <span className="shrink-0 text-[1.05rem] font-semibold text-slate-400 dark:text-zinc-500">
+        <span className="shrink-0 text-[1.05rem] font-semibold text-neutral-400 dark:text-neutral-500">
           :
         </span>
 
@@ -330,7 +330,7 @@ export const TimePicker = forwardRef(function TimePicker(
                     "h-8 min-w-[2.55rem] rounded-full px-2 text-sm shadow-none",
                     active
                       ? "text-sky-600 dark:text-sky-300"
-                      : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100",
+                      : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
                   )}
                   onClick={() =>
                     setDraftValue((current) =>
@@ -355,7 +355,7 @@ export const TimePicker = forwardRef(function TimePicker(
         ) : null}
       </div>
 
-      <div className="mt-2 flex items-center justify-between gap-2 border-t border-slate-200/80 px-2 pt-3 dark:border-zinc-800">
+      <div className="mt-2 flex items-center justify-between gap-2 border-t border-neutral-200/80 px-2 pt-3 dark:border-neutral-800">
         <Button
           type="button"
           variant="ghost"
@@ -477,8 +477,8 @@ export const TimePicker = forwardRef(function TimePicker(
             className={cn(
               "pointer-events-auto",
               theme === "dark"
-                ? "text-zinc-400 hover:text-zinc-100"
-                : "text-slate-500 hover:text-slate-900",
+                ? "text-neutral-400 hover:text-neutral-100"
+                : "text-neutral-500 hover:text-neutral-900",
             )}
             onClick={(event) => {
               event.preventDefault();
@@ -495,16 +495,16 @@ export const TimePicker = forwardRef(function TimePicker(
           color="neutral"
           shape="square"
           size="sm"
-          aria-label={open ? "Cerrar selector de hora" : "Abrir selector de hora"}
-          title={open ? "Cerrar selector de hora" : "Abrir selector de hora"}
+          aria-label={open ? TXT.CLOSE_TIME_PICKER : TXT.OPEN_TIME_PICKER}
+          title={open ? TXT.CLOSE_TIME_PICKER : TXT.OPEN_TIME_PICKER}
           aria-controls={open ? popupId : undefined}
           aria-haspopup="dialog"
           disabled={resolvedDisabled}
           className={cn(
             "pointer-events-auto",
             theme === "dark"
-              ? "text-zinc-400 hover:text-zinc-100"
-              : "text-slate-500 hover:text-slate-900",
+              ? "text-neutral-400 hover:text-neutral-100"
+              : "text-neutral-500 hover:text-neutral-900",
           )}
           onClick={(event) => {
             event.preventDefault();

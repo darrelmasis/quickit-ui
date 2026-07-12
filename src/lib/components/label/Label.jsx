@@ -1,12 +1,8 @@
 import { forwardRef, useEffect, useId } from "react";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 import { useQuickitControlState } from "@/lib/theme";
+import { LABEL_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { cn } from "@/lib/utils";
-
-const LABEL_THEME_CLASSES = {
-  light: "text-slate-950/85",
-  dark: "text-zinc-50/85",
-};
 
 const LABEL_SIZE_CLASSES = {
   sm: "text-xs px-0.5",

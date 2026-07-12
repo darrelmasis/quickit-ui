@@ -1,6 +1,7 @@
 import {
   Children,
   cloneElement,
+  forwardRef,
   isValidElement,
   useCallback,
   useEffect,
@@ -18,8 +19,9 @@ import {
   trapFocusWithin,
 } from "@/lib/components/_shared/overlay-focus";
 import { useQuickitControlState } from "@/lib/theme";
-import { cn, lockAppScroll, unlockAppScroll } from "@/lib/utils";
+import { cn, lockAppScroll, unlockAppScroll, useMergeRefs } from "@/lib/utils";
 import { QUICKIT_EASE_DEFAULT } from "@/lib/tokens";
+import { TXT } from "@/lib/texts";
 import { ModalContext, useModalContext } from "./modal-context";
 
 const ANIMATION_DURATION = 220;
@@ -75,20 +77,7 @@ const MODAL_PRIMITIVES = {
     "flex w-full gap-3 border-t px-5 py-4 flex-shrink-0",
 };
 
-const MODAL_THEME_CLASSES = {
-  light: {
-    dialog: "border-slate-200 bg-white text-slate-950",
-    muted: "text-slate-600",
-    header: "border-slate-200",
-    actions: "border-slate-200 bg-slate-50/70",
-  },
-  dark: {
-    dialog: "border-zinc-800 bg-zinc-950 text-stone-50",
-    muted: "text-stone-300",
-    header: "border-zinc-800",
-    actions: "border-zinc-800 bg-zinc-900/70",
-  },
-};
+import { MODAL_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 export function Modal({
   children,
@@ -326,14 +315,14 @@ export function Modal({
   return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>;
 }
 
-export function ModalTrigger({
+const ModalTrigger = forwardRef(function ModalTrigger({
   as = "button",
   asChild = false,
   children,
   className,
   disabled = false,
   ...props
-}) {
+}, ref) {
   const { open, setOpen, setTriggerElement } = useModalContext("ModalTrigger");
 
   if (asChild) {
@@ -346,7 +335,6 @@ export function ModalTrigger({
     }
 
     const childProps = {
-      ref: child.props.ref,
       className: cn(child.props.className, className),
       ...props,
     };
@@ -372,6 +360,7 @@ export function ModalTrigger({
 
   return (
     <Component
+      ref={ref}
       {...props}
       className={cn("cursor-pointer", className)}
       disabled={disabled}
@@ -387,9 +376,10 @@ export function ModalTrigger({
       {children}
     </Component>
   );
-}
+});
+export { ModalTrigger };
 
-export function ModalContent({ children, className }) {
+const ModalContent = forwardRef(function ModalContent({ children, className }, ref) {
   const {
     blockingOverlay,
     close,
@@ -405,6 +395,7 @@ export function ModalContent({ children, className }) {
   const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
   const dialogRef = useRef(null);
+  const modalMergedRef = useMergeRefs(dialogRef, ref);
   const dialogTransform = getModalTransform(visible);
 
   useEffect(() => {
@@ -451,7 +442,7 @@ export function ModalContent({ children, className }) {
         style={{ zIndex: instanceZIndex + 1 }}
       >
         <div
-          ref={dialogRef}
+          ref={modalMergedRef}
           className={cn(
             MODAL_PRIMITIVES.dialog,
             ui.dialog,
@@ -468,6 +459,7 @@ export function ModalContent({ children, className }) {
           role="dialog"
           aria-modal={blockingOverlay ? "true" : undefined}
           aria-labelledby={titleId || undefined}
+          aria-label={!titleId ? "Modal" : undefined}
           aria-describedby={descriptionId || undefined}
           tabIndex={-1}
           onClick={(event) => event.stopPropagation()}
@@ -483,7 +475,8 @@ export function ModalContent({ children, className }) {
     </>,
     document.body,
   );
-}
+});
+export { ModalContent };
 
 export function ModalHeader({ children, className }) {
   const { close, showCloseButton } = useModalContext("ModalHeader");
@@ -499,8 +492,8 @@ export function ModalHeader({ children, className }) {
           variant="ghost"
           shape="square"
           size="md"
-          color="slate"
-          aria-label="Cerrar modal"
+          color="neutral"
+          aria-label={TXT.CLOSE_MODAL}
           onClick={close}
           className="shrink-0"
           data-overlay-close="true"
@@ -575,17 +568,17 @@ export function ModalActions({
   );
 }
 
-export function ModalAction({
+const ModalAction = forwardRef(function ModalAction({
   children,
   className,
   closeOnClick = true,
-  color = "primary",
+  color = "neutral",
   onClick,
   renderButton,
   size = "md",
-  variant = "solid",
+  variant = "soft",
   ...props
-}) {
+}, ref) {
   const { close } = useModalContext("ModalAction");
   const buttonProps = {
     variant,
@@ -606,8 +599,9 @@ export function ModalAction({
     return renderButton(buttonProps, children);
   }
 
-  return <Button {...buttonProps}>{children}</Button>;
-}
+  return <Button ref={ref} {...buttonProps}>{children}</Button>;
+});
+export { ModalAction };
 
 Modal.Trigger = ModalTrigger;
 Modal.Content = ModalContent;

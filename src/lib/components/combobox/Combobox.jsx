@@ -23,7 +23,7 @@ import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
 import { CheckFillIcon, ChevronDownIcon, ClearIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 import { useInputGroup } from "@/lib/components/input/input-group.context";
 import {
   FORM_FIELD_THEME_CLASSES,
@@ -38,6 +38,7 @@ import {
   useFloatingTransition,
   useMatchFloatingWidth,
 } from "@/lib/components/_shared/floating-list";
+import { TXT } from "@/lib/texts";
 
 const COMBOBOX_PRIMITIVES = {
   wrapper: "relative w-full",
@@ -63,14 +64,7 @@ const COMBOBOX_SIZE_CLASSES = {
   lg: "h-12 text-base",
 };
 
-const COMBOBOX_THEME_CLASSES = {
-  light: {
-    invalid: FORM_FIELD_THEME_CLASSES.light.invalid,
-  },
-  dark: {
-    invalid: FORM_FIELD_THEME_CLASSES.dark.invalid,
-  },
-};
+import { COMBOBOX_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 function assignRef(ref, value) {
   if (typeof ref === "function") {
@@ -159,21 +153,22 @@ const Combobox = forwardRef(function Combobox(
   {
     className,
     clearButton = true,
-    clearButtonLabel = "Limpiar selección",
+    clearButtonLabel = TXT.CLEAR_SELECTION,
     clearIcon,
     color: colorProp,
     defaultValue,
     disabled = false,
-    emptyText = "Sin resultados",
+    emptyText = TXT.EMPTY,
     id,
     invalid = false,
+    loading = false,
     name,
     onChange,
     onClear,
     onInputChange,
     onValueChange,
     options: optionsProp = [],
-    placeholder = "Buscar…",
+    placeholder = TXT.SEARCH,
     required = false,
     size: controlSizeProp,
     usePortal = true,
@@ -196,7 +191,7 @@ const Combobox = forwardRef(function Combobox(
   const field = useFormControl();
   const options = useMemo(() => normalizeOptions(optionsProp), [optionsProp]);
   const resolvedInvalid = invalid || field?.invalid;
-  const resolvedDisabled = disabled || field?.disabled;
+  const resolvedDisabled = disabled || field?.disabled || loading;
   const resolvedRequired = required || field?.required;
   const generatedId = useId();
   const resolvedId = id ?? field?.controlId ?? generatedId;
@@ -413,7 +408,11 @@ const Combobox = forwardRef(function Combobox(
         "aria-labelledby": resolvedId,
       })}
     >
-      {filteredOptions.length === 0 ? (
+      {loading ? (
+        <li role="presentation" className="px-3 py-2 text-sm text-current/50">
+          {TXT.LOADING}
+        </li>
+      ) : filteredOptions.length === 0 ? (
         <li role="presentation" className="px-3 py-2 text-sm text-current/50">
           {emptyText}
         </li>
@@ -475,6 +474,7 @@ const Combobox = forwardRef(function Combobox(
           autoComplete="off"
           role="combobox"
           aria-expanded={open}
+          aria-haspopup="listbox"
           aria-labelledby={labelledBy}
           aria-controls={open ? listboxId : undefined}
           aria-activedescendant={activeOptionId}
@@ -575,8 +575,8 @@ const Combobox = forwardRef(function Combobox(
             shape="square"
             size="sm"
             tabIndex={-1}
-            title={open ? "Cerrar opciones" : "Abrir opciones"}
-            aria-label={open ? "Cerrar opciones" : "Abrir opciones"}
+            title={open ? TXT.CLOSE_OPTIONS : TXT.OPEN_OPTIONS}
+            aria-label={open ? TXT.CLOSE_OPTIONS : TXT.OPEN_OPTIONS}
             disabled={resolvedDisabled}
             className={cn(
               COMBOBOX_PRIMITIVES.actionButton,

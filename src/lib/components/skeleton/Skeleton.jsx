@@ -1,11 +1,7 @@
 import { forwardRef } from "react";
 import { useQuickitControlState } from "@/lib/theme";
+import { SKELETON_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { cn } from "@/lib/utils";
-
-const SKELETON_THEME_CLASSES = {
-  light: "bg-slate-200",
-  dark: "bg-zinc-800",
-};
 
 const SKELETON_SHAPE_CLASSES = {
   line: "h-4 w-full rounded-full",

@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import { ChevronRightIcon } from "@/lib/assets/icons";
-import { Button } from "@/lib/components/button";
+import Button from "@/lib/components/button/Button";
 import { useBreakpoint } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
+import { TXT } from "@/lib/texts";
 
 function createPaginationItems({ count, page, siblingCount }) {
   const totalNumbers = siblingCount * 2 + 5;
@@ -40,7 +41,7 @@ function createPaginationItems({ count, page, siblingCount }) {
   return [1, "dots-left", ...middleRange, "dots-right", count];
 }
 
-export function Pagination({
+const Pagination = forwardRef(function Pagination({
   className,
   color = "neutral",
   count,
@@ -50,7 +51,7 @@ export function Pagination({
   page: controlledPage,
   renderButton,
   siblingCount = 1,
-}) {
+}, ref) {
   const { isMobile } = useBreakpoint();
   const isControlled = controlledPage !== undefined;
   const [internalPage, setInternalPage] = useState(defaultPage);
@@ -87,13 +88,14 @@ export function Pagination({
     }
   };
 
-  const defaultRenderButton = (props, children) => (
-    <Button {...props}>{children}</Button>
+  const defaultRenderButton = ({ key: btnKey, ...props }, children) => (
+    <Button key={btnKey} {...props}>{children}</Button>
   );
   const btn = renderButton || defaultRenderButton;
 
   return (
     <nav
+      ref={ref}
       aria-label="Pagination"
       className={cn(
         "flex w-full flex-wrap items-center justify-center gap-2",
@@ -102,8 +104,8 @@ export function Pagination({
     >
       {btn(
         {
-          "aria-label": "Página anterior",
-          title: "Página anterior",
+          "aria-label": TXT.PREV_PAGE,
+          title: TXT.PREV_PAGE,
           shape: "square",
           variant: "outline",
           color,
@@ -131,8 +133,8 @@ export function Pagination({
                   color,
                   "aria-label":
                     item === currentPage
-                      ? `Página actual, ${item}`
-                      : `Ir a la página ${item}`,
+                      ? TXT.PAGE_CURRENT(item)
+                      : TXT.PAGE_GO_TO(item),
                   "aria-current":
                     item === currentPage ? "page" : undefined,
                   onClick: () => setPage(item),
@@ -152,8 +154,8 @@ export function Pagination({
 
       {btn(
         {
-          "aria-label": "Página siguiente",
-          title: "Página siguiente",
+          "aria-label": TXT.NEXT_PAGE,
+          title: TXT.NEXT_PAGE,
           shape: "square",
           variant: "outline",
           color,
@@ -167,11 +169,12 @@ export function Pagination({
 
       {isMobile && safeCount > 0 ? (
         <p className="basis-full text-center text-xs font-medium text-neutral-500 dark:text-neutral-400">
-          Pagina {currentPage} de {safeCount}
+          {TXT.PAGE_INFO(currentPage, safeCount)}
         </p>
       ) : null}
     </nav>
   );
-}
+});
+export { Pagination };
 
 export default Pagination;

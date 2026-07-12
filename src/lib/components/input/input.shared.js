@@ -1,7 +1,7 @@
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 import {
   ACTION_CONTROL_BASE_CLASSES,
   getActionControlRadius,
@@ -82,29 +82,14 @@ export const INPUT_ACTION_BUTTON_THEME_CLASSES = {
 const INPUT_ACTION_BUTTON_COLOR_CLASSES = {
   light: {
     neutral: [
-      "text-slate-500",
-      "hover:border-slate-200 hover:bg-slate-100 hover:text-slate-950",
-      "focus-visible:outline-slate-500",
-    ].join(" "),
-    slate: [
-      "text-slate-500",
-      "hover:border-slate-200 hover:bg-slate-100 hover:text-slate-950",
-      "focus-visible:outline-slate-500",
-    ].join(" "),
-    zinc: [
-      "text-zinc-500",
-      "hover:border-zinc-200 hover:bg-zinc-100 hover:text-zinc-950",
-      "focus-visible:outline-zinc-500",
+      "text-neutral-500",
+      "hover:border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950",
+      "focus-visible:outline-neutral-500",
     ].join(" "),
     primary: [
       "text-sky-600",
       "hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800",
       "focus-visible:outline-sky-600",
-    ].join(" "),
-    brand: [
-      "text-brand-600",
-      "hover:border-brand-200 hover:bg-brand-50 hover:text-brand-800",
-      "focus-visible:outline-brand-600",
     ].join(" "),
     success: [
       "text-emerald-600",
@@ -132,41 +117,21 @@ const INPUT_ACTION_BUTTON_COLOR_CLASSES = {
       "focus-visible:outline-neutral-600",
     ].join(" "),
     dark: [
-      "text-zinc-600",
-      "hover:border-zinc-200 hover:bg-zinc-100 hover:text-zinc-950",
-      "focus-visible:outline-zinc-600",
-    ].join(" "),
-    black: [
-      "text-neutral-700",
+      "text-neutral-600",
       "hover:border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950",
-      "focus-visible:outline-neutral-700",
+      "focus-visible:outline-neutral-600",
     ].join(" "),
   },
   dark: {
     neutral: [
-      "text-zinc-400",
-      "hover:border-zinc-800 hover:bg-zinc-900 hover:text-zinc-50",
-      "focus-visible:outline-zinc-400",
-    ].join(" "),
-    slate: [
-      "text-slate-300",
-      "hover:border-slate-700 hover:bg-slate-800/60 hover:text-slate-50",
-      "focus-visible:outline-slate-300",
-    ].join(" "),
-    zinc: [
-      "text-zinc-300",
-      "hover:border-zinc-700 hover:bg-zinc-800/60 hover:text-zinc-50",
-      "focus-visible:outline-zinc-300",
+      "text-neutral-400",
+      "hover:border-neutral-800 hover:bg-neutral-900 hover:text-neutral-50",
+      "focus-visible:outline-neutral-400",
     ].join(" "),
     primary: [
       "text-sky-300",
       "hover:border-sky-800/60 hover:bg-sky-950/40 hover:text-sky-200",
       "focus-visible:outline-sky-300",
-    ].join(" "),
-    brand: [
-      "text-brand-300",
-      "hover:border-brand-800/60 hover:bg-brand-950/35 hover:text-brand-200",
-      "focus-visible:outline-brand-300",
     ].join(" "),
     success: [
       "text-emerald-300",
@@ -194,11 +159,6 @@ const INPUT_ACTION_BUTTON_COLOR_CLASSES = {
       "focus-visible:outline-neutral-200",
     ].join(" "),
     dark: [
-      "text-zinc-200",
-      "hover:border-zinc-700 hover:bg-zinc-900 hover:text-zinc-50",
-      "focus-visible:outline-zinc-200",
-    ].join(" "),
-    black: [
       "text-neutral-200",
       "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
       "focus-visible:outline-neutral-200",
@@ -231,8 +191,8 @@ export const INPUT_SIDE_ELEMENT_SIZE_CLASSES = {
 };
 
 export const INPUT_SIDE_ELEMENT_THEME_CLASSES = {
-  light: "text-slate-500/90",
-  dark: "text-zinc-400/90",
+  light: "text-neutral-500/90",
+  dark: "text-neutral-400/90",
 };
 
 export const INPUT_ACTION_PADDING_CLASSES = {
@@ -291,29 +251,14 @@ export const INPUT_GROUP_ALIGNMENT_CLASSES = {
 export const INPUT_GROUP_THEME_CLASSES = {
   light: {
     neutral: {
-      frame: "border-slate-300",
-      separator: "bg-slate-300",
-      focus: "focus-within:ring-slate-400/50",
-    },
-    slate: {
-      frame: "border-slate-300",
-      separator: "bg-slate-300",
-      focus: "focus-within:ring-slate-400/50",
-    },
-    zinc: {
-      frame: "border-zinc-300",
-      separator: "bg-zinc-300",
-      focus: "focus-within:ring-zinc-400/50",
+      frame: "border-neutral-300",
+      separator: "bg-neutral-300",
+      focus: "focus-within:ring-neutral-400/50",
     },
     primary: {
       frame: "border-sky-300/90",
       separator: "bg-sky-300/90",
       focus: "focus-within:ring-sky-400/45",
-    },
-    brand: {
-      frame: "border-brand-300/90",
-      separator: "bg-brand-300/90",
-      focus: "focus-within:ring-brand-400/45",
     },
     success: {
       frame: "border-emerald-300/90",
@@ -336,46 +281,26 @@ export const INPUT_GROUP_THEME_CLASSES = {
       focus: "focus-within:ring-cyan-400/45",
     },
     light: {
-      frame: "border-stone-300",
-      separator: "bg-stone-300",
-      focus: "focus-within:ring-stone-400/45",
+      frame: "border-neutral-300",
+      separator: "bg-neutral-300",
+      focus: "focus-within:ring-neutral-400/45",
     },
     dark: {
-      frame: "border-zinc-800",
-      separator: "bg-zinc-800",
-      focus: "focus-within:ring-zinc-700/32",
-    },
-    black: {
-      frame: "border-zinc-950",
-      separator: "bg-zinc-950",
-      focus: "focus-within:ring-zinc-700/32",
+      frame: "border-neutral-800",
+      separator: "bg-neutral-800",
+      focus: "focus-within:ring-neutral-700/32",
     },
   },
   dark: {
     neutral: {
-      frame: "border-zinc-700",
-      separator: "bg-zinc-700",
-      focus: "focus-within:ring-zinc-500/32",
-    },
-    slate: {
-      frame: "border-slate-700",
-      separator: "bg-slate-700",
-      focus: "focus-within:ring-slate-600/30",
-    },
-    zinc: {
-      frame: "border-zinc-700",
-      separator: "bg-zinc-700",
-      focus: "focus-within:ring-zinc-600/30",
+      frame: "border-neutral-700",
+      separator: "bg-neutral-700",
+      focus: "focus-within:ring-neutral-500/32",
     },
     primary: {
       frame: "border-sky-500/55",
       separator: "bg-sky-500/55",
       focus: "focus-within:ring-sky-400/30",
-    },
-    brand: {
-      frame: "border-brand-500/55",
-      separator: "bg-brand-500/55",
-      focus: "focus-within:ring-brand-400/30",
     },
     success: {
       frame: "border-emerald-500/55",
@@ -398,19 +323,14 @@ export const INPUT_GROUP_THEME_CLASSES = {
       focus: "focus-within:ring-cyan-400/30",
     },
     light: {
-      frame: "border-stone-300/70",
-      separator: "bg-stone-300/70",
-      focus: "focus-within:ring-stone-300/30",
+      frame: "border-neutral-300/70",
+      separator: "bg-neutral-300/70",
+      focus: "focus-within:ring-neutral-300/30",
     },
     dark: {
-      frame: "border-zinc-700",
-      separator: "bg-zinc-700",
-      focus: "focus-within:ring-zinc-600/35",
-    },
-    black: {
-      frame: "border-zinc-600",
-      separator: "bg-zinc-600",
-      focus: "focus-within:ring-zinc-500/35",
+      frame: "border-neutral-700",
+      separator: "bg-neutral-700",
+      focus: "focus-within:ring-neutral-600/35",
     },
   },
 };

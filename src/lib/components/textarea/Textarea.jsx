@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn, getControlRadius } from "@/lib/utils";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 import {
   FORM_FIELD_THEME_CLASSES,
   getFormFieldAutofillStyle,

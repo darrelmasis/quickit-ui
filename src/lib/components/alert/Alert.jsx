@@ -11,8 +11,10 @@ import {
 import { CloseIcon } from "@/lib/assets/icons";
 import Button from "@/lib/components/button/Button";
 import { useQuickitControlState } from "@/lib/theme";
+import { ALERT_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { QUICKIT_SEMANTIC_COLORS, resolveQuickitToken } from "@/lib/tokens";
 import { cn, getControlRadius } from "@/lib/utils";
+import { TXT } from "@/lib/texts";
 
 const AlertContext = createContext(null);
 
@@ -21,103 +23,12 @@ const ALERT_PRIMITIVES = {
     "relative flex w-full items-start gap-4 overflow-hidden border p-5 transition-[background-color,border-color,color]",
   icon:
     "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl bg-current/10 ring-1 ring-current/10 [&_svg]:size-5",
-  content: "min-w-0 flex-1 space-y-1.5",
+  content: "flex min-w-0 flex-1 flex-col gap-1.5",
   title: "text-sm font-semibold leading-6 tracking-tight",
   description: "text-sm leading-6 opacity-80",
   actions: "!mt-4 flex flex-wrap items-center gap-2.5 pt-1",
   dismiss:
     "inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-current opacity-70 transition-[background-color,opacity,transform] hover:bg-current/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-current/15 active:scale-[0.98]",
-};
-
-const ALERT_THEME_CLASSES = {
-  light: {
-    soft: {
-      neutral: "border-slate-200 bg-slate-50 text-slate-800",
-      slate: "border-slate-200 bg-slate-50 text-slate-800",
-      zinc: "border-zinc-200 bg-zinc-50 text-zinc-800",
-      primary: "border-sky-200 bg-sky-50 text-sky-800",
-      brand: "border-brand-200 bg-brand-50 text-brand-800",
-      success: "border-emerald-200 bg-emerald-50 text-emerald-800",
-      danger: "border-rose-200 bg-rose-50 text-rose-800",
-      warning: "border-amber-200 bg-amber-50 text-amber-800",
-      info: "border-cyan-200 bg-cyan-50 text-cyan-800",
-      light: "border-neutral-200 bg-white text-neutral-950",
-      dark: "border-zinc-300 bg-zinc-100 text-zinc-900",
-      black: "border-neutral-300 bg-neutral-100 text-neutral-950",
-    },
-    outline: {
-      neutral: "border-slate-300 bg-transparent text-slate-800",
-      slate: "border-slate-300 bg-transparent text-slate-800",
-      zinc: "border-zinc-300 bg-transparent text-zinc-800",
-      primary: "border-sky-300 bg-transparent text-sky-800",
-      brand: "border-brand-300 bg-transparent text-brand-800",
-      success: "border-emerald-300 bg-transparent text-emerald-800",
-      danger: "border-rose-300 bg-transparent text-rose-800",
-      warning: "border-amber-300 bg-transparent text-amber-800",
-      info: "border-cyan-300 bg-transparent text-cyan-800",
-      light: "border-neutral-200 bg-transparent text-neutral-950",
-      dark: "border-zinc-500 bg-transparent text-zinc-900",
-      black: "border-black bg-transparent text-neutral-950",
-    },
-    solid: {
-      neutral: "border-slate-900 bg-slate-900 text-white",
-      slate: "border-slate-900 bg-slate-900 text-white",
-      zinc: "border-zinc-900 bg-zinc-900 text-white",
-      primary: "border-sky-600 bg-sky-600 text-white",
-      brand: "border-brand-600 bg-brand-600 text-white",
-      success: "border-emerald-600 bg-emerald-600 text-white",
-      danger: "border-rose-600 bg-rose-600 text-white",
-      warning: "border-amber-400 bg-amber-400 text-neutral-950",
-      info: "border-cyan-600 bg-cyan-600 text-white",
-      light: "border-white bg-white text-neutral-950",
-      dark: "border-zinc-900 bg-zinc-900 text-white",
-      black: "border-black bg-black text-white",
-    },
-  },
-  dark: {
-    soft: {
-      neutral: "border-zinc-700 bg-zinc-950 text-zinc-200",
-      slate: "border-slate-700 bg-slate-900 text-slate-100",
-      zinc: "border-zinc-700 bg-zinc-900 text-zinc-100",
-      primary: "border-sky-800 bg-sky-950 text-sky-100",
-      brand: "border-brand-800 bg-brand-950 text-brand-100",
-      success: "border-emerald-800 bg-emerald-950 text-emerald-100",
-      danger: "border-rose-800 bg-rose-950 text-rose-100",
-      warning: "border-amber-800 bg-amber-950 text-amber-100",
-      info: "border-cyan-800 bg-cyan-950 text-cyan-100",
-      light: "border-neutral-700 bg-neutral-900 text-neutral-100",
-      dark: "border-zinc-700 bg-zinc-900 text-zinc-100",
-      black: "border-black bg-black text-neutral-100",
-    },
-    outline: {
-      neutral: "border-zinc-700 bg-transparent text-zinc-100",
-      slate: "border-slate-700 bg-transparent text-slate-100",
-      zinc: "border-zinc-700 bg-transparent text-zinc-100",
-      primary: "border-sky-500/50 bg-transparent text-sky-300",
-      brand: "border-brand-500/50 bg-transparent text-brand-300",
-      success: "border-emerald-500/50 bg-transparent text-emerald-300",
-      danger: "border-rose-500/50 bg-transparent text-rose-300",
-      warning: "border-amber-500/50 bg-transparent text-amber-300",
-      info: "border-cyan-500/50 bg-transparent text-cyan-300",
-      light: "border-neutral-500 bg-transparent text-neutral-100",
-      dark: "border-zinc-600 bg-transparent text-zinc-100",
-      black: "border-black bg-transparent text-neutral-100",
-    },
-    solid: {
-      neutral: "border-zinc-100 bg-zinc-100 text-zinc-950",
-      slate: "border-slate-100 bg-slate-100 text-slate-950",
-      zinc: "border-zinc-100 bg-zinc-100 text-zinc-950",
-      primary: "border-sky-300 bg-sky-300 text-neutral-950",
-      brand: "border-brand-300 bg-brand-300 text-neutral-950",
-      success: "border-emerald-300 bg-emerald-300 text-neutral-950",
-      danger: "border-rose-300 bg-rose-300 text-neutral-950",
-      warning: "border-amber-300 bg-amber-300 text-neutral-950",
-      info: "border-cyan-300 bg-cyan-300 text-neutral-950",
-      light: "border-neutral-200 bg-neutral-200 text-neutral-950",
-      dark: "border-zinc-700 bg-zinc-700 text-zinc-50",
-      black: "border-black bg-black text-white",
-    },
-  },
 };
 
 function useAlertContextSlot(slot) {
@@ -199,12 +110,12 @@ const Alert = forwardRef(function Alert(
     autoDismiss,
     children,
     className,
-    color = "info",
+    color = "neutral",
     defaultOpen = true,
     description,
     dismissButtonProps,
     dismissible = false,
-    dismissLabel = "Cerrar alerta",
+    dismissLabel = TXT.CLOSE_ALERT,
     icon,
     onDismiss,
     onOpenChange,

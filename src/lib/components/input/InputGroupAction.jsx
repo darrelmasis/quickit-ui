@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Button } from "@/lib/components/button";
+import Button from "@/lib/components/button/Button";
 import { getInputGroupActionClassName } from "./input.shared";
 import { useInputGroup } from "./input-group.context";
 
@@ -12,7 +12,7 @@ const InputGroupAction = forwardRef(function InputGroupAction(
     shape,
     size,
     type = "button",
-    variant = "solid",
+    variant = "soft",
     ...props
   },
   ref,

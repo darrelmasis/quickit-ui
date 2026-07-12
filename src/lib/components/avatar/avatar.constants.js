@@ -44,16 +44,16 @@ export const AVATAR_SHAPE_CLASSES = {
 
 export const AVATAR_THEME_CLASSES = {
   light: {
-    root: "border-slate-200 bg-slate-100 text-slate-700",
+    root: "border-neutral-200 bg-neutral-100 text-neutral-700",
     userChip:
-      "border-slate-200 bg-white text-slate-950 hover:border-slate-300 hover:bg-slate-50",
-    userChipDescription: "text-slate-500",
+      "border-neutral-200 bg-white text-neutral-950 hover:border-neutral-300 hover:bg-neutral-50",
+    userChipDescription: "text-neutral-500",
   },
   dark: {
-    root: "border-zinc-800 bg-zinc-900 text-stone-200",
+    root: "border-neutral-800 bg-neutral-900 text-neutral-200",
     userChip:
-      "border-zinc-800 bg-zinc-950 text-stone-50 hover:border-zinc-700 hover:bg-zinc-900",
-    userChipDescription: "text-stone-400",
+      "border-neutral-800 bg-neutral-950 text-neutral-50 hover:border-neutral-700 hover:bg-neutral-900",
+    userChipDescription: "text-neutral-400",
   },
 };
 

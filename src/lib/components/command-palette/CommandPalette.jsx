@@ -2,6 +2,11 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import Modal from "@/lib/components/modal/Modal";
 import Input from "@/lib/components/input/Input";
 import { cn } from "@/lib/utils";
+import { TXT } from "@/lib/texts";
+import {
+  registerCommandPaletteShortcut,
+  unregisterCommandPaletteShortcut,
+} from "./command-palette-shortcut";
 
 function normalizeSearchText(value) {
   if (typeof value === "string" || typeof value === "number") {
@@ -35,15 +40,15 @@ function normalizeGroups(groups) {
 /**
  * Paleta de comandos (búsqueda + acciones) basada en `Modal`.
  */
-export function CommandPalette({
+function CommandPalette({
   className,
-  emptyText = "Sin resultados",
+  emptyText = TXT.EMPTY,
   groups = [],
   headerTrailing,
   title = "Comandos",
   onOpenChange,
   open,
-  placeholder = "Buscar comando…",
+  placeholder = TXT.SEARCH_COMMAND,
   shortcutLabel = "Ctrl+K",
   shortcutEnabled = true,
   autoFocusOnOpen = true,
@@ -95,31 +100,22 @@ export function CommandPalette({
     };
   }, [autoFocusOnOpen, resolvedOpen]);
 
+  const resolvedOpenRef = useRef(resolvedOpen);
+  resolvedOpenRef.current = resolvedOpen;
+
   useEffect(() => {
     if (!shortcutEnabled) {
       return;
     }
 
-    const onKey = (event) => {
-      const target = event.target;
+    registerCommandPaletteShortcut(baseId, () => {
+      handleOpenChange(!resolvedOpenRef.current);
+    });
 
-      if (
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        target instanceof HTMLSelectElement ||
-        target?.isContentEditable
-      ) {
-        return;
-      }
-
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        handleOpenChange(!resolvedOpen);
-      }
+    return () => {
+      unregisterCommandPaletteShortcut(baseId);
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [handleOpenChange, resolvedOpen, shortcutEnabled]);
+  }, [baseId, handleOpenChange, shortcutEnabled]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -238,7 +234,7 @@ export function CommandPalette({
             ) : null}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="space-y-3">
+        <Modal.Body className="flex flex-col gap-3">
           <Input
             ref={handleInputMount}
             value={query}
@@ -248,7 +244,7 @@ export function CommandPalette({
             aria-label="Buscar en la paleta de comandos"
             role="combobox"
             aria-expanded={resolvedOpen}
-            aria-controls={listboxId}
+            aria-controls={resolvedOpen ? listboxId : undefined}
             aria-activedescendant={activeItemId}
             aria-autocomplete="list"
             data-overlay-autofocus={autoFocusOnOpen ? "true" : undefined}
@@ -281,7 +277,7 @@ export function CommandPalette({
                       {group.heading}
                     </div>
                   ) : null}
-                  <ul className="space-y-0.5">
+                  <ul className="flex flex-col gap-0.5">
                     {group.items.map((item) => {
                       const itemIndex = item.optionIndex;
                       const isActive = itemIndex === activeIndex;
@@ -292,7 +288,6 @@ export function CommandPalette({
                           id={`${baseId}-item-${item.optionIndex}`}
                           type="button"
                           role="option"
-                          aria-selected={isActive}
                           className={cn(
                             "flex w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-black/5 dark:hover:bg-white/10",
                             isActive && "bg-black/5 dark:bg-white/10",
@@ -320,5 +315,6 @@ export function CommandPalette({
     </Modal>
   );
 }
+export { CommandPalette };
 
 export default CommandPalette;

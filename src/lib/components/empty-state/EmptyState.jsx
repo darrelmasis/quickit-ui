@@ -2,18 +2,7 @@ import { forwardRef } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
-const EMPTY_STATE_THEME_CLASSES = {
-  light: {
-    base: "bg-slate-50 border-slate-200",
-    title: "text-slate-900",
-    description: "text-slate-500",
-  },
-  dark: {
-    base: "bg-zinc-900/40 border-zinc-800",
-    title: "text-zinc-50",
-    description: "text-zinc-400",
-  },
-};
+import { EMPTY_STATE_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 const EMPTY_STATE_PRIMITIVES = {
   root: "flex w-full flex-col rounded-2xl border border-dashed p-6 sm:p-8",

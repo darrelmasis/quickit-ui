@@ -17,19 +17,19 @@ export const FLOATING_LIST_ITEM_PRIMITIVES = {
 };
 
 export const FLOATING_LIST_SURFACE_THEME_CLASSES = {
-  light: "border-slate-200 bg-white text-slate-950",
-  dark: "border-zinc-800 bg-zinc-950 text-stone-100",
+  light: "border-neutral-200 bg-white text-neutral-950",
+  dark: "border-neutral-800 bg-neutral-950 text-neutral-100",
 };
 
 export const FLOATING_LIST_ITEM_THEME_CLASSES = {
   light: {
     default: [
-      "text-slate-700",
-      "hover:bg-slate-100 hover:text-slate-950",
-      "focus-visible:bg-slate-100 focus-visible:text-slate-950",
-      "focus-visible:outline-slate-300",
+      "text-neutral-700",
+      "hover:bg-neutral-100 hover:text-neutral-950",
+      "focus-visible:bg-neutral-100 focus-visible:text-neutral-950",
+      "focus-visible:outline-neutral-300",
     ].join(" "),
-    selected: "bg-slate-100 text-slate-950",
+    selected: "bg-neutral-100 text-neutral-950",
     danger: [
       "text-red-700",
       "hover:bg-red-50 hover:text-red-800",
@@ -37,17 +37,17 @@ export const FLOATING_LIST_ITEM_THEME_CLASSES = {
       "focus-visible:outline-red-300",
     ].join(" "),
     disabled:
-      "cursor-not-allowed text-slate-400 opacity-60 hover:bg-transparent",
-    separator: "border-slate-200",
+      "cursor-not-allowed text-neutral-400 opacity-60 hover:bg-transparent",
+    separator: "border-neutral-200",
   },
   dark: {
     default: [
-      "text-stone-300",
-      "hover:bg-zinc-900 hover:text-stone-50",
-      "focus-visible:bg-zinc-900 focus-visible:text-stone-50",
-      "focus-visible:outline-zinc-700",
+      "text-neutral-300",
+      "hover:bg-neutral-900 hover:text-neutral-50",
+      "focus-visible:bg-neutral-900 focus-visible:text-neutral-50",
+      "focus-visible:outline-neutral-700",
     ].join(" "),
-    selected: "bg-zinc-900 text-stone-50",
+    selected: "bg-neutral-900 text-neutral-50",
     danger: [
       "text-red-300",
       "hover:bg-red-500/10 hover:text-red-200",
@@ -55,8 +55,8 @@ export const FLOATING_LIST_ITEM_THEME_CLASSES = {
       "focus-visible:outline-red-500/40",
     ].join(" "),
     disabled:
-      "cursor-not-allowed text-stone-500 opacity-60 hover:bg-transparent",
-    separator: "border-zinc-800",
+      "cursor-not-allowed text-neutral-500 opacity-60 hover:bg-transparent",
+    separator: "border-neutral-800",
   },
 };
 

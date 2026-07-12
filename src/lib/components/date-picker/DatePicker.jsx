@@ -26,6 +26,7 @@ import {
   startOfMonth,
   yearOutsideRange,
 } from "./date-utils";
+import { TXT } from "@/lib/texts";
 
 const WEEKDAYS = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"];
 const MONTH_LABELS = Array.from({ length: 12 }, (_, monthIndex) =>
@@ -38,82 +39,58 @@ const MONTH_LABELS = Array.from({ length: 12 }, (_, monthIndex) =>
 const CALENDAR_RANGE_CELL_CLASSES = {
   neutral: {
     committed:
-      "bg-slate-400/15 text-slate-800 hover:bg-slate-400/25 dark:bg-slate-500/20 dark:text-stone-100 dark:hover:bg-slate-500/30",
+      "bg-neutral-400/15 text-neutral-800 hover:bg-neutral-400/25 dark:bg-neutral-500/20 dark:text-neutral-100 dark:hover:bg-neutral-500/30",
     hover:
-      "bg-slate-400/25 text-slate-800 ring-1 ring-inset ring-slate-400/35 hover:bg-slate-400/35 dark:bg-slate-500/35 dark:text-stone-50 dark:ring-slate-400/40 dark:hover:bg-slate-500/45",
-  },
-  slate: {
-    committed:
-      "bg-slate-500/15 text-slate-800 hover:bg-slate-500/25 dark:bg-slate-500/20 dark:text-stone-100 dark:hover:bg-slate-500/30",
-    hover:
-      "bg-slate-500/25 text-slate-800 ring-1 ring-inset ring-slate-500/35 hover:bg-slate-500/35 dark:bg-slate-600/35 dark:text-stone-50 dark:ring-slate-400/45 dark:hover:bg-slate-600/45",
-  },
-  zinc: {
-    committed:
-      "bg-zinc-400/15 text-slate-800 hover:bg-zinc-400/25 dark:bg-zinc-500/20 dark:text-stone-100 dark:hover:bg-zinc-500/30",
-    hover:
-      "bg-zinc-400/25 text-slate-800 ring-1 ring-inset ring-zinc-400/35 hover:bg-zinc-400/35 dark:bg-zinc-500/35 dark:text-stone-50 dark:ring-zinc-400/40 dark:hover:bg-zinc-500/45",
+      "bg-neutral-400/25 text-neutral-800 ring-1 ring-inset ring-neutral-400/35 hover:bg-neutral-400/35 dark:bg-neutral-500/35 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-500/45",
   },
   primary: {
     committed:
-      "bg-sky-500/15 text-slate-800 hover:bg-sky-500/25 dark:bg-sky-500/20 dark:text-stone-100 dark:hover:bg-sky-500/30",
+      "bg-sky-500/15 text-neutral-800 hover:bg-sky-500/25 dark:bg-sky-500/20 dark:text-neutral-100 dark:hover:bg-sky-500/30",
     hover:
-      "bg-sky-500/25 text-slate-800 ring-1 ring-inset ring-sky-500/35 hover:bg-sky-500/35 dark:bg-sky-500/35 dark:text-stone-50 dark:ring-sky-400/40 dark:hover:bg-sky-500/45",
-  },
-  brand: {
-    committed:
-      "bg-brand-500/15 text-slate-800 hover:bg-brand-500/25 dark:bg-brand-500/20 dark:text-stone-100 dark:hover:bg-brand-500/30",
-    hover:
-      "bg-brand-500/25 text-slate-800 ring-1 ring-inset ring-brand-500/35 hover:bg-brand-500/35 dark:bg-brand-500/35 dark:text-stone-50 dark:ring-brand-400/40 dark:hover:bg-brand-500/45",
+      "bg-sky-500/25 text-neutral-800 ring-1 ring-inset ring-sky-500/35 hover:bg-sky-500/35 dark:bg-sky-500/35 dark:text-neutral-50 dark:ring-sky-400/40 dark:hover:bg-sky-500/45",
   },
   success: {
     committed:
-      "bg-emerald-500/15 text-slate-800 hover:bg-emerald-500/25 dark:bg-emerald-500/20 dark:text-stone-100 dark:hover:bg-emerald-500/30",
+      "bg-emerald-500/15 text-neutral-800 hover:bg-emerald-500/25 dark:bg-emerald-500/20 dark:text-neutral-100 dark:hover:bg-emerald-500/30",
     hover:
-      "bg-emerald-500/25 text-slate-800 ring-1 ring-inset ring-emerald-500/35 hover:bg-emerald-500/35 dark:bg-emerald-500/35 dark:text-stone-50 dark:ring-emerald-400/40 dark:hover:bg-emerald-500/45",
+      "bg-emerald-500/25 text-neutral-800 ring-1 ring-inset ring-emerald-500/35 hover:bg-emerald-500/35 dark:bg-emerald-500/35 dark:text-neutral-50 dark:ring-emerald-400/40 dark:hover:bg-emerald-500/45",
   },
   danger: {
     committed:
-      "bg-rose-500/15 text-slate-800 hover:bg-rose-500/25 dark:bg-rose-500/20 dark:text-stone-100 dark:hover:bg-rose-500/30",
+      "bg-rose-500/15 text-neutral-800 hover:bg-rose-500/25 dark:bg-rose-500/20 dark:text-neutral-100 dark:hover:bg-rose-500/30",
     hover:
-      "bg-rose-500/25 text-slate-800 ring-1 ring-inset ring-rose-500/35 hover:bg-rose-500/35 dark:bg-rose-500/35 dark:text-stone-50 dark:ring-rose-400/40 dark:hover:bg-rose-500/45",
+      "bg-rose-500/25 text-neutral-800 ring-1 ring-inset ring-rose-500/35 hover:bg-rose-500/35 dark:bg-rose-500/35 dark:text-neutral-50 dark:ring-rose-400/40 dark:hover:bg-rose-500/45",
   },
   warning: {
     committed:
-      "bg-amber-500/15 text-slate-800 hover:bg-amber-500/25 dark:bg-amber-500/20 dark:text-stone-100 dark:hover:bg-amber-500/30",
+      "bg-amber-500/15 text-neutral-800 hover:bg-amber-500/25 dark:bg-amber-500/20 dark:text-neutral-100 dark:hover:bg-amber-500/30",
     hover:
-      "bg-amber-500/25 text-slate-800 ring-1 ring-inset ring-amber-500/35 hover:bg-amber-500/35 dark:bg-amber-500/35 dark:text-stone-50 dark:ring-amber-400/40 dark:hover:bg-amber-500/45",
+      "bg-amber-500/25 text-neutral-800 ring-1 ring-inset ring-amber-500/35 hover:bg-amber-500/35 dark:bg-amber-500/35 dark:text-neutral-50 dark:ring-amber-400/40 dark:hover:bg-amber-500/45",
   },
   info: {
     committed:
-      "bg-cyan-500/15 text-slate-800 hover:bg-cyan-500/25 dark:bg-cyan-500/20 dark:text-stone-100 dark:hover:bg-cyan-500/30",
+      "bg-cyan-500/15 text-neutral-800 hover:bg-cyan-500/25 dark:bg-cyan-500/20 dark:text-neutral-100 dark:hover:bg-cyan-500/30",
     hover:
-      "bg-cyan-500/25 text-slate-800 ring-1 ring-inset ring-cyan-500/35 hover:bg-cyan-500/35 dark:bg-cyan-500/35 dark:text-stone-50 dark:ring-cyan-400/40 dark:hover:bg-cyan-500/45",
+      "bg-cyan-500/25 text-neutral-800 ring-1 ring-inset ring-cyan-500/35 hover:bg-cyan-500/35 dark:bg-cyan-500/35 dark:text-neutral-50 dark:ring-cyan-400/40 dark:hover:bg-cyan-500/45",
   },
   light: {
     committed:
-      "bg-stone-400/15 text-stone-900 hover:bg-stone-400/25 dark:bg-stone-500/20 dark:text-stone-100 dark:hover:bg-stone-500/30",
+      "bg-neutral-400/15 text-neutral-900 hover:bg-neutral-400/25 dark:bg-neutral-500/20 dark:text-neutral-100 dark:hover:bg-neutral-500/30",
     hover:
-      "bg-stone-400/25 text-stone-900 ring-1 ring-inset ring-stone-400/35 hover:bg-stone-400/35 dark:bg-stone-500/35 dark:text-stone-50 dark:ring-stone-400/40 dark:hover:bg-stone-500/45",
+      "bg-neutral-400/25 text-neutral-900 ring-1 ring-inset ring-neutral-400/35 hover:bg-neutral-400/35 dark:bg-neutral-500/35 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-500/45",
   },
   dark: {
     committed:
-      "bg-zinc-600/15 text-slate-800 hover:bg-zinc-600/25 dark:bg-zinc-600/25 dark:text-stone-100 dark:hover:bg-zinc-600/35",
+      "bg-neutral-600/15 text-neutral-800 hover:bg-neutral-600/25 dark:bg-neutral-600/25 dark:text-neutral-100 dark:hover:bg-neutral-600/35",
     hover:
-      "bg-zinc-600/25 text-slate-800 ring-1 ring-inset ring-zinc-500/35 hover:bg-zinc-600/35 dark:bg-zinc-600/40 dark:text-stone-50 dark:ring-zinc-400/40 dark:hover:bg-zinc-600/45",
-  },
-  black: {
-    committed:
-      "bg-neutral-800/15 text-slate-800 hover:bg-neutral-800/25 dark:bg-neutral-800/25 dark:text-stone-100 dark:hover:bg-neutral-800/35",
-    hover:
-      "bg-neutral-800/25 text-slate-800 ring-1 ring-inset ring-neutral-700/35 hover:bg-neutral-800/35 dark:bg-neutral-700/40 dark:text-stone-50 dark:ring-neutral-500/40 dark:hover:bg-neutral-700/45",
+      "bg-neutral-600/25 text-neutral-800 ring-1 ring-inset ring-neutral-500/35 hover:bg-neutral-600/35 dark:bg-neutral-600/40 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-600/45",
   },
 };
 
 function getCalendarRangeSurfaceClasses(semanticColor) {
   const key = resolveFormFieldColor(semanticColor);
   const row =
-    CALENDAR_RANGE_CELL_CLASSES[key] ?? CALENDAR_RANGE_CELL_CLASSES.brand;
+    CALENDAR_RANGE_CELL_CLASSES[key] ?? CALENDAR_RANGE_CELL_CLASSES.primary;
   return { committed: row.committed, hover: row.hover };
 }
 
@@ -427,7 +404,7 @@ export const DatePicker = forwardRef(function DatePicker(
       aria-label={isRange ? "Selector de rango de fechas" : "Selector de fecha"}
       className={cn(
         "w-[min(100vw-2rem,18rem)] p-2",
-        "text-slate-900 dark:text-stone-100",
+        "text-neutral-900 dark:text-neutral-100",
       )}
     >
       <div className="mb-2 flex items-center justify-between gap-2 px-1">
@@ -465,7 +442,7 @@ export const DatePicker = forwardRef(function DatePicker(
             variant="ghost"
             color="neutral"
             size="sm"
-            className="min-w-0 px-2 text-center text-sm font-semibold text-slate-800 dark:text-stone-100"
+            className="min-w-0 px-2 text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100"
             onClick={() =>
               setCalendarView((currentView) =>
                 currentView === "day" ? "month" : "year",
@@ -475,7 +452,7 @@ export const DatePicker = forwardRef(function DatePicker(
             {headerLabel}
           </Button>
         ) : (
-          <div className="min-w-0 text-center text-sm font-semibold text-slate-800 dark:text-stone-100">
+          <div className="min-w-0 text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100">
             {headerLabel}
           </div>
         )}
@@ -510,7 +487,7 @@ export const DatePicker = forwardRef(function DatePicker(
       </div>
       {calendarView === "day" ? (
         <>
-          <div className="grid grid-cols-7 gap-1 text-center text-[0.65rem] font-semibold uppercase tracking-wide text-slate-500 dark:text-zinc-500">
+          <div className="grid grid-cols-7 gap-1 text-center text-[0.65rem] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
             {WEEKDAYS.map((d) => (
               <div key={d}>{d}</div>
             ))}
@@ -547,11 +524,11 @@ export const DatePicker = forwardRef(function DatePicker(
                       outsideMonth &&
                         !isSelected &&
                         !out &&
-                        "text-slate-400 dark:text-zinc-500",
+                        "text-neutral-400 dark:text-neutral-500",
                       !isSelected &&
                         !outsideMonth &&
                         !out &&
-                        "text-slate-800 dark:text-stone-100",
+                        "text-neutral-800 dark:text-neutral-100",
                       out && "cursor-not-allowed opacity-30",
                     )}
                   >
@@ -614,13 +591,13 @@ export const DatePicker = forwardRef(function DatePicker(
                       !inHoverSpan &&
                       outsideMonth &&
                       !out &&
-                      "text-slate-400 dark:text-zinc-500",
+                      "text-neutral-400 dark:text-neutral-500",
                     !rangeEndpointSolid &&
                       !inCommittedSpan &&
                       !inHoverSpan &&
                       !outsideMonth &&
                       !out &&
-                      "text-slate-800 dark:text-stone-100",
+                      "text-neutral-800 dark:text-neutral-100",
                     out && "cursor-not-allowed opacity-30",
                   )}
                 >
@@ -644,7 +621,7 @@ export const DatePicker = forwardRef(function DatePicker(
                 "min-h-10 justify-center px-2 text-sm font-medium",
                 !cell.selected &&
                   !cell.disabled &&
-                  "text-slate-800 dark:text-stone-100",
+                  "text-neutral-800 dark:text-neutral-100",
                 cell.disabled && "cursor-not-allowed opacity-30",
               )}
               onClick={() => {
@@ -670,7 +647,7 @@ export const DatePicker = forwardRef(function DatePicker(
                 "min-h-10 justify-center px-2 text-sm font-medium",
                 !cell.selected &&
                   !cell.disabled &&
-                  "text-slate-800 dark:text-stone-100",
+                  "text-neutral-800 dark:text-neutral-100",
                 cell.disabled && "cursor-not-allowed opacity-30",
               )}
               onClick={() => {
@@ -767,14 +744,14 @@ export const DatePicker = forwardRef(function DatePicker(
       </Popover>
       <button
         type="button"
-        aria-label={calendarOpen ? "Cerrar calendario" : "Abrir calendario"}
+        aria-label={calendarOpen ? TXT.CLOSE_CALENDAR : TXT.OPEN_CALENDAR}
         aria-controls={calendarOpen ? popupId : undefined}
         aria-haspopup="dialog"
         aria-expanded={calendarOpen}
         disabled={resolvedDisabled}
         className={cn(
-          "absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded-md p-0.5 text-slate-500 dark:text-zinc-400",
-          "pointer-events-auto hover:text-slate-700 dark:hover:text-zinc-200",
+          "absolute right-2 top-1/2 z-[1] -translate-y-1/2 rounded-md p-0.5 text-neutral-500 dark:text-neutral-400",
+          "pointer-events-auto hover:text-neutral-700 dark:hover:text-neutral-200",
         )}
         onClick={(e) => {
           e.preventDefault();

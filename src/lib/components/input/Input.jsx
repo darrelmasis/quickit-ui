@@ -28,6 +28,7 @@ import {
   useInputFieldState,
 } from "./input.shared";
 import { useInputGroup } from "./input-group.context";
+import { TXT } from "@/lib/texts";
 import { getFormFieldAutofillStyle } from "@/lib/components/_shared/form-field";
 
 function toFocusWithinClasses(className) {
@@ -43,7 +44,7 @@ const Input = forwardRef(function Input(
     actionShape = "circle",
     className,
     clearButton,
-    clearButtonLabel = "Limpiar búsqueda",
+    clearButtonLabel = TXT.CLEAR_SEARCH,
     clearIcon,
     color: colorProp,
     defaultPasswordVisible = false,
@@ -233,8 +234,8 @@ const Input = forwardRef(function Input(
   );
   const numberSpinnerBorderClassName =
     theme === "dark"
-      ? "border-zinc-700 divide-zinc-700"
-      : "border-slate-300 divide-slate-300";
+      ? "border-neutral-700 divide-neutral-700"
+      : "border-neutral-300 divide-neutral-300";
 
   const clearInputValue = () => {
     if (props.readOnly) {

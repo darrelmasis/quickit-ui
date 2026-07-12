@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useQuickitFocusRing, useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
-import { cn } from "@/lib/utils";
+import { cn, useMergeRefs } from "@/lib/utils";
 import { PlusIcon } from "@/lib/assets/icons";
 import {
   AccordionContext,
@@ -10,28 +10,7 @@ import {
   useAccordionItemContext,
 } from "./accordion-context";
 
-const ACCORDION_THEME_CLASSES = {
-  light: {
-    item:
-      "border-slate-200 bg-white text-slate-950",
-    trigger:
-      "text-slate-950 hover:bg-slate-50 hover:text-slate-700 focus-visible:outline-slate-300",
-    triggerOpen: "bg-slate-50/90 text-slate-950",
-    contentShell: "border-slate-200/80",
-    content: "text-slate-600",
-    icon: "text-slate-500",
-  },
-  dark: {
-    item:
-      "border-zinc-800 bg-zinc-950 text-stone-50",
-    trigger:
-      "text-stone-50 hover:bg-zinc-900/80 hover:text-stone-200 focus-visible:outline-zinc-700",
-    triggerOpen: "bg-zinc-900/90 text-stone-50",
-    contentShell: "border-zinc-800/80",
-    content: "text-stone-300",
-    icon: "text-stone-400",
-  },
-};
+import { ACCORDION_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 function resolveTheme(theme) {
   return resolveQuickitThemeMode(theme);
@@ -56,7 +35,7 @@ function deriveOpenValues(isMultiple, value) {
   return single != null ? [single] : [];
 }
 
-export function Accordion({
+const Accordion = forwardRef(function Accordion({
   children,
   className,
   clickOutside = false,
@@ -65,7 +44,7 @@ export function Accordion({
   onValueChange,
   type = "single",
   value: controlledValue,
-}) {
+}, ref) {
   // single y multiple comparten la misma API externa; openValues normaliza
   // ambos modos para simplificar el resto del árbol.
   const generatedId = useId();
@@ -142,14 +121,14 @@ export function Accordion({
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <div ref={rootRef} className={cn("w-full space-y-3", className)}>
+      <div ref={useMergeRefs(rootRef, ref)} className={cn("flex w-full flex-col gap-3", className)}>
         {children}
       </div>
     </AccordionContext.Provider>
   );
-}
+});
 
-export function AccordionItem({ children, className, value }) {
+export const AccordionItem = forwardRef(function AccordionItem({ children, className, value }, ref) {
   const { baseId, openValues } = useAccordionContext("AccordionItem");
   const theme = resolveTheme(useQuickitTheme());
   const ui = ACCORDION_THEME_CLASSES[theme];
@@ -167,6 +146,7 @@ export function AccordionItem({ children, className, value }) {
   return (
     <AccordionItemContext.Provider value={contextValue}>
       <div
+        ref={ref}
         className={cn(
           "overflow-hidden rounded-[1rem] border transition-[border-color,background-color,box-shadow] duration-200",
           ui.item,
@@ -177,9 +157,9 @@ export function AccordionItem({ children, className, value }) {
       </div>
     </AccordionItemContext.Provider>
   );
-}
+});
 
-export function AccordionTrigger({ children, className, ...props }) {
+export const AccordionTrigger = forwardRef(function AccordionTrigger({ children, className, ...props }, ref) {
   const { toggleItem } = useAccordionContext("AccordionTrigger");
   const { contentId, isOpen, triggerId, value } =
     useAccordionItemContext("AccordionTrigger");
@@ -189,6 +169,7 @@ export function AccordionTrigger({ children, className, ...props }) {
 
   return (
     <button
+      ref={ref}
       type="button"
       id={triggerId}
       aria-controls={contentId}
@@ -220,14 +201,14 @@ export function AccordionTrigger({ children, className, ...props }) {
       </span>
     </button>
   );
-}
+});
 
-export function AccordionContent({
+export const AccordionContent = forwardRef(function AccordionContent({
   children,
   className,
   forceMount,
   ...props
-}) {
+}, ref) {
   void forceMount;
   const { contentId, isOpen, triggerId } =
     useAccordionItemContext("AccordionContent");
@@ -236,6 +217,7 @@ export function AccordionContent({
 
   return (
     <div
+      ref={ref}
       role="region"
       id={contentId}
       aria-labelledby={triggerId}
@@ -262,10 +244,11 @@ export function AccordionContent({
       </div>
     </div>
   );
-}
+});
 
 Accordion.Item = AccordionItem;
 Accordion.Trigger = AccordionTrigger;
 Accordion.Content = AccordionContent;
 
+export { Accordion };
 export default Accordion;

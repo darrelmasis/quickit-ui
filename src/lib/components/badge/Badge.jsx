@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { useQuickitTheme, resolveQuickitThemeMode } from "@/lib/theme";
+import { BADGE_THEME_CLASSES } from "@/lib/theme/theme-classes";
 import { cn, getControlRadius } from "@/lib/utils";
 import {
   QUICKIT_SEMANTIC_COLORS,
@@ -14,97 +15,6 @@ const BADGE_PRIMITIVES = {
 const BADGE_SIZE_CLASSES = {
   sm: "px-2.5 py-1 text-xs",
   md: "px-3 py-1.5 text-sm",
-};
-
-const BADGE_THEME_CLASSES = {
-  light: {
-    solid: {
-      neutral: "border-slate-800 bg-slate-800 text-white",
-      slate: "border-slate-800 bg-slate-800 text-white",
-      zinc: "border-zinc-800 bg-zinc-800 text-white",
-      primary: "border-sky-600 bg-sky-600 text-white",
-      brand: "border-brand-600 bg-brand-600 text-white",
-      success: "border-emerald-600 bg-emerald-600 text-white",
-      danger: "border-rose-600 bg-rose-600 text-white",
-      warning: "border-amber-400 bg-amber-400 text-neutral-950",
-      info: "border-cyan-600 bg-cyan-600 text-white",
-      light: "border-stone-300 bg-stone-300 text-neutral-950",
-      dark: "border-zinc-800 bg-zinc-800 text-white",
-      black: "border-black bg-black text-white",
-    },
-    soft: {
-      neutral: "border-slate-200 bg-slate-50 text-slate-800",
-      slate: "border-slate-200 bg-slate-50 text-slate-800",
-      zinc: "border-zinc-200 bg-zinc-50 text-zinc-800",
-      primary: "border-sky-200 bg-sky-50 text-sky-800",
-      brand: "border-brand-200 bg-brand-50 text-brand-800",
-      success: "border-emerald-200 bg-emerald-50 text-emerald-800",
-      danger: "border-rose-200 bg-rose-50 text-rose-800",
-      warning: "border-amber-200 bg-amber-50 text-amber-800",
-      info: "border-cyan-200 bg-cyan-50 text-cyan-800",
-      light: "border-stone-200 bg-stone-50 text-stone-700",
-      dark: "border-zinc-800 bg-zinc-900 text-white",
-      black: "border-neutral-950 bg-neutral-950 text-white",
-    },
-    outline: {
-      neutral: "border-slate-300 bg-transparent text-slate-800",
-      slate: "border-slate-300 bg-transparent text-slate-800",
-      zinc: "border-zinc-300 bg-transparent text-zinc-800",
-      primary: "border-sky-300 bg-transparent text-sky-800",
-      brand: "border-brand-300 bg-transparent text-brand-800",
-      success: "border-emerald-300 bg-transparent text-emerald-800",
-      danger: "border-rose-300 bg-transparent text-rose-800",
-      warning: "border-amber-300 bg-transparent text-amber-800",
-      info: "border-cyan-300 bg-transparent text-cyan-800",
-      light: "border-stone-300 bg-transparent text-stone-700",
-      dark: "border-zinc-800 bg-transparent text-white",
-      black: "border-zinc-950 bg-transparent text-black",
-    },
-  },
-  dark: {
-    solid: {
-      neutral: "border-zinc-100 bg-zinc-100 text-zinc-950",
-      slate: "border-slate-100 bg-slate-100 text-slate-950",
-      zinc: "border-zinc-100 bg-zinc-100 text-zinc-950",
-      primary: "border-sky-300 bg-sky-300 text-neutral-950",
-      brand: "border-brand-300 bg-brand-300 text-neutral-950",
-      success: "border-emerald-300 bg-emerald-300 text-neutral-950",
-      danger: "border-rose-300 bg-rose-300 text-neutral-950",
-      warning: "border-amber-300 bg-amber-300 text-neutral-950",
-      info: "border-cyan-300 bg-cyan-300 text-neutral-950",
-      light: "border-stone-200 bg-stone-200 text-zinc-950",
-      dark: "border-zinc-800 bg-zinc-800 text-white",
-      black: "border-neutral-950 bg-neutral-950 text-white",
-    },
-    soft: {
-      neutral: "border-zinc-700 bg-zinc-950 text-zinc-200",
-      slate: "border-slate-700 bg-slate-900 text-slate-100",
-      zinc: "border-zinc-700 bg-zinc-900 text-zinc-100",
-      primary: "border-sky-800 bg-sky-950 text-sky-100",
-      brand: "border-brand-800 bg-brand-950 text-brand-100",
-      success: "border-emerald-800 bg-emerald-950 text-emerald-100",
-      danger: "border-rose-800 bg-rose-950 text-rose-100",
-      warning: "border-amber-800 bg-amber-950 text-amber-100",
-      info: "border-cyan-800 bg-cyan-950 text-cyan-100",
-      light: "border-stone-700 bg-stone-800 text-stone-100",
-      dark: "border-zinc-800 bg-zinc-950 text-white",
-      black: "border-neutral-950 bg-neutral-950 text-white",
-    },
-    outline: {
-      neutral: "border-zinc-700 bg-transparent text-zinc-100",
-      slate: "border-slate-700 bg-transparent text-slate-100",
-      zinc: "border-zinc-700 bg-transparent text-zinc-100",
-      primary: "border-sky-500/50 bg-transparent text-sky-300",
-      brand: "border-brand-500/50 bg-transparent text-brand-300",
-      success: "border-emerald-500/50 bg-transparent text-emerald-300",
-      danger: "border-rose-500/50 bg-transparent text-rose-300",
-      warning: "border-amber-500/50 bg-transparent text-amber-300",
-      info: "border-cyan-500/50 bg-transparent text-cyan-300",
-      light: "border-stone-500/50 bg-transparent text-stone-200",
-      dark: "border-zinc-800 bg-transparent text-white",
-      black: "border-neutral-950 bg-transparent text-white",
-    },
-  },
 };
 
 function resolveTheme(theme) {

@@ -10,7 +10,7 @@ import {
 import { useQuickitControlState } from "@/lib/theme";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
 import { cn } from "@/lib/utils";
-import { useFormControl } from "@/lib/components/form-control";
+import { useFormControl } from "@/lib/components/form-control/useFormControl";
 import Tooltip from "@/lib/components/tooltip/Tooltip";
 
 const RANGE_PRIMITIVES = {
@@ -24,46 +24,7 @@ const RANGE_PRIMITIVES = {
   ].join(" "),
 };
 
-const RANGE_THEME_CLASSES = {
-  light: {
-    track: "bg-slate-100 border-slate-200",
-    thumb: "border-slate-300 focus-visible:ring-slate-400",
-    colors: {
-      neutral: "bg-slate-700",
-      slate: "bg-slate-700",
-      zinc: "bg-zinc-700",
-      primary: "bg-sky-600",
-      brand: "bg-brand-600",
-      success: "bg-emerald-600",
-      danger: "bg-rose-600",
-      warning: "bg-amber-500",
-      info: "bg-cyan-600",
-      light: "bg-stone-300",
-      dark: "bg-zinc-800",
-      black: "bg-slate-950",
-    },
-    invalid: "bg-rose-600",
-  },
-  dark: {
-    track: "bg-zinc-900 border-zinc-700",
-    thumb: "border-zinc-700 focus-visible:ring-zinc-400",
-    colors: {
-      neutral: "bg-zinc-100",
-      slate: "bg-slate-100",
-      zinc: "bg-zinc-100",
-      primary: "bg-sky-300",
-      brand: "bg-brand-300",
-      success: "bg-emerald-300",
-      danger: "bg-rose-300",
-      warning: "bg-amber-300",
-      info: "bg-cyan-300",
-      light: "bg-stone-200",
-      dark: "bg-zinc-300",
-      black: "bg-white",
-    },
-    invalid: "bg-rose-400",
-  },
-};
+import { RANGE_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 function clampRangeValue(rawValue, min, max) {
   const parsed = Number(rawValue);

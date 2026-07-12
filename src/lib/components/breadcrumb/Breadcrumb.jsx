@@ -1,5 +1,5 @@
 import { Children, forwardRef, isValidElement } from "react";
-import { Link } from "@/lib/components/link";
+import { Link } from "@/lib/components/link/Link";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { ChevronRightIcon } from "@/lib/assets/icons";
@@ -14,16 +14,7 @@ const BREADCRUMB_PRIMITIVES = {
   itemContent: "inline-flex items-center gap-1.5",
 };
 
-const BREADCRUMB_THEME_CLASSES = {
-  light: {
-    text: "text-slate-500",
-    current: "text-slate-900",
-  },
-  dark: {
-    text: "text-stone-400",
-    current: "text-stone-50",
-  },
-};
+import { BREADCRUMB_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 function renderBreadcrumbItemContent({
   allowLink,
@@ -157,7 +148,7 @@ export const BreadcrumbItem = forwardRef(function BreadcrumbItem(
 });
 
 export const BreadcrumbLink = forwardRef(function BreadcrumbLink(
-  { className, variant = "muted", ...props },
+  { className, variant = "soft", ...props },
   ref,
 ) {
   const { theme } = useQuickitControlState("breadcrumb");
