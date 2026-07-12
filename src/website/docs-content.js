@@ -7,29 +7,29 @@ export const TAILWIND_STYLES_SNIPPET = `@import "quickit-ui/styles.css";
 
 @custom-variant dark (&:where(.dark, .dark *));`;
 
-export const BRAND_OVERRIDE_SNIPPET = `@import "quickit-ui/styles.css";
+export const PRIMARY_OVERRIDE_SNIPPET = `@import "quickit-ui/styles.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: oklch(0.98 0.03 165);
-  --color-brand-100: oklch(0.94 0.06 165);
-  --color-brand-200: oklch(0.88 0.1 165);
-  --color-brand-300: oklch(0.8 0.14 165);
-  --color-brand-400: oklch(0.72 0.17 165);
-  --color-brand-500: oklch(0.64 0.19 165);
-  --color-brand-600: oklch(0.56 0.18 165);
-  --color-brand-700: oklch(0.48 0.15 165);
-  --color-brand-800: oklch(0.4 0.12 165);
-  --color-brand-900: oklch(0.34 0.09 165);
-  --color-brand-950: oklch(0.24 0.07 165);
+  --color-primary-50: oklch(0.98 0.03 165);
+  --color-primary-100: oklch(0.94 0.06 165);
+  --color-primary-200: oklch(0.88 0.1 165);
+  --color-primary-300: oklch(0.8 0.14 165);
+  --color-primary-400: oklch(0.72 0.17 165);
+  --color-primary-500: oklch(0.64 0.19 165);
+  --color-primary-600: oklch(0.56 0.18 165);
+  --color-primary-700: oklch(0.48 0.15 165);
+  --color-primary-800: oklch(0.4 0.12 165);
+  --color-primary-900: oklch(0.34 0.09 165);
+  --color-primary-950: oklch(0.24 0.07 165);
 }`;
 
 export const COMPONENT_IMPORT_SNIPPET = `import { Button } from "quickit-ui";
 
 export function SaveAction() {
-  return <Button color="brand">Guardar</Button>;
+  return <Button color="primary">Guardar</Button>;
 }`;
 
 export const QUICKIT_PROVIDER_SNIPPET = `import { QuickitProvider } from "quickit-ui";
@@ -88,7 +88,7 @@ function Card({ active }) {
       className={cn(
         "border p-4 transition-colors",
         getControlRadius("lg"),
-        active ? "border-brand-500 bg-brand-50" : "border-neutral-200",
+        active ? "border-primary-500 bg-primary-50" : "border-neutral-200",
       )}
     >
       Radio de avatar: {getAvatarRadius("rounded", "md")}
@@ -117,7 +117,7 @@ const SearchInput = forwardRef(function SearchInput(props, ref) {
 });`;
 
 export const UTILS_TOKENS_SNIPPET = `import {
-  QUICKIT_BRAND_COLORS,
+  QUICKIT_ACCENT_COLORS,
   QUICKIT_NEUTRAL_COLORS,
   QUICKIT_SEMANTIC_COLORS,
   QUICKIT_STATUS_COLORS,
@@ -133,7 +133,7 @@ const color = resolveQuickitToken(
 
 const isKnownColor = isQuickitTokenValue(QUICKIT_SEMANTIC_COLORS, color);
 const statusColors = QUICKIT_STATUS_COLORS;
-const accentColors = QUICKIT_BRAND_COLORS;
+const accentColors = QUICKIT_ACCENT_COLORS;
 const neutralColors = QUICKIT_NEUTRAL_COLORS;`;
 
 export const UTILS_THEME_SNIPPET = `import { resolveQuickitThemeMode } from "quickit-ui";
@@ -177,209 +177,61 @@ export default function RootLayout({ children }) {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.0.17",
-  date: "29 de junio de 2026",
+  version: "1.1.0",
+  date: "11 de julio de 2026",
   summary:
-    "Quickit UI 1.0.17 trae mejoras de responsividad, accesibilidad y pulido visual en componentes core: Tabs responsive con scroll snap, Button loading sin overlay, Label sin estirarse al ancho completo y corrección de duplicados de gap.",
+    "Quickit UI 1.1.0 trae una nueva variante soft, cambio de defaults globales y rediseño de ButtonGroup. Todos los componentes ahora usan variant=\"soft\" y color=\"neutral\" por defecto.",
   highlights: [
-    "`Tabs` ahora desplaza los triggers con scroll snap step-by-step y un fade mask lateral cuando desbordan.",
-    "`Button` reemplazó el overlay absoluto por render condicional durante loading y añadió `truncate` para textos largos.",
-    "`Label` ya no ocupa todo el ancho del contenedor: el clic solo se activa sobre su texto.",
+    "Nueva variante `soft` para action controls: borde + fondo sutil del color seleccionado en reposo, sólido en hover.",
+    "Todos los componentes con `variant` ahora default a `\"soft\"` (antes `\"solid\"`/`\"default\"`).",
+    "Todos los componentes con `color` ahora default a `\"neutral\"` (antes `\"primary\"`/`\"info\"`).",
   ],
   notableChanges: [
-    "`TabsList` usa `scroll-snap-stop:always` con fade mask vía `maskImage` para un scroll pausado y predecible.",
-    "`Button loading` elimina el overlay absoluto; ahora renderiza solo el contenido de carga inline. Soporta `loadingText` y extractTextContent como fallback.",
-    "`Input` quitó `tabIndex` en `passwordToggle` y `clearButton` para evitar foco innecesario.",
-    "`Label` agregó `self-start` para no estirarse en un contenedor flex-col.",
-    "`Button` eliminó `gap-2` redundante del `<button>` exterior (el `<span>` interior ya lo manejaba).",
-    "Header de documentación: logo npm corregido, icono GitHub actualizado, toggle de tema sin borde y logo npm responsive (solo la N).",
-    "Documentación: ripple habilitado globalmente vía `pressEffect='ripple'` en QuickitThemeProvider.",
+    "ButtonGroup rediseñado: outline usa superposición negativa; solid/ghost inyectan divisores automáticos.",
+    "Eliminados 36 archivos index.js barrel por componente — los imports resuelven directo al archivo.",
+    "Bug fixes: Show (evaluación perezosa), forwardRef en DataTable/Pagination, Playground sin crash.",
   ],
 };
 
 export const QUICKIT_V1_MIGRATION = {
-  fromVersion: "0.2.4",
-  toVersion: "1.0.17",
+  fromVersion: "1.0.17",
+  toVersion: "1.1.0",
   summary:
-    "La migración desde 0.2.4 a 1.0.17 sigue siendo directa en la mayoría de proyectos. El objetivo principal es alinear tu código con la API estable, las composiciones recomendadas, el entry final de estilos, el orden de imports con Tailwind CSS 4 y los contratos actuales de formularios/tokens.",
+    "La migración desde 1.0.17 a 1.1.0 es directa. Los cambios principales son los nuevos defaults globales (variant=\"soft\", color=\"neutral\") y la nueva variante soft.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube directamente a `quickit-ui@1.0.17` y vuelve a instalar dependencias para asegurar que paquete, tipos y estilos generados queden sincronizados.",
-      beforeCode: "npm install quickit-ui@0.2.4",
-      afterCode: "npm install quickit-ui@1.0.17",
+        "Sube directamente a `quickit-ui@1.1.0` y vuelve a instalar dependencias.",
+      beforeCode: "npm install quickit-ui@1.0.17",
+      afterCode: "npm install quickit-ui@1.1.0",
       language: "bash",
     },
     {
-      title: "Simplifica Breadcrumb",
+      title: "Defaults globales: variant=\"soft\", color=\"neutral\"",
       description:
-        "La forma recomendada ahora es usar `Breadcrumb.Item` con `href` o `current` para el caso común, en vez de combinar primitives más verbosas.",
-      beforeCode: `import { Breadcrumb } from "quickit-ui";
-
-export function Navigation() {
-  return (
-    <Breadcrumb>
-      <Breadcrumb.List>
-        <Breadcrumb.Item>
-          <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Separator />
-        <Breadcrumb.Item>
-          <Breadcrumb.Current>Productos</Breadcrumb.Current>
-        </Breadcrumb.Item>
-      </Breadcrumb.List>
-    </Breadcrumb>
-  );
-}`,
-      afterCode: `import { Breadcrumb } from "quickit-ui";
-
-export function Navigation() {
-  return (
-    <Breadcrumb>
-      <Breadcrumb.List>
-        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-        <Breadcrumb.Item current>Productos</Breadcrumb.Item>
-      </Breadcrumb.List>
-    </Breadcrumb>
-  );
-}`,
+        "Todos los componentes ahora usan `variant=\"soft\"` y `color=\"neutral\"` por defecto. Si tu código dependía del comportamiento anterior, agrega props explícitas para mantener la apariencia anterior.",
+      beforeCode: `<Button>Guardar</Button>
+<Alert title="Info" />
+<Progress value={60} />`,
+      afterCode: `<Button variant="solid" color="primary">Guardar</Button>
+<Alert color="info" title="Info" />
+<Progress color="primary" value={60} />`,
       language: "jsx",
     },
     {
-      title: "Prefiere la API compuesta de Tabs y FormControl",
+      title: "Nueva variante soft",
       description:
-        "La documentación oficial ahora prioriza subcomponentes compuestos como `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, `FormControl.Description` y `FormControl.Message`.",
-      beforeCode: `import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  Label,
-  Input,
-} from "quickit-ui";
-
-export function Settings() {
-  return (
-    <>
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="team">Equipo</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview">Resumen</TabsContent>
-        <TabsContent value="team">Miembros</TabsContent>
-      </Tabs>
-
-      <FormControl invalid required>
-        <Label htmlFor="email">Correo</Label>
-        <Input id="email" type="email" />
-        <FormDescription>Usa tu correo principal.</FormDescription>
-        <FormMessage>El correo es obligatorio.</FormMessage>
-      </FormControl>
-    </>
-  );
-}`,
-      afterCode: `import { Tabs, FormControl, Label, Input } from "quickit-ui";
-
-export function Settings() {
-  return (
-    <>
-      <Tabs defaultValue="overview">
-        <Tabs.List>
-          <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-          <Tabs.Trigger value="team">Equipo</Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="overview">Resumen</Tabs.Content>
-        <Tabs.Content value="team">Miembros</Tabs.Content>
-      </Tabs>
-
-      <FormControl invalid required>
-        <Label htmlFor="email">Correo</Label>
-        <Input id="email" type="email" />
-        <FormControl.Description>
-          Usa tu correo principal.
-        </FormControl.Description>
-        <FormControl.Message>
-          El correo es obligatorio.
-        </FormControl.Message>
-      </FormControl>
-    </>
-  );
-}`,
+        "La variante `soft` ya está disponible en todos los action controls (Button, ButtonGroup, Link button). Combina borde + fondo sutil del color en reposo y se vuelve sólido en hover.",
+      beforeCode: `<Button variant="outline">Acción</Button>`,
+      afterCode: `<Button variant="soft">Acción</Button>`,
       language: "jsx",
-    },
-    {
-      title: "Revisa tus CommandPalette y EmptyState",
-      description:
-        "Si montas varias `CommandPalette`, deja una sola con el shortcut global. Y si usas `EmptyState`, revisa el layout mobile-first y el uso de `EmptyState.Icon`.",
-      beforeCode: `import { CommandPalette, EmptyState, Button } from "quickit-ui";
-
-export function Page() {
-  return (
-    <>
-      <CommandPalette />
-      <CommandPalette />
-
-      <EmptyState
-        title="Sin resultados"
-        description="No hay elementos por mostrar."
-        actions={<Button>Recargar</Button>}
-      />
-    </>
-  );
-}`,
-      afterCode: `import { CommandPalette, EmptyState, Button } from "quickit-ui";
-
-export function Page() {
-  return (
-    <>
-      <CommandPalette />
-      <CommandPalette shortcutEnabled={false} />
-
-      <EmptyState>
-        <EmptyState.Icon>
-          <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5">
-            <path
-              d="M5 8h14M8 5h8M7 11h10v8H7z"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-          </svg>
-        </EmptyState.Icon>
-        <EmptyState.Title>Sin resultados</EmptyState.Title>
-        <EmptyState.Description>
-          No hay elementos por mostrar.
-        </EmptyState.Description>
-        <EmptyState.Actions>
-          <Button>Recargar</Button>
-        </EmptyState.Actions>
-      </EmptyState>
-    </>
-  );
-}`,
-      language: "jsx",
-    },
-    {
-      title: "Verifica formularios, overlays y visuales",
-      description:
-        "Haz una pasada final a formularios, pickers, overlays y componentes que dependen de tokens `brand` o fills de `Range`.",
-      beforeCode: "npm run test",
-      afterCode:
-        "npm run test && npm run test:types && npm run build && npm run build:docs",
-      language: "bash",
     },
   ],
   checks: [
-    "Revisa formularios que usen `Select`, `Combobox`, `DatePicker`, `TimePicker`, `Checkbox`, `Radio`, `Switch` y `Range`.",
-    "Verifica `Modal`, `Drawer`, `Dropdown`, `Popover` y `CommandPalette` en teclado y cierre.",
-    "Haz smoke test visual de `Button`, `Badge`, `Alert`, `Range` y `EmptyState` si dependen de tokens `brand` o nuevos layouts.",
+    "Revisa componentes sin props explícitas de variant/color — ahora se renderizan con soft/neutral.",
+    "Si usabas Button solid primary como default, agrega variant=\"solid\" color=\"primary\" explícito.",
+    "Verifica Alert, Link, Progress y demás componentes que cambiaron su color default.",
   ],
 };
 
@@ -532,7 +384,7 @@ function CustomControl() {
   return (
     <div 
       tabIndex={0}
-      className={focusRingEnabled ? "focus:ring-2 focus:ring-brand-500 outline-none" : "outline-none"}
+      className={focusRingEnabled ? "focus:ring-2 focus:ring-primary-500 outline-none" : "outline-none"}
     >
       Control personalizado con foco Quickit
     </div>
@@ -596,7 +448,7 @@ function PressFeedback() {
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "introduccion", label: "Introducción" },
   { id: "instalacion", label: "Instalación" },
-  { id: "migracion", label: "Migración 0.2.4 → 1.0.17" },
+  { id: "migracion", label: "Migración 1.0.17 → 1.1.0" },
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },
@@ -870,11 +722,7 @@ export const WEBSITE_COMPONENT_GROUPS = [
         name: "For",
         description: "Iteración declarativa con fallback vacío.",
       },
-      {
-        slug: "animate",
-        name: "Animate",
-        description: "Ciclo declarativo de entrada/salida para animaciones simples.",
-      },
+
     ],
   },
   {
@@ -989,6 +837,17 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "data-table",
         name: "DataTable",
         description: "Tabla con ordenación por columnas y cabecera sticky.",
+      },
+    ],
+  },
+  {
+    title: "Layout",
+    items: [
+      {
+        slug: "container",
+        name: "Container",
+        isNew: true,
+        description: "Contenedor centrado con max-width responsivo y padding.",
       },
     ],
   },
@@ -1287,17 +1146,13 @@ export function ButtonPreview() {
       label: "Colores compatibles",
       values: [
         "neutral",
-        "slate",
-        "zinc",
         "primary",
-        "brand",
         "success",
         "danger",
         "warning",
         "info",
         "light",
         "dark",
-        "black",
       ],
     },
   ],
@@ -1310,15 +1165,15 @@ export function ButtonPreview() {
     },
     {
       name: "variant",
-      type: `"solid" | "outline" | "ghost"`,
-      defaultValue: `"solid"`,
+      type: `"solid" | "outline" | "ghost" | "soft"`,
+      defaultValue: `"soft"`,
       description: "Define el tratamiento visual principal del botón.",
     },
     {
       name: "color",
       type: "QuickitSemanticColor",
-      defaultValue: `"primary"`,
-      description: "`QuickitSemanticColor` se mantiene por compatibilidad; conceptualmente `brand`/`primary` son acentos, `success`/`danger`/`warning`/`info` son estados y el resto son neutros/superficies.",
+      defaultValue: `"neutral"`,
+      description: "`QuickitSemanticColor` se mantiene por compatibilidad; conceptualmente `primary` es acento, `success`/`danger`/`warning`/`info` son estados y el resto son neutros/superficies.",
     },
     {
       name: "size",
@@ -1349,6 +1204,12 @@ export function ButtonPreview() {
       type: "boolean",
       defaultValue: "false",
       description: "Hace que el botón ocupe el ancho completo del contenedor.",
+    },
+    {
+      name: "align",
+      type: `"left" | "center" | "right"`,
+      defaultValue: `"center"`,
+      description: "Alineación del contenido interno del botón.",
     },
     {
       name: "loading",
