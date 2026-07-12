@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   CheckStrokeIcon,
@@ -30,16 +30,14 @@ const TOAST_ROOT_WIDTH_CLASS =
   "w-[min(24rem,calc(100vw-2rem))] max-w-sm min-w-0";
 
 const TOAST_THEME = {
-  light:
-    "border-neutral-200 bg-white text-neutral-950",
-  dark:
-    "border-neutral-800 bg-neutral-950 text-neutral-100",
+  light: "border-neutral-200 bg-white text-neutral-950",
+  dark: "border-neutral-800 bg-neutral-950 text-neutral-100",
 };
 
-const DEFAULT_GAP_COLLAPSED = 12;
-const DEFAULT_GAP_EXPANDED = 96;
+const DEFAULT_GAP_COLLAPSED = 16;
+const DEFAULT_GAP_EXPANDED = 80;
 const SCALE_STEP = 0.052;
-const OPACITY_STEP = 0.11;
+const OPACITY_STEP = 0;
 const TOAST_BASE_MIN_H = 76;
 
 const BUILTIN_KIND_ICONS = {
@@ -88,7 +86,7 @@ function resolveGap(gapProp, expanded) {
   if (typeof gapProp === "number") {
     const collapsedGap = Math.max(0, gapProp);
 
-    return expanded ? Math.max(72, Math.round(collapsedGap * 6.5)) : collapsedGap;
+    return expanded ? Math.max(36, Math.round(collapsedGap * 4)) : collapsedGap;
   }
 
   const collapsed = gapProp.collapsed ?? DEFAULT_GAP_COLLAPSED;
@@ -135,19 +133,22 @@ function getToastAnnouncementProps(item) {
   };
 }
 
-export function Toaster({
-  position = "bottom-right",
-  visibleToasts: visibleToastsProp,
-  gap,
-  expandOnHover = true,
-  showCloseButton = true,
-  defaultIcon,
-  icons: iconsProp,
-  toastClassName,
-  className,
-  style,
-  ...rootProps
-}) {
+const Toaster = forwardRef(function Toaster(
+  {
+    position = "bottom-right",
+    visibleToasts: visibleToastsProp,
+    gap,
+    expandOnHover = true,
+    showCloseButton = true,
+    defaultIcon,
+    icons: iconsProp,
+    toastClassName,
+    className,
+    style,
+    ...rootProps
+  },
+  ref,
+) {
   const { theme } = useQuickitControlState("toaster");
   const [items, setItems] = useState([]);
   const [stackExpanded, setStackExpanded] = useState(false);
@@ -158,6 +159,28 @@ export function Toaster({
     visibleToastsProp ?? MAX_VISIBLE_TOASTS,
   );
   const iconOptions = { defaultIcon, icons: iconsProp };
+  const [positions, setPositions] = useState([]);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root || !(expandOnHover && stackExpanded)) {
+      return;
+    }
+    const measure = () => {
+      const toastEls = root.querySelectorAll("[data-toast-idx]");
+      const newPositions = [0];
+      for (let i = 1; i < toastEls.length; i++) {
+        const prevH = toastEls[i - 1].getBoundingClientRect().height;
+        newPositions[i] = newPositions[i - 1] + prevH + 16;
+      }
+      setPositions(newPositions);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    const toastEls = root.querySelectorAll("[data-toast-idx]");
+    toastEls.forEach((el) => ro.observe(el));
+    return () => ro.disconnect();
+  }, [expandOnHover, stackExpanded, visibleCount, items]);
 
   useEffect(() => subscribeToToasts(setItems), []);
 
@@ -235,13 +258,18 @@ export function Toaster({
   const visibleList = orderedItems.slice(0, visibleCount);
   const layoutSlots = visibleList.length;
   const stackGapPx = resolveGap(gap, expandedLayout);
+  const posArr = positions;
+  const lastPos = posArr.length > 0 ? posArr[posArr.length - 1] : 0;
   const stackMinHeight =
     layoutSlots > 0
-      ? TOAST_BASE_MIN_H + (layoutSlots - 1) * stackGapPx
+      ? expandedLayout && posArr.length > 0
+        ? lastPos + TOAST_BASE_MIN_H
+        : TOAST_BASE_MIN_H + (layoutSlots - 1) * stackGapPx
       : 0;
 
   return createPortal(
     <div
+      ref={ref}
       {...rootProps}
       className={cn(
         "fixed overflow-visible",
@@ -265,7 +293,9 @@ export function Toaster({
       >
         {visibleList.map((item, sliceIndex) => {
           const deckDepth = Math.min(sliceIndex, visibleCount - 1);
-          const inset = sliceIndex * stackGapPx;
+          const staticInset = sliceIndex * stackGapPx;
+          const dynamicInset = posArr[sliceIndex] ?? staticInset;
+          const inset = expandedLayout && posArr.length > 0 ? dynamicInset : staticInset;
           const scale =
             expandedLayout || item.dismissing ? 1 : 1 - deckDepth * SCALE_STEP;
           const stackOpacity =
@@ -278,6 +308,7 @@ export function Toaster({
           return (
             <div
               key={item.id}
+              data-toast-idx={sliceIndex}
               className="absolute inset-x-0 min-w-0"
               style={{
                 ...edgeStyle,
@@ -293,8 +324,7 @@ export function Toaster({
                 style={{
                   transform: `scale(${scale}) translateZ(0)`,
                   transformOrigin,
-                  transition:
-                    "transform 380ms cubic-bezier(0.32, 0.72, 0, 1)",
+                  transition: "transform 380ms cubic-bezier(0.32, 0.72, 0, 1)",
                 }}
               >
                 <div
@@ -367,6 +397,6 @@ export function Toaster({
     </div>,
     document.body,
   );
-}
+});
 
 export default Toaster;

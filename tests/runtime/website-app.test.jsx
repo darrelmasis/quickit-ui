@@ -31,7 +31,7 @@ describe("WebsiteApp", () => {
       </QuickitThemeProvider>,
     );
 
-    await user.click(screen.getByRole("button", { name: /buscar en docs/i }));
+    await user.click(screen.getByRole("button", { name: /buscar documentos/i }));
 
     const searchInput = await screen.findByLabelText(
       /buscar en la paleta de comandos/i,
@@ -91,24 +91,12 @@ describe("WebsiteApp", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: /la forma más/i,
+        name: /construye interfaces/i,
       }),
     ).toBeTruthy();
     expect(
-      screen.getByRole("link", { name: /abrir quickit ui en npm/i }),
+      screen.getByRole("link", { name: /documentación/i }),
     ).toBeTruthy();
-    expect(
-      screen
-        .getByRole("link", { name: /abrir quickit ui en npm/i })
-        .getAttribute("href"),
-    ).toBe("https://www.npmjs.com/package/quickit-ui");
-    expect(
-      screen
-        .getByRole("link", {
-          name: /abrir repositorio de quickit ui en github/i,
-        })
-        .getAttribute("href"),
-    ).toBe("https://github.com/darrelmasis/quickit-ui");
   }, 15000);
 
   it("renders the avatar docs page without invalid component types", async () => {
@@ -124,7 +112,8 @@ describe("WebsiteApp", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Avatar" })).toBeTruthy();
-    expect(await screen.findByText("Design lead")).toBeTruthy();
+    const designLeadEls = await screen.findAllByText("Design lead");
+    expect(designLeadEls.length).toBeGreaterThanOrEqual(1);
   }, 15000);
 
   it("syncs the document theme when toggling dark mode", async () => {

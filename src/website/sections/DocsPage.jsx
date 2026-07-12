@@ -1,12 +1,14 @@
+import { useRef, useState, useEffect } from "react";
+import WebsitePageToc from "@/website/components/WebsitePageToc";
 import {
   Badge,
   Button,
   Checkbox,
   Combobox,
   CommandPalette,
+  Container,
   DataTable,
   DatePicker,
-  Default,
   Drawer,
   FormControl,
   For,
@@ -20,6 +22,7 @@ import {
   Range,
   RenderSwitch,
   Radio,
+  Default,
   Select,
   Show,
   Stepper,
@@ -39,11 +42,11 @@ import {
 import {
   QUICKIT_BUTTON_SHAPES,
   QUICKIT_BUTTON_VARIANTS,
-  QUICKIT_BRAND_COLORS,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_LINK_TEXT_VARIANTS,
   QUICKIT_LINK_UNDERLINES,
   QUICKIT_NEUTRAL_COLORS,
+  QUICKIT_SEMANTIC_COLORS,
   QUICKIT_STATUS_COLORS,
 } from "@/lib/tokens";
 import {
@@ -63,7 +66,7 @@ import {
   INSTALL_COMMAND,
   STYLES_SNIPPET,
   TAILWIND_STYLES_SNIPPET,
-  BRAND_OVERRIDE_SNIPPET,
+  PRIMARY_OVERRIDE_SNIPPET,
   QUICKIT_PROVIDER_SNIPPET,
   THEME_PROVIDER_SNIPPET,
   THEME_TOGGLE_SNIPPET,
@@ -150,15 +153,17 @@ function PropsTable({ props, caption = "Tabla de props" }) {
 
 function NotesList({ notes }) {
   return (
-    <div className="space-y-3">
-      {notes.map((note, index) => (
-        <div
-          key={`${note}-${index}`}
-          className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
-        >
-          {note}
-        </div>
-      ))}
+    <div className="flex flex-col gap-3">
+      <For each={notes}>
+        {(note, index) => (
+          <div
+            key={`${note}-${index}`}
+            className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+          >
+            {note}
+          </div>
+        )}
+      </For>
     </div>
   );
 }
@@ -166,46 +171,46 @@ function NotesList({ notes }) {
 function TokenGroupsList({ groups }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {groups.map((group) => (
-        <div
-          key={group.label}
-          className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800"
-        >
-          <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
-            {group.label}
-          </h4>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            {group.values.map((value) => (
-              <TokenGroupValue key={`${group.label}-${value}`} value={value} />
-            ))}
+      <For each={groups}>
+        {(group) => (
+          <div
+            key={group.label}
+            className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
+          >
+            <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+              {group.label}
+            </h4>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <For each={group.values}>
+                {(value) => (
+                  <TokenGroupValue key={`${group.label}-${value}`} value={value} />
+                )}
+              </For>
+            </div>
           </div>
-        </div>
-      ))}
+        )}
+      </For>
     </div>
   );
 }
 
 const TOKEN_COLOR_SWATCH_CLASSES = {
   neutral: "border-neutral-200 bg-neutral-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100",
-  slate: "border-slate-200 bg-slate-100 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100",
-  zinc: "border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100",
-  primary: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
-  brand: "border-brand-200 bg-brand-100 text-brand-800 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-100",
+  primary: "border-primary-200 bg-primary-100 text-primary-800 dark:border-primary-800 dark:bg-primary-950/60 dark:text-primary-100",
   success: "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-100",
   danger: "border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
   warning: "border-amber-200 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
   info: "border-sky-200 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-100",
   light: "border-neutral-200 bg-white text-neutral-900 dark:border-neutral-700 dark:bg-neutral-100 dark:text-neutral-950",
   dark: "border-neutral-800 bg-neutral-900 text-white dark:border-neutral-500 dark:bg-neutral-900 dark:text-neutral-50",
-  black: "border-black bg-black text-white dark:border-neutral-400 dark:bg-black dark:text-white",
 };
 
 const TOKEN_COLOR_GROUPS = [
   {
     id: "tokens-color-identidad",
     title: "Identidad y acción",
-    description: "`primary` y `brand` cubren intención principal y marca. `brand` es el slot que puedes reemplazar por tu paleta.",
-    colors: ["primary", "brand"],
+    description: "Primary cubre la intención principal de marca y acción.",
+    colors: ["primary"],
   },
   {
     id: "tokens-color-estados",
@@ -217,13 +222,12 @@ const TOKEN_COLOR_GROUPS = [
     id: "tokens-color-neutrales",
     title: "Neutrales",
     description: "Neutrales para superficies, jerarquía visual y acciones sin intención semántica fuerte.",
-    colors: ["neutral", "slate", "zinc", "light", "dark", "black"],
+    colors: ["neutral", "light", "dark"],
   },
 ];
 
 const TOKEN_COLOR_VALUES = new Set([
-  ...QUICKIT_BRAND_COLORS,
-  ...QUICKIT_STATUS_COLORS,
+  ...QUICKIT_SEMANTIC_COLORS,
   ...QUICKIT_NEUTRAL_COLORS,
 ]);
 
@@ -295,7 +299,7 @@ function TokenShapeSample({ shape }) {
 
 function TokenVariantSample({ variant }) {
   return (
-    <Button size="sm" variant={variant} color="brand">
+    <Button size="sm" variant={variant} color="primary">
       {variant}
     </Button>
   );
@@ -319,24 +323,26 @@ function TokenUnderlineSample({ underline }) {
 
 function ReviewNotesList({ notes }) {
   return (
-    <div className="space-y-3">
-      {notes.map((note, index) => (
-        <div
-          key={`${note.tag ?? "nota"}-${index}`}
-          className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800"
-        >
-          <div className="flex flex-wrap items-center gap-3">
-            {note.tag ? (
-              <Badge color="neutral" variant="soft">
-                {note.tag}
-              </Badge>
-            ) : null}
-            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-              {note.text}
-            </p>
+    <div className="flex flex-col gap-3">
+      <For each={notes}>
+        {(note, index) => (
+          <div
+            key={`${note.tag ?? "nota"}-${index}`}
+            className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
+          >
+            <div className="flex flex-wrap items-center gap-3">
+              <Show when={note.tag}>
+                <Badge color="neutral" variant="soft">
+                  {note.tag}
+                </Badge>
+              </Show>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                {note.text}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        )}
+      </For>
     </div>
   );
 }
@@ -369,58 +375,14 @@ function parseDocsRoute(pathname) {
   return { mode: "section", sectionId };
 }
 
-function getComponentSections(slug) {
-  const doc = COMPONENT_DOCS[slug];
-  const reviewNotes = WEBSITE_COMPONENT_REVIEW_NOTES[slug] ?? [];
-
-  if (!doc) {
-    return [{ id: "componente-no-encontrado", label: "Componente no encontrado" }];
-  }
-
-  const exampleChildren =
-    doc.examples?.map((example) => ({
-      id: example.id,
-      label: example.title,
-    })) ?? [];
-
-  const sections = [
-    { id: "ejemplo-visual", label: "Ejemplo visual y código" },
-    { id: "instalacion", label: "Instalación" },
-  ];
-
-  if (doc.props?.length) {
-    sections.push({ id: "api", label: "API" });
-  }
-
-  if (doc.tokenGroups?.length) {
-    sections.push({ id: "tokens-y-variantes", label: "Tokens y variantes" });
-  }
-
-  if (doc.notes?.length) {
-    sections.push({ id: "notas", label: "Notas" });
-  }
-
-  if (reviewNotes.length) {
-    sections.push({ id: "notas-de-revision", label: "Notas de revisión" });
-  }
-
-  sections.push({
-    id: "ejemplos",
-    label: "Ejemplos",
-    children: exampleChildren,
-  });
-
-  return sections;
-}
-
 function OverviewPage() {
   return (
     <>
       <div className="max-w-3xl">
-        <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50 sm:text-5xl">
+        <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-neutral-950 dark:text-neutral-50">
           Quickit UI desde una base simple
         </h1>
-        <p className="mt-5 text-base leading-8 text-neutral-600 dark:text-neutral-400 sm:text-lg">
+        <p className="mt-4 text-base leading-7 text-neutral-500 dark:text-neutral-400">
           Quickit UI reúne componentes, hooks y utilidades lógicas para
           construir interfaces consistentes sin levantar un sistema desde cero.
           Esta guía parte del código real de la librería y se enfoca en cómo
@@ -457,10 +419,10 @@ function HooksIndexPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         <For each={WEBSITE_HOOKS}>
           {(hook) => (
-            <a
+            <Link
               key={hook.name}
               href={getWebsiteHookRoute(hook.name)}
-              className="rounded-2xl border border-neutral-200 p-6 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+              className="rounded-xl border border-neutral-200 p-6 transition-colors hover:bg-neutral-50 no-underline dark:border-neutral-800 dark:hover:bg-neutral-900"
             >
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 {hook.name}
@@ -468,7 +430,7 @@ function HooksIndexPage() {
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 {hook.description}
               </p>
-            </a>
+            </Link>
           )}
         </For>
       </div>
@@ -484,23 +446,23 @@ function HookDetailPage({ slug }) {
       <div className="py-20 text-center">
         <h2 className="text-2xl font-semibold">Hook no encontrado</h2>
         <p className="mt-2 text-neutral-600">El hook que buscas no existe o ha sido movido.</p>
-        <a href="/docs/hooks" className="mt-4 inline-block text-brand-600 hover:underline">Volver a Hooks</a>
+        <Link href="/docs/hooks" className="mt-4 inline-block text-primary-600 hover:underline">Volver a Hooks</Link>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8">
       <div id="descripcion" className="scroll-mt-28">
-        <h1 className="text-3xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50 sm:text-4xl">
+        <h1 className="scroll-m-20 text-3xl font-bold tracking-tight text-neutral-950 dark:text-neutral-50">
           {hook.name}
         </h1>
-        <p className="mt-4 text-base leading-8 text-neutral-600 dark:text-neutral-400 sm:text-lg">
+        <p className="mt-4 text-base leading-7 text-neutral-500 dark:text-neutral-400">
           {hook.description}
         </p>
       </div>
 
-      <div className="space-y-10">
+      <div className="flex flex-col">
         <Show when={hook.parameters}>
           <div id="parametros" className="scroll-mt-28">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
@@ -548,14 +510,13 @@ function HookDetailPage({ slug }) {
 
 function GenericSectionPage({ sectionId }) {
   return (
-    <div className="space-y-14 sm:space-y-16">
+    <div className="flex flex-col">
       <Show when={sectionId === "introduccion"}>
         <WebsiteSection
           id="introduccion"
           title="Introducción"
-          description="Quickit está pensado para equipos que necesitan velocidad, consistencia visual y una API suficientemente flexible para adaptar producto real."
-        >
-          <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+          description="Quickit está pensado para equipos que necesitan velocidad, consistencia visual y una API suficientemente flexible para adaptar producto real.">
+          <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
             Los primitives compuestos (Accordion, Tabs, Dropdown, Breadcrumb, Modal,
             Drawer, FormControl, InputGroup, Avatar, EmptyState…) exponen subcomponentes
             como <code className="font-mono text-xs">Componente.Subcomponente</code>.
@@ -564,7 +525,7 @@ function GenericSectionPage({ sectionId }) {
             por compatibilidad.
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3
                 id="introduccion-componentes"
                 className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -576,7 +537,7 @@ function GenericSectionPage({ sectionId }) {
                 vacíos listos para integrarse en apps reales.
               </p>
             </div>
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3
                 id="introduccion-tema"
                 className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -588,7 +549,7 @@ function GenericSectionPage({ sectionId }) {
                 control global y por componente.
               </p>
             </div>
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800 sm:col-span-2 xl:col-span-1">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800 sm:col-span-2 xl:col-span-1">
               <h3
                 id="introduccion-utilidades"
                 className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -610,21 +571,21 @@ function GenericSectionPage({ sectionId }) {
           title="Instalación"
           description="La integración mínima requiere instalar el paquete, importar estilos y decidir si quieres un provider estático o un controlador de tema persistente."
         >
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6">
             <WebsiteCodeBlock code={INSTALL_COMMAND} language="bash" />
-            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Si tu app no usa Tailwind, importa los estilos de Quickit una sola vez. Ese archivo contiene los estilos base de componentes, tokens <code className="font-mono text-xs">brand</code>, variables CSS y variantes dark compiladas.
+            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              Si tu app no usa Tailwind, importa los estilos de Quickit una sola vez. Ese archivo contiene los estilos base de componentes, tokens de color, variables CSS y variantes dark compiladas.
             </div>
             <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
             <WebsiteCodeBlock code={COMPONENT_IMPORT_SNIPPET} language="jsx" />
-            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
               Si tu app también usa Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code> y después <code className="font-mono text-xs">tailwindcss</code>. Así Tailwind y los tokens de tu app quedan al final de la cascada y pueden sobrescribir lo necesario.
             </div>
             <WebsiteCodeBlock code={TAILWIND_STYLES_SNIPPET} language="css" />
-            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              <code className="font-mono text-xs">brand</code> es reemplazable. Declara tu escala dentro de <code className="font-mono text-xs">@theme</code> al final del archivo para que <code className="font-mono text-xs">color="brand"</code> use la identidad visual de tu producto.
+            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              <code className="font-mono text-xs">primary</code> es reemplazable. Declara tu escala dentro de <code className="font-mono text-xs">@theme</code> al final del archivo para que <code className="font-mono text-xs">color="primary"</code> use la identidad visual de tu producto.
             </div>
-            <WebsiteCodeBlock code={BRAND_OVERRIDE_SNIPPET} language="css" />
+            <WebsiteCodeBlock code={PRIMARY_OVERRIDE_SNIPPET} language="css" />
           </div>
         </WebsiteSection>
       </Show>
@@ -635,19 +596,19 @@ function GenericSectionPage({ sectionId }) {
           title={`Migración a ${QUICKIT_V1_MIGRATION.toVersion}`}
           description={QUICKIT_V1_MIGRATION.summary}
         >
-          <div className="space-y-8">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm leading-7 text-emerald-900 dark:border-emerald-900/60 dark:bg-emerald-950/20 dark:text-emerald-100">
+          <div className="flex flex-col gap-8">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm leading-7 text-emerald-900 dark:border-emerald-900/60 dark:bg-emerald-950/20 dark:text-emerald-100">
               Ruta cubierta en esta guía: <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.fromVersion}</code> →{" "}
               <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.toVersion}</code>.
             </div>
 
-            <div className="space-y-6">
+            <div className="flex flex-col gap-6">
               <For each={QUICKIT_V1_MIGRATION.steps}>
                 {(step, index) => (
                   <div
                     key={step.title}
                     id={`migracion-paso-${index + 1}`}
-                    className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800"
+                    className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
                   >
                     <div className="flex items-center gap-3">
                       <span className="inline-flex size-8 items-center justify-center rounded-full border border-neutral-300 text-xs font-semibold text-neutral-700 dark:border-neutral-700 dark:text-neutral-200">
@@ -695,11 +656,11 @@ function GenericSectionPage({ sectionId }) {
               </For>
             </div>
 
-            <div id="migracion-checklist" className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div id="migracion-checklist" className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Checklist final
               </h3>
-              <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 <For each={QUICKIT_V1_MIGRATION.checks}>
                   {(item) => <li key={item}>• {item}</li>}
                 </For>
@@ -715,10 +676,10 @@ function GenericSectionPage({ sectionId }) {
           title="Changelog"
           description={`Resumen de la release ${QUICKIT_V1_RELEASE.version} del ${QUICKIT_V1_RELEASE.date}.`}
         >
-          <div className="space-y-8">
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+          <div className="flex flex-col gap-8">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="inline-flex rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-700 dark:border-brand-900/60 dark:bg-brand-950/30 dark:text-brand-200">
+                <span className="inline-flex rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700 dark:border-primary-900/60 dark:bg-primary-950/30 dark:text-primary-200">
                   v{QUICKIT_V1_RELEASE.version}
                 </span>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -730,29 +691,29 @@ function GenericSectionPage({ sectionId }) {
               </p>
             </div>
 
-            <div id="changelog-highlight" className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div id="changelog-highlight" className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Highlights
               </h3>
-              <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 <For each={QUICKIT_V1_RELEASE.highlights}>
                   {(item) => <li key={item}>• {item}</li>}
                 </For>
               </ul>
             </div>
 
-            <div id="changelog-cambios" className="scroll-mt-28 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div id="changelog-cambios" className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Cambios destacados
               </h3>
-              <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 <For each={QUICKIT_V1_RELEASE.notableChanges}>
                   {(item) => <li key={item}>• {item}</li>}
                 </For>
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Archivo completo
               </h3>
@@ -770,8 +731,8 @@ function GenericSectionPage({ sectionId }) {
           title="Tema"
           description="Usa QuickitProvider cuando tu app ya resuelve el tema por su cuenta. Usa QuickitThemeProvider cuando quieres persistencia, soporte system y helpers de lectura."
         >
-          <div className="space-y-10">
-            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+          <div className="flex flex-col gap-10">
+            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
               QuickitThemeProvider es un wrapper con estado que controla el tema y
               luego renderiza QuickitProvider por debajo. QuickitProvider solo
               aplica la política visual; no persiste ni muta el tema.
@@ -803,7 +764,7 @@ function GenericSectionPage({ sectionId }) {
                 QuickitThemeProvider añade persistencia, soporte system y un
                 hook para leer o cambiar el tema.
               </p>
-              <div className="mt-4 space-y-6">
+              <div className="mt-4 flex flex-col gap-6">
                 <WebsiteCodeBlock code={THEME_PROVIDER_SNIPPET} language="jsx" />
                 <WebsiteCodeBlock code={THEME_TOGGLE_SNIPPET} language="jsx" />
               </div>
@@ -837,11 +798,11 @@ function GenericSectionPage({ sectionId }) {
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 El "Flash of Unstyled Content" ocurre porque React hidrata el tema después del primer pintado. 
-                Para evitarlo, es necesario un script síncrono en el <code className="text-brand-500">&lt;head&gt;</code> que 
+                Para evitarlo, es necesario un script síncrono en el <code className="text-primary-500">&lt;head&gt;</code> que 
                 bloquee el renderizado hasta que se aplique la clase correcta.
               </p>
               
-              <div className="mt-6 space-y-6">
+              <div className="mt-6 flex flex-col gap-6">
                 <div>
                   <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                     Vite / SPA (index.html)
@@ -861,22 +822,22 @@ function GenericSectionPage({ sectionId }) {
                 </div>
               </div>
 
-              <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50/50 p-5 dark:border-neutral-800 dark:bg-neutral-900/50">
+              <div className="mt-8 rounded-xl border border-neutral-200 bg-neutral-50/50 p-5 dark:border-neutral-800 dark:bg-neutral-900/50">
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-950 dark:text-neutral-50">
                   Resumen de implementación
                 </h4>
-                <ul className="mt-4 space-y-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                   <li>
                     <strong className="text-neutral-950 dark:text-neutral-50">¿Por qué?</strong> Porque React se ejecuta después de que el navegador pinta el HTML.
                   </li>
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cómo?</strong> Con un script síncrono que modifique <code className="text-brand-500">documentElement</code>.
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cómo?</strong> Con un script síncrono que modifique <code className="text-primary-500">documentElement</code>.
                   </li>
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cuándo?</strong> Inmediatamente, antes de que el navegador renderice el <code className="text-brand-500">&lt;body&gt;</code>.
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cuándo?</strong> Inmediatamente, antes de que el navegador renderice el <code className="text-primary-500">&lt;body&gt;</code>.
                   </li>
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Dónde?</strong> En lo más alto de tu <code className="text-brand-500">&lt;head&gt;</code>.
+                    <strong className="text-neutral-950 dark:text-neutral-50">¿Dónde?</strong> En lo más alto de tu <code className="text-primary-500">&lt;head&gt;</code>.
                   </li>
                 </ul>
               </div>
@@ -891,9 +852,9 @@ function GenericSectionPage({ sectionId }) {
           title="Comportamiento"
           description="Define políticas globales de focus ring, ripple y press effect desde el provider, con posibilidad de sobrescribirlas por componente."
         >
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6">
             <WebsiteCodeBlock code={QUICKIT_PROVIDER_SNIPPET} language="jsx" />
-            <div className="rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
               Ajusta focusRing, ripple y pressEffect para toda la app. Luego,
               cada componente puede sobrescribir con sus props específicas si
               lo necesitas.
@@ -908,8 +869,8 @@ function GenericSectionPage({ sectionId }) {
           title="Tokens"
           description="Referencia visual rápida de colores, tamaños, shapes y variants disponibles en Quickit."
         >
-          <div className="space-y-6">
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+          <div className="flex flex-col gap-6">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3
                 id="tokens-colores"
                 className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -917,28 +878,32 @@ function GenericSectionPage({ sectionId }) {
                 Colores de componentes
               </h3>
               <div className="mt-4 grid gap-5 md:grid-cols-3">
-                {TOKEN_COLOR_GROUPS.map((group) => (
-                  <div key={group.id} id={group.id} className="scroll-mt-28">
-                    <h4 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
-                      {group.title}
-                    </h4>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {group.colors.map((color) => (
-                        <TokenColorChip key={color} color={color} />
-                      ))}
+                <For each={TOKEN_COLOR_GROUPS}>
+                  {(group) => (
+                    <div key={group.id} id={group.id} className="scroll-mt-28">
+                      <h4 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+                        {group.title}
+                      </h4>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <For each={group.colors}>
+                          {(color) => (
+                            <TokenColorChip key={color} color={color} />
+                          )}
+                        </For>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )}
+                </For>
               </div>
               <div
-                id="tokens-brand"
-                className="mt-5 scroll-mt-28 rounded-xl border border-brand-200 bg-brand-50/60 p-4 text-sm leading-7 text-brand-900 dark:border-brand-900/60 dark:bg-brand-950/20 dark:text-brand-100"
+                id="tokens-primary"
+                className="mt-5 scroll-mt-28 rounded-xl border border-primary-200 bg-primary-50/60 p-4 text-sm leading-7 text-primary-900 dark:border-primary-900/60 dark:bg-primary-950/20 dark:text-primary-100"
               >
                 <p>
-                  <strong>brand es reemplazable.</strong> En proyectos con Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code>, luego <code className="font-mono text-xs">tailwindcss</code> y declara <code className="font-mono text-xs">--color-brand-50</code> a <code className="font-mono text-xs">--color-brand-950</code> dentro de <code className="font-mono text-xs">@theme</code> al final del archivo.
+                  <strong>primary es reemplazable.</strong> En proyectos con Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code>, luego <code className="font-mono text-xs">tailwindcss</code> y declara <code className="font-mono text-xs">--color-primary-50</code> a <code className="font-mono text-xs">--color-primary-950</code> dentro de <code className="font-mono text-xs">@theme</code> al final del archivo.
                 </p>
                 <div className="mt-3">
-                  <WebsiteCodeBlock code={BRAND_OVERRIDE_SNIPPET} language="css" />
+                  <WebsiteCodeBlock code={PRIMARY_OVERRIDE_SNIPPET} language="css" />
                 </div>
               </div>
               <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-500">
@@ -947,22 +912,20 @@ function GenericSectionPage({ sectionId }) {
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
                 <h3
                   id="tokens-accent"
                   className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
                 >
                   Colecciones exportadas
                 </h3>
-                <div className="mt-4 space-y-4">
+                <div className="mt-4 flex flex-col gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
-                      Brand / acción
+                      Acción
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {QUICKIT_BRAND_COLORS.map((color) => (
-                        <TokenColorChip key={color} color={color} />
-                      ))}
+                      <TokenColorChip color="primary" />
                     </div>
                   </div>
                   <div>
@@ -970,9 +933,11 @@ function GenericSectionPage({ sectionId }) {
                       Estados
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {QUICKIT_STATUS_COLORS.map((color) => (
-                        <TokenColorChip key={color} color={color} />
-                      ))}
+                      <For each={QUICKIT_STATUS_COLORS}>
+                        {(color) => (
+                          <TokenColorChip key={color} color={color} />
+                        )}
+                      </For>
                     </div>
                   </div>
                   <div>
@@ -980,15 +945,17 @@ function GenericSectionPage({ sectionId }) {
                       Neutrales
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {QUICKIT_NEUTRAL_COLORS.map((color) => (
-                        <TokenColorChip key={color} color={color} />
-                      ))}
+                      <For each={QUICKIT_NEUTRAL_COLORS}>
+                        {(color) => (
+                          <TokenColorChip key={color} color={color} />
+                        )}
+                      </For>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
                 <h3
                   id="tokens-tamaños"
                   className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -996,13 +963,15 @@ function GenericSectionPage({ sectionId }) {
                   Tamaños
                 </h3>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {QUICKIT_CONTROL_SIZES.map((size) => (
-                    <TokenSizeSample key={size} size={size} />
-                  ))}
+                  <For each={QUICKIT_CONTROL_SIZES}>
+                    {(size) => (
+                      <TokenSizeSample key={size} size={size} />
+                    )}
+                  </For>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
                 <h3
                   id="tokens-shapes"
                   className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -1010,13 +979,15 @@ function GenericSectionPage({ sectionId }) {
                   Shapes
                 </h3>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {QUICKIT_BUTTON_SHAPES.map((shape) => (
-                    <TokenShapeSample key={shape} shape={shape} />
-                  ))}
+                  <For each={QUICKIT_BUTTON_SHAPES}>
+                    {(shape) => (
+                      <TokenShapeSample key={shape} shape={shape} />
+                    )}
+                  </For>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
                 <h3
                   id="tokens-variants"
                   className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -1024,13 +995,15 @@ function GenericSectionPage({ sectionId }) {
                   Button variants
                 </h3>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {QUICKIT_BUTTON_VARIANTS.map((variant) => (
-                    <TokenVariantSample key={variant} variant={variant} />
-                  ))}
+                  <For each={QUICKIT_BUTTON_VARIANTS}>
+                    {(variant) => (
+                      <TokenVariantSample key={variant} variant={variant} />
+                    )}
+                  </For>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800 lg:col-span-2">
+              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800 lg:col-span-2">
                 <h3
                   id="tokens-link"
                   className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
@@ -1038,14 +1011,18 @@ function GenericSectionPage({ sectionId }) {
                   Link
                 </h3>
                 <div className="mt-4 flex flex-wrap items-center gap-4">
-                  {QUICKIT_LINK_TEXT_VARIANTS.map((variant) => (
-                    <TokenLinkVariantSample key={variant} variant={variant} />
-                  ))}
+                  <For each={QUICKIT_LINK_TEXT_VARIANTS}>
+                    {(variant) => (
+                      <TokenLinkVariantSample key={variant} variant={variant} />
+                    )}
+                  </For>
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-4">
-                  {QUICKIT_LINK_UNDERLINES.map((underline) => (
-                    <TokenUnderlineSample key={underline} underline={underline} />
-                  ))}
+                  <For each={QUICKIT_LINK_UNDERLINES}>
+                    {(underline) => (
+                      <TokenUnderlineSample key={underline} underline={underline} />
+                    )}
+                  </For>
                 </div>
               </div>
             </div>
@@ -1059,8 +1036,8 @@ function GenericSectionPage({ sectionId }) {
           title="Utilidades"
           description="Quickit también exporta helpers de clases, radios, scroll, refs, tema y resolución de tokens para construir wrappers o componentes propios sin copiar lógica interna."
         >
-          <div className="space-y-10">
-            <div id="utilidades-clases" className="scroll-mt-28 space-y-3">
+          <div className="flex flex-col gap-10">
+            <div id="utilidades-clases" className="scroll-mt-28 flex flex-col gap-3">
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Clases y radios
               </h3>
@@ -1070,7 +1047,7 @@ function GenericSectionPage({ sectionId }) {
               <WebsiteCodeBlock code={UTILS_CN_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-scroll" className="scroll-mt-28 space-y-3">
+            <div id="utilidades-scroll" className="scroll-mt-28 flex flex-col gap-3">
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Bloqueo de scroll
               </h3>
@@ -1080,7 +1057,7 @@ function GenericSectionPage({ sectionId }) {
               <WebsiteCodeBlock code={UTILS_SCROLL_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-refs" className="scroll-mt-28 space-y-3">
+            <div id="utilidades-refs" className="scroll-mt-28 flex flex-col gap-3">
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Merge de refs
               </h3>
@@ -1090,7 +1067,7 @@ function GenericSectionPage({ sectionId }) {
               <WebsiteCodeBlock code={UTILS_REFS_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-tokens" className="scroll-mt-28 space-y-3">
+            <div id="utilidades-tokens" className="scroll-mt-28 flex flex-col gap-3">
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Resolución de tokens
               </h3>
@@ -1100,7 +1077,7 @@ function GenericSectionPage({ sectionId }) {
               <WebsiteCodeBlock code={UTILS_TOKENS_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-tema" className="scroll-mt-28 space-y-3">
+            <div id="utilidades-tema" className="scroll-mt-28 flex flex-col gap-3">
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Tema resuelto
               </h3>
@@ -1119,12 +1096,12 @@ function GenericSectionPage({ sectionId }) {
           title="Componentes"
           description="Empieza por los primitives base y después entra a cada página para ver instalación, uso, preview y API."
         >
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6">
             <For each={WEBSITE_COMPONENT_GROUPS}>
               {(group) => (
                 <div
                   key={group.title}
-                  className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800"
+                  className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
                 >
                   <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                     {group.title}
@@ -1132,18 +1109,18 @@ function GenericSectionPage({ sectionId }) {
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <For each={group.items}>
                       {(item) => (
-                        <a
-                          key={item.slug}
-                          href={getWebsiteComponentRoute(item.slug)}
-                          className="rounded-2xl border border-neutral-200 p-4 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
-                        >
-                          <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
-                            {item.name}
-                          </p>
-                          <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                            {item.description}
-                          </p>
-                        </a>
+                    <Link
+                        key={item.slug}
+                        href={getWebsiteComponentRoute(item.slug)}
+                        className="rounded-xl border border-neutral-200 p-4 transition-colors hover:bg-neutral-50 no-underline dark:border-neutral-800 dark:hover:bg-neutral-900"
+                      >
+                        <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                          {item.name}
+                        </p>
+                        <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                          {item.description}
+                        </p>
+                      </Link>
                       )}
                     </For>
                   </div>
@@ -1164,15 +1141,15 @@ function ComponentPage({ component }) {
   return (
     <>
       <div className="max-w-3xl">
-        <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50 sm:text-5xl">
+        <h1 className="scroll-m-20 text-4xl font-bold tracking-tight text-neutral-950 dark:text-neutral-50">
           {component.name}
         </h1>
-        <p className="mt-5 text-base leading-8 text-neutral-600 dark:text-neutral-400 sm:text-lg">
+        <p className="mt-4 text-base leading-7 text-neutral-500 dark:text-neutral-400">
           {doc?.description ?? component.description}
         </p>
       </div>
 
-      <div className="mt-14 sm:mt-16">
+      <div className="flex flex-col">
         <Show when={doc}>
           <WebsiteSection id="ejemplo-visual" title="Ejemplo visual y código">
             <WebsitePreviewTabs code={doc.previewCode}>
@@ -1225,44 +1202,46 @@ function ComponentPage({ component }) {
           </Show>
 
           <WebsiteSection id="ejemplos" title="Ejemplos">
-            <div className="space-y-10">
-              {doc.examples?.map((example) => (
-                <div key={example.id} className={example.id === "ejemplos-props" ? "pt-2" : undefined}>
-                  <h3
-                    id={example.id}
-                    className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
-                  >
-                    {example.title}
-                  </h3>
-                  {example.preview ? (
-                    <div className="mt-4">
-                      {example.code ? (
-                        <WebsitePreviewTabs code={example.code}>
-                          {example.preview}
-                        </WebsitePreviewTabs>
-                      ) : (
-                        example.preview
-                      )}
-                    </div>
-                  ) : null}
-                  {example.description ? (
-                    <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-                      {example.description}
-                    </p>
-                  ) : null}
-                  {example.note ? (
-                    <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                      {example.note}
-                    </p>
-                  ) : null}
-                  {example.props ? (
-                    <div className="mt-4">
-                      <PropsTable props={example.props} />
-                    </div>
-                  ) : null}
-                  {example.notes ? <div className="mt-6"><NotesList notes={example.notes} /></div> : null}
-                </div>
-              ))}
+            <div className="flex flex-col gap-10">
+              <For each={doc.examples ?? []}>
+                {(example) => (
+                  <div key={example.id} className={example.id === "ejemplos-props" ? "pt-2" : undefined}>
+                    <h3
+                      id={example.id}
+                      className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+                    >
+                      {example.title}
+                    </h3>
+                    <Show when={example.preview}>
+                      <div className="mt-4">
+                        <Show when={example.code} fallback={example.preview}>
+                          <WebsitePreviewTabs code={example.code}>
+                            {example.preview}
+                          </WebsitePreviewTabs>
+                        </Show>
+                      </div>
+                    </Show>
+                    <Show when={example.description}>
+                      <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
+                        {example.description}
+                      </p>
+                    </Show>
+                    <Show when={example.note}>
+                      <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+                        {example.note}
+                      </p>
+                    </Show>
+                    <Show when={example.props}>
+                      <div className="mt-4">
+                        <PropsTable props={example.props} />
+                      </div>
+                    </Show>
+                    <Show when={example.notes}>
+                      <div className="mt-6"><NotesList notes={example.notes} /></div>
+                    </Show>
+                  </div>
+                )}
+              </For>
             </div>
           </WebsiteSection>
         </Show>
@@ -1273,7 +1252,7 @@ function ComponentPage({ component }) {
             title="Página en construcción"
             description={`La arquitectura ya está lista para ${component.name}. Lo siguiente es documentar este componente con el mismo nivel de detalle que Button: ejemplo visual, instalación, uso y ejemplos completos.`}
           >
-            <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 Esta página ya tiene ruta propia, navegación lateral y contexto
                 del componente. El siguiente paso es rellenar el contenido
@@ -1295,7 +1274,7 @@ function ComponentNotFoundPage({ componentSlug }) {
       title="Componente no encontrado"
       description={`No existe un componente documentado con el slug "${componentSlug}".`}
     >
-      <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
+      <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
         <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
           Revisa la URL o vuelve al índice de componentes para abrir una página
           válida de la librería.
@@ -1310,109 +1289,45 @@ function ComponentNotFoundPage({ componentSlug }) {
   );
 }
 
-function getGenericSections(sectionId) {
-  if (sectionId === "introduccion") {
-    return [
-      { id: "introduccion", label: "Introducción" },
-      { id: "introduccion-componentes", label: "Componentes" },
-      { id: "introduccion-tema", label: "Tema y comportamiento" },
-      { id: "introduccion-utilidades", label: "Utilidades lógicas" },
-    ];
-  }
-  if (sectionId === "instalacion") {
-    return [{ id: "instalacion", label: "Instalación" }];
-  }
-  if (sectionId === "migracion") {
-    return [
-      { id: "migracion", label: `Migración ${QUICKIT_V1_MIGRATION.toVersion}` },
-      { id: "migracion-paso-1", label: "Actualiza el paquete" },
-      { id: "migracion-paso-2", label: "Simplifica Breadcrumb" },
-      { id: "migracion-paso-3", label: "Usa APIs compuestas" },
-      { id: "migracion-paso-4", label: "CommandPalette y EmptyState" },
-      { id: "migracion-paso-5", label: "Verificación final" },
-      { id: "migracion-checklist", label: "Checklist final" },
-    ];
-  }
-  if (sectionId === "changelog") {
-    return [
-      { id: "changelog", label: "Changelog" },
-      { id: "changelog-highlight", label: "Highlights" },
-      { id: "changelog-cambios", label: "Cambios destacados" },
-    ];
-  }
-  if (sectionId === "tema") {
-    return [
-      { id: "tema", label: "Tema" },
-      { id: "tema-proveedor", label: "Proveedor base" },
-      { id: "tema-controlador", label: "Controlador de tema" },
-      { id: "tema-lectura", label: "Lectura rápida" },
-      { id: "tema-fouc", label: "Evitar parpadeo (FOUC)" },
-    ];
-  }
-  if (sectionId === "comportamiento") {
-    return [{ id: "comportamiento", label: "Comportamiento" }];
-  }
-  if (sectionId === "tokens") {
-    return [
-      { id: "tokens", label: "Tokens" },
-      { id: "tokens-colores", label: "Colores de componentes" },
-      { id: "tokens-brand", label: "Reemplazar brand" },
-      { id: "tokens-accent", label: "Accent" },
-      { id: "tokens-tamaños", label: "Tamaños" },
-      { id: "tokens-shapes", label: "Shapes" },
-      { id: "tokens-variants", label: "Button variants" },
-      { id: "tokens-link", label: "Link" },
-    ];
-  }
-  if (sectionId === "utilidades") {
-    return [
-      { id: "utilidades", label: "Utilidades" },
-      { id: "utilidades-clases", label: "Clases y radios" },
-      { id: "utilidades-scroll", label: "Bloqueo de scroll" },
-      { id: "utilidades-refs", label: "Merge de refs" },
-      { id: "utilidades-tokens", label: "Resolución de tokens" },
-      { id: "utilidades-tema", label: "Tema resuelto" },
-    ];
-  }
-  if (sectionId === "componentes") {
-    return [{ id: "componentes", label: "Componentes" }];
-  }
-  return [];
-}
-
 export default function DocsPage({ currentPath }) {
   const route = parseDocsRoute(currentPath);
   const { mode, componentSlug, sectionId, hookSlug } = route;
 
   const currentComponent =
     mode === "component" ? WEBSITE_COMPONENT_LOOKUP[componentSlug] : null;
-  const currentHook =
-    mode === "hook"
-      ? WEBSITE_HOOKS.find((h) => hookToSlug(h.name) === hookSlug)
-      : null;
 
-  let tocSections = [];
-  if (currentComponent) {
-    tocSections = getComponentSections(currentComponent.slug);
-  } else if (currentHook) {
-    tocSections = [
-      { id: "descripcion", label: "Descripción" },
-      currentHook.parameters && { id: "parametros", label: "Parámetros" },
-      currentHook.returns && { id: "retorno", label: "Valor de retorno" },
-      WEBSITE_HOOK_EXAMPLES[currentHook.name] && { id: "ejemplo", label: "Ejemplo" },
-    ].filter(Boolean);
-  } else if (mode === "section") {
-    tocSections = getGenericSections(sectionId);
-  } else if (mode === "hooks-index") {
-    tocSections = [{ id: "hooks", label: "Hooks" }];
-  } else if (mode === "component") {
-    tocSections = [{ id: "componente-no-encontrado", label: "Componente no encontrado" }];
-  }
+  const contentRef = useRef(null);
+  const [tocSections, setTocSections] = useState([]);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+    const timer = setTimeout(() => {
+      const content = contentRef.current;
+      const result = [];
+      const sections = content.querySelectorAll("section[id]");
+      sections.forEach((section) => {
+        const id = section.getAttribute("id");
+        const h2 = section.querySelector("h2");
+        if (!id || !h2) return;
+        const entry = { id, label: h2.textContent.trim(), children: [] };
+        const h3s = section.querySelectorAll("h3[id]");
+        h3s.forEach((h3) => {
+          const childId = h3.getAttribute("id");
+          if (childId) {
+            entry.children.push({ id: childId, label: h3.textContent.trim() });
+          }
+        });
+        result.push(entry);
+      });
+      setTocSections(result);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [mode, componentSlug, sectionId, hookSlug]);
 
   return (
-    <main className="pb-20">
+    <main className="pb-16">
       <Toaster />
-      <div className="grid lg:grid-cols-[14rem_minmax(0,1fr)] min-w-0">
+      <div className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_14rem] min-w-0">
         <WebsiteDocsSidebar
           currentComponentSlug={currentComponent?.slug}
           sections={WEBSITE_DOC_OVERVIEW_SECTIONS}
@@ -1420,27 +1335,30 @@ export default function DocsPage({ currentPath }) {
           currentPath={currentPath}
         />
 
-        <article className="min-w-0 w-full px-4 sm:px-6 xl:px-8 pl-8 xl:pl-10 py-6 lg:col-start-2">
-          <RenderSwitch value={mode}>
-            <Match when="component">
-              {currentComponent ? (
-                <ComponentPage component={currentComponent} />
-              ) : (
-                <ComponentNotFoundPage componentSlug={componentSlug} />
-              )}
-            </Match>
-            <Match when="hook">
-              <HookDetailPage slug={hookSlug} />
-            </Match>
-            <Match when="hooks-index">
-              <HooksIndexPage />
-            </Match>
-            <Default>
-              <GenericSectionPage sectionId={sectionId} />
-            </Default>
-          </RenderSwitch>
-        </article>
+        <Container as="article" size="full" padding="md" center={false} className="min-w-0 px-4 sm:px-6 lg:col-start-2 lg:pl-10 xl:pl-12 py-6 lg:py-10 lg:pr-12 xl:pr-16">
+          <div ref={contentRef}>
+            <RenderSwitch value={mode}>
+              <Match when="component">
+                {currentComponent ? (
+                  <ComponentPage component={currentComponent} />
+                ) : (
+                  <ComponentNotFoundPage componentSlug={componentSlug} />
+                )}
+              </Match>
+              <Match when="hook">
+                <HookDetailPage slug={hookSlug} />
+              </Match>
+              <Match when="hooks-index">
+                <HooksIndexPage />
+              </Match>
+              <Default>
+                <GenericSectionPage sectionId={sectionId} />
+              </Default>
+            </RenderSwitch>
+          </div>
+        </Container>
 
+        <WebsitePageToc sections={tocSections} />
       </div>
     </main>
   );
