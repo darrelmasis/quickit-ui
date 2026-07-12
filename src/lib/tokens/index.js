@@ -2,25 +2,18 @@ import { AVATAR_RADIUS_BY_SIZE, CONTROL_RADIUS_BY_SIZE } from "@/lib/utils/radiu
 
 export const QUICKIT_SEMANTIC_COLORS = Object.freeze([
   "neutral",
-  "slate",
-  "zinc",
   "primary",
-  "brand",
   "success",
   "danger",
   "warning",
   "info",
   "light",
   "dark",
-  "black",
 ]);
 
 export const QUICKIT_ACCENT_COLORS = Object.freeze([
   "neutral",
-  "slate",
-  "zinc",
   "primary",
-  "brand",
   "success",
   "danger",
   "warning",
@@ -34,18 +27,10 @@ export const QUICKIT_STATUS_COLORS = Object.freeze([
   "info",
 ]);
 
-export const QUICKIT_BRAND_COLORS = Object.freeze([
-  "primary",
-  "brand",
-]);
-
 export const QUICKIT_NEUTRAL_COLORS = Object.freeze([
   "neutral",
-  "slate",
-  "zinc",
   "light",
   "dark",
-  "black",
 ]);
 
 export const QUICKIT_CONTROL_SIZES = Object.freeze([
@@ -62,6 +47,7 @@ export const QUICKIT_BUTTON_VARIANTS = Object.freeze([
   "solid",
   "outline",
   "ghost",
+  "soft",
 ]);
 
 export const QUICKIT_BUTTON_SHAPES = Object.freeze([
@@ -96,6 +82,8 @@ export const QUICKIT_TAB_SIZES = Object.freeze([
   "sm",
   "md",
   "lg",
+  "xl",
+  "2xl",
 ]);
 
 export const QUICKIT_EASE_DEFAULT = "cubic-bezier(0.22, 1, 0.36, 1)";

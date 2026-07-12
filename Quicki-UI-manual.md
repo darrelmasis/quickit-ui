@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.0.12`
+Version documentada: `1.1.0`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.0.12` |
+| Version actual | `1.1.0` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -298,7 +298,7 @@ Exports:
 | --- | --- |
 | `QUICKIT_CONTROL_SIZES` | `sm`, `md`, `lg`, `xl`, `2xl` |
 | `QUICKIT_COMPACT_CONTROL_SIZES` | `sm`, `md` |
-| `QUICKIT_BUTTON_VARIANTS` | `solid`, `outline`, `ghost` |
+| `QUICKIT_BUTTON_VARIANTS` | `solid`, `outline`, `ghost`, `soft` |
 | `QUICKIT_BUTTON_SHAPES` | `default`, `square`, `circle`, `pill` |
 | `QUICKIT_AVATAR_SHAPES` | `circle`, `rounded`, `square` |
 | `QUICKIT_AVATAR_SIZES` | `sm`, `md`, `lg`, `xl`, `2xl` |
@@ -376,7 +376,7 @@ export function ThemeToggle() {
   const { theme, resolvedTheme, toggleTheme } = useQuickitThemeController();
 
   return (
-    <Button variant="outline" color="neutral" onClick={toggleTheme}>
+    <Button onClick={toggleTheme}>
       {theme} / {resolvedTheme}
     </Button>
   );
@@ -427,7 +427,7 @@ Quickit intenta mantener una API consistente:
 
 | Convencion | Uso |
 | --- | --- |
-| `variant` | Tratamiento visual: `solid`, `outline`, `ghost`, etc. |
+| `variant` | Tratamiento visual: `solid`, `outline`, `ghost`, `soft`, etc. |
 | `color` | Paleta compatible: `QuickitSemanticColor` o `"default"` en algunos overlays. |
 | `size` | Escala visual. |
 | `shape` | Geometria: `default`, `square`, `circle`, `pill`. |
@@ -457,7 +457,7 @@ import { Button } from "quickit-ui";
 Uso:
 
 ```jsx
-<Button color="brand" size="lg">
+<Button size="lg">
   Guardar cambios
 </Button>
 
@@ -470,8 +470,8 @@ Props relevantes:
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
-| `variant` | `solid | outline | ghost` | `solid` | Tratamiento visual. |
-| `color` | `QuickitSemanticColor` | `primary` | Paleta aplicada. |
+| `variant` | `solid | outline | ghost | soft` | `soft` | Tratamiento visual. Soft: borde + fondo sutil en reposo, sólido en hover. |
+| `color` | `QuickitSemanticColor` | `neutral` | Paleta aplicada. |
 | `size` | `sm | md | lg | xl | 2xl` | `md` | Tamanno visual. |
 | `shape` | `default | square | circle | pill` | `default` | Geometria. |
 | `type` | `button | submit | reset` | `button` | Tipo nativo. |
@@ -511,9 +511,9 @@ Props relevantes:
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
 | `appearance` | `text | button` | `text` | Decide si renderiza estilo enlace o boton. |
-| `variant` | `default | muted | subtle` en texto; variantes de boton en button | `default` | Tratamiento visual. |
+| `variant` | `default | muted | subtle` en texto; variantes de boton en button | `soft` | Tratamiento visual. |
 | `underline` | `always | hover | none` | `hover` | Subrayado en modo texto. |
-| `color` | `QuickitSemanticColor` | `primary` | Paleta. |
+| `color` | `QuickitSemanticColor` | `neutral` | Paleta. |
 | `size` | `xs | sm | md | lg` o escala de boton | `md` | Tamanno. |
 | `disabled` | `boolean` | `false` | Aplica `aria-disabled` y evita interaccion. |
 | `target` | string | - | Si `_blank`, agrega `noopener noreferrer`. |
@@ -812,7 +812,6 @@ Slider nativo estilizado con modo simple y modo doble.
   defaultValue={[20, 80]}
   startLabel="Precio minimo"
   endLabel="Precio maximo"
-  color="brand"
 />
 ```
 
@@ -1275,7 +1274,7 @@ Marcador de carga.
 Indicador lineal de progreso.
 
 ```jsx
-<Progress value={60} max={100} color="brand" />
+<Progress value={60} max={100} />
 ```
 
 Props:
@@ -1553,14 +1552,28 @@ import {
 } from "quickit-ui";
 ```
 
-## 20. Migracion Desde 0.2.4
+## 20. Migracion
 
-La migracion principal documentada va de `0.2.4` a `1.0.12`.
+### De 1.0.17 a 1.1.0
+
+| Cambio | Detalle |
+| --- | --- |
+| Variante `soft` | Nueva variante para Button, ButtonGroup y otros action controls. Borde + fondo sutil del color seleccionado en reposo, sólido en hover. |
+| Defaults de `variant` | Todos los componentes que exponen `variant` ahora default a `"soft"` en vez de `"solid"` o `"default"`. |
+| Defaults de `color` | Todos los componentes que exponen `color` ahora default a `"neutral"` en vez de `"primary"` o `"info"`. |
 
 Comando:
 
 ```bash
-npm install quickit-ui@1.0.12
+npm install quickit-ui@1.1.0
+```
+
+### Legacy: De 0.2.4 a 1.0.17
+
+Comando:
+
+```bash
+npm install quickit-ui@1.1.0
 ```
 
 Cambios a revisar:
@@ -1602,7 +1615,8 @@ Si usas este manual como contexto para un agente:
 | Tocar overlays | Revisar foco, Escape, outside click, roles, portal y scroll lock. |
 | Tocar CommandPalette | No romper multiples instancias ni shortcuts. |
 | Tocar tipos | Actualizar `src/lib/quickit-ui.d.ts` y `tests/types/public-api.tsx`. |
-| Tocar docs | Actualizar README, docs website, migration y changelog si aplica. |
+| Tocar defaults | `variant` ahora default a `"soft"`, `color` a `"neutral"` en todos los componentes. |
+| Tocar variante soft | Borde + fondo sutil del color seleccionado en reposo, sólido en hover. |
 
 Validacion minima antes de publicar:
 
@@ -1634,6 +1648,7 @@ Quickit UI se entiende mejor asi:
 | Tema | `QuickitThemeProvider` controla `light/dark/system` y `.dark`. |
 | Comportamiento | `focusRing`, `ripple`, `pressEffect`. |
 | Tokens | Compatibilidad con `QuickitSemanticColor`; taxonomia real: brand/status/neutral. |
+| Defaults globales | Todos los componentes: `variant="soft"`, `color="neutral"`. |
 | Forms | `FormControl` coordina accesibilidad; controles aceptan estados coherentes. |
 | Overlays | Basados en primitives compuestos, portal, foco y cierre. |
 | Docs | Website consume la libreria real y debe mantenerse alineado con runtime. |

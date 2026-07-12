@@ -1,7 +1,7 @@
 {
   "name": "quickit-ui",
   "private": false,
-  "version": "1.0.17",
+  "version": "1.1.0",
   "description": "Biblioteca de componentes UI reutilizables para React con soporte para light y dark mode.",
   "license": "MIT",
   "repository": {
@@ -58,6 +58,7 @@
     "preview:docs": "vite preview --mode docs",
     "test": "vitest run",
     "test:types": "node scripts/copy-types.mjs && tsc -p tsconfig.types.json --noEmit",
+    "component:create": "node scripts/create-component.mjs",
     "test:watch": "vitest"
   },
   "peerDependencies": {
