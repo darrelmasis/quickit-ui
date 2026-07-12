@@ -54,12 +54,19 @@ const BUTTON_VISUAL_STATE_CLASSES = {
   pressed: "translate-y-px scale-[0.99]",
 };
 
+const ALIGN_CLASSES = {
+  left: "justify-start",
+  center: "justify-center",
+  right: "justify-end",
+};
+
 const Button = forwardRef(function Button(
   {
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     active = false,
     activeMotion,
+    align = "center",
     children,
     className,
     disabled = false,
@@ -72,9 +79,9 @@ const Button = forwardRef(function Button(
     pressed = false,
     ripple,
     spinner = true,
-    color = "primary",
+    color = "neutral",
     shape = "default",
-    variant = "solid",
+    variant = "soft",
     size = "md",
     style,
     title,
@@ -217,7 +224,7 @@ const Button = forwardRef(function Button(
       {resolvedRipple ? rippleEffect.rippleLayer : null}
 
       {loading ? (
-        <span className="relative z-[1] inline-flex items-center justify-center gap-2 shrink-0 truncate">
+        <span className={`relative z-[1] inline-flex items-center ${ALIGN_CLASSES[align]} gap-2 shrink-0 truncate`}>
           {spinner ? (
             <SpinnerIcon className="size-4 shrink-0 animate-spin motion-reduce:animate-none" />
           ) : null}
@@ -225,7 +232,7 @@ const Button = forwardRef(function Button(
         </span>
       ) : (
         <span
-          className="relative z-[1] inline-flex items-center gap-2 flex-grow-1 justify-center min-w-0 truncate"
+          className={`relative z-[1] inline-flex items-center gap-2 flex-grow-1 ${ALIGN_CLASSES[align]} min-w-0 truncate`}
         >
           {baseContent}
         </span>
