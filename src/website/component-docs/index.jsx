@@ -36,6 +36,8 @@ import { skeletonDoc } from "@/website/component-docs/skeleton.doc";
 import { showDoc } from "@/website/component-docs/show.doc";
 import { renderSwitchDoc } from "@/website/component-docs/render-switch.doc";
 import { forDoc } from "@/website/component-docs/for.doc";
+import { cardDoc } from "@/website/component-docs/card.doc";
+import { dividerDoc } from "@/website/component-docs/divider.doc";
 
 import { containerDoc } from "@/website/component-docs/container.doc";
 export const COMPONENT_DOCS = {
@@ -77,5 +79,7 @@ export const COMPONENT_DOCS = {
   "show": showDoc,
   "render-switch": renderSwitchDoc,
   "for": forDoc,
+  "card": cardDoc,
+  "divider": dividerDoc,
   "container": containerDoc
 };

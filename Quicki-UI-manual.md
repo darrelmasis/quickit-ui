@@ -1355,20 +1355,6 @@ Control declarativo de estados.
 </RenderSwitch>
 ```
 
-### Animate
-
-Utilidad declarativa para ciclos simples de entrada/salida.
-
-```jsx
-<Animate show={open}>
-  {(state) => (
-    <div data-state={state}>
-      Contenido animado
-    </div>
-  )}
-</Animate>
-```
-
 ## 17. Arquitectura De Componentes
 
 Quickit favorece primitives compuestos cuando el componente tiene partes internas:
@@ -1505,7 +1491,6 @@ import {
   RenderSwitch,
   Match,
   Default,
-  Animate,
 } from "quickit-ui";
 ```
 

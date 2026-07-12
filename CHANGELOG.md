@@ -24,7 +24,7 @@
 - 9 accessibility tests in `tests/runtime/accessibility.test.jsx`
 - `loading` and `emptyText` props to DataTable, Select, Combobox
 - `forwardRef` support to Accordion, Tabs, FormControl, Stepper, Toaster, Popover, Tooltip, DataTable, Pagination, Modal (Trigger/Content/Action), Drawer (Trigger/Content/Action)
-- TypeScript declarations for ButtonGroup, Animate, lockAppScroll/unlockAppScroll, useMergeRefs, 10 theme-classes constants, `emptyText`/`loading` props
+- TypeScript declarations for ButtonGroup, lockAppScroll/unlockAppScroll, useMergeRefs, 10 theme-classes constants, `emptyText`/`loading` props
 - Scaffolding script (`npm run component:create Nombre`)
 - Centralized texts in `src/lib/texts.js` (27 constants)
 

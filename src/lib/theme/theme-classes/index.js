@@ -4,6 +4,7 @@ export * from "./form-field.js";
 export * from "./form-field-autofill.js";
 export * from "./badge.js";
 export * from "./alert.js";
+export * from "./card.js";
 export * from "./link-text.js";
 export * from "./label.js";
 export * from "./progress.js";

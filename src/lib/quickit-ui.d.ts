@@ -1602,12 +1602,34 @@ export declare const Container: React.ForwardRefExoticComponent<
   ContainerProps & React.RefAttributes<HTMLDivElement>
 >;
 
-export interface AnimateProps {
-  children?: React.ReactNode;
-  duration?: number;
-  show: boolean;
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface CardSectionProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+export declare const CardHeader: React.ForwardRefExoticComponent<
+  CardSectionProps & React.RefAttributes<HTMLDivElement>
+>;
+export declare const CardBody: React.ForwardRefExoticComponent<
+  CardSectionProps & React.RefAttributes<HTMLDivElement>
+>;
+export declare const CardFooter: React.ForwardRefExoticComponent<
+  CardSectionProps & React.RefAttributes<HTMLDivElement>
+>;
+export type CardComponent = React.ForwardRefExoticComponent<
+  CardProps & React.RefAttributes<HTMLDivElement>
+> & {
+  Header: typeof CardHeader;
+  Body: typeof CardBody;
+  Footer: typeof CardFooter;
+};
+export declare const Card: CardComponent;
+
+export interface DividerProps extends React.HTMLAttributes<HTMLDivElement> {
+  label?: React.ReactNode;
+  orientation?: "horizontal" | "vertical";
 }
-export declare function Animate(props: AnimateProps): React.JSX.Element;
+export declare const Divider: React.ForwardRefExoticComponent<
+  DividerProps & React.RefAttributes<HTMLDivElement>
+>;
 
 export declare function lockAppScroll(): void;
 export declare function unlockAppScroll(): void;
