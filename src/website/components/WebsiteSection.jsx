@@ -5,18 +5,18 @@ export default function WebsiteSection({
   description,
 }) {
   return (
-    <section id={id} className="scroll-mt-32 border-t border-neutral-200 py-10 first:border-t-0 first:pt-0 dark:border-neutral-800">
+    <section id={id} className="scroll-mt-20 first:mt-0 mt-10 border-b border-neutral-100 pb-2 first:border-b-0 dark:border-neutral-800">
       <div className="max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50">
           {title}
         </h2>
         {description ? (
-          <p className="mt-6 text-base leading-8 text-neutral-600 dark:text-neutral-400">
+          <p className="mt-4 text-base leading-7 text-neutral-500 dark:text-neutral-400">
             {description}
           </p>
         ) : null}
       </div>
-      <div className="mt-8">{children}</div>
+      <div className="mt-6">{children}</div>
     </section>
   );
 }

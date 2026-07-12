@@ -3,71 +3,67 @@ import { Button, useQuickitTheme, Tooltip } from "@/lib";
 import { CheckStrokeIcon, CopyIcon } from "@/lib/assets/icons";
 import useCopyToClipboard from "@/website/hooks/useCopyToClipboard";
 
-/** `label` sustituye el texto de la cabecera (por defecto el `language`). */
 export default function WebsiteCodeBlock({
   code,
   language = "bash",
-  label,
 }) {
   const theme = useQuickitTheme();
   const isDark = theme === "dark";
   const codeTheme = isDark ? themes.nightOwl : themes.nightOwlLight;
   const { copied, copy } = useCopyToClipboard();
-  const headerText = label ?? language;
 
   return (
-    <div
-      className={`overflow-hidden rounded-2xl border ${isDark ? "border-neutral-800 bg-neutral-950" : "border-neutral-200 bg-neutral-50"}`}
-    >
-      <div
-        className={`flex items-center justify-between border-b px-4 py-3 ${isDark ? "border-white/10" : "border-neutral-200"}`}
-      >
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
-          {headerText}
-        </span>
+    <div className={`group relative overflow-hidden rounded-lg border ${isDark ? "border-neutral-800 bg-neutral-950" : "border-neutral-200 bg-neutral-50"}`}>
+      <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
         <Tooltip content={copied ? "Código copiado" : "Copiar código"} placement="top" showArrow={false}>
           <Button
-          aria-label={copied ? "Codigo copiado" : "Copiar codigo"}
-          title={copied ? "Copiado" : "Copiar"}
-          shape="circle"
-          size="md"
-          variant="ghost"
-          color="neutral"
-          onClick={() => copy(code)}
-        >
-          {copied ? (
-            <CheckStrokeIcon className="size-5" />
-          ) : (
-            <CopyIcon className="size-5" />
-          )}
-        </Button>
+            aria-label={copied ? "Codigo copiado" : "Copiar codigo"}
+            title={copied ? "Copiado" : "Copiar"}
+            shape="circle"
+            size="sm"
+            variant="ghost"
+            color="neutral"
+            onClick={() => copy(code)}
+          >
+            {copied ? (
+              <CheckStrokeIcon className="size-4" />
+            ) : (
+              <CopyIcon className="size-4" />
+            )}
+          </Button>
         </Tooltip>
       </div>
-      <pre className={`overflow-x-auto px-4 py-4 text-sm leading-7 [scrollbar-width:thin] [scrollbar-color:rgb(163_163_163)_transparent] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent [&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:bg-clip-content [&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:[scrollbar-color:rgb(115_115_115)_transparent] dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600`}>
-        <Highlight theme={codeTheme} code={code.trimEnd()} language={language}>
+      <pre className={`overflow-x-auto px-4 py-4 text-sm leading-relaxed [scrollbar-width:thin] [scrollbar-color:rgb(163_163_163)_transparent] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent [&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:bg-clip-content [&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:[scrollbar-color:rgb(115_115_115)_transparent] dark:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600`}>
+        <Highlight theme={codeTheme} code={(code ?? "").trimEnd()} language={language}>
           {({ className, getLineProps, getTokenProps, tokens }) => (
             <code className={`grid gap-0 ${className}`}>
-              {tokens.map((line, index) => (
-                <div
-                  key={`line-${index}`}
-                  className="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-5"
-                  {...getLineProps({ line })}
-                >
-                  <span
-                    className={`select-none text-right pr-2 ${isDark ? "text-neutral-500" : "text-neutral-400"}`}
+              {tokens.map((line, index) => {
+                const { key: _lineKey, ...lineProps } = getLineProps({ line });
+                return (
+                  <div
+                    key={`line-${index}`}
+                    className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4"
+                    {...lineProps}
                   >
-                    {index + 1}
-                  </span>
-                  <span className="whitespace-pre">
-                    {line.map((token, tokenIndex) => (
-                      <span
-                        key={`token-${index}-${tokenIndex}`}
-                        {...getTokenProps({ token })}
-                      />
-                    ))}
-                  </span>
-                </div>
-              ))}
+                    <span
+                      className={`select-none text-right text-[0.75rem] ${isDark ? "text-neutral-600" : "text-neutral-400"}`}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="whitespace-pre">
+                      {line.map((token, tokenIndex) => {
+                        const { key: _tokenKey, ...tokenProps } = getTokenProps({ token });
+                        return (
+                          <span
+                            key={`token-${index}-${tokenIndex}`}
+                            {...tokenProps}
+                          />
+                        );
+                      })}
+                    </span>
+                  </div>
+                );
+              })}
             </code>
           )}
         </Highlight>

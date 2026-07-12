@@ -1,10 +1,10 @@
 export const WEBSITE_THEME_STORAGE_KEY = "quickit-ui-website-theme";
-export const WEBSITE_SHELL = "mx-auto w-full px-4 sm:px-6 xl:px-8";
 
 export const WEBSITE_ROUTES = {
   landing: "/",
   docs: "/docs",
   examples: "/examples",
+  playground: "/playground",
 };
 
 export function getWebsiteSection(pathname) {
@@ -26,6 +26,10 @@ export function getWebsiteSection(pathname) {
     return WEBSITE_ROUTES.examples;
   }
 
+  if (pathname === WEBSITE_ROUTES.playground) {
+    return WEBSITE_ROUTES.playground;
+  }
+
   return WEBSITE_ROUTES.landing;
 }
 
@@ -35,5 +39,6 @@ export function getWebsiteComponentRoute(slug) {
 
 export const WEBSITE_NAV = [
   { href: WEBSITE_ROUTES.docs, label: "Docs" },
+  { href: WEBSITE_ROUTES.playground, label: "Playground" },
   { href: WEBSITE_ROUTES.examples, label: "Ejemplos" },
 ];

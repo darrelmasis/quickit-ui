@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import {
-  Badge,
   Button,
   CommandPalette,
   For,
@@ -13,7 +12,6 @@ import { getWebsiteSearchGroups } from "@/website/docs-search";
 import {
   WEBSITE_NAV,
   WEBSITE_ROUTES,
-  WEBSITE_SHELL,
 } from "@/website/site-config";
 import WebsiteLogo from "@/website/components/WebsiteLogo";
 import { navigateWebsiteToHref } from "@/website/router";
@@ -54,14 +52,6 @@ function GithubIcon() {
   );
 }
 
-function NpmIcon() {
-  return (
-    <svg viewBox="0 0 250 250" className="size-4" aria-hidden="true">
-      <path fill="currentColor" d="M0,200h100V50h50v150h50V0H0V200z" strokeWidth="5" stroke="currentColor" />
-    </svg>
-  );
-}
-
 export default function WebsiteHeader({ activePath }) {
   const { resolvedTheme, toggleTheme } = useQuickitThemeController();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -76,112 +66,91 @@ export default function WebsiteHeader({ activePath }) {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/88 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-950/88">
-      <div className={WEBSITE_SHELL}>
-        <div className="flex h-[60px] items-center gap-4">
-          <a
-            href={WEBSITE_ROUTES.landing}
-            className="flex items-center"
-            aria-label="Ir al inicio de Quickit UI"
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-neutral-800/40 dark:bg-neutral-950/95 dark:supports-[backdrop-filter]:bg-neutral-950/60">
+      <div className="flex h-14 items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <a
+          href={WEBSITE_ROUTES.landing}
+          className="flex items-center shrink-0"
+          aria-label="Ir al inicio de Quickit UI"
+        >
+          <WebsiteLogo className="h-5 w-auto text-neutral-950 dark:text-neutral-50" />
+        </a>
+
+        <nav className="hidden items-center gap-1 md:flex">
+          <For each={WEBSITE_NAV.filter((item) => item.href !== WEBSITE_ROUTES.examples)}>
+            {(item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                  activePath === item.href
+                    ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
+                    : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
+                )}
+              >
+                {item.label}
+              </a>
+            )}
+          </For>
+        </nav>
+
+        <div className="ml-auto flex items-center gap-1">
+          <Button
+            size="sm"
+            color="neutral"
+            variant="outline"
+            activeMotion={false}
+            className="hidden min-w-[11rem] justify-between md:inline-flex"
+            onClick={() => setSearchOpen(true)}
           >
-            <WebsiteLogo className="h-5 w-auto text-neutral-950 dark:text-neutral-50" />
-          </a>
-
-          <nav className="hidden items-center gap-1 md:flex">
-            <For each={WEBSITE_NAV}>
-              {(item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "rounded-full px-3 py-2 text-sm font-medium transition-colors",
-                    activePath === item.href
-                      ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-950"
-                      : "text-neutral-900 hover:bg-neutral-900/5 hover:text-neutral-950 dark:text-white dark:hover:bg-white/5 dark:hover:text-neutral-100",
-                  )}
-                >
-                  {item.label}
-                </a>
-              )}
-            </For>
-          </nav>
-
-          <div className="ml-auto flex items-center gap-2">
-            <Button
-              size="sm"
-              color="neutral"
-              variant="outline"
-              activeMotion={false}
-              className="hidden min-w-[15rem] justify-between md:inline-flex"
-              onClick={() => setSearchOpen(true)}
-            >
-              <span className="flex flex-1 items-center justify-between gap-2">
-                <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  Buscar en docs
-                </span>
-                <Badge color="neutral" variant="soft">
-                  <kbd className="text-xs text-neutral-500 dark:text-neutral-500">
-                    Ctrl+K
-                  </kbd>
-                </Badge>
+            <span className="flex flex-1 items-center justify-between gap-2">
+              <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                Buscar documentos
               </span>
-            </Button>
+              <kbd className="text-xs text-neutral-400 dark:text-neutral-500">Ctrl+K</kbd>
+            </span>
+          </Button>
 
-            <Button
-              size="sm"
-              color="neutral"
-              variant="outline"
-              activeMotion={false}
-              className="md:hidden"
-              onClick={() => setSearchOpen(true)}
-            >
-              Buscar
-            </Button>
+          <Button
+            size="sm"
+            color="neutral"
+            variant="outline"
+            activeMotion={false}
+            className="md:hidden"
+            onClick={() => setSearchOpen(true)}
+          >
+            Buscar
+          </Button>
 
-            <Link
-              href="https://www.npmjs.com/package/quickit-ui"
-              target="_blank"
-              appearance="button"
-              size="sm"
-              shape="circle"
-              color="neutral"
-              variant="outline"
-              activeMotion={false}
-              aria-label="Abrir Quickit UI en npm"
-              title="npm"
-            >
-              <NpmIcon />
-            </Link>
+          <Link
+            href="https://github.com/darrelmasis/quickit-ui"
+            target="_blank"
+            appearance="button"
+            size="sm"
+            shape="circle"
+            color="neutral"
+            variant="ghost"
+            activeMotion={false}
+            aria-label="Abrir repositorio de Quickit UI en GitHub"
+            title="GitHub"
+          >
+            <GithubIcon />
+          </Link>
 
-            <Link
-              href="https://github.com/darrelmasis/quickit-ui"
-              target="_blank"
-              appearance="button"
-              size="sm"
-              shape="circle"
-              color="neutral"
-              variant="outline"
-              activeMotion={false}
-              aria-label="Abrir repositorio de Quickit UI en GitHub"
-              title="GitHub"
-            >
-              <GithubIcon />
-            </Link>
-
-            <Button
-              size="sm"
-              shape="circle"
-              color="neutral"
-              variant="ghost"
-              activeMotion={false}
-              aria-label={isDark ? "Activar tema claro" : "Activar tema oscuro"}
-              onClick={toggleTheme}
-            >
-              <Show when={isDark} fallback={<MoonIcon />}>
-                <SunIcon />
-              </Show>
-            </Button>
-          </div>
+          <Button
+            size="sm"
+            shape="circle"
+            color="neutral"
+            variant="ghost"
+            activeMotion={false}
+            aria-label={isDark ? "Activar tema claro" : "Activar tema oscuro"}
+            onClick={toggleTheme}
+          >
+            <Show when={isDark} fallback={<MoonIcon />}>
+              <SunIcon />
+            </Show>
+          </Button>
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { For, cn } from "@/lib";
+import { For, Link, Show } from "@/lib";
+import { cn } from "@/lib/utils";
 
 export default function WebsitePageToc({ sections }) {
   const [activeId, setActiveId] = useState("");
@@ -47,52 +48,49 @@ export default function WebsitePageToc({ sections }) {
     setActiveId(id);
   };
 
-  const renderLink = (id, label, isChild = false) => {
+  const renderLink = (id, label, depth = 0) => {
     const isActive = resolvedActiveId === id;
-    
     return (
-      <a
+      <Link
         href={`#${id}`}
         onClick={() => handleLinkClick(id)}
         className={cn(
-          "block transition-colors",
-          isChild 
-            ? "break-words rounded-md px-3 py-1.5 text-sm" 
-            : "rounded-lg px-3 py-2 text-sm",
+          "block transition-colors no-underline",
+          depth === 0
+            ? "py-1 text-[0.8125rem]"
+            : "py-0.5 text-[0.8125rem]",
           isActive
-            ? "bg-brand-50/50 font-semibold text-brand-600 dark:bg-brand-950/20 dark:text-brand-400"
-            : isChild
-              ? "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-500 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
-              : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+            ? "font-medium text-neutral-900 dark:text-neutral-100"
+            : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
         )}
       >
         {label}
-      </a>
+      </Link>
     );
   };
 
   return (
-    <aside className="hidden xl:sticky xl:top-24 xl:block xl:self-start xl:h-[calc(100vh-7rem)] xl:overflow-y-auto xl:overflow-x-hidden xl:pr-3 xl:[scrollbar-width:thin] xl:[scrollbar-color:rgb(163_163_163)_transparent] xl:[&::-webkit-scrollbar]:w-2 xl:[&::-webkit-scrollbar-track]:bg-transparent xl:[&::-webkit-scrollbar-thumb]:rounded-full xl:[&::-webkit-scrollbar-thumb]:border-2 xl:[&::-webkit-scrollbar-thumb]:border-transparent xl:[&::-webkit-scrollbar-thumb]:bg-neutral-300 xl:[&::-webkit-scrollbar-thumb]:bg-clip-content xl:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-400 dark:xl:[scrollbar-color:rgb(115_115_115)_transparent] dark:xl:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:xl:[&::-webkit-scrollbar-thumb]:bg-neutral-700 dark:xl:[&::-webkit-scrollbar-thumb:hover]:bg-neutral-600">
+    <aside className="hidden xl:sticky xl:top-20 xl:block xl:self-start xl:h-[calc(100vh-5rem)] xl:overflow-y-auto">
       <div className="w-56 max-w-full">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+        <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
           En esta página
         </p>
-        <nav className="mt-4 space-y-1">
+        <nav className="mt-3 flex flex-col">
           <For each={sections}>
             {(section, index) => (
               <div key={`${section.id}-${index}`}>
-                {renderLink(section.id, section.label)}
-                {section.children ? (
-                  <div className="mt-1 space-y-1 pl-3 border-l border-neutral-200 dark:border-neutral-800 ml-3">
+                {renderLink(section.id, section.label, 0)}
+                <Show when={section.children}>
+                  <div className="flex flex-col border-l border-neutral-200 pl-3 ml-3 dark:border-neutral-800">
                     <For each={section.children}>
                       {(child, childIndex) => (
                         <div key={`${child.id}-${childIndex}`}>
-                          {renderLink(child.id, child.label, true)}
+                          {renderLink(child.id, child.label, 1)}
                         </div>
                       )}
                     </For>
                   </div>
-                ) : null}
+                </Show>
               </div>
             )}
           </For>

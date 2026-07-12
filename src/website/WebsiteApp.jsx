@@ -11,6 +11,7 @@ import {
 import LandingPage from "@/website/sections/LandingPage";
 import DocsPage from "@/website/sections/DocsPage";
 import ExamplesPage from "@/website/sections/ExamplesPage";
+import PlaygroundPage from "@/website/sections/PlaygroundPage";
 
 export default function WebsiteApp() {
   const [activePath, setActivePath] = useState(() =>
@@ -104,6 +105,9 @@ export default function WebsiteApp() {
         </Match>
         <Match when={WEBSITE_ROUTES.examples}>
           <ExamplesPage />
+        </Match>
+        <Match when={WEBSITE_ROUTES.playground}>
+          <PlaygroundPage />
         </Match>
         <Default>
           <LandingPage />
