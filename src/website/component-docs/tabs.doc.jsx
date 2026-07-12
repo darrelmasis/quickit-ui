@@ -65,7 +65,12 @@ export function TabsBasico() {
     id: "ejemplos-tamanos",
     title: "Tamaños",
     description: `Sizes disponibles: ${QUICKIT_CONTROL_SIZES.join(", ")}.`,
-    preview: <div className="space-y-4">
+    preview: <div className="flex flex-col gap-4">
+          <Tabs defaultValue="a" size="xs">
+            <Tabs.List><Tabs.Trigger value="a">Extra small</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
+            <Tabs.Content value="a">Contenido xs.</Tabs.Content>
+            <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+          </Tabs>
           <Tabs defaultValue="a" size="sm">
             <Tabs.List><Tabs.Trigger value="a">Small</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
             <Tabs.Content value="a">Contenido small.</Tabs.Content>
@@ -76,12 +81,35 @@ export function TabsBasico() {
             <Tabs.Content value="a">Contenido medium.</Tabs.Content>
             <Tabs.Content value="b">Segundo panel.</Tabs.Content>
           </Tabs>
+          <Tabs defaultValue="a" size="lg">
+            <Tabs.List><Tabs.Trigger value="a">Large</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
+            <Tabs.Content value="a">Contenido large.</Tabs.Content>
+            <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+          </Tabs>
+          <Tabs defaultValue="a" size="xl">
+            <Tabs.List><Tabs.Trigger value="a">Extra large</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
+            <Tabs.Content value="a">Contenido xl.</Tabs.Content>
+            <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+          </Tabs>
+          <Tabs defaultValue="a" size="2xl">
+            <Tabs.List><Tabs.Trigger value="a">2X large</Tabs.Trigger><Tabs.Trigger value="b">Tabs</Tabs.Trigger></Tabs.List>
+            <Tabs.Content value="a">Contenido 2xl.</Tabs.Content>
+            <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+          </Tabs>
         </div>,
     code: `import { Tabs } from "quickit-ui";
 
 export function TabsTamanos() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
+      <Tabs defaultValue="a" size="xs">
+        <Tabs.List>
+          <Tabs.Trigger value="a">Extra small</Tabs.Trigger>
+          <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="a">Contenido xs.</Tabs.Content>
+        <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+      </Tabs>
       <Tabs defaultValue="a" size="sm">
         <Tabs.List>
           <Tabs.Trigger value="a">Small</Tabs.Trigger>
@@ -96,6 +124,30 @@ export function TabsTamanos() {
           <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value="a">Contenido medium.</Tabs.Content>
+        <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+      </Tabs>
+      <Tabs defaultValue="a" size="lg">
+        <Tabs.List>
+          <Tabs.Trigger value="a">Large</Tabs.Trigger>
+          <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="a">Contenido large.</Tabs.Content>
+        <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+      </Tabs>
+      <Tabs defaultValue="a" size="xl">
+        <Tabs.List>
+          <Tabs.Trigger value="a">Extra large</Tabs.Trigger>
+          <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="a">Contenido xl.</Tabs.Content>
+        <Tabs.Content value="b">Segundo panel.</Tabs.Content>
+      </Tabs>
+      <Tabs defaultValue="a" size="2xl">
+        <Tabs.List>
+          <Tabs.Trigger value="a">2X large</Tabs.Trigger>
+          <Tabs.Trigger value="b">Tabs</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="a">Contenido 2xl.</Tabs.Content>
         <Tabs.Content value="b">Segundo panel.</Tabs.Content>
       </Tabs>
     </div>

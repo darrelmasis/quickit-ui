@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TimePicker } from "@/lib";
 function TimePickerPreviewCanvas() {
   const [value, setValue] = useState("09:30");
-  return <div className="w-full max-w-xl space-y-4">
+  return <div className="w-full max-w-xl flex flex-col gap-4">
       <TimePicker value={value} onChange={setValue} />
       <TimePicker hourCycle="24h" minuteStep={15} defaultValue="14:00" minTime="08:00" maxTime="18:00" placeholder="Hora de soporte" />
     </div>;
@@ -17,7 +17,7 @@ import { TimePicker } from "quickit-ui";
 export function TimePickerPreview() {
   const [value, setValue] = useState("09:30");
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <TimePicker value={value} onChange={setValue} />
       <TimePicker hourCycle="24h" minuteStep={15} defaultValue="14:00" minTime="08:00" maxTime="18:00" placeholder="Hora de soporte" />
     </div>
@@ -29,7 +29,7 @@ export function TimePickerPreview() {
     id: "ejemplos-formato",
     title: "12h y 24h",
     description: "Usa hourCycle para AM/PM o cuadrícula de 24 horas.",
-    preview: <div className="w-full max-w-xl space-y-4">
+    preview: <div className="w-full max-w-xl flex flex-col gap-4">
           <TimePicker defaultValue="09:30" />
           <TimePicker hourCycle="24h" defaultValue="17:45" minuteStep={15} />
         </div>,
@@ -37,7 +37,7 @@ export function TimePickerPreview() {
 
 export function TimePickerFormato() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <TimePicker defaultValue="09:30" />
       <TimePicker hourCycle="24h" defaultValue="17:45" minuteStep={15} />
     </div>

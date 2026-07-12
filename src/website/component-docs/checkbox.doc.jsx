@@ -67,7 +67,7 @@ export function CheckboxTamanos() {
     description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
     preview: <div className="grid gap-2">
           <Checkbox color="neutral" label="Neutral" defaultChecked />
-          <Checkbox color="brand" label="Brand" defaultChecked />
+          <Checkbox color="primary" label="Primary" defaultChecked />
           <Checkbox color="success" label="Success" defaultChecked />
           <Checkbox color="danger" label="Danger" defaultChecked />
         </div>,
@@ -77,7 +77,7 @@ export function CheckboxColores() {
   return (
     <div className="grid gap-2">
       <Checkbox color="neutral" label="Neutral" defaultChecked />
-      <Checkbox color="brand" label="Brand" defaultChecked />
+      <Checkbox color="primary" label="Primary" defaultChecked />
       <Checkbox color="success" label="Success" defaultChecked />
       <Checkbox color="danger" label="Danger" defaultChecked />
     </div>

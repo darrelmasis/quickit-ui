@@ -93,17 +93,13 @@ export function ButtonFormas() {
     description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
     preview: <div className="flex flex-wrap gap-3">
           <Button color="neutral">Neutral</Button>
-          <Button color="slate">Slate</Button>
-          <Button color="zinc">Zinc</Button>
           <Button color="primary">Primary</Button>
-          <Button color="brand">Brand</Button>
           <Button color="success">Success</Button>
           <Button color="danger">Danger</Button>
           <Button color="warning">Warning</Button>
           <Button color="info">Info</Button>
           <Button color="light">Light</Button>
           <Button color="dark">Dark</Button>
-          <Button color="black">Black</Button>
         </div>,
     code: `import { Button } from "quickit-ui";
 
@@ -111,17 +107,13 @@ export function ButtonColores() {
   return (
     <div className="flex flex-wrap gap-3">
       <Button color="neutral">Neutral</Button>
-      <Button color="slate">Slate</Button>
-      <Button color="zinc">Zinc</Button>
       <Button color="primary">Primary</Button>
-      <Button color="brand">Brand</Button>
       <Button color="success">Success</Button>
       <Button color="danger">Danger</Button>
       <Button color="warning">Warning</Button>
       <Button color="info">Info</Button>
       <Button color="light">Light</Button>
       <Button color="dark">Dark</Button>
-      <Button color="black">Black</Button>
     </div>
   );
 }`

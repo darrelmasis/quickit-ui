@@ -4,12 +4,12 @@ import { QUICKIT_ACCENT_COLORS, QUICKIT_COMPACT_CONTROL_SIZES } from "@/lib/toke
 const BADGE_PREVIEW_CODE = `import { Badge } from "quickit-ui";
 
 export function BadgePreview() {
-  return <Badge color="brand">Nuevo</Badge>;
+  return <Badge color="primary">Nuevo</Badge>;
 }`;
 function BadgePreviewCanvas() {
   return <div className="flex items-center justify-center">
       <span className="inline-flex">
-        <Badge color="brand">Nuevo</Badge>
+        <Badge color="primary">Nuevo</Badge>
       </span>
     </div>;
 }
@@ -63,10 +63,7 @@ export function BadgeTamanos() {
     description: `Colores disponibles: ${QUICKIT_ACCENT_COLORS.join(", ")}.`,
     preview: <div className="flex flex-wrap gap-3">
           <Badge color="neutral">Neutral</Badge>
-          <Badge color="slate">Slate</Badge>
-          <Badge color="zinc">Zinc</Badge>
           <Badge color="primary">Primary</Badge>
-          <Badge color="brand">Brand</Badge>
           <Badge color="success">Success</Badge>
           <Badge color="danger">Danger</Badge>
           <Badge color="warning">Warning</Badge>
@@ -78,10 +75,7 @@ export function BadgeColores() {
   return (
     <div className="flex flex-wrap gap-3">
       <Badge color="neutral">Neutral</Badge>
-      <Badge color="slate">Slate</Badge>
-      <Badge color="zinc">Zinc</Badge>
       <Badge color="primary">Primary</Badge>
-      <Badge color="brand">Brand</Badge>
       <Badge color="success">Success</Badge>
       <Badge color="danger">Danger</Badge>
       <Badge color="warning">Warning</Badge>

@@ -6,12 +6,9 @@ export function ProgressPreview() {
   return <Progress value={62} />;
 }`;
 function ProgressPreviewCanvas() {
-  return <div className="w-full max-w-md space-y-4">
+  return <div className="w-full max-w-md flex flex-col gap-4">
       <Progress value={80} color="neutral" />
-      <Progress value={75} color="slate" />
-      <Progress value={70} color="zinc" />
       <Progress value={65} color="primary" />
-      <Progress value={60} color="brand" />
       <Progress value={55} color="success" />
       <Progress value={50} color="danger" />
       <Progress value={45} color="warning" />
@@ -28,7 +25,7 @@ export const progressDoc = {
     id: "ejemplos-basico",
     title: "Básico",
     description: "Progress simple con value.",
-    preview: <div className="w-full max-w-md space-y-3">
+    preview: <div className="w-full max-w-md flex flex-col gap-3">
           <Progress value={45} />
           <Progress value={78} />
         </div>,
@@ -36,7 +33,7 @@ export const progressDoc = {
 
 export function ProgressBasico() {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Progress value={45} />
       <Progress value={78} />
     </div>
@@ -46,18 +43,18 @@ export function ProgressBasico() {
     id: "ejemplos-colores",
     title: "Colores",
     description: "Selecciona color por semántica.",
-    preview: <div className="space-y-3">
+    preview: <div className="flex flex-col gap-3">
           <Progress value={30} color="neutral" />
-          <Progress value={60} color="brand" />
+          <Progress value={60} color="primary" />
           <Progress value={80} color="success" />
         </div>,
     code: `import { Progress } from "quickit-ui";
 
 export function ProgressColores() {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Progress value={30} color="neutral" />
-      <Progress value={60} color="brand" />
+      <Progress value={60} color="primary" />
       <Progress value={80} color="success" />
     </div>
   );
@@ -66,7 +63,7 @@ export function ProgressColores() {
     id: "ejemplos-tamanos",
     title: "Tamaños",
     description: "Altura sm, md, lg.",
-    preview: <div className="space-y-3">
+    preview: <div className="flex flex-col gap-3">
           <Progress value={40} size="sm" />
           <Progress value={60} size="md" />
           <Progress value={80} size="lg" />
@@ -75,7 +72,7 @@ export function ProgressColores() {
 
 export function ProgressTamanos() {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Progress value={40} size="sm" />
       <Progress value={60} size="md" />
       <Progress value={80} size="lg" />
@@ -103,7 +100,7 @@ export function ProgressTamanos() {
     }, {
       name: "color",
       type: "QuickitSemanticColor",
-      defaultValue: `"primary"`,
+      defaultValue: `"neutral"`,
       description: "Color de la barra activa."
     }, {
       name: "size",

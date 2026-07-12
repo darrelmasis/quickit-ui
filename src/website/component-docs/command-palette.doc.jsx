@@ -3,7 +3,7 @@ import { Button, CommandPalette } from "@/lib";
 import { useState } from "react";
 function CommandPaletteDocPreview() {
   const [open, setOpen] = useState(false);
-  return <div className="space-y-3">
+  return <div className="flex flex-col gap-3">
       <Button type="button" onClick={() => setOpen(true)}>
         Abrir paleta (o Ctrl+K)
       </Button>
@@ -15,7 +15,7 @@ function CommandPaletteDocPreview() {
 }
 function CommandPaletteBasicoEjemplo() {
   const [open, setOpen] = useState(false);
-  return <div className="space-y-3">
+  return <div className="flex flex-col gap-3">
       <Button type="button" onClick={() => setOpen(true)}>Abrir paleta</Button>
       <CommandPalette open={open} onOpenChange={setOpen} shortcutEnabled={false} groups={[{
       heading: "Acciones",
@@ -51,7 +51,7 @@ export function CommandPaletteBasico() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Button type="button" onClick={() => setOpen(true)}>
         Abrir paleta
       </Button>

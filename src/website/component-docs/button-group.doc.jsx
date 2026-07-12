@@ -79,18 +79,18 @@ export function BtnGroupVertical() {
     title: "Full width",
     description: "Ocupa todo el ancho disponible y reparte el espacio equitativamente.",
     preview: <ButtonGroup fullWidth>
-        <Button color="brand" variant="outline">Opción A</Button>
-        <Button color="brand" variant="outline">Opción B</Button>
-        <Button color="brand" variant="outline">Opción C</Button>
+        <Button color="primary" variant="outline">Opción A</Button>
+        <Button color="primary" variant="outline">Opción B</Button>
+        <Button color="primary" variant="outline">Opción C</Button>
       </ButtonGroup>,
     code: `import { Button, ButtonGroup } from "quickit-ui";
 
 export function BtnGroupFullWidth() {
   return (
     <ButtonGroup fullWidth>
-      <Button color="brand" variant="outline">Opción A</Button>
-      <Button color="brand" variant="outline">Opción B</Button>
-      <Button color="brand" variant="outline">Opción C</Button>
+      <Button color="primary" variant="outline">Opción A</Button>
+      <Button color="primary" variant="outline">Opción B</Button>
+      <Button color="primary" variant="outline">Opción C</Button>
     </ButtonGroup>
   );
 }`

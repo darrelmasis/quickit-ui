@@ -46,7 +46,7 @@ export const alertDoc = {
       title: "Colores",
       description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
       preview: (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           <Alert color="info" title="Información" description="Este es un mensaje informativo." />
           <Alert color="success" title="Operación exitosa" description="Los cambios se guardaron correctamente." />
           <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
@@ -57,7 +57,7 @@ export const alertDoc = {
 
 export function AlertColores() {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Alert color="info" title="Información" description="Mensaje informativo." />
       <Alert color="success" title="Operación exitosa" description="Cambios guardados." />
       <Alert color="warning" title="Advertencia" description="Revisa los datos." />
@@ -97,7 +97,7 @@ export function AlertShorthand() {
       description: "Se cierra automáticamente después del tiempo indicado.",
       preview: (
         <Alert
-          color="brand"
+          color="primary"
           autoDismiss={5000}
           dismissible
           title="Enlace copiado"
@@ -109,7 +109,7 @@ export function AlertShorthand() {
 export function AlertAutoDismiss() {
   return (
     <Alert
-      color="brand"
+      color="primary"
       autoDismiss={5000}
       dismissible
       title="Enlace copiado"

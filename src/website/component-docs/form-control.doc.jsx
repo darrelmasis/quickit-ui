@@ -12,7 +12,7 @@ export function FormControlPreview() {
   );
 }`;
 function FormControlPreviewCanvas() {
-  return <div className="w-full max-w-md space-y-3">
+  return <div className="w-full max-w-md flex flex-col gap-3">
       <FormControl controlId="fc-name">
         <Label>Nombre</Label>
         <Input placeholder="Elena Ruiz" />
@@ -30,7 +30,7 @@ export const formControlDoc = {
     id: "ejemplos-basico",
     title: "Básico",
     description: "FormControl une label, input y descripción.",
-    preview: <div className="w-full max-w-md space-y-3">
+    preview: <div className="w-full max-w-md flex flex-col gap-3">
         <FormControl controlId="fc-basic">
           <Label>Nombre</Label>
           <Input placeholder="Elena Ruiz" />

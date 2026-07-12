@@ -24,7 +24,7 @@ export const showDoc = {
     id: "ejemplos-basico",
     title: "Básico",
     description: "Muestra contenido cuando when es truthy, fallback en caso contrario.",
-    preview: <div className="space-y-4">
+    preview: <div className="flex flex-col gap-4">
           <Show when={true} fallback="Cargando...">
             <p className="text-sm">Contenido listo</p>
           </Show>
@@ -36,7 +36,7 @@ export const showDoc = {
 
 export function ShowBasico() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <Show when={true} fallback="Cargando...">
         <p className="text-sm">Contenido listo</p>
       </Show>

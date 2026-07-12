@@ -17,7 +17,7 @@ export function AccordionPreview() {
   );
 }`;
 function AccordionPreviewCanvas() {
-  return <div className="w-full max-w-md space-y-4">
+  return <div className="w-full max-w-md flex flex-col gap-4">
       <Accordion type="single" collapsible>
         <Accordion.Item value="item-1">
           <Accordion.Trigger>Primera sección</Accordion.Trigger>

@@ -24,7 +24,7 @@ export const forDoc = {
     id: "ejemplos-basico",
     title: "Básico",
     description: "Itera un array con fallback cuando está vacío.",
-    preview: <div className="space-y-4">
+    preview: <div className="flex flex-col gap-4">
           <For each={[{ id: 1, label: "Primero" }, { id: 2, label: "Segundo" }]}>
             {item => <div key={item.id} className="text-sm">{item.label}</div>}
           </For>
@@ -36,7 +36,7 @@ export const forDoc = {
 
 export function ForBasico() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <For each={[{ id: 1, label: "Primero" }, { id: 2, label: "Segundo" }]}>
         {(item) => <div key={item.id} className="text-sm">{item.label}</div>}
       </For>

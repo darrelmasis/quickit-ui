@@ -7,7 +7,7 @@ const BREADCRUMB_PREVIEW_CODE = `import { Breadcrumb } from "quickit-ui";
 
 export function BreadcrumbPreview() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <Breadcrumb>
         <Breadcrumb.List>
           <Breadcrumb.Item href="/docs">Inicio</Breadcrumb.Item>
@@ -25,7 +25,7 @@ export function BreadcrumbPreview() {
   );
 }`;
 function BreadcrumbPreviewCanvas() {
-  return <div className="space-y-4">
+  return <div className="flex flex-col gap-4">
       <Breadcrumb>
         <Breadcrumb.List>
           <Breadcrumb.Item href={HOME_HREF} {...SAFE_LINK_PROPS}>Inicio</Breadcrumb.Item>

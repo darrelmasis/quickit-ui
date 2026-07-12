@@ -4,14 +4,14 @@ const RANGE_PREVIEW_CODE = `import { Range } from "quickit-ui";
 
 export function RangePreview() {
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
         <p className="text-xs font-medium text-neutral-500">Valor único</p>
         <Range defaultValue={40} />
       </div>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <p className="text-xs font-medium text-neutral-500">Rango (inicio/fin)</p>
-        <Range range defaultValue={[20, 75]} color="brand" />
+        <Range range defaultValue={[20, 75]} color="primary" />
       </div>
       <div className="h-40">
         <Range orientation="vertical" defaultValue={60} step={10} className="h-full" />
@@ -20,16 +20,16 @@ export function RangePreview() {
   );
 }`;
 function RangePreviewCanvas() {
-  return <div className="w-full max-w-md space-y-6">
-      <div className="space-y-2">
+  return <div className="w-full max-w-md flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Valor único</p>
         <Range defaultValue={40} />
       </div>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Rango (inicio/fin)</p>
-        <Range range defaultValue={[20, 75]} color="brand" />
+        <Range range defaultValue={[20, 75]} color="primary" />
       </div>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Vertical</p>
         <div className="h-40">
           <Range orientation="vertical" defaultValue={60} step={10} className="h-full" />
@@ -61,10 +61,10 @@ export function RangeBasico() {
     id: "ejemplos-colores",
     title: "Colores",
     description: "Usa tokens semánticos para mantener consistencia.",
-    preview: <div className="space-y-3">
+    preview: <div className="flex flex-col gap-3">
           <Range defaultValue={10} color="neutral" />
           <Range defaultValue={20} color="primary" />
-          <Range defaultValue={30} color="brand" />
+          <Range defaultValue={30} color="primary" />
           <Range defaultValue={40} color="success" />
           <Range defaultValue={50} color="danger" />
         </div>,
@@ -72,10 +72,10 @@ export function RangeBasico() {
 
 export function RangeColores() {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Range defaultValue={10} color="neutral" />
       <Range defaultValue={20} color="primary" />
-      <Range defaultValue={30} color="brand" />
+      <Range defaultValue={30} color="primary" />
       <Range defaultValue={40} color="success" />
       <Range defaultValue={50} color="danger" />
     </div>
@@ -85,22 +85,22 @@ export function RangeColores() {
     id: "ejemplos-doble-thumb",
     title: "Rango doble (inicio/fin)",
     description: "Activa range para renderizar dos thumbs y seleccionar un intervalo.",
-    preview: <div className="space-y-4">
+    preview: <div className="flex flex-col gap-4">
           <Range range defaultValue={[15, 65]} />
-          <Range range name="priceMin" endName="priceMax" defaultValue={[30, 90]} color="brand" startLabel="Precio mínimo" endLabel="Precio máximo" showValueTooltip />
+          <Range range name="priceMin" endName="priceMax" defaultValue={[30, 90]} color="primary" startLabel="Precio mínimo" endLabel="Precio máximo" showValueTooltip />
         </div>,
     code: `import { Range } from "quickit-ui";
 
 export function RangeDoble() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <Range range defaultValue={[15, 65]} />
       <Range
         range
         name="priceMin"
         endName="priceMax"
         defaultValue={[30, 90]}
-        color="brand"
+        color="primary"
         startLabel="Precio mínimo"
         endLabel="Precio máximo"
         showValueTooltip
@@ -130,7 +130,7 @@ export function RangeVertical() {
     props: [{
       name: "color",
       type: "QuickitSemanticColor",
-      defaultValue: `"primary"`,
+      defaultValue: `"neutral"`,
       description: "Color del thumb (accent nativo)."
     }, {
       name: "min",

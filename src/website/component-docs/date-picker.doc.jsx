@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { DatePicker } from "@/lib";
 export const datePickerDoc = {
   name: "DatePicker",
@@ -7,13 +6,13 @@ export const datePickerDoc = {
 
 export function DatePickerPreview() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <DatePicker defaultValue="2025-06-15" placeholder="Una fecha (single)" />
       <DatePicker selectionMode="between" defaultValue={{ from: "2025-06-01", to: "2025-06-14" }} />
     </div>
   );
 }`,
-  preview: <div className="w-full max-w-xl space-y-4">
+  preview: <div className="w-full max-w-xl flex flex-col gap-4">
       <DatePicker defaultValue="2025-06-15" placeholder="Una fecha (single)" />
       <DatePicker selectionMode="between" defaultValue={{ from: "2025-06-01", to: "2025-06-14" }} />
     </div>,
@@ -34,7 +33,7 @@ export function DatePickerBasico() {
     id: "ejemplos-date-style",
     title: "dateStyle: short, long y full",
     description: "El formato depende del locale del navegador.",
-    preview: <div className="w-full max-w-xl space-y-5">
+    preview: <div className="w-full max-w-xl flex flex-col gap-5">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">short</p>
             <DatePicker dateStyle="short" defaultValue="2025-06-15" placeholder="Sin fecha" />
@@ -52,7 +51,7 @@ export function DatePickerBasico() {
 
 export function DatePickerStyle() {
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col gap-5">
       <div>
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">short</p>
         <DatePicker dateStyle="short" defaultValue="2025-06-15" placeholder="Sin fecha" />

@@ -12,7 +12,7 @@ export function TextareaPreview() {
   );
 }`;
 function TextareaPreviewCanvas() {
-  return <div className="w-full max-w-md space-y-3">
+  return <div className="w-full max-w-md flex flex-col gap-3">
       <Label htmlFor="doc-textarea">Notas</Label>
       <Textarea id="doc-textarea" placeholder="Escribe algo..." />
     </div>;

@@ -13,7 +13,7 @@ export function SelectPreview() {
   );
 }`;
 function SelectPreviewCanvas() {
-  return <div className="w-full max-w-xs space-y-3">
+  return <div className="w-full max-w-xs flex flex-col gap-3">
       <Label htmlFor="doc-select">Estado</Label>
       <Select id="doc-select" placeholder="Selecciona estado">
         <option value="active">Activo</option>
@@ -23,7 +23,7 @@ function SelectPreviewCanvas() {
 }
 function ControlledSelectPreview() {
   const [value, setValue] = useState("active");
-  return <div className="space-y-2">
+  return <div className="flex flex-col gap-2">
       <Select value={value} onValueChange={setValue}>
         <option value="active">Activo</option>
         <option value="paused">Pausado</option>
@@ -99,7 +99,7 @@ export function SelectTamanos() {
           <Select color="neutral" placeholder="Neutral">
             <option value="1">Opción</option>
           </Select>
-          <Select color="brand" placeholder="Brand">
+          <Select color="primary" placeholder="Primary">
             <option value="1">Opción</option>
           </Select>
           <Select color="danger" placeholder="Danger">
@@ -114,7 +114,7 @@ export function SelectColores() {
       <Select color="neutral" placeholder="Neutral">
         <option value="1">Opción</option>
       </Select>
-      <Select color="brand" placeholder="Brand">
+      <Select color="primary" placeholder="Primary">
         <option value="1">Opción</option>
       </Select>
       <Select color="danger" placeholder="Danger">
@@ -160,7 +160,7 @@ import { useState } from "react";
 export function SelectControlado() {
   const [value, setValue] = useState("active");
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <Select value={value} onValueChange={setValue}>
         <option value="active">Activo</option>
         <option value="paused">Pausado</option>

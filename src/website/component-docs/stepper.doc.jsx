@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { Stepper } from "@/lib";
 export const stepperDoc = {
   name: "Stepper",

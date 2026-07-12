@@ -36,7 +36,8 @@ import { skeletonDoc } from "@/website/component-docs/skeleton.doc";
 import { showDoc } from "@/website/component-docs/show.doc";
 import { renderSwitchDoc } from "@/website/component-docs/render-switch.doc";
 import { forDoc } from "@/website/component-docs/for.doc";
-import { animateDoc } from "@/website/component-docs/animate.doc";
+
+import { containerDoc } from "@/website/component-docs/container.doc";
 export const COMPONENT_DOCS = {
   "button": buttonDoc,
   "button-group": buttonGroupDoc,
@@ -76,5 +77,5 @@ export const COMPONENT_DOCS = {
   "show": showDoc,
   "render-switch": renderSwitchDoc,
   "for": forDoc,
-  "animate": animateDoc
+  "container": containerDoc
 };

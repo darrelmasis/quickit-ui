@@ -6,7 +6,7 @@ export function SkeletonPreview() {
   return <Skeleton shape="line" />;
 }`;
 function SkeletonPreviewCanvas() {
-  return <div className="w-full max-w-sm space-y-2">
+  return <div className="w-full max-w-sm flex flex-col gap-2">
       <Skeleton shape="line" />
       <Skeleton shape="line" />
     </div>;

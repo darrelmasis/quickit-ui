@@ -12,7 +12,7 @@ export function InputGroupPreview() {
   );
 }`;
 function InputGroupPreviewCanvas() {
-  return <div className="w-full max-w-md space-y-4">
+  return <div className="w-full max-w-md flex flex-col gap-4">
       <InputGroup attached>
         <InputGroup.Addon align="inline-start">https://</InputGroup.Addon>
         <Input placeholder="quickit.dev" />

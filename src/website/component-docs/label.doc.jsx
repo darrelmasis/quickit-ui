@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { Checkbox, FormControl, Input, Label } from "@/lib";
 export const labelDoc = {
   name: "Label",

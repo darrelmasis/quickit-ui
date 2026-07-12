@@ -69,7 +69,7 @@ export function RadioTamanos() {
     description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
     preview: <div className="grid gap-2">
           <Radio color="neutral" label="Neutral" defaultChecked />
-          <Radio color="brand" label="Brand" defaultChecked />
+          <Radio color="primary" label="Primary" defaultChecked />
           <Radio color="success" label="Success" defaultChecked />
         </div>,
     code: `import { Radio } from "quickit-ui";
@@ -78,7 +78,7 @@ export function RadioColores() {
   return (
     <div className="grid gap-2">
       <Radio color="neutral" label="Neutral" defaultChecked />
-      <Radio color="brand" label="Brand" defaultChecked />
+      <Radio color="primary" label="Primary" defaultChecked />
       <Radio color="success" label="Success" defaultChecked />
     </div>
   );

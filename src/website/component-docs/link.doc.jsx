@@ -68,7 +68,7 @@ export function LinkUnderline() {
     preview: <div className="flex flex-wrap gap-4">
           <Link href={DOCS_LINK_HREF} color="primary" {...SAFE_LINK_PROPS}>Primary</Link>
           <Link href={DOCS_LINK_HREF} color="neutral" {...SAFE_LINK_PROPS}>Neutral</Link>
-          <Link href={DOCS_LINK_HREF} color="brand" {...SAFE_LINK_PROPS}>Brand</Link>
+          <Link href={DOCS_LINK_HREF} color="primary" {...SAFE_LINK_PROPS}>Primary</Link>
           <Link href={DOCS_LINK_HREF} color="success" {...SAFE_LINK_PROPS}>Success</Link>
           <Link href={DOCS_LINK_HREF} color="danger" {...SAFE_LINK_PROPS}>Danger</Link>
         </div>,
@@ -79,7 +79,7 @@ export function LinkColores() {
     <div className="flex flex-wrap gap-4">
       <Link href="/docs" color="primary">Primary</Link>
       <Link href="/docs" color="neutral">Neutral</Link>
-      <Link href="/docs" color="brand">Brand</Link>
+      <Link href="/docs" color="primary">Primary</Link>
       <Link href="/docs" color="success">Success</Link>
       <Link href="/docs" color="danger">Danger</Link>
     </div>
@@ -101,7 +101,7 @@ export function LinkColores() {
     }, {
       name: "color",
       type: "QuickitSemanticColor",
-      defaultValue: '"primary"',
+      defaultValue: '"neutral"',
       description: "Paleta de color."
     }, {
       name: "size",

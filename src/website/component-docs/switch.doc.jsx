@@ -59,7 +59,7 @@ export function SwitchTamanos() {
     description: `Colores disponibles: ${QUICKIT_SEMANTIC_COLORS.join(", ")}.`,
     preview: <div className="grid gap-2">
           <Switch defaultChecked color="neutral" label="Neutral" />
-          <Switch defaultChecked color="brand" label="Brand" />
+          <Switch defaultChecked color="primary" label="Primary" />
           <Switch defaultChecked color="success" label="Success" />
         </div>,
     code: `import { Switch } from "quickit-ui";
@@ -68,7 +68,7 @@ export function SwitchColores() {
   return (
     <div className="grid gap-2">
       <Switch defaultChecked color="neutral" label="Neutral" />
-      <Switch defaultChecked color="brand" label="Brand" />
+      <Switch defaultChecked color="primary" label="Primary" />
       <Switch defaultChecked color="success" label="Success" />
     </div>
   );

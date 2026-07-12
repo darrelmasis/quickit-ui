@@ -53,7 +53,7 @@ export const modalDoc = {
             <Modal.Body>¿Deseas continuar?</Modal.Body>
             <Modal.Actions>
               <Modal.Action variant="outline">Cancelar</Modal.Action>
-              <Modal.Action color="brand">Continuar</Modal.Action>
+              <Modal.Action color="primary">Continuar</Modal.Action>
             </Modal.Actions>
           </Modal.Content>
         </Modal>,
@@ -70,7 +70,7 @@ export function ModalBasico() {
         <Modal.Body>¿Deseas continuar?</Modal.Body>
         <Modal.Actions>
           <Modal.Action variant="outline">Cancelar</Modal.Action>
-          <Modal.Action color="brand">Continuar</Modal.Action>
+          <Modal.Action color="primary">Continuar</Modal.Action>
         </Modal.Actions>
       </Modal.Content>
     </Modal>

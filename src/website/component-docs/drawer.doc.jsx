@@ -22,7 +22,7 @@ export function DrawerPreview() {
 }`;
 function DrawerPreviewCanvas() {
   return <Drawer>
-      <Drawer.Trigger>
+      <Drawer.Trigger asChild>
         <Button color="neutral">Ver detalles</Button>
       </Drawer.Trigger>
       <Drawer.Content>
@@ -48,11 +48,11 @@ export const drawerDoc = {
     description: "Right, left, bottom y top.",
     preview: <div className="grid gap-3 sm:grid-cols-2">
           <Drawer placement="right">
-            <Drawer.Trigger><Button size="sm" variant="outline" color="neutral">Right</Button></Drawer.Trigger>
+            <Drawer.Trigger asChild><Button size="sm" variant="outline" color="neutral">Right</Button></Drawer.Trigger>
             <Drawer.Content><Drawer.Body>Drawer right</Drawer.Body></Drawer.Content>
           </Drawer>
           <Drawer placement="bottom">
-            <Drawer.Trigger><Button size="sm" variant="outline" color="neutral">Bottom</Button></Drawer.Trigger>
+            <Drawer.Trigger asChild><Button size="sm" variant="outline" color="neutral">Bottom</Button></Drawer.Trigger>
             <Drawer.Content><Drawer.Body>Drawer bottom</Drawer.Body></Drawer.Content>
           </Drawer>
         </div>,

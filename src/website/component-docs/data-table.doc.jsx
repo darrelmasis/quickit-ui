@@ -25,7 +25,7 @@ const MEMBERS_COLUMNS = [{
 const MEMBERS_DATA = [{ id: 1, member: "Elena Ruiz", email: "elena@quickit.dev", plan: "Scale", usage: 92, status: "Needs review", statusColor: "warning" }, { id: 2, member: "Ana García", email: "ana@quickit.dev", plan: "Scale", usage: 48, status: "Healthy", statusColor: "success" }, { id: 3, member: "Luis Ortega", email: "luis@quickit.dev", plan: "Starter", usage: 31, status: "Healthy", statusColor: "success" }, { id: 4, member: "Paula Vega", email: "paula@quickit.dev", plan: "Scale", usage: 76, status: "At risk", statusColor: "danger" }];
 function DataTablePreviewCanvas() {
   return <div className="w-full min-w-0">
-      <DataTable color="brand" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA} rowKey={(row) => row.id} />
+      <DataTable color="primary" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA} rowKey={(row) => row.id} />
     </div>;
 }
 export const dataTableDoc = {
@@ -47,7 +47,7 @@ const columns = [
 const data = [{ id: 1, member: "Elena Ruiz", email: "elena@quickit.dev", plan: "Scale", usage: 92, status: "Needs review", statusColor: "warning" }];
 
 export function DataTablePreview() {
-  return <div className="w-full min-w-0"><DataTable color="brand" columns={columns} data={data} rowKey={(row) => row.id} /></div>;
+  return <div className="w-full min-w-0"><DataTable color="primary" columns={columns} data={data} rowKey={(row) => row.id} /></div>;
 }`,
   preview: <DataTablePreviewCanvas />,
   installCode: `import { DataTable } from "quickit-ui";`,
@@ -56,7 +56,7 @@ export function DataTablePreview() {
     title: "Básico",
     description: "DataTable con sorting y celdas personalizadas.",
     preview: <div className="w-full min-w-0">
-        <DataTable color="brand" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA} rowKey={(row) => row.id} />
+        <DataTable color="primary" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA} rowKey={(row) => row.id} />
       </div>,
     code: `import { Badge, DataTable } from "quickit-ui";
 
@@ -79,13 +79,13 @@ const data = [
 ];
 
 export function DataTableBasico() {
-  return <DataTable color="brand" columns={columns} data={data} rowKey={(row) => row.id} />;
+  return <DataTable color="primary" columns={columns} data={data} rowKey={(row) => row.id} />;
 }`
   }, {
     id: "ejemplos-colores",
     title: "Colores del sistema",
     description: "Adapta la tabla al contexto visual.",
-    preview: <div className="space-y-6">
+    preview: <div className="flex flex-col gap-6">
           <DataTable color="success" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA.slice(0, 2)} rowKey={(row) => row.id} stickyHeader={false} />
           <DataTable color="danger" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA.slice(2)} rowKey={(row) => row.id} stickyHeader={false} />
         </div>,
@@ -93,7 +93,7 @@ export function DataTableBasico() {
 
 export function DataTableColores() {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <DataTable color="success" columns={columns} data={data.slice(0, 2)} rowKey={(row) => row.id} stickyHeader={false} />
       <DataTable color="danger" columns={columns} data={data.slice(2)} rowKey={(row) => row.id} stickyHeader={false} />
     </div>

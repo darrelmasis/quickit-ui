@@ -28,7 +28,7 @@ export function PopoverBasico() {
     id: "ejemplos-trigger",
     title: "Trigger click + interactive",
     description: "Usa click + interactive para contenido accionable.",
-    preview: <Popover content={<div className="space-y-2">
+    preview: <Popover content={<div className="flex flex-col gap-2">
             <p className="text-sm font-medium">¿Confirmar acción?</p>
             <button type="button" className="rounded-lg border border-current px-2 py-1 text-xs">Aceptar</button>
           </div>} trigger="click" interactive>
@@ -40,7 +40,7 @@ export function PopoverClick() {
   return (
     <Popover
       content={(
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <p className="text-sm font-medium">¿Confirmar acción?</p>
           <button type="button" className="rounded-lg border border-current px-2 py-1 text-xs">
             Aceptar
