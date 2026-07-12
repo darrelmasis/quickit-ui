@@ -175,8 +175,7 @@ const LinkButtonAppearance = forwardRef(function LinkButtonAppearance(
     ACTION_CONTROL_SIZE_CLASSES[resolvedShape][resolvedSize] ??
     ACTION_CONTROL_SIZE_CLASSES[resolvedShape].md ??
     ACTION_CONTROL_SIZE_CLASSES.default.md;
-  const motionAllowedByShape =
-    resolvedShape !== "square" && resolvedShape !== "circle";
+  const motionAllowedByShape = true;
   const resolvedActiveMotion =
     activeMotion ??
     (resolvedPressEffect === "transform" ? motionAllowedByShape : false);

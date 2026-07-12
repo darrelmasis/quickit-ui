@@ -66,7 +66,7 @@ Para construir wrappers o galerías puedes importar colecciones más precisas:
 
 ```js
 import {
-  QUICKIT_BRAND_COLORS,
+  QUICKIT_ACCENT_COLORS,
   QUICKIT_NEUTRAL_COLORS,
   QUICKIT_STATUS_COLORS,
 } from "quickit-ui";

@@ -18,6 +18,7 @@ const Progress = forwardRef(function Progress(
     min = 0,
     size = "md",
     value = 0,
+    valueText,
     ...props
   },
   ref,
@@ -42,6 +43,7 @@ const Progress = forwardRef(function Progress(
       aria-valuenow={clampedValue}
       aria-valuemin={min}
       aria-valuemax={max}
+      aria-valuetext={valueText}
       className={cn(
         "relative w-full overflow-hidden rounded-full",
         resolvedSize,

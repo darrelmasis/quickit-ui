@@ -79,6 +79,10 @@ import {
   UTILS_REFS_SNIPPET,
   UTILS_TOKENS_SNIPPET,
   UTILS_THEME_SNIPPET,
+  RADIUS_PROVIDER_SNIPPET,
+  RADIUS_RAW_CSS_SNIPPET,
+  RADIUS_CSS_VARIABLE_SNIPPET,
+  CUSTOM_SCROLLBAR_SNIPPET,
 } from "@/website/docs-content";
 import { COMPONENT_DOCS } from "@/website/component-docs";
 import {
@@ -196,7 +200,7 @@ function TokenGroupsList({ groups }) {
 
 const TOKEN_COLOR_SWATCH_CLASSES = {
   neutral: "border-neutral-200 bg-neutral-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100",
-  primary: "border-primary-200 bg-primary-100 text-primary-800 dark:border-primary-800 dark:bg-primary-950/60 dark:text-primary-100",
+  primary: "border-sky-200 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-100",
   success: "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-100",
   danger: "border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
   warning: "border-amber-200 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
@@ -729,7 +733,7 @@ function GenericSectionPage({ sectionId }) {
         <WebsiteSection
           id="tema"
           title="Tema"
-          description="Usa QuickitProvider cuando tu app ya resuelve el tema por su cuenta. Usa QuickitThemeProvider cuando quieres persistencia, soporte system y helpers de lectura."
+          description="Usa QuickitProvider cuando tu app ya resuelve el tema por su cuenta. Usa QuickitThemeProvider cuando quieres persistencia, soporte system y helpers de lectura. radius controla el border-radius global."
         >
           <div className="flex flex-col gap-10">
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
@@ -850,14 +854,183 @@ function GenericSectionPage({ sectionId }) {
         <WebsiteSection
           id="comportamiento"
           title="Comportamiento"
-          description="Define políticas globales de focus ring, ripple y press effect desde el provider, con posibilidad de sobrescribirlas por componente."
+          description="Define políticas globales de focus ring, ripple, press effect y scrollbar desde el provider, con posibilidad de sobrescribirlas por componente."
         >
-          <div className="flex flex-col gap-6">
-            <WebsiteCodeBlock code={QUICKIT_PROVIDER_SNIPPET} language="jsx" />
+          <div className="flex flex-col gap-10">
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Ajusta focusRing, ripple y pressEffect para toda la app. Luego,
-              cada componente puede sobrescribir con sus props específicas si
-              lo necesitas.
+              Ajusta focusRing, ripple, pressEffect, customScrollbar y radius
+              para toda la app. Luego, cada componente puede sobrescribir con
+              sus props específicas si lo necesitas.
+            </div>
+
+            <div>
+              <h3
+                id="comportamiento-provider"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Configuración completa del Provider
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Todas las props de comportamiento disponibles en QuickitProvider
+                y QuickitThemeProvider.
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={QUICKIT_PROVIDER_SNIPPET} language="jsx" />
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="comportamiento-scrollbar"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Scrollbar custom
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Por defecto, Quickit aplica un scrollbar themado con colores del
+                tema en todos los scrollable internals. Desactívalo con{" "}
+                <code className="font-mono text-xs">customScrollbar={"{"}false{"}"}</code>{" "}
+                si prefieres el scrollbar nativo del sistema.
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={CUSTOM_SCROLLBAR_SNIPPET} language="jsx" />
+              </div>
+            </div>
+          </div>
+        </WebsiteSection>
+      </Show>
+
+      <Show when={sectionId === "radio"}>
+        <WebsiteSection
+          id="radio"
+          title="Radio (border-radius)"
+          description="Configura el border-radius global de todos los componentes desde QuickitProvider o CSS variables."
+        >
+          <div className="flex flex-col gap-10">
+            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              Quickit usa una variable CSS base (<code className="font-mono text-xs">--qi-radius</code>) de
+              la cual se derivan todos los radios de la librería. Puedes configurarla
+              con la prop <code className="font-mono text-xs">radius</code> del provider o directamente en CSS.
+            </div>
+
+            <div>
+              <h3
+                id="radio-provider"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Configuración vía Provider
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Acepta valores semánticos o CSS raw. El default es <code className="font-mono text-xs">"sm"</code> (0.75rem).
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={RADIUS_PROVIDER_SNIPPET} language="jsx" />
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="radio-semanticos"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Valores semánticos
+              </h3>
+              <div className="mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800">
+                <div className="grid grid-cols-[auto_1fr_auto] gap-x-6 gap-y-2 px-5 py-4 text-sm">
+                  <span className="font-mono text-xs text-neutral-500">sharp</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Sin radio (0)</span>
+                  <span className="font-mono text-xs text-neutral-400">0</span>
+
+                  <span className="font-mono text-xs text-neutral-500">xs</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Muy pequeño</span>
+                  <span className="font-mono text-xs text-neutral-400">0.625rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">sm</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Pequeño (default)</span>
+                  <span className="font-mono text-xs text-neutral-400">0.75rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">md</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Medio</span>
+                  <span className="font-mono text-xs text-neutral-400">0.875rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">lg</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Grande</span>
+                  <span className="font-mono text-xs text-neutral-400">1rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">xl</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Extra grande</span>
+                  <span className="font-mono text-xs text-neutral-400">1.25rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">2xl</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Doble extra</span>
+                  <span className="font-mono text-xs text-neutral-400">1.5rem</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="radio-css-raw"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                CSS raw
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Pasa cualquier valor CSS válido directamente como string.
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={RADIUS_RAW_CSS_SNIPPET} language="jsx" />
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="radio-css-variable"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Override vía CSS
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Si no usas el provider, puedes overridear directamente la variable CSS. Los
+                radios derivados (<code className="font-mono text-xs">--qi-radius-xl</code>, <code className="font-mono text-xs">--qi-radius-2xl</code>, etc.)
+                se recalculan automáticamente con <code className="font-mono text-xs">calc()</code>.
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={RADIUS_CSS_VARIABLE_SNIPPET} language="css" />
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
+              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+                Variables CSS derivadas
+              </h3>
+              <div className="mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800">
+                <div className="grid grid-cols-[auto_1fr_auto] gap-x-6 gap-y-2 px-5 py-4 text-sm">
+                  <span className="font-mono text-xs text-neutral-500">--qi-radius</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Base (se setea vía provider)</span>
+                  <span className="font-mono text-xs text-neutral-400">0.75rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">--qi-radius-xs</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Base × 0.833</span>
+                  <span className="font-mono text-xs text-neutral-400">0.625rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">--qi-radius-lg</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.167</span>
+                  <span className="font-mono text-xs text-neutral-400">0.875rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">--qi-radius-xl</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.333</span>
+                  <span className="font-mono text-xs text-neutral-400">1rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">--qi-radius-2xl</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.5</span>
+                  <span className="font-mono text-xs text-neutral-400">1.125rem</span>
+
+                  <span className="font-mono text-xs text-neutral-500">--qi-radius-3xl</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.667</span>
+                  <span className="font-mono text-xs text-neutral-400">1.25rem</span>
+                </div>
+              </div>
             </div>
           </div>
         </WebsiteSection>

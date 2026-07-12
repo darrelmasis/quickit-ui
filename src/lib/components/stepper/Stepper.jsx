@@ -1,7 +1,8 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import { cn } from "@/lib/utils";
 import { useQuickitControlState } from "@/lib/theme";
 import { CheckFillIcon } from "@/lib/assets/icons";
+import { TXT } from "@/lib/texts";
 
 const STEPPER_THEME = {
   light: {
@@ -38,11 +39,12 @@ const Stepper = forwardRef(function Stepper({
   const { theme } = useQuickitControlState("stepper");
   const ui = STEPPER_THEME[theme] ?? STEPPER_THEME.light;
   const isVertical = orientation === "vertical";
+  const uid = useId();
 
   return (
     <nav
       id={id}
-      aria-label="Progreso"
+      aria-label={TXT.STEPPER_LABEL}
       className={cn("w-full", className)}
     >
       <ol
@@ -57,6 +59,7 @@ const Stepper = forwardRef(function Stepper({
           const description = step?.description;
           const done = index < activeStep;
           const current = index === activeStep;
+          const descId = description ? `${uid}-step-desc-${index}` : undefined;
           const clickable =
             Boolean(onStepChange) && (step?.clickable !== false);
 
@@ -97,6 +100,7 @@ const Stepper = forwardRef(function Stepper({
                   type="button"
                   disabled={!clickable}
                   aria-current={current ? "step" : undefined}
+                  aria-describedby={descId}
                   className={cn(
                     "flex size-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition-colors",
                     done && ui.dotDone,
@@ -120,7 +124,7 @@ const Stepper = forwardRef(function Stepper({
                 <div className={cn("min-w-0", !isVertical && "max-w-[10rem]")}>
                   <div className={cn("text-sm font-medium", ui.title)}>{title}</div>
                   {description ? (
-                    <p className={cn("mt-0.5 text-xs", ui.desc)}>{description}</p>
+                    <p id={descId} className={cn("mt-0.5 text-xs", ui.desc)}>{description}</p>
                   ) : null}
                 </div>
               </div>

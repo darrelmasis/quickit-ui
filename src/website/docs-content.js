@@ -13,17 +13,17 @@ export const PRIMARY_OVERRIDE_SNIPPET = `@import "quickit-ui/styles.css";
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary-50: oklch(0.98 0.03 165);
-  --color-primary-100: oklch(0.94 0.06 165);
-  --color-primary-200: oklch(0.88 0.1 165);
-  --color-primary-300: oklch(0.8 0.14 165);
-  --color-primary-400: oklch(0.72 0.17 165);
-  --color-primary-500: oklch(0.64 0.19 165);
-  --color-primary-600: oklch(0.56 0.18 165);
-  --color-primary-700: oklch(0.48 0.15 165);
-  --color-primary-800: oklch(0.4 0.12 165);
-  --color-primary-900: oklch(0.34 0.09 165);
-  --color-primary-950: oklch(0.24 0.07 165);
+  --color-primary-50: oklch(0.98 0.02 202);
+  --color-primary-100: oklch(0.94 0.04 202);
+  --color-primary-200: oklch(0.88 0.08 202);
+  --color-primary-300: oklch(0.8 0.12 202);
+  --color-primary-400: oklch(0.72 0.16 202);
+  --color-primary-500: oklch(0.64 0.18 202);
+  --color-primary-600: oklch(0.56 0.17 202);
+  --color-primary-700: oklch(0.48 0.14 202);
+  --color-primary-800: oklch(0.4 0.11 202);
+  --color-primary-900: oklch(0.34 0.08 202);
+  --color-primary-950: oklch(0.24 0.06 202);
 }`;
 
 export const COMPONENT_IMPORT_SNIPPET = `import { Button } from "quickit-ui";
@@ -38,6 +38,8 @@ export function AppRoot({ theme }) {
   return (
     <QuickitProvider
       theme={theme}
+      radius="md"
+      customScrollbar={true}
       focusRing={{ enabled: true, disabledComponents: ["dropdown"] }}
       ripple={{ enabled: true, disabledComponents: ["link"] }}
       pressEffect="transform"
@@ -53,6 +55,11 @@ createRoot(document.getElementById("root")).render(
   <QuickitThemeProvider
     defaultTheme="system"
     storageKey="quickit-ui-theme"
+    radius="md"
+    customScrollbar={true}
+    focusRing={true}
+    ripple={true}
+    pressEffect="transform"
   >
     <App />
   </QuickitThemeProvider>,
@@ -168,11 +175,67 @@ export default function RootLayout({ children }) {
                 document.documentElement.classList.add('dark');
               }
             } catch (e) {}
-          })();\`.replace(/\n/g, ''),
+          })();\`.replace(/\\n/g, ''),
         }} />
       </head>
       <body>{children}</body>
     </html>
+  );
+}`;
+
+export const RADIUS_PROVIDER_SNIPPET = `import { QuickitProvider } from "quickit-ui";
+
+export function AppRoot() {
+  return (
+    <QuickitProvider radius="lg">
+      <App />
+    </QuickitProvider>
+  );
+}`;
+
+export const RADIUS_RAW_CSS_SNIPPET = `import { QuickitProvider } from "quickit-ui";
+
+export function AppRoot() {
+  return (
+    <QuickitProvider radius="1rem">
+      <App />
+    </QuickitProvider>
+  );
+}`;
+
+export const RADIUS_CSS_VARIABLE_SNIPPET = `/* Override directo en CSS */
+:root {
+  --qi-radius: 1rem;
+}`;
+
+export const RADIUS_HOOK_SNIPPET = `import { useQuickitRadius } from "quickit-ui";
+
+function BadgeWithRadius() {
+  const radius = useQuickitRadius();
+
+  return (
+    <div style={{ borderRadius: radius }}>
+      Radio actual: {radius}
+    </div>
+  );
+}`;
+
+export const CUSTOM_SCROLLBAR_SNIPPET = `import { QuickitThemeProvider } from "quickit-ui";
+
+// Desactiva el scrollbar custom global (usa el nativo del SO)
+<QuickitThemeProvider customScrollbar={false}>
+  <App />
+</QuickitThemeProvider>`;
+
+export const CUSTOM_SCROLLBAR_HOOK_SNIPPET = `import { useQuickitCustomScrollbar } from "quickit-ui";
+
+function ScrollbarInfo() {
+  const enabled = useQuickitCustomScrollbar();
+
+  return (
+    <span>
+      Scrollbar custom: {enabled ? "activo" : "inactivo"}
+    </span>
   );
 }`;
 
@@ -443,6 +506,12 @@ function PressFeedback() {
   );
 }`,
   },
+  useQuickitRadius: {
+    code: RADIUS_HOOK_SNIPPET,
+  },
+  useQuickitCustomScrollbar: {
+    code: CUSTOM_SCROLLBAR_HOOK_SNIPPET,
+  },
 };
 
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
@@ -452,6 +521,7 @@ export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
   { id: "changelog", label: "Changelog" },
   { id: "tema", label: "Tema" },
   { id: "comportamiento", label: "Comportamiento" },
+  { id: "radio", label: "Radio (border-radius)" },
   { id: "tokens", label: "Tokens" },
   { id: "utilidades", label: "Utilidades" },
   {
@@ -470,6 +540,8 @@ export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
       { id: "hook-use-quickit-focus-ring", label: "useQuickitFocusRing" },
       { id: "hook-use-quickit-focus-ring-config", label: "useQuickitFocusRingConfig" },
       { id: "hook-use-quickit-press-effect", label: "useQuickitPressEffect" },
+      { id: "hook-use-quickit-radius", label: "useQuickitRadius" },
+      { id: "hook-use-quickit-custom-scrollbar", label: "useQuickitCustomScrollbar" },
       { id: "hook-use-quickit-ripple", label: "useQuickitRipple" },
       { id: "hook-use-quickit-ripple-config", label: "useQuickitRippleConfig" },
     ],
@@ -583,6 +655,16 @@ export const WEBSITE_HOOKS = [
     name: "useQuickitPressEffect",
     description: "Consulta el efecto visual preferido (transform o ripple) para interacciones táctiles o click.",
     returns: "El valor 'transform' o 'ripple' configurado globalmente."
+  },
+  {
+    name: "useQuickitRadius",
+    description: "Devuelve el valor CSS del radio base (--qi-radius) configurado en QuickitProvider.",
+    returns: "String con el valor CSS del radio (ej: '0.75rem', '1rem')."
+  },
+  {
+    name: "useQuickitCustomScrollbar",
+    description: "Indica si el scrollbar custom global está activo según la prop customScrollbar de QuickitProvider.",
+    returns: "Boolean que indica si el scrollbar theming está habilitado."
   },
   {
     name: "useQuickitRipple",
@@ -701,6 +783,12 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "skeleton",
         name: "Skeleton",
         description: "Marcador de carga para line, rect y circle.",
+      },
+      {
+        slug: "divider",
+        name: "Divider",
+        isNew: true,
+        description: "Línea separadora horizontal o vertical con label opcional.",
       },
     ],
   },
@@ -848,6 +936,12 @@ export const WEBSITE_COMPONENT_GROUPS = [
         name: "Container",
         isNew: true,
         description: "Contenedor centrado con max-width responsivo y padding.",
+      },
+      {
+        slug: "card",
+        name: "Card",
+        isNew: true,
+        description: "Contenedor versátil con header, body y footer.",
       },
     ],
   },
@@ -1132,7 +1226,7 @@ export function ButtonPreview() {
   tokenGroups: [
     {
       label: "Variantes",
-      values: ["solid", "outline", "ghost"],
+      values: ["soft", "solid", "outline", "ghost"],
     },
     {
       label: "Tamaños",

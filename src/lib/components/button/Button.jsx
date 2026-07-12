@@ -123,9 +123,7 @@ const Button = forwardRef(function Button(
   const resolvedShape = resolveActionShape(shape);
   const resolvedSize = resolveActionSize(size);
 
-  // Los icon buttons compactos se sienten más estables sin translate/scale.
-  const motionAllowedByShape =
-    resolvedShape !== "square" && resolvedShape !== "circle";
+  const motionAllowedByShape = true;
   const resolvedActiveMotion =
     activeMotion ??
     (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
