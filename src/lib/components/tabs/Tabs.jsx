@@ -16,18 +16,14 @@ const TABS_ROOT_PRIMITIVES = {
 };
 
 const TABS_LIST_PRIMITIVES = {
-  base: [
-    "relative flex items-center gap-1 border",
-    "w-fit max-w-full",
-  ].join(" "),
-  horizontal:
-    "flex-row overflow-x-auto scrollbar-hidden",
+  base: "relative flex items-center gap-1 border w-full",
+  horizontal: "flex-row overflow-x-auto scrollbar-hidden",
   vertical: "flex-col items-stretch",
 };
 
 const TABS_TRIGGER_PRIMITIVES = {
   base: [
-    "relative z-[1] inline-flex items-center justify-center font-medium",
+    "relative z-[1] inline-flex shrink-0 items-center justify-center font-medium",
     "outline-none cursor-pointer border-0",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-50",
@@ -58,7 +54,7 @@ const TABS_SIZE_CLASSES = {
   },
   "2xl": {
     list: "rounded-[var(--qi-radius-2xl)] p-2",
-    trigger: "h-16 min-w-[9.5rem] rounded-[var(--qi-radius-2xl)] px-7 text-lg",
+    trigger: "shrink-0 h-16 min-w-[9.5rem] rounded-[var(--qi-radius-2xl)] px-7 text-lg",
   },
 };
 
@@ -153,7 +149,6 @@ export const TabsList = forwardRef(function TabsList({ children, className }, re
   const ui = TABS_THEME_CLASSES[theme];
   const listRef = useRef(null);
   const indicatorRef = useRef(null);
-  const [scrollState, setScrollState] = useState({ left: false, right: false });
 
   const measureIndicator = useCallback(() => {
     const list = listRef.current;
@@ -177,49 +172,20 @@ export const TabsList = forwardRef(function TabsList({ children, className }, re
     const activeTab = listRef.current?.querySelector('[role="tab"][data-state="active"]');
     activeTab?.scrollIntoView({ behavior: "instant", block: "nearest", inline: "center" });
     measureIndicator();
-  }, [measureIndicator, value]);
-
-  const checkScroll = useCallback(() => {
-    const el = listRef.current;
-    if (!el || orientation !== "horizontal") return;
-    setScrollState({
-      left: el.scrollLeft > 4,
-      right: el.scrollLeft < el.scrollWidth - el.clientWidth - 4,
-    });
-  }, [orientation]);
+  }, [measureIndicator, size, value]);
 
   useEffect(() => {
     const el = listRef.current;
-    if (!el || orientation !== "horizontal") return;
-    checkScroll();
-    const handleScroll = () => {
-      checkScroll();
-      measureIndicator();
-    };
-    el.addEventListener("scroll", handleScroll, { passive: true });
+    if (!el) return;
+    measureIndicator();
     const ro = new ResizeObserver(() => {
-      checkScroll();
       measureIndicator();
     });
     ro.observe(el);
     return () => {
-      el.removeEventListener("scroll", handleScroll);
       ro.disconnect();
     };
-  }, [checkScroll, measureIndicator, orientation]);
-
-  const fadeMask = useMemo(() => {
-    if (orientation !== "horizontal") return undefined;
-    const f = 16;
-    if (!scrollState.left && !scrollState.right) return undefined;
-    if (scrollState.left && scrollState.right) {
-      return `linear-gradient(to right, transparent ${f}px, black ${f * 2}px, black calc(100% - ${f * 2}px), transparent calc(100% - ${f}px))`;
-    }
-    if (scrollState.left) {
-      return `linear-gradient(to right, transparent ${f}px, black ${f * 2}px, black 100%)`;
-    }
-    return `linear-gradient(to right, black 0%, black calc(100% - ${f * 2}px), transparent calc(100% - ${f}px))`;
-  }, [orientation, scrollState]);
+  }, [measureIndicator, orientation]);
 
   return (
     <div
@@ -234,11 +200,6 @@ export const TabsList = forwardRef(function TabsList({ children, className }, re
         ui.list,
         className,
       )}
-      style={
-        fadeMask
-          ? { maskImage: fadeMask, WebkitMaskImage: fadeMask }
-          : undefined
-      }
     >
       <div
         ref={indicatorRef}
