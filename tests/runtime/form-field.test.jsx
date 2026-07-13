@@ -14,13 +14,13 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
-      "border-neutral-800",
+      "border-neutral-500",
     );
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
       "focus-visible:ring-neutral-700/32",
     );
     expect(screen.getByPlaceholderText("Consola").className).toContain(
-      "bg-neutral-900",
+      "bg-neutral-200",
     );
     expect(screen.getByPlaceholderText("Consola").className).toContain(
       "focus-visible:ring-neutral-700/32",
