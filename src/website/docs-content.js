@@ -7,23 +7,15 @@ export const TAILWIND_STYLES_SNIPPET = `@import "quickit-ui/styles.css";
 
 @custom-variant dark (&:where(.dark, .dark *));`;
 
-export const PRIMARY_OVERRIDE_SNIPPET = `@import "quickit-ui/styles.css";
+export const ACCENT_OVERRIDE_SNIPPET = `@import "quickit-ui/styles.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary-50: oklch(0.98 0.02 202);
-  --color-primary-100: oklch(0.94 0.04 202);
-  --color-primary-200: oklch(0.88 0.08 202);
-  --color-primary-300: oklch(0.8 0.12 202);
-  --color-primary-400: oklch(0.72 0.16 202);
-  --color-primary-500: oklch(0.64 0.18 202);
-  --color-primary-600: oklch(0.56 0.17 202);
-  --color-primary-700: oklch(0.48 0.14 202);
-  --color-primary-800: oklch(0.4 0.11 202);
-  --color-primary-900: oklch(0.34 0.08 202);
-  --color-primary-950: oklch(0.24 0.06 202);
+  --color-blue-600: oklch(0.5 0.22 260);
+  --color-purple-500: oklch(0.62 0.24 300);
+  --color-green-500: oklch(0.62 0.2 150);
 }`;
 
 export const COMPONENT_IMPORT_SNIPPET = `import { Button } from "quickit-ui";
@@ -148,6 +140,88 @@ export const UTILS_THEME_SNIPPET = `import { resolveQuickitThemeMode } from "qui
 const mode = resolveQuickitThemeMode(themeFromConfig);
 // Devuelve "dark" solo si themeFromConfig === "dark"; cualquier otro valor cae a "light".`;
 
+export const THEME_COLOR_MAP_SNIPPET = `| Color semántico | Color Tailwind |
+|-----------------|---------------|
+| neutral         | neutral       |
+| primary         | blue          |
+| secondary       | purple        |
+| success         | green         |
+| danger          | red           |
+| warning         | amber         |
+| info            | cyan          |
+| light           | neutral       |
+| dark            | neutral       |`;
+
+export const THEME_CUSTOMIZE_SNIPPET = `@import "tailwindcss";
+@import "quickit-ui/styles.css";
+
+@theme {
+  --color-blue-600: oklch(0.5 0.22 260);
+  --color-purple-500: oklch(0.62 0.24 300);
+  --color-green-500: oklch(0.62 0.2 150);
+}`;
+
+export const THEME_CLASSES_PATTERN_SNIPPET = `// src/lib/theme/theme-classes/mi-componente.js
+export const MI_COMPONENTE_THEME_CLASSES = {
+  light: {
+    primary:   "bg-blue-600 text-white hover:bg-blue-700",
+    secondary: "bg-purple-600 text-white hover:bg-purple-700",
+    success:   "bg-green-600 text-white hover:bg-green-700",
+    danger:    "bg-red-600 text-white hover:bg-red-700",
+    neutral:   "bg-neutral-900 text-white hover:bg-neutral-800",
+  },
+  dark: {
+    primary:   "bg-blue-500 text-white hover:bg-blue-600",
+    secondary: "bg-purple-500 text-white hover:bg-purple-600",
+    success:   "bg-green-500 text-white hover:bg-green-600",
+    danger:    "bg-red-500 text-white hover:bg-red-600",
+    neutral:   "bg-neutral-100 text-neutral-900 hover:bg-white",
+  },
+};`;
+
+export const THEME_CLASSES_USAGE_SNIPPET = `import { useTheme } from "quickit-ui";
+import { MI_COMPONENTE_THEME_CLASSES } from "quickit-ui/theme-classes";
+
+function MiComponente({ color = "primary" }) {
+  const { theme } = useTheme();
+  const classes = MI_COMPONENTE_THEME_CLASSES[theme][color];
+  return <button className={classes}>{color}</button>;
+}`;
+
+export const THEME_CLASSES_INDEX_SNIPPET = `src/lib/theme/theme-classes/
+├── index.js              # Barrel — re-exporta todos los módulos
+├── action-control.js
+├── action-control-active.js
+├── accordion.js
+├── alert.js
+├── avatar.js
+├── badge.js
+├── breadcrumb.js
+├── card.js
+├── checkbox.js
+├── combobox.js
+├── data-table.js
+├── date-picker.js
+├── drawer.js
+├── empty-state.js
+├── form-control.js
+├── form-field.js
+├── form-field-autofill.js
+├── input-affix.js
+├── input-group.js
+├── label.js
+├── link-text.js
+├── modal.js
+├── popover.js
+├── progress.js
+├── radio.js
+├── range.js
+├── select.js
+├── skeleton.js
+├── switch.js
+├── tabs.js
+└── toaster.js`;
+
 export const THEME_FOUC_VITE_SNIPPET = `<script>
   (function() {
     try {
@@ -240,34 +314,34 @@ function ScrollbarInfo() {
 }`;
 
 export const QUICKIT_V1_RELEASE = {
-  version: "1.1.0",
-  date: "11 de julio de 2026",
+  version: "1.2.0",
+  date: "12 de julio de 2026",
   summary:
-    "Quickit UI 1.1.0 trae una nueva variante soft, cambio de defaults globales y rediseño de ButtonGroup. Todos los componentes ahora usan variant=\"soft\" y color=\"neutral\" por defecto.",
+    "Quickit UI 1.2.0 reestructura el sistema de colores semánticos: primary→blue, secondary→purple, success→green, danger→red. Todas las clases de color se centralizan en theme-classes y el modo oscuro se maneja con objetos light/dark sin selectores CSS.",
   highlights: [
-    "Nueva variante `soft` para action controls: borde + fondo sutil del color seleccionado en reposo, sólido en hover.",
-    "Todos los componentes con `variant` ahora default a `\"soft\"` (antes `\"solid\"`/`\"default\"`).",
-    "Todos los componentes con `color` ahora default a `\"neutral\"` (antes `\"primary\"`/`\"info\"`).",
+    "Nuevo color semántico `secondary` mapeado a purple.",
+    "Mapa de colores reorganizado: primary→blue, success→green, danger→red, warning→amber, info→cyan.",
+    "31 archivos theme-classes centralizan todas las clases de color; ningún componente JSX contiene literales de color.",
   ],
   notableChanges: [
-    "ButtonGroup rediseñado: outline usa superposición negativa; solid/ghost inyectan divisores automáticos.",
-    "Eliminados 36 archivos index.js barrel por componente — los imports resuelven directo al archivo.",
-    "Bug fixes: Show (evaluación perezosa), forwardRef en DataTable/Pagination, Playground sin crash.",
+    "Modo oscuro vía objetos light/dark explícitos en cada theme-classes file, sin depender de la clase `.dark` de Tailwind.",
+    "Personalización vía `@theme` sobrescribiendo colores nativos de Tailwind (ej. `--color-blue-600`) sin variables intermedias.",
+    "5 nuevos theme-classes: input-group, input-affix, date-picker, avatar, toaster.",
   ],
 };
 
 export const QUICKIT_V1_MIGRATION = {
   fromVersion: "1.0.17",
-  toVersion: "1.1.0",
+  toVersion: "1.2.0",
   summary:
-    "La migración desde 1.0.17 a 1.1.0 es directa. Los cambios principales son los nuevos defaults globales (variant=\"soft\", color=\"neutral\") y la nueva variante soft.",
+    "La migración desde 1.0.17 a 1.2.0 cubre dos releases. Los cambios principales son los nuevos defaults globales (variant=\"soft\", color=\"neutral\") y la reorganización del mapa de colores semánticos.",
   steps: [
     {
       title: "Actualiza el paquete",
       description:
-        "Sube directamente a `quickit-ui@1.1.0` y vuelve a instalar dependencias.",
+        "Sube directamente a `quickit-ui@1.2.0` y vuelve a instalar dependencias.",
       beforeCode: "npm install quickit-ui@1.0.17",
-      afterCode: "npm install quickit-ui@1.1.0",
+      afterCode: "npm install quickit-ui@1.2.0",
       language: "bash",
     },
     {
@@ -290,11 +364,38 @@ export const QUICKIT_V1_MIGRATION = {
       afterCode: `<Button variant="soft">Acción</Button>`,
       language: "jsx",
     },
+    {
+      title: "Colores semánticos reorganizados",
+      description:
+        "v1.2.0 actualiza el mapa de colores semánticos. Los tonos `sky`, `emerald` y `rose` fueron reemplazados por `blue`, `green` y `red` respectivamente. Además se agrega `secondary` (purple). Si tu código usaba strings de color Tailwind directamente (ej. `border-sky-200`), debes actualizarlos.",
+      beforeCode: `<Badge color="primary">Etiqueta</Badge>
+{/* Antes: primary usaba sky */}
+<span className="border-sky-200 bg-sky-50">Personalizado</span>`,
+      afterCode: `<Badge color="primary">Etiqueta</Badge>
+{/* Ahora: primary usa blue. secondary está disponible */}
+<Badge color="secondary">Nuevo</Badge>
+<span className="border-blue-200 bg-blue-50">Personalizado</span>`,
+      language: "jsx",
+    },
+    {
+      title: "Personalización vía @theme",
+      description:
+        "Ya no existen variables CSS intermedias `--color-primary-*`. Para cambiar colores, sobrescribe directamente los colores nativos de Tailwind en `@theme`: `--color-blue-600` para primary, `--color-purple-500` para secondary, etc.",
+      beforeCode: `@theme {
+  --color-primary-500: oklch(0.64 0.18 202);
+}`,
+      afterCode: `@theme {
+  --color-blue-600: oklch(0.5 0.22 260);
+}`,
+      language: "css",
+    },
   ],
   checks: [
     "Revisa componentes sin props explícitas de variant/color — ahora se renderizan con soft/neutral.",
     "Si usabas Button solid primary como default, agrega variant=\"solid\" color=\"primary\" explícito.",
-    "Verifica Alert, Link, Progress y demás componentes que cambiaron su color default.",
+    "Si tenías clases CSS con sky, emerald o rose, migra a blue, green, red.",
+    "Si sobrescribías --color-primary-* en @theme, ahora sobrescribe --color-blue-* (o el color Tailwind correspondiente).",
+    "Reemplaza referencias directas a --color-primary-* por --color-blue-* en tu CSS personalizado.",
   ],
 };
 
@@ -515,18 +616,19 @@ function PressFeedback() {
 };
 
 export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
-  { id: "introduccion", label: "Introducción" },
-  { id: "instalacion", label: "Instalación" },
-  { id: "migracion", label: "Migración 1.0.17 → 1.1.0" },
-  { id: "changelog", label: "Changelog" },
-  { id: "tema", label: "Tema" },
-  { id: "comportamiento", label: "Comportamiento" },
-  { id: "radio", label: "Radio (border-radius)" },
-  { id: "tokens", label: "Tokens" },
-  { id: "utilidades", label: "Utilidades" },
+  { id: "introduccion", label: "Introducción", group: "Primeros pasos" },
+  { id: "instalacion", label: "Instalación", group: "Primeros pasos" },
+  { id: "migracion", label: "Migración 1.0.17 → 1.2.0", group: "Primeros pasos" },
+  { id: "changelog", label: "Changelog", group: "Primeros pasos" },
+  { id: "tema", label: "Tema", group: "Personalización" },
+  { id: "comportamiento", label: "Comportamiento", group: "Personalización" },
+  { id: "radio", label: "Radio (border-radius)", group: "Personalización" },
+  { id: "tokens", label: "Tokens", group: "Personalización" },
+  { id: "utilidades", label: "Utilidades", group: "Referencia" },
   {
     id: "hooks",
     label: "Hooks",
+    group: "Referencia",
     children: [
       { id: "hook-use-quickit-theme", label: "useQuickitTheme" },
       { id: "hook-use-quickit-theme-controller", label: "useQuickitThemeController" },
@@ -546,7 +648,7 @@ export const WEBSITE_DOC_OVERVIEW_SECTIONS = [
       { id: "hook-use-quickit-ripple-config", label: "useQuickitRippleConfig" },
     ],
   },
-  { id: "componentes", label: "Componentes" },
+  { id: "componentes", label: "Componentes", group: "Referencia" },
 ];
 
 export const WEBSITE_COMPONENT_DOC_SECTIONS = [
@@ -891,11 +993,8 @@ export const WEBSITE_COMPONENT_GROUPS = [
         name: "Modal",
         description: "Overlay con trigger, contenido y acciones compuestas.",
       },
-      {
-        slug: "command-palette",
-        name: "CommandPalette",
-        description: "Paleta de comandos con búsqueda y atajo Ctrl+K.",
-      },
+
+
     ],
   },
   {

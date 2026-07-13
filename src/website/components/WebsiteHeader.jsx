@@ -1,20 +1,19 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import {
   Button,
-  CommandPalette,
   For,
+  Input,
   Link,
   Show,
   useQuickitThemeController,
 } from "@/lib";
 import { cn } from "@/lib/utils";
-import { getWebsiteSearchGroups } from "@/website/docs-search";
 import {
   WEBSITE_NAV,
   WEBSITE_ROUTES,
 } from "@/website/site-config";
+import { buildWebsiteSearchIndex } from "@/website/docs-search";
 import WebsiteLogo from "@/website/components/WebsiteLogo";
-import { navigateWebsiteToHref } from "@/website/router";
 
 function SunIcon() {
   return (
@@ -54,16 +53,60 @@ function GithubIcon() {
 
 export default function WebsiteHeader({ activePath }) {
   const { resolvedTheme, toggleTheme } = useQuickitThemeController();
-  const [searchOpen, setSearchOpen] = useState(false);
   const isDark = resolvedTheme === "dark";
-  const searchGroups = useMemo(
-    () =>
-      getWebsiteSearchGroups((href) => {
-        navigateWebsiteToHref(href);
-        setSearchOpen(false);
-      }),
-    [],
-  );
+  const searchIndex = useMemo(() => buildWebsiteSearchIndex(), []);
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const inputRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const filteredResults = useMemo(() => {
+    if (!query.trim()) return [];
+    const q = query.toLowerCase();
+    return searchIndex
+      .filter(
+        (entry) =>
+          entry.label.toLowerCase().includes(q) ||
+          entry.keywords.some((k) => k.toLowerCase().includes(q)),
+      )
+      .slice(0, 10);
+  }, [query, searchIndex]);
+
+  const groupedResults = useMemo(() => {
+    const groups = new Map();
+    filteredResults.forEach((entry) => {
+      if (!groups.has(entry.group)) groups.set(entry.group, []);
+      groups.get(entry.group).push(entry);
+    });
+    return Array.from(groups.entries());
+  }, [filteredResults]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleClickOutside(e) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(e.target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-neutral-800/40 dark:bg-neutral-950/95 dark:supports-[backdrop-filter]:bg-neutral-950/60">
@@ -96,32 +139,49 @@ export default function WebsiteHeader({ activePath }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <Button
-            size="sm"
-            color="neutral"
-            variant="outline"
-            activeMotion={false}
-            className="hidden min-w-[11rem] justify-between md:inline-flex"
-            onClick={() => setSearchOpen(true)}
-          >
-            <span className="flex flex-1 items-center justify-between gap-2">
-              <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                Buscar documentos
-              </span>
-              <kbd className="text-xs text-neutral-400 dark:text-neutral-500">Ctrl+K</kbd>
-            </span>
-          </Button>
-
-          <Button
-            size="sm"
-            color="neutral"
-            variant="outline"
-            activeMotion={false}
-            className="md:hidden"
-            onClick={() => setSearchOpen(true)}
-          >
-            Buscar
-          </Button>
+          <div className="relative hidden md:block w-60">
+            <Input
+              ref={inputRef}
+              type="search"
+              placeholder="Buscar documentos..."
+              size="sm"
+              color="neutral"
+              clearButton={false}
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setIsOpen(true);
+              }}
+              onFocus={() => setIsOpen(true)}
+              rightElement={
+                <kbd className="text-[10px] text-neutral-400 dark:text-neutral-500">Ctrl+K</kbd>
+              }
+            />
+            {isOpen && query.trim() && filteredResults.length > 0 && (
+              <div
+                ref={dropdownRef}
+                className="absolute left-0 top-full mt-1 w-full max-h-72 overflow-y-auto rounded-md border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-900"
+              >
+                {groupedResults.map(([group, items]) => (
+                  <div key={group}>
+                    <div className="px-2 py-1 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+                      {group}
+                    </div>
+                    {items.map((item) => (
+                      <a
+                        key={item.id}
+                        href={item.href}
+                        className="block rounded-md px-2 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <Link
             href="https://github.com/darrelmasis/quickit-ui"
@@ -154,13 +214,6 @@ export default function WebsiteHeader({ activePath }) {
         </div>
       </div>
 
-      <CommandPalette
-        open={searchOpen}
-        onOpenChange={setSearchOpen}
-        groups={searchGroups}
-        placeholder="Buscar componentes, hooks o guías…"
-        emptyText="No encontré resultados en la documentación"
-      />
     </header>
   );
 }

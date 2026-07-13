@@ -82,6 +82,19 @@ export default function WebsiteDocsSidebar({
     [allComponents, filter],
   );
 
+  const displaySections = useMemo(() => {
+    const result = [];
+    let lastGroup = null;
+    sections.forEach((section) => {
+      if (section.group && section.group !== lastGroup) {
+        result.push({ type: "group-header", label: section.group });
+        lastGroup = section.group;
+      }
+      result.push(section);
+    });
+    return result;
+  }, [sections]);
+
   const activeSectionIds = useMemo(
     () =>
       new Set(
@@ -125,17 +138,29 @@ export default function WebsiteDocsSidebar({
               )}
             >
               <div className="min-h-0 overflow-hidden">
-                <nav className="flex flex-col gap-0.5">
-                  <For each={sections}>
-                    {(section, index) => {
-                      const {
-                        baseHref,
-                        childEntries,
-                        hasChildren,
-                        isActive,
-                        isChildActive,
-                      } = getSectionState(section, currentPath);
-                      const isExpanded =
+                  <nav className="flex flex-col gap-0.5">
+                    <For each={displaySections}>
+                      {(entry, index) => {
+                        if (entry.type === "group-header") {
+                          return (
+                            <div
+                              key={`group-${index}`}
+                              className="px-3 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500"
+                            >
+                              {entry.label}
+                            </div>
+                          );
+                        }
+
+                        const section = entry;
+                        const {
+                          baseHref,
+                          childEntries,
+                          hasChildren,
+                          isActive,
+                          isChildActive,
+                        } = getSectionState(section, currentPath);
+                        const isExpanded =
                         hasChildren &&
                         (openSections.has(section.id) ||
                           activeSectionIds.has(section.id) ||
@@ -290,7 +315,7 @@ export default function WebsiteDocsSidebar({
                         <span className="flex items-center gap-2">
                           {item.name}
                           <Show when={item.isNew}>
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
                           </Show>
                         </span>
                       </Link>
