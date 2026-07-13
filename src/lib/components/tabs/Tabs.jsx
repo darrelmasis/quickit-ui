@@ -68,6 +68,25 @@ function getEnabledTabs(container) {
   );
 }
 
+function positionIndicator(list, indicator, orientation) {
+  if (!list || !indicator) return;
+  const activeTab = list.querySelector('[role="tab"][data-state="active"]');
+  if (!activeTab) {
+    indicator.style.display = "none";
+    return;
+  }
+  indicator.style.display = "block";
+  indicator.style.width = `${activeTab.offsetWidth}px`;
+  indicator.style.height = `${activeTab.offsetHeight}px`;
+  if (orientation === "horizontal") {
+    indicator.style.top = `${activeTab.offsetTop}px`;
+    indicator.style.left = `${activeTab.offsetLeft - list.scrollLeft}px`;
+  } else {
+    indicator.style.top = `${activeTab.offsetTop - list.scrollTop}px`;
+    indicator.style.left = `${activeTab.offsetLeft}px`;
+  }
+}
+
 const Tabs = forwardRef(function Tabs({
   activationMode = "automatic",
   children,
@@ -89,7 +108,6 @@ const Tabs = forwardRef(function Tabs({
       if (!isControlled) {
         setInternalValue(nextValue);
       }
-
       if (nextValue !== value) {
         onValueChange?.(nextValue);
       }
@@ -149,43 +167,45 @@ export const TabsList = forwardRef(function TabsList({ children, className }, re
   const ui = TABS_THEME_CLASSES[theme];
   const listRef = useRef(null);
   const indicatorRef = useRef(null);
+  const scrollTimerRef = useRef(null);
 
-  const measureIndicator = useCallback(() => {
-    const list = listRef.current;
-    const indicator = indicatorRef.current;
-    if (!list || !indicator) return;
-    const activeTab = list.querySelector('[role="tab"][data-state="active"]');
-    if (!activeTab) {
-      indicator.style.display = "none";
-      return;
-    }
-    const listRect = list.getBoundingClientRect();
-    const tabRect = activeTab.getBoundingClientRect();
-    indicator.style.display = "block";
-    indicator.style.width = `${tabRect.width}px`;
-    indicator.style.height = `${tabRect.height}px`;
-    indicator.style.top = `${tabRect.top - listRect.top - list.clientTop}px`;
-    indicator.style.left = `${tabRect.left - listRect.left - list.clientLeft}px`;
-  }, []);
+  const updateIndicator = useCallback(() => {
+    positionIndicator(listRef.current, indicatorRef.current, orientation);
+  }, [orientation]);
 
   useLayoutEffect(() => {
-    const activeTab = listRef.current?.querySelector('[role="tab"][data-state="active"]');
+    const list = listRef.current;
+    if (!list) return;
+    const activeTab = list.querySelector('[role="tab"][data-state="active"]');
     activeTab?.scrollIntoView({ behavior: "instant", block: "nearest", inline: "center" });
-    measureIndicator();
-  }, [measureIndicator, size, value]);
+    updateIndicator();
+  }, [updateIndicator, size, value]);
 
   useEffect(() => {
-    const el = listRef.current;
-    if (!el) return;
-    measureIndicator();
+    const list = listRef.current;
+    if (!list) return;
+    updateIndicator();
+    const onScroll = () => {
+      const ind = indicatorRef.current;
+      if (ind) ind.style.transition = "none";
+      updateIndicator();
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+      scrollTimerRef.current = setTimeout(() => {
+        const ind2 = indicatorRef.current;
+        if (ind2) ind2.style.transition = "";
+      }, 80);
+    };
+    list.addEventListener("scroll", onScroll, { passive: true });
     const ro = new ResizeObserver(() => {
-      measureIndicator();
+      updateIndicator();
     });
-    ro.observe(el);
+    ro.observe(list);
     return () => {
+      list.removeEventListener("scroll", onScroll);
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
       ro.disconnect();
     };
-  }, [measureIndicator, orientation]);
+  }, [updateIndicator]);
 
   return (
     <div
@@ -234,25 +254,15 @@ export const TabsTrigger = forwardRef(function TabsTrigger({
   const { theme, focusRing: focusRingEnabled } = useQuickitControlState("tabs");
   const ui = TABS_THEME_CLASSES[theme];
   const isSelected = selectedValue === value;
-  const triggerRef = useRef(null);
 
   const handleKeyDown = (event) => {
     const container = event.currentTarget.parentElement;
-
-    if (!container) {
-      return;
-    }
-
+    if (!container) return;
     const enabledTabs = getEnabledTabs(container);
     const currentIndex = enabledTabs.indexOf(event.currentTarget);
-
-    if (currentIndex === -1) {
-      return;
-    }
-
+    if (currentIndex === -1) return;
     const isHorizontal = orientation === "horizontal";
     let nextIndex = currentIndex;
-
     if (
       (isHorizontal && event.key === "ArrowRight") ||
       (!isHorizontal && event.key === "ArrowDown")
@@ -277,11 +287,9 @@ export const TabsTrigger = forwardRef(function TabsTrigger({
     } else {
       return;
     }
-
     event.preventDefault();
     const nextTab = enabledTabs[nextIndex];
     nextTab?.focus();
-
     if (activationMode === "automatic") {
       setValue(nextTab?.dataset.value);
     }
@@ -289,7 +297,7 @@ export const TabsTrigger = forwardRef(function TabsTrigger({
 
   return (
     <button
-      ref={useMergeRefs(triggerRef, ref)}
+      ref={ref}
       type="button"
       role="tab"
       id={`${baseId}-trigger-${value}`}
@@ -333,9 +341,7 @@ export const TabsContent = forwardRef(function TabsContent({
   const ui = TABS_THEME_CLASSES[theme];
   const isSelected = selectedValue === value;
 
-  if (!forceMount && !isSelected) {
-    return null;
-  }
+  if (!forceMount && !isSelected) return null;
 
   return (
     <div
