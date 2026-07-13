@@ -339,7 +339,6 @@ export const DropdownContent = forwardRef(function DropdownContent(
   ref,
 ) {
   const {
-    arrowElement,
     arrowHeight,
     arrowStrokeWidth,
     arrowTipRadius,
