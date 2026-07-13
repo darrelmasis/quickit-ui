@@ -50,7 +50,7 @@ import { Button, Input, QuickitThemeProvider } from "quickit-ui";
 export function App() {
   return (
     <QuickitThemeProvider defaultTheme="system">
-      <Button color="brand">Guardar</Button>
+      <Button color="primary">Guardar</Button>
       <Input placeholder="Correo" />
     </QuickitThemeProvider>
   );
@@ -69,7 +69,7 @@ Ese archivo debe bastar para cargar:
 
 | Incluye | Detalle |
 | --- | --- |
-| Tokens `brand` | Escala `--color-brand-50` a `--color-brand-950`. |
+| Colores de acento | `primary` (blue), `secondary` (purple), `success` (green), `danger` (red), `warning` (amber), `info` (cyan). |
 | Utilidades Tailwind usadas por componentes | El CSS publicado ya viene compilado. |
 | Variantes dark | Quickit usa selector por clase `.dark`. |
 | Estilos auxiliares | Ripple, autofill, toasts, accordion y estilos internos. |
@@ -91,7 +91,7 @@ Orden recomendado:
 | --- | --- |
 | `quickit-ui/styles.css` primero | Carga el contrato base de Quickit: tokens, utilidades compiladas y estilos auxiliares. |
 | `tailwindcss` despues | Permite que las utilidades y tokens de tu app queden al final de la cascada. |
-| `@theme` al final | Hace que tus tokens, especialmente `brand`, ganen sobre los defaults de Quickit. |
+| `@theme` al final | Hace que tus tokens ganen sobre los defaults de Quickit. |
 
 Evita documentar como patron base `@import "tailwindcss";` antes de `@import "quickit-ui/styles.css";` en el mismo archivo global, porque Quickit puede quedar despues en la cascada y reintroducir defaults que la app queria sobrescribir.
 
@@ -237,7 +237,7 @@ Quickit exporta tokens para que wrappers, galerias y apps consumidoras usen la m
 
 ### Colores Compatibles
 
-La union historica para props `color` se llama `QuickitSemanticColor`. Se conserva por compatibilidad.
+La union para props `color` se llama `QuickitSemanticColor`.
 
 ```js
 import { QUICKIT_SEMANTIC_COLORS } from "quickit-ui";
@@ -246,26 +246,32 @@ import { QUICKIT_SEMANTIC_COLORS } from "quickit-ui";
 Valores:
 
 ```txt
-neutral, slate, zinc, primary, secondary, brand, success, danger, warning, info, light, dark, black
+neutral, primary, secondary, success, danger, warning, info, light, dark
 ```
 
 Conceptualmente, la taxonomia actual separa:
 
 | Coleccion | Export | Valores | Uso |
 | --- | --- | --- | --- |
-| Acentos de producto | `QUICKIT_BRAND_COLORS` | `primary`, `secondary`, `brand` | Accion principal, secundaria y marca. |
+| Acentos de producto | `QUICKIT_ACCENT_COLORS` | `neutral`, `primary`, `secondary`, `success`, `danger`, `warning`, `info` | Gama cromatica completa para componentes compactos como `Badge`. |
 | Estados | `QUICKIT_STATUS_COLORS` | `success`, `danger`, `warning`, `info` | Feedback semantico. |
-| Neutrales | `QUICKIT_NEUTRAL_COLORS` | `neutral`, `slate`, `zinc`, `light`, `dark`, `black` | Superficies y jerarquia visual. |
-| Compatibilidad | `QUICKIT_SEMANTIC_COLORS` | Todos los anteriores | Props publicas `color`. |
-| Accent legacy | `QUICKIT_ACCENT_COLORS` | Neutral, acentos y estados sin `light/dark/black` | Componentes compactos como `Badge`. |
+| Neutrales | `QUICKIT_NEUTRAL_COLORS` | `neutral`, `light`, `dark` | Superficies y jerarquia visual. |
+| Compatibilidad | `QUICKIT_SEMANTIC_COLORS` | `neutral`, `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark` | Props publicas `color`. |
 
-### Brand
+### Colores de acento
 
-`brand` es el slot de marca. No es un estado semantico como `success` o `danger`.
+Los colores `primary` y `secondary` se mapean directamente a colores nativos de Tailwind:
 
-Todos los componentes que usan `color="brand"` consumen variables `--color-brand-*`.
+| Semantico | Color Tailwind |
+| --- | --- |
+| `primary` | blue |
+| `secondary` | purple |
+| `success` | green |
+| `danger` | red |
+| `warning` | amber |
+| `info` | cyan |
 
-Forma recomendada con Tailwind CSS 4:
+Para personalizar, sobrescribe el color Tailwind subyacente en `@theme`:
 
 ```css
 @import "quickit-ui/styles.css";
@@ -274,21 +280,10 @@ Forma recomendada con Tailwind CSS 4:
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: oklch(0.98 0.03 165);
-  --color-brand-100: oklch(0.94 0.06 165);
-  --color-brand-200: oklch(0.88 0.1 165);
-  --color-brand-300: oklch(0.8 0.14 165);
-  --color-brand-400: oklch(0.72 0.17 165);
-  --color-brand-500: oklch(0.64 0.19 165);
-  --color-brand-600: oklch(0.56 0.18 165);
-  --color-brand-700: oklch(0.48 0.15 165);
-  --color-brand-800: oklch(0.4 0.12 165);
-  --color-brand-900: oklch(0.34 0.09 165);
-  --color-brand-950: oklch(0.24 0.07 165);
+  --color-blue-600: oklch(0.5 0.2 250);
+  --color-purple-500: oklch(0.55 0.18 290);
 }
 ```
-
-Si tu build no procesa directivas Tailwind, puedes sobreescribir las variables CSS equivalentes despues de importar `quickit-ui/styles.css`.
 
 ### Tamanos, Variantes Y Shapes
 
@@ -351,7 +346,7 @@ export function CardButton({ active }) {
       className={cn(
         "border p-4 transition-colors",
         getControlRadius("lg"),
-        active ? "border-brand-500 bg-brand-50" : "border-neutral-200",
+        active ? "border-primary-500 bg-primary-50" : "border-neutral-200",
       )}
     >
       Accion
@@ -501,7 +496,7 @@ import { Link } from "quickit-ui";
 
 <Link href="/docs">Documentacion</Link>
 
-<Link href="/docs" appearance="button" color="brand">
+<Link href="/docs" appearance="button" color="primary">
   Abrir docs
 </Link>
 ```
@@ -1479,7 +1474,7 @@ import {
 import {
   QUICKIT_SEMANTIC_COLORS,
   QUICKIT_STATUS_COLORS,
-  QUICKIT_BRAND_COLORS,
+  QUICKIT_ACCENT_COLORS,
   QUICKIT_NEUTRAL_COLORS,
   QUICKIT_CONTROL_SIZES,
   QUICKIT_BUTTON_VARIANTS,
@@ -1523,7 +1518,7 @@ Cambios a revisar:
 | Area | Accion |
 | --- | --- |
 | Estilos | Usar `import "quickit-ui/styles.css"`. |
-| Brand | Reemplazar escala `brand` con `@theme` si quieres marca propia. |
+| Colores | `primary` (blue), `secondary` (purple). Reemplazables via `@theme`. |
 | Breadcrumb | Preferir `Breadcrumb.Item href/current`. |
 | Tabs/FormControl | Preferir API compuesta `Tabs.List`, `FormControl.Description`, etc. |
 | CommandPalette | Eliminado del paquete en 1.2.0. |
@@ -1552,7 +1547,7 @@ Si usas este manual como contexto para un agente:
 | Cambiar UI | Mantener props compatibles y no romper `QuickitSemanticColor`. |
 | Documentar ejemplos | Alinear snippets con runtime real, no con API deseada. |
 | Tocar estilos | Recordar que el contrato minimo es `quickit-ui/styles.css`; si la app usa Tailwind, Quickit va antes de `tailwindcss`. |
-| Tocar tokens | `brand` es accent reemplazable; estados son `success/danger/warning/info`. |
+| Tocar tokens | `primary` y `secondary` son acentos reemplazables via `@theme`. Estados: `success/danger/warning/info`. |
 | Tocar forms | Revisar `FormControl`, `name`, hidden inputs y `aria-describedby`. |
 | Tocar overlays | Revisar foco, Escape, outside click, roles, portal y scroll lock. |
 | CommandPalette | Eliminado en 1.2.0; migrar a input search propio. |
@@ -1589,7 +1584,7 @@ Quickit UI se entiende mejor asi:
 | Estilos | Sin Tailwind: un import `quickit-ui/styles.css`; con Tailwind: Quickit primero, Tailwind despues. |
 | Tema | `QuickitThemeProvider` controla `light/dark/system` y `.dark`. |
 | Comportamiento | `focusRing`, `ripple`, `pressEffect`. |
-| Tokens | Compatibilidad con `QuickitSemanticColor`; taxonomia real: brand/status/neutral. |
+| Tokens | `QuickitSemanticColor` incluye acentos (`primary`, `secondary`), estados (`success`, `danger`, `warning`, `info`) y neutros (`neutral`, `light`, `dark`). |
 | Defaults globales | Todos los componentes: `variant="soft"`, `color="neutral"`. |
 | Forms | `FormControl` coordina accesibilidad; controles aceptan estados coherentes. |
 | Overlays | Basados en primitives compuestos, portal, foco y cierre. |
