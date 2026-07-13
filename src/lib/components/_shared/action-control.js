@@ -99,14 +99,14 @@ export function resolveActionColor(
   theme,
   variant,
   color,
-  fallback = "primary",
+  fallback = "neutral",
 ) {
   const resolvedTheme = resolveActionTheme(theme);
   const resolvedVariant = resolveActionVariant(resolvedTheme, variant);
   const resolvedFallback = resolveQuickitToken(
     QUICKIT_SEMANTIC_COLORS,
     fallback,
-    "primary",
+    "neutral",
   );
   const resolvedColor = resolveQuickitToken(
     QUICKIT_SEMANTIC_COLORS,
@@ -125,7 +125,7 @@ export function resolveActionActiveStateClasses(
   theme,
   variant,
   color,
-  fallback = "primary",
+  fallback = "neutral",
 ) {
   const resolvedTheme = resolveActionTheme(theme);
   const resolvedVariant = resolveActionVariant(resolvedTheme, variant);
@@ -147,7 +147,7 @@ export function resolveActionActivePseudoClasses(
   theme,
   variant,
   color,
-  fallback = "primary",
+  fallback = "neutral",
   prefix = "active",
 ) {
   return prefixStateClasses(
@@ -155,6 +155,18 @@ export function resolveActionActivePseudoClasses(
     resolveActionActiveStateClasses(theme, variant, color, fallback),
   );
 }
+
+const RIPPLE_HUE_MAP = {
+  neutral: { light: "rgb(255 255 255)", dark: "rgb(15 23 42)" },
+  primary: { light: "var(--color-blue-100)", dark: "var(--color-blue-900)" },
+  secondary: { light: "var(--color-purple-100)", dark: "var(--color-purple-900)" },
+  success: { light: "var(--color-green-100)", dark: "var(--color-green-900)" },
+  danger: { light: "var(--color-red-100)", dark: "var(--color-red-900)" },
+  warning: { light: "var(--color-amber-100)", dark: "var(--color-amber-900)" },
+  info: { light: "var(--color-cyan-100)", dark: "var(--color-cyan-900)" },
+  light: { light: "rgb(255 255 255)", dark: "rgb(15 23 42)" },
+  dark: { light: "rgb(255 255 255)", dark: "rgb(15 23 42)" },
+};
 
 export function resolveActionRippleStyles(theme, variant, color) {
   const resolvedTheme = resolveActionTheme(theme);
@@ -166,33 +178,55 @@ export function resolveActionRippleStyles(theme, variant, color) {
   );
 
   const isLightMode = resolvedTheme === "light";
+  const shades = RIPPLE_HUE_MAP[resolvedColor] || RIPPLE_HUE_MAP.neutral;
 
   if (resolvedVariant === "solid") {
-    // En modo claro, los colores que no son blancos/amarillos necesitan ripple blanco.
     if (isLightMode) {
-      if (["warning", "light"].includes(resolvedColor)) {
-        return { color: "rgb(15 23 42)", opacity: 0.18 };
+      // `light` sólido en light mode tiene bg white/neutral-50 → buena opacidad
+      if (resolvedColor === "light") {
+        return { color: shades.dark, opacity: 0.28 };
       }
-      return { color: "rgb(255 255 255)", opacity: 0.28 };
+      // warning tiene fondo claro (amber-500) → ripple oscuro
+      if (resolvedColor === "warning") {
+        return { color: shades.dark, opacity: 0.18 };
+      }
+      // Fondos sólidos oscuros → ripple claro del mismo tono
+      return { color: shades.light, opacity: 0.28 };
     }
 
-    // En modo oscuro, casi todos los sólidos son oscuros ahora, excepto 'light'.
+    // Modo oscuro
     if (resolvedColor === "light") {
-      return { color: "rgb(15 23 42)", opacity: 0.22 };
+      return { color: shades.dark, opacity: 0.32 };
     }
-    return { color: "rgb(255 255 255)", opacity: 0.24 };
+    return { color: shades.light, opacity: 0.24 };
   }
 
-  // Outline y Ghost suelen preferir un ripple que acompañe al texto.
+  // Outline: fondos transparentes → ripple oscuro en light, claro en dark
   if (resolvedVariant === "outline") {
+    if (resolvedColor === "light") {
+      return !isLightMode
+        ? { color: shades.light, opacity: 0.28 }
+        : { color: shades.dark, opacity: 0.28 };
+    }
     return !isLightMode
-      ? { color: "rgb(255 255 255)", opacity: 0.18 }
-      : { color: "rgb(15 23 42)", opacity: 0.16 };
+      ? { color: shades.light, opacity: 0.18 }
+      : { color: shades.dark, opacity: 0.16 };
   }
 
+  // Los colores neutros (light/neutral/dark) en soft/ghost tienen fondos claros
+  // (white/neutral-100/neutral-200 en light mode) donde el ripple oscuro al 12%
+  // es imperceptible. Se necesita mayor opacidad para que sea visible,
+  // especialmente porque el hover oscurece el fondo (hover:bg-neutral-300/500).
+  if (resolvedColor === "light" || resolvedColor === "neutral" || resolvedColor === "dark") {
+    return !isLightMode
+      ? { color: shades.light, opacity: 0.28 }
+      : { color: shades.dark, opacity: 0.28 };
+  }
+
+  // soft / ghost
   return !isLightMode
-    ? { color: "rgb(255 255 255)", opacity: 0.14 }
-    : { color: "rgb(15 23 42)", opacity: 0.12 };
+    ? { color: shades.light, opacity: 0.14 }
+    : { color: shades.dark, opacity: 0.12 };
 }
 
 export function getActionControlRadius(shape, size) {

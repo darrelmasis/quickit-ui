@@ -178,6 +178,7 @@ const Button = forwardRef(function Button(
       title={title}
       data-active={isActive || undefined}
       data-pressed={pressed || undefined}
+      data-qi-ripple-hue={resolvedColor}
       style={{
         "--qi-ripple-color": rippleUi.color,
         "--qi-ripple-opacity": rippleOpacity,

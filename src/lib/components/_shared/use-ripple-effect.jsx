@@ -83,10 +83,25 @@ function getRelativeLuminance({ r, g, b }) {
   return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
 }
 
+const RIPPLE_HUE_MAP = {
+  neutral: { light: "rgb(255 255 255)", dark: "rgb(15 23 42)" },
+  primary: { light: "var(--color-blue-100)", dark: "var(--color-blue-900)" },
+  secondary: { light: "var(--color-purple-100)", dark: "var(--color-purple-900)" },
+  success: { light: "var(--color-green-100)", dark: "var(--color-green-900)" },
+  danger: { light: "var(--color-red-100)", dark: "var(--color-red-900)" },
+  warning: { light: "var(--color-amber-100)", dark: "var(--color-amber-900)" },
+  info: { light: "var(--color-cyan-100)", dark: "var(--color-cyan-900)" },
+  light: { light: "rgb(255 255 255)", dark: "rgb(15 23 42)" },
+  dark: { light: "rgb(255 255 255)", dark: "rgb(15 23 42)" },
+};
+
 export function resolveRippleStyleFromElement(element, fallback) {
   if (!(element instanceof HTMLElement)) {
     return fallback;
   }
+
+  const hue = element.dataset.qiRippleHue || "neutral";
+  const shades = RIPPLE_HUE_MAP[hue] || RIPPLE_HUE_MAP.neutral;
 
   const styles = window.getComputedStyle(element);
   const background = parseRgbColor(styles.backgroundColor);
@@ -97,15 +112,26 @@ export function resolveRippleStyleFromElement(element, fallback) {
 
   const luminance = getRelativeLuminance(background);
 
-  return luminance > 0.52
-    ? {
-        color: "rgb(15 23 42)",
-        opacity: 0.18,
-      }
-    : {
-        color: "rgb(255 255 255)",
-        opacity: 0.28,
-      };
+  // Fondos muy claros (luminancia > 0.7) necesitan ripple oscuro con más
+  // opacidad para ser perceptible. Fondos medios/oscuros usan ripple claro.
+  if (luminance > 0.7) {
+    return {
+      color: shades.dark,
+      opacity: 0.28,
+    };
+  }
+
+  if (luminance > 0.52) {
+    return {
+      color: shades.dark,
+      opacity: 0.18,
+    };
+  }
+
+  return {
+    color: shades.light,
+    opacity: 0.28,
+  };
 }
 
 export function useRippleHandlers(

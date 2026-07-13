@@ -201,6 +201,7 @@ const LinkButtonAppearance = forwardRef(function LinkButtonAppearance(
       target={target}
       rel={resolveExternalLinkRel(target, rel)}
       title={title}
+      data-qi-ripple-hue={resolvedButtonColor}
       className={cn(
         resolveQuickitFocusRingClasses(focusRingEnabled, ACTION_CONTROL_BASE_CLASSES),
         resolvedRipple && "qi-ripple-host isolate overflow-hidden",
