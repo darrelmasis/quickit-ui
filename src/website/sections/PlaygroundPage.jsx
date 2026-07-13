@@ -9,7 +9,6 @@ import {
   ButtonGroup,
   Checkbox,
   Combobox,
-  CommandPalette,
   Container,
   DataTable,
   DatePicker,
@@ -55,6 +54,7 @@ const PROP_TYPES = {
     label: "Color",
     options: [
       "primary",
+      "secondary",
       "neutral",
       "success",
       "warning",
@@ -200,17 +200,17 @@ const COMPONENT_CONFIG = {
     ),
   },
   checkbox: {
-    props: ["size", "disabled"],
+    props: ["size", "color", "disabled"],
     sizeOptions: SIZE_OPTIONS_MD,
     preview: (p) => <Checkbox {...p} label="Casilla" />,
   },
   radio: {
-    props: ["size", "disabled"],
+    props: ["size", "color", "disabled"],
     sizeOptions: SIZE_OPTIONS_MD,
     preview: (p) => <Radio {...p} label="Opción" />,
   },
   switch: {
-    props: ["size", "disabled"],
+    props: ["size", "color", "disabled"],
     sizeOptions: SIZE_OPTIONS_MD,
     preview: (p) => <Switch {...p} label="Interruptor" />,
   },
@@ -266,8 +266,8 @@ const COMPONENT_CONFIG = {
   breadcrumb: {
     props: ["size"],
     sizeOptions: SIZE_OPTIONS_FULL,
-    preview: (p) => (
-      <Breadcrumb {...p}>
+    preview: () => (
+      <Breadcrumb>
         <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
         <Breadcrumb.Item href="#">Sección</Breadcrumb.Item>
         <Breadcrumb.Item current>Página</Breadcrumb.Item>
@@ -275,9 +275,10 @@ const COMPONENT_CONFIG = {
     ),
   },
   stepper: {
-    props: [],
-    preview: () => (
+    props: ["color"],
+    preview: (p) => (
       <Stepper
+        {...p}
         steps={[
           { title: "Paso 1", description: "Completado" },
           { title: "Paso 2", description: "En progreso" },
@@ -359,9 +360,9 @@ const COMPONENT_CONFIG = {
     preview: (p) => <Pagination {...p} count={10} defaultPage={1} />,
   },
   dropdown: {
-    props: [],
-    preview: () => (
-      <Dropdown defaultOpen trigger="click">
+    props: ["color"],
+    preview: (p) => (
+      <Dropdown {...p} defaultOpen trigger="click">
         <Dropdown.Trigger>
           <Button>Abrir menú</Button>
         </Dropdown.Trigger>
@@ -498,37 +499,7 @@ const COMPONENT_CONFIG = {
       </div>
     ),
   },
-  "command-palette": {
-    props: [],
-    preview: () => <CommandPalettePreview />,
-  },
 };
-
-function CommandPalettePreview() {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <Button onClick={() => setOpen(true)}>Abrir paleta de comandos</Button>
-      <span className="text-xs text-neutral-500">(o presiona Ctrl+K)</span>
-      <CommandPalette
-        open={open}
-        onOpenChange={setOpen}
-        groups={[
-          {
-            heading: "Páginas",
-            items: [
-              { label: "Panel", href: "#" },
-              { label: "Configuración", href: "#" },
-              { label: "Perfil", href: "#" },
-            ],
-          },
-        ]}
-        placeholder="Buscar comandos..."
-        emptyText="Sin resultados"
-      />
-    </div>
-  );
-}
 
 const LOGIC_COMPONENTS = new Set([
   "show",
@@ -721,7 +692,6 @@ export default function PlaygroundPage() {
                         <Link
                           key={`${item.slug}-${iIdx}`}
                           href={`#${item.slug}`}
-                          und
                           onClick={(e) => {
                             e.preventDefault();
                             selectComponent(item.slug);

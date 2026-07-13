@@ -5,7 +5,6 @@ import {
   Button,
   Checkbox,
   Combobox,
-  CommandPalette,
   Container,
   DataTable,
   DatePicker,
@@ -66,13 +65,18 @@ import {
   INSTALL_COMMAND,
   STYLES_SNIPPET,
   TAILWIND_STYLES_SNIPPET,
-  PRIMARY_OVERRIDE_SNIPPET,
+  ACCENT_OVERRIDE_SNIPPET,
   QUICKIT_PROVIDER_SNIPPET,
   THEME_PROVIDER_SNIPPET,
   THEME_TOGGLE_SNIPPET,
   THEME_READ_SNIPPET,
   THEME_FOUC_VITE_SNIPPET,
   THEME_FOUC_NEXT_SNIPPET,
+  THEME_COLOR_MAP_SNIPPET,
+  THEME_CUSTOMIZE_SNIPPET,
+  THEME_CLASSES_PATTERN_SNIPPET,
+  THEME_CLASSES_USAGE_SNIPPET,
+  THEME_CLASSES_INDEX_SNIPPET,
   COMPONENT_IMPORT_SNIPPET,
   UTILS_CN_SNIPPET,
   UTILS_SCROLL_SNIPPET,
@@ -87,6 +91,7 @@ import {
 import { COMPONENT_DOCS } from "@/website/component-docs";
 import {
   getWebsiteDocsSectionIdFromSegment,
+  getWebsiteDocsSectionRoute,
   getWebsiteHookRoute,
   hookToSlug,
 } from "@/website/docs-navigation";
@@ -200,11 +205,12 @@ function TokenGroupsList({ groups }) {
 
 const TOKEN_COLOR_SWATCH_CLASSES = {
   neutral: "border-neutral-200 bg-neutral-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100",
-  primary: "border-sky-200 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-100",
-  success: "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-100",
+  primary: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
+  secondary: "border-purple-200 bg-purple-100 text-purple-800 dark:border-purple-800 dark:bg-purple-950/60 dark:text-purple-100",
+  success: "border-green-200 bg-green-100 text-green-800 dark:border-green-800 dark:bg-green-950/60 dark:text-green-100",
   danger: "border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
   warning: "border-amber-200 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
-  info: "border-sky-200 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-100",
+  info: "border-cyan-200 bg-cyan-100 text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-100",
   light: "border-neutral-200 bg-white text-neutral-900 dark:border-neutral-700 dark:bg-neutral-100 dark:text-neutral-950",
   dark: "border-neutral-800 bg-neutral-900 text-white dark:border-neutral-500 dark:bg-neutral-900 dark:text-neutral-50",
 };
@@ -213,8 +219,8 @@ const TOKEN_COLOR_GROUPS = [
   {
     id: "tokens-color-identidad",
     title: "Identidad y acción",
-    description: "Primary cubre la intención principal de marca y acción.",
-    colors: ["primary"],
+    description: "Primary y secondary cubren la intención principal y secundaria de marca.",
+    colors: ["primary", "secondary"],
   },
   {
     id: "tokens-color-estados",
@@ -587,9 +593,9 @@ function GenericSectionPage({ sectionId }) {
             </div>
             <WebsiteCodeBlock code={TAILWIND_STYLES_SNIPPET} language="css" />
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              <code className="font-mono text-xs">primary</code> es reemplazable. Declara tu escala dentro de <code className="font-mono text-xs">@theme</code> al final del archivo para que <code className="font-mono text-xs">color="primary"</code> use la identidad visual de tu producto.
+              Todos los colores de acento (<code className="font-mono text-xs">primary</code>, <code className="font-mono text-xs">secondary</code>, <code className="font-mono text-xs">success</code>, <code className="font-mono text-xs">danger</code>, <code className="font-mono text-xs">warning</code>, <code className="font-mono text-xs">info</code>) son reemplazables porque se mapean directamente a colores nativos de Tailwind. Solo sobrescribe el color Tailwind subyacente en <code className="font-mono text-xs">@theme</code>.
             </div>
-            <WebsiteCodeBlock code={PRIMARY_OVERRIDE_SNIPPET} language="css" />
+            <WebsiteCodeBlock code={ACCENT_OVERRIDE_SNIPPET} language="css" />
           </div>
         </WebsiteSection>
       </Show>
@@ -601,7 +607,7 @@ function GenericSectionPage({ sectionId }) {
           description={QUICKIT_V1_MIGRATION.summary}
         >
           <div className="flex flex-col gap-8">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm leading-7 text-emerald-900 dark:border-emerald-900/60 dark:bg-emerald-950/20 dark:text-emerald-100">
+            <div className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 text-sm leading-7 text-green-900 dark:border-green-900/60 dark:bg-green-950/20 dark:text-green-100">
               Ruta cubierta en esta guía: <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.fromVersion}</code> →{" "}
               <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.toVersion}</code>.
             </div>
@@ -846,6 +852,135 @@ function GenericSectionPage({ sectionId }) {
                 </ul>
               </div>
             </div>
+
+            <div>
+              <h3
+                id="tema-arquitectura-colores"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Arquitectura de colores
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Todos los componentes consumen colores semánticos que se mapean
+                directamente a colores nativos de Tailwind v4. Esto permite
+                sobrescribir cualquier tono desde <code className="text-primary-500">@theme</code> sin
+                variables CSS intermedias ni capas de indirección.
+              </p>
+              <div className="mt-4 overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-neutral-200 dark:border-neutral-800">
+                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">Semántico</th>
+                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">Color Tailwind</th>
+                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">Ejemplo de uso</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                    {[
+                      ["neutral", "neutral", "color=&quot;neutral&quot;"],
+                      ["primary", "blue", "color=&quot;primary&quot;"],
+                      ["secondary", "purple", "color=&quot;secondary&quot;"],
+                      ["success", "green", "color=&quot;success&quot;"],
+                      ["danger", "red", "color=&quot;danger&quot;"],
+                      ["warning", "amber", "color=&quot;warning&quot;"],
+                      ["info", "cyan", "color=&quot;info&quot;"],
+                      ["light", "neutral", "color=&quot;light&quot;"],
+                      ["dark", "neutral", "color=&quot;dark&quot;"],
+                    ].map(([semantic, twColor, example]) => (
+                      <tr key={semantic} className="text-neutral-600 dark:text-neutral-400">
+                        <td className="px-4 py-2.5 font-mono text-xs">{semantic}</td>
+                        <td className="px-4 py-2.5 font-mono text-xs">{twColor}</td>
+                        <td className="px-4 py-2.5 font-mono text-xs">{example}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
+                <strong className="text-neutral-950 dark:text-neutral-50">Nota:</strong>{" "}
+                <code className="text-primary-500">light</code> y <code className="text-primary-500">dark</code>{" "}
+                son neutros porque representan fondos extremos, no acentos de estado.
+              </p>
+            </div>
+
+            <div>
+              <h3
+                id="tema-personalizar"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Personalizar colores
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Como no hay variables CSS intermedias (<code className="text-primary-500">--color-primary</code>),
+                cambiar el tono de un color semántico es tan simple como sobrescribir
+                el color Tailwind subyacente en <code className="text-primary-500">@theme</code>:
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={THEME_CUSTOMIZE_SNIPPET} language="css" />
+              </div>
+              <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Al cambiar <code className="text-primary-500">--color-blue-600</code>, todos los componentes
+                con <code className="text-primary-500">color=&quot;primary&quot;</code> reflejan el nuevo tono
+                automáticamente. No necesitas tocar las definiciones de los componentes.
+              </p>
+            </div>
+
+            <div>
+              <h3
+                id="tema-theme-classes"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Sistema theme-classes
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Internamente, cada componente de quickit resuelve sus clases CSS
+                desde archivos dedicados en <code className="text-primary-500">src/lib/theme/theme-classes/</code>.
+                Ningún componente JSX contiene literales como{" "}
+                <code className="text-primary-500">blue-600</code> o <code className="text-primary-500">hover:bg-red-500</code>.
+              </p>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Cada archivo exporta un objeto con dos variantes —<code className="text-primary-500">light</code> y{" "}
+                <code className="text-primary-500">dark</code>— y dentro de cada una, una entrada por color semántico:
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={THEME_CLASSES_PATTERN_SNIPPET} language="js" />
+              </div>
+              <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                El componente recibe el tema vía <code className="text-primary-500">useTheme</code> y selecciona
+                el set de clases correspondiente:
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={THEME_CLASSES_USAGE_SNIPPET} language="jsx" />
+              </div>
+              <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Los archivos existentes son:
+              </p>
+              <div className="mt-4">
+                <WebsiteCodeBlock code={THEME_CLASSES_INDEX_SNIPPET} language="" />
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="tema-modo-oscuro"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Modo oscuro
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Quickit no usa <code className="text-primary-500">@media (prefers-color-scheme: dark)</code>{" "}
+                ni la clase <code className="text-primary-500">.dark</code> de Tailwind para cambiar colores.
+                En su lugar, cada theme-classes file define explícitamente los valores{" "}
+                <code className="text-primary-500">light</code> y <code className="text-primary-500">dark</code>.
+                El <code className="text-primary-500">ThemeController</code> persiste la preferencia y los
+                componentes leen el tema actual para seleccionar el set de clases adecuado en tiempo real.
+              </p>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Esto permite cambiar entre modo claro y oscuro sin depender de selectores CSS,
+                y funciona correctamente en entornos SPA donde la clase <code className="text-primary-500">.dark</code>{" "}
+                no está disponible.
+              </p>
+            </div>
           </div>
         </WebsiteSection>
       </Show>
@@ -1073,14 +1208,14 @@ function GenericSectionPage({ sectionId }) {
                 className="mt-5 scroll-mt-28 rounded-xl border border-primary-200 bg-primary-50/60 p-4 text-sm leading-7 text-primary-900 dark:border-primary-900/60 dark:bg-primary-950/20 dark:text-primary-100"
               >
                 <p>
-                  <strong>primary es reemplazable.</strong> En proyectos con Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code>, luego <code className="font-mono text-xs">tailwindcss</code> y declara <code className="font-mono text-xs">--color-primary-50</code> a <code className="font-mono text-xs">--color-primary-950</code> dentro de <code className="font-mono text-xs">@theme</code> al final del archivo.
+                  <strong>Todos los colores de acento son reemplazables.</strong> Como quickit mapea cada color semántico a un color Tailwind nativo, sobrescribes cualquier tono desde <code className="font-mono text-xs">@theme</code>. Por ejemplo, <code className="font-mono text-xs">--color-blue-600</code> cambia <code className="font-mono text-xs">primary</code> y <code className="font-mono text-xs">--color-purple-500</code> cambia <code className="font-mono text-xs">secondary</code>.
                 </p>
                 <div className="mt-3">
-                  <WebsiteCodeBlock code={PRIMARY_OVERRIDE_SNIPPET} language="css" />
+                  <WebsiteCodeBlock code={ACCENT_OVERRIDE_SNIPPET} language="css" />
                 </div>
               </div>
               <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-500">
-                El tipo público aún se llama <code className="font-mono">QuickitSemanticColor</code> por compatibilidad, aunque la taxonomía visual separa identidad, estados y neutrales.
+                Incluye <code className="font-mono">secondary</code> disponible desde v1.2.0. El tipo público <code className="font-mono">QuickitSemanticColor</code> agrupa todos los valores semánticos; la taxonomía visual separa identidad (primary, secondary), estados (success, danger, warning, info) y neutros (neutral, light, dark). También se usa en <code className="font-mono">QUICKIT_ACCENT_COLORS</code> para componentes que aceptan toda la gama cromática.
               </p>
             </div>
 
@@ -1099,6 +1234,7 @@ function GenericSectionPage({ sectionId }) {
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <TokenColorChip color="primary" />
+                      <TokenColorChip color="secondary" />
                     </div>
                   </div>
                   <div>
@@ -1453,7 +1589,7 @@ function ComponentNotFoundPage({ componentSlug }) {
           válida de la librería.
         </p>
         <div className="mt-4">
-          <Link href={WEBSITE_ROUTES.components}>
+          <Link href={getWebsiteDocsSectionRoute("componentes")}>
             Ver componentes
           </Link>
         </div>

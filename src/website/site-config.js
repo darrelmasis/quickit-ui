@@ -30,7 +30,7 @@ export function getWebsiteSection(pathname) {
     return WEBSITE_ROUTES.playground;
   }
 
-  return WEBSITE_ROUTES.landing;
+  return null;
 }
 
 export function getWebsiteComponentRoute(slug) {

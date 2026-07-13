@@ -12,6 +12,7 @@ import LandingPage from "@/website/sections/LandingPage";
 import DocsPage from "@/website/sections/DocsPage";
 import ExamplesPage from "@/website/sections/ExamplesPage";
 import PlaygroundPage from "@/website/sections/PlaygroundPage";
+import NotFoundPage from "@/website/sections/NotFoundPage";
 
 export default function WebsiteApp() {
   const [activePath, setActivePath] = useState(() =>
@@ -100,6 +101,9 @@ export default function WebsiteApp() {
     <div className="min-h-screen bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-100">
       <WebsiteHeader activePath={getWebsiteSection(activePath)} />
       <RenderSwitch value={getWebsiteSection(activePath)}>
+        <Match when={WEBSITE_ROUTES.landing}>
+          <LandingPage />
+        </Match>
         <Match when={WEBSITE_ROUTES.docs}>
           <DocsPage currentPath={activePath} />
         </Match>
@@ -110,7 +114,7 @@ export default function WebsiteApp() {
           <PlaygroundPage />
         </Match>
         <Default>
-          <LandingPage />
+          <NotFoundPage />
         </Default>
       </RenderSwitch>
     </div>
