@@ -1,13 +1,13 @@
 # Migración
 
-## 1.0.12 - 17 de mayo de 2026
+## 1.2.0 - 13 de julio de 2026
 
-Esta guía cubre la migración principal desde `0.2.4` hasta `1.0.12`. El salto sigue siendo directo en la mayoría de proyectos, pero conviene alinear tu código con las APIs y patrones que ahora quedan documentados como camino oficial.
+Esta guía cubre la migración principal desde `0.2.4` hasta `1.2.0`. El salto sigue siendo directo en la mayoría de proyectos, pero conviene alinear tu código con las APIs y patrones que ahora quedan documentados como camino oficial.
 
 ### Cambios a revisar
 
 - `Instalación y versión del paquete`
-  Sube directamente a `quickit-ui@1.0.12`.
+  Sube directamente a `quickit-ui@1.2.0`.
   Esta versión reúne la API estable de `1.0.0`, los ajustes posteriores de accesibilidad/docs, el empaquetado final del entry de estilos, una pasada compatible de hardening sobre tokens/forms/componentes complejos y la guía actualizada de orden de imports con Tailwind CSS 4.
 
 - `Breadcrumb`, `Tabs` y APIs compuestas
@@ -15,8 +15,7 @@ Esta guía cubre la migración principal desde `0.2.4` hasta `1.0.12`. El salto 
   Si vienes de ejemplos viejos o wrappers propios, revisa `Breadcrumb.Item`, `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, `FormControl.Description` y `FormControl.Message`.
 
 - `CommandPalette`
-  Solo una instancia responde al atajo global `Ctrl+K` / `Cmd+K`.
-  Si montas varias paletas en la misma vista, deja una sola como principal y usa `shortcutEnabled={false}` en las secundarias o demos embebidas.
+  Eliminado del paquete. Si dependías de este componente, implementa tu propia paleta de búsqueda o usa un input tipo search en el header de tu app.
 
 - `AvatarPresence`
   Ahora es decorativo por defecto.
@@ -55,7 +54,7 @@ Esta guía cubre la migración principal desde `0.2.4` hasta `1.0.12`. El salto 
 1. Actualiza el paquete:
 
 ```bash
-npm install quickit-ui@1.0.12
+npm install quickit-ui@1.2.0
 ```
 
 2. Revisa el uso de APIs compuestas y simplificadas:
@@ -107,14 +106,7 @@ npm install quickit-ui@1.0.12
 </FormControl>
 ```
 
-4. Si tienes varias `CommandPalette`, deja una sola con shortcut activo:
-
-```jsx
-<CommandPalette />
-<CommandPalette shortcutEnabled={false} />
-```
-
-5. Si usas `EmptyState`, revisa el layout mobile-first y el icono superior:
+4. Si usas `EmptyState`, revisa el layout mobile-first y el icono superior:
 
 ```jsx
 <EmptyState>
