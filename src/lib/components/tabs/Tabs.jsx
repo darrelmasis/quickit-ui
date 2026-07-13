@@ -58,6 +58,15 @@ const TABS_SIZE_CLASSES = {
   },
 };
 
+const TABS_INDICATOR_CLASSES = {
+  xs: "h-6 rounded-[var(--qi-radius)]",
+  sm: "h-9 rounded-[var(--qi-radius-xs)]",
+  md: "h-11 rounded-[var(--qi-radius)]",
+  lg: "h-12 rounded-[var(--qi-radius-xl)]",
+  xl: "h-14 rounded-[var(--qi-radius-xl)]",
+  "2xl": "h-16 rounded-[var(--qi-radius-2xl)]",
+};
+
 const TABS_CONTENT_PRIMITIVES = {
   base: "mt-4 outline-none",
 };
@@ -75,15 +84,17 @@ function positionIndicator(list, indicator, orientation) {
     indicator.style.display = "none";
     return;
   }
+  const listRect = list.getBoundingClientRect();
+  const tabRect = activeTab.getBoundingClientRect();
   indicator.style.display = "block";
-  indicator.style.width = `${activeTab.offsetWidth}px`;
-  indicator.style.height = `${activeTab.offsetHeight}px`;
+  indicator.style.width = `${tabRect.width}px`;
+  indicator.style.height = `${tabRect.height}px`;
   if (orientation === "horizontal") {
-    indicator.style.top = `${activeTab.offsetTop}px`;
-    indicator.style.left = `${activeTab.offsetLeft - list.scrollLeft}px`;
+    indicator.style.top = `${tabRect.top - listRect.top - list.clientTop}px`;
+    indicator.style.left = `${tabRect.left - listRect.left - list.clientLeft}px`;
   } else {
-    indicator.style.top = `${activeTab.offsetTop - list.scrollTop}px`;
-    indicator.style.left = `${activeTab.offsetLeft}px`;
+    indicator.style.top = `${tabRect.top - listRect.top - list.clientTop}px`;
+    indicator.style.left = `${tabRect.left - listRect.left - list.clientLeft}px`;
   }
 }
 
@@ -225,7 +236,7 @@ export const TabsList = forwardRef(function TabsList({ children, className }, re
         ref={indicatorRef}
         className={cn(
           `absolute z-0 hidden border transition-all duration-300 ease-[${QUICKIT_EASE_DEFAULT}]`,
-          TABS_SIZE_CLASSES[size].trigger,
+          TABS_INDICATOR_CLASSES[size],
           ui.bubbleActive[color],
         )}
         style={{ transitionProperty: "top, left, width, height" }}
