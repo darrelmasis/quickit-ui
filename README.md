@@ -10,7 +10,7 @@ npm install quickit-ui
 
 ## Estilos
 
-Importa los estilos de Quickit una sola vez en el entry de tu app. Este archivo incluye los estilos base de los componentes, tokens `brand`, variables CSS y variantes dark compiladas de la librería.
+Importa los estilos de Quickit una sola vez en el entry de tu app. Este archivo incluye los estilos base de los componentes, colores de acento, variables CSS y variantes dark compiladas de la librería.
 
 ```jsx
 import "quickit-ui/styles.css";
@@ -25,11 +25,9 @@ Si tu proyecto también usa Tailwind CSS 4, importa primero Quickit y después T
 @custom-variant dark (&:where(.dark, .dark *));
 ```
 
-Declara `@theme` al final del archivo cuando quieras sobrescribir tokens como `brand`.
+### Personalizar colores de acento
 
-### Personalizar `brand`
-
-`brand` es el slot de marca de Quickit. En proyectos con Tailwind CSS 4, reemplázalo con `@theme` al final del CSS global para que tu escala gane sobre los defaults de Quickit.
+Los colores `primary` (blue) y `secondary` (purple) se mapean directamente a colores nativos de Tailwind. Para personalizarlos, sobrescribe el color Tailwind subyacente en `@theme`:
 
 ```css
 @import "quickit-ui/styles.css";
@@ -38,29 +36,18 @@ Declara `@theme` al final del archivo cuando quieras sobrescribir tokens como `b
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: oklch(0.98 0.03 165);
-  --color-brand-100: oklch(0.94 0.06 165);
-  --color-brand-200: oklch(0.88 0.1 165);
-  --color-brand-300: oklch(0.8 0.14 165);
-  --color-brand-400: oklch(0.72 0.17 165);
-  --color-brand-500: oklch(0.64 0.19 165);
-  --color-brand-600: oklch(0.56 0.18 165);
-  --color-brand-700: oklch(0.48 0.15 165);
-  --color-brand-800: oklch(0.4 0.12 165);
-  --color-brand-900: oklch(0.34 0.09 165);
-  --color-brand-950: oklch(0.24 0.07 165);
+  --color-blue-600: oklch(0.5 0.2 250);
+  --color-purple-500: oklch(0.55 0.18 290);
 }
 ```
 
-Todos los componentes que usan `color="brand"` tomarán esa nueva escala.
-
 ### Taxonomía de colores
 
-La API compatible mantiene `QuickitSemanticColor` como unión histórica para props `color`, pero conceptualmente Quickit separa los tokens así:
+La API de Quickit para props `color` usa `QuickitSemanticColor`:
 
-- `brand` y `primary`: acentos de producto.
+- `primary`, `secondary`: acentos de producto.
 - `success`, `danger`, `warning`, `info`: estados semánticos.
-- `neutral`, `slate`, `zinc`, `light`, `dark`, `black`: escalas neutras o de superficie.
+- `neutral`, `light`, `dark`: escalas neutras o de superficie.
 
 Para construir wrappers o galerías puedes importar colecciones más precisas:
 
@@ -163,7 +150,7 @@ export default function App() {
           </FormControl.Description>
         </FormControl>
 
-        <Button color="brand">Empezar</Button>
+        <Button color="primary">Empezar</Button>
       </div>
     </QuickitThemeProvider>
   );

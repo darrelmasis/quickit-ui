@@ -34,8 +34,8 @@ Esta guía cubre la migración principal desde `0.2.4` hasta `1.2.0`. El salto s
   Si tienes integraciones de formularios HTML o adapters de eventos, revisa los ejemplos actualizados.
 
 - `Tokens de color`
-  `QuickitSemanticColor` se mantiene por compatibilidad, pero la documentación ahora distingue acentos (`brand`, `primary`), estados (`success`, `danger`, `warning`, `info`) y neutros (`neutral`, `slate`, `zinc`, `light`, `dark`, `black`).
-  Puedes usar `QUICKIT_STATUS_COLORS`, `QUICKIT_BRAND_COLORS` y `QUICKIT_NEUTRAL_COLORS` para galerías o wrappers más precisos.
+  `QuickitSemanticColor` incluye acentos (`primary`, `secondary`), estados (`success`, `danger`, `warning`, `info`) y neutros (`neutral`, `light`, `dark`).
+  Puedes usar `QUICKIT_STATUS_COLORS`, `QUICKIT_ACCENT_COLORS` y `QUICKIT_NEUTRAL_COLORS` para galerías o wrappers más precisos.
 
 - `Range`
   En modo doble, si pasas `name`, Quickit ahora serializa dos hidden inputs: `name` para el valor inicial y `endName` para el valor final.

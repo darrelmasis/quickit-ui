@@ -13,8 +13,8 @@
 - Floating UI sera la base para overlays y posicionamiento
 - la documentacion debe crecer junto con cada componente, no al final
 - el contrato publico de estilos es `import "quickit-ui/styles.css"`; el consumidor no debe compilar el CSS fuente de la libreria
-- `brand` es un slot de acento reemplazable via `@theme`, no un color semantico de estado
-- las colecciones historicas se mantienen por compatibilidad, pero la documentacion debe preferir taxonomias precisas: acentos, estados y neutros
+- `primary` y `secondary` son acentos reemplazables via `@theme`
+- la taxonomia de colores distingue acentos (`primary`, `secondary`), estados (`success`, `danger`, `warning`, `info`) y neutros (`neutral`, `light`, `dark`)
 
 ## Estructura por componente
 
