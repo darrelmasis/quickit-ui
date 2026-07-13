@@ -5,15 +5,14 @@ import { QuickitThemeProvider } from "@/lib";
 import WebsiteApp from "@/website/WebsiteApp";
 import { WEBSITE_THEME_STORAGE_KEY } from "@/website/site-config";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QuickitThemeProvider
       defaultTheme="system"
       pressEffect="transform"
-      radius="md"
       storageKey={WEBSITE_THEME_STORAGE_KEY}
     >
       <WebsiteApp />
     </QuickitThemeProvider>
   </StrictMode>,
-)
+);

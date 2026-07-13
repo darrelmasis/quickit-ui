@@ -42,7 +42,7 @@ export default function LandingPage() {
               >
                 <code className="font-mono text-sm">{INSTALL_SNIPPET}</code>
                 <Show when={copied} fallback={<CopyIcon className="size-4 text-neutral-400" />}>
-                  <CheckStrokeIcon className="size-4 text-emerald-500" />
+                  <CheckStrokeIcon className="size-4 text-green-500" />
                 </Show>
               </Button>
             </div>

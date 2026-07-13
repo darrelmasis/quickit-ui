@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0] — 2026-07-12
+
+### Added
+- `secondary` color semántico mapeado a `purple`, registrado en `QUICKIT_SEMANTIC_COLORS` y `QUICKIT_ACCENT_COLORS`
+- 5 nuevos archivos theme-classes: `input-group`, `input-affix`, `date-picker`, `avatar`, `toaster`
+- Documentación del sistema de temas en `docs/architecture.md`
+
+### Changed
+- **Breaking**: Mapa de colores semánticos actualizado:
+  - `primary` ahora mapea a `blue` (antes `sky`)
+  - `secondary` mapea a `purple` (nuevo)
+  - `success` ahora mapea a `green` (antes `emerald`)
+  - `danger` ahora mapea a `red` (antes `rose`)
+- Todas las clases de color Tailwind migradas a `src/lib/theme/theme-classes/`; ningún componente JSX contiene literales de color
+- El modo oscuro se maneja con objetos `light`/`dark` separados en cada theme-classes file, no con selectores CSS `.dark`
+- Los colores se personalizan vía `@theme` sobrescribiendo variables nativas (ej. `--color-blue-600`) sin capa de variables intermedias
+
 ## [1.1.0] — 2026-07-11
 
 ### Added
