@@ -71,12 +71,10 @@ const Popover = forwardRef(function Popover({
   zIndex = 2000,
 }, forwardedRef) {
   const isTooltip = variant === "tooltip";
+  const effectiveTrigger = isTooltip ? "hover" : trigger;
+  const effectiveInteractive = isTooltip ? false : interactive;
+  const effectiveShowArrow = isTooltip ? true : showArrow;
 
-  if (isTooltip) {
-    trigger = "hover";
-    interactive = false;
-    showArrow = true;
-  }
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const isOpenControlled = controlledOpen !== undefined;
   const open = isOpenControlled ? controlledOpen : uncontrolledOpen;
@@ -93,7 +91,7 @@ const Popover = forwardRef(function Popover({
   const { theme: effectiveTheme } = useQuickitControlState("popover");
   const resolvedColor = POPOVER_THEME_CLASSES[effectiveTheme][color] ? color : "default";
   const palette = POPOVER_THEME_CLASSES[effectiveTheme][resolvedColor];
-  const isHoverTrigger = trigger === "hover";
+  const isHoverTrigger = effectiveTrigger === "hover";
   const hoverDelay =
     HOVER_DELAY_PRESETS[hoverDelayPreset] ?? HOVER_DELAY_PRESETS.normal;
 
@@ -108,7 +106,7 @@ const Popover = forwardRef(function Popover({
       offset(offsetValue),
       flip({ padding: 8 }),
       shift({ padding: 8 }),
-      ...(showArrow ? [arrow({ element: arrowElement })] : []),
+      ...(effectiveShowArrow ? [arrow({ element: arrowElement })] : []),
     ],
   });
 
@@ -119,16 +117,16 @@ const Popover = forwardRef(function Popover({
     handleClose: safePolygon(),
   });
   const click = useClick(context, {
-    enabled: !isHoverTrigger && trigger !== "manual",
+    enabled: !isHoverTrigger && effectiveTrigger !== "manual",
   });
   const focus = useFocus(context, {
-    enabled: trigger !== "manual",
+    enabled: effectiveTrigger !== "manual",
   });
   const dismiss = useDismiss(context, {
-    enabled: trigger !== "manual",
+    enabled: effectiveTrigger !== "manual",
   });
   const role = useRole(context, {
-    role: isHoverTrigger && !interactive ? "tooltip" : interactive ? "dialog" : undefined,
+    role: isHoverTrigger && !effectiveInteractive ? "tooltip" : effectiveInteractive ? "dialog" : undefined,
   });
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
@@ -169,7 +167,7 @@ const Popover = forwardRef(function Popover({
   }, [autoCloseMs, open, setOpen]);
 
   useEffect(() => {
-    if (!open || !interactive) {
+    if (!open || !effectiveInteractive) {
       return undefined;
     }
 
@@ -184,7 +182,7 @@ const Popover = forwardRef(function Popover({
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [interactive, open]);
+  }, [effectiveInteractive, open]);
 
   const triggerRef = useMergeRefs(referenceRef, forwardedRef);
   const mergedChildRef = useMergeRefs(
@@ -258,7 +256,7 @@ const Popover = forwardRef(function Popover({
       tabIndex={interactive ? -1 : undefined}
     >
       {content}
-      {showArrow ? (
+      {effectiveShowArrow ? (
         <FloatingArrow
           ref={setArrowElement}
           context={context}

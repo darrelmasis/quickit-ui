@@ -85,6 +85,11 @@ export function ModalBasico() {
       defaultValue: "false",
       description: "Estado inicial."
     }, {
+      name: "color",
+      type: `"primary" | "secondary" | "neutral" | "success" | "warning" | "danger" | "info" | "light" | "dark"`,
+      defaultValue: `"neutral"`,
+      description: "Color del modal."
+    }, {
       name: "open",
       type: "boolean",
       defaultValue: "undefined",

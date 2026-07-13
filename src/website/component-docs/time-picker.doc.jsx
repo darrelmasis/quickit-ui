@@ -91,6 +91,11 @@ export function TimePickerRango() {
       defaultValue: `"md"`,
       description: "Tamaño del campo."
     }, {
+      name: "color",
+      type: `"primary" | "secondary" | "neutral" | "success" | "warning" | "danger" | "info" | "light" | "dark"`,
+      defaultValue: `"neutral"`,
+      description: "Color del campo."
+    }, {
       name: "name",
       type: "string",
       defaultValue: "undefined",

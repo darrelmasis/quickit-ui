@@ -3,15 +3,18 @@ import {
   Accordion,
   Alert,
   Avatar,
+  AvatarGroup,
   Badge,
   Breadcrumb,
   Button,
   ButtonGroup,
+  Card,
   Checkbox,
   Combobox,
   Container,
   DataTable,
   DatePicker,
+  Divider,
   Drawer,
   Dropdown,
   EmptyState,
@@ -36,6 +39,7 @@ import {
   TimePicker,
   Toaster,
   Tooltip,
+  UserChip,
 } from "@/lib";
 import { toast } from "@/lib/components/toaster/toast-store";
 import { cn } from "@/lib/utils";
@@ -45,8 +49,15 @@ import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 const SIZE_OPTIONS_FULL = ["sm", "md", "lg", "xl", "2xl"];
 const SIZE_OPTIONS_LG = ["sm", "md", "lg"];
 const SIZE_OPTIONS_MD = ["sm", "md"];
+const SHAPE_OPTIONS_BUTTON = ["default", "square", "circle", "pill"];
+const SHAPE_OPTIONS_INPUT = ["square", "pill"];
+const SHAPE_OPTIONS_AVATAR = ["circle", "rounded", "square"];
 const VARIANT_OPTIONS_SOG = ["solid", "outline", "ghost", "soft"];
 const VARIANT_OPTIONS_SOS = ["soft", "outline", "solid"];
+const PLACEMENT_TOOLTIP = ["top", "bottom", "left", "right"];
+const PLACEMENT_DROPDOWN = ["bottom-start", "bottom-end", "top-start", "top-end"];
+const PLACEMENT_DRAWER = ["right", "left", "bottom", "top"];
+const PLACEMENT_TOASTER = ["top-right", "top-left", "bottom-right", "bottom-left"];
 
 const PROP_TYPES = {
   size: { label: "Tamaño", options: SIZE_OPTIONS_FULL },
@@ -65,14 +76,72 @@ const PROP_TYPES = {
     ],
   },
   variant: { label: "Variante", options: VARIANT_OPTIONS_SOG },
+  shape: { label: "Forma", options: SHAPE_OPTIONS_BUTTON },
   disabled: { label: "Desactivado", type: "boolean" },
+  fullWidth: { label: "Ancho completo", type: "boolean" },
+  loading: { label: "Cargando", type: "boolean" },
+  orientation: { label: "Orientación", options: ["horizontal", "vertical"] },
+  appearance: { label: "Apariencia", options: ["text", "button"] },
+  underline: { label: "Subrayado", options: ["always", "hover", "none"] },
+  presence: { label: "Presencia", options: ["off", "online", "away", "busy", "offline"] },
+  clearButton: { label: "Botón limpiar", type: "boolean" },
+  passwordToggle: { label: "Toggle contraseña", type: "boolean" },
+  invalid: { label: "Inválido", type: "boolean" },
+  required: { label: "Requerido", type: "boolean" },
+  indeterminate: { label: "Indeterminado", type: "boolean" },
+  showValueTooltip: { label: "Tooltip valor", type: "boolean" },
+  dismissible: { label: "Descartable", type: "boolean" },
+  hourCycle: { label: "Formato hora", options: ["12h", "24h"] },
+  stickyHeader: { label: "Cabecera fija", type: "boolean" },
+  closeOnScroll: { label: "Cerrar al scroll", type: "boolean" },
+  showCloseButton: { label: "Botón cerrar", type: "boolean" },
+  interactive: { label: "Interactivo", type: "boolean" },
+  showArrow: { label: "Mostrar flecha", type: "boolean" },
+  collapsible: { label: "Colapsable", type: "boolean" },
+  center: { label: "Centrado", type: "boolean" },
+  animated: { label: "Animado", type: "boolean" },
+  placement: { label: "Posición", options: PLACEMENT_TOOLTIP },
+  type: { label: "Tipo", options: ["single", "multiple"] },
+  trigger: { label: "Trigger", options: ["click", "hover"] },
+  outsideClick: { label: "Cerrar al exterior", type: "boolean" },
+  closeOnEscape: { label: "Cerrar con Escape", type: "boolean" },
+  selectionMode: { label: "Modo selección", options: ["single", "between"] },
+  optional: { label: "Opcional", type: "boolean" },
 };
 
 const DEFAULTS = {
   size: "md",
   color: "neutral",
   variant: "soft",
+  shape: "default",
   disabled: false,
+  fullWidth: false,
+  loading: false,
+  invalid: false,
+  required: false,
+  indeterminate: false,
+  clearButton: true,
+  passwordToggle: false,
+  dismissible: false,
+  showValueTooltip: true,
+  stickyHeader: false,
+  closeOnScroll: false,
+  showCloseButton: true,
+  interactive: false,
+  showArrow: true,
+  collapsible: true,
+  type: "single",
+  hourCycle: "12h",
+  orientation: "horizontal",
+  appearance: "text",
+  underline: "hover",
+  presence: "off",
+  center: false,
+  animated: true,
+  outsideClick: true,
+  closeOnEscape: true,
+  selectionMode: "single",
+  optional: false,
 };
 
 const CHILDREN_EXAMPLES = {
@@ -127,13 +196,19 @@ const CHILDREN_EXAMPLES = {
   "form-control": `<Label>Nombre</Label>\n<Input placeholder="Ingresa tu nombre" />`,
   label: "Texto de etiqueta",
   container: "Contenido del contenedor",
+  card:
+    `<Card.Header>Título</Card.Header>\n` +
+    `<Card.Body>Contenido</Card.Body>\n` +
+    `<Card.Footer>Pie</Card.Footer>`,
+  divider: "",
 };
 
 const COMPONENT_CONFIG = {
   button: {
-    props: ["size", "color", "variant", "disabled"],
+    props: ["size", "color", "variant", "shape", "fullWidth", "loading", "disabled"],
     sizeOptions: SIZE_OPTIONS_FULL,
     variantOptions: VARIANT_OPTIONS_SOG,
+    shapeOptions: SHAPE_OPTIONS_BUTTON,
     preview: (p) => <Button {...p}>Botón</Button>,
   },
   badge: {
@@ -143,7 +218,7 @@ const COMPONENT_CONFIG = {
     preview: (p) => <Badge {...p}>Etiqueta</Badge>,
   },
   "button-group": {
-    props: ["size", "color", "variant"],
+    props: ["size", "color", "variant", "orientation", "fullWidth"],
     sizeOptions: SIZE_OPTIONS_FULL,
     variantOptions: VARIANT_OPTIONS_SOG,
     preview: (p) => (
@@ -155,8 +230,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   link: {
-    props: ["size", "color"],
-    sizeOptions: SIZE_OPTIONS_FULL,
+    props: ["color", "appearance", "underline", "disabled"],
     preview: (p) => (
       <Link {...p} href="#" onClick={(e) => e.preventDefault()}>
         Texto del enlace
@@ -164,13 +238,15 @@ const COMPONENT_CONFIG = {
     ),
   },
   input: {
-    props: ["size", "disabled"],
+    props: ["size", "color", "shape", "clearButton", "passwordToggle", "disabled"],
     sizeOptions: SIZE_OPTIONS_LG,
+    shapeOptions: SHAPE_OPTIONS_INPUT,
     preview: (p) => <Input {...p} placeholder="Escribe algo..." />,
   },
   textarea: {
-    props: ["size", "disabled"],
+    props: ["size", "color", "shape", "disabled"],
     sizeOptions: SIZE_OPTIONS_LG,
+    shapeOptions: SHAPE_OPTIONS_INPUT,
     preview: (p) => <Textarea {...p} placeholder="Texto multilínea..." />,
   },
   select: {
@@ -185,7 +261,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   combobox: {
-    props: ["size", "color", "disabled"],
+    props: ["size", "color", "clearButton", "disabled"],
     sizeOptions: SIZE_OPTIONS_LG,
     preview: (p) => (
       <Combobox
@@ -200,14 +276,20 @@ const COMPONENT_CONFIG = {
     ),
   },
   checkbox: {
-    props: ["size", "color", "disabled"],
+    props: ["size", "color", "indeterminate", "disabled"],
     sizeOptions: SIZE_OPTIONS_MD,
     preview: (p) => <Checkbox {...p} label="Casilla" />,
   },
   radio: {
     props: ["size", "color", "disabled"],
     sizeOptions: SIZE_OPTIONS_MD,
-    preview: (p) => <Radio {...p} label="Opción" />,
+    preview: (p) => (
+      <div className="flex flex-col gap-2">
+        <Radio {...p} name="pg-radio" value="a" defaultChecked label="Opción A" />
+        <Radio {...p} name="pg-radio" value="b" label="Opción B" />
+        <Radio {...p} name="pg-radio" value="c" label="Opción C" />
+      </div>
+    ),
   },
   switch: {
     props: ["size", "color", "disabled"],
@@ -215,17 +297,37 @@ const COMPONENT_CONFIG = {
     preview: (p) => <Switch {...p} label="Interruptor" />,
   },
   range: {
-    props: ["size", "color", "disabled"],
-    sizeOptions: SIZE_OPTIONS_LG,
+    props: ["color", "disabled", "orientation"],
     preview: (p) => <Range {...p} />,
   },
   avatar: {
-    props: ["size"],
+    props: ["size", "shape", "presence"],
     sizeOptions: SIZE_OPTIONS_FULL,
-    preview: (p) => (
-      <Avatar {...p}>
-        <Avatar.Fallback>UI</Avatar.Fallback>
-      </Avatar>
+    shapeOptions: SHAPE_OPTIONS_AVATAR,
+    preview: ({ presence, ...p }) => (
+      <div className="flex flex-col items-center gap-6">
+        <div className="flex items-center gap-4">
+          <Avatar {...p}>
+            <Avatar.Fallback>UI</Avatar.Fallback>
+            {presence !== "off" && <Avatar.Presence status={presence} />}
+          </Avatar>
+          <UserChip {...p} name="Elena Ruiz" description="elenaruiz@email.com" presence={presence !== "off" ? presence : undefined} />
+        </div>
+        <AvatarGroup>
+          <Avatar size="sm" shape="circle">
+            <Avatar.Fallback>AN</Avatar.Fallback>
+          </Avatar>
+          <Avatar size="sm" shape="circle">
+            <Avatar.Fallback>BR</Avatar.Fallback>
+          </Avatar>
+          <Avatar size="sm" shape="circle">
+            <Avatar.Fallback>CL</Avatar.Fallback>
+          </Avatar>
+          <Avatar size="sm" shape="circle">
+            <Avatar.Fallback>DM</Avatar.Fallback>
+          </Avatar>
+        </AvatarGroup>
+      </div>
     ),
   },
   progress: {
@@ -244,7 +346,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   alert: {
-    props: ["color", "variant"],
+    props: ["color", "variant", "dismissible"],
     variantOptions: VARIANT_OPTIONS_SOS,
     preview: (p) => (
       <Alert
@@ -264,8 +366,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   breadcrumb: {
-    props: ["size"],
-    sizeOptions: SIZE_OPTIONS_FULL,
+    props: [],
     preview: () => (
       <Breadcrumb>
         <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
@@ -274,46 +375,74 @@ const COMPONENT_CONFIG = {
       </Breadcrumb>
     ),
   },
-  stepper: {
+  card: {
     props: ["color"],
+    preview: (p) => (
+      <Card {...p} className="max-w-sm">
+        <Card.Header>Título de tarjeta</Card.Header>
+        <Card.Body>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            Contenido de la tarjeta.
+          </p>
+        </Card.Body>
+        <Card.Footer>Pie de tarjeta</Card.Footer>
+      </Card>
+    ),
+  },
+  divider: {
+    props: [],
+    preview: () => (
+      <div className="w-full max-w-[400px]">
+        <p className="mb-3 text-sm text-neutral-600 dark:text-neutral-400">Texto antes del divisor</p>
+        <Divider />
+        <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Texto después del divisor</p>
+      </div>
+    ),
+  },
+  stepper: {
+    props: ["color", "orientation"],
     preview: (p) => (
       <Stepper
         {...p}
         steps={[
           { title: "Paso 1", description: "Completado" },
           { title: "Paso 2", description: "En progreso" },
-          { title: "Paso 3", description: "Pendiente" },
+          { title: " Paso 3", description: "Pendiente" },
         ]}
         activeStep={1}
       />
     ),
   },
   tooltip: {
-    props: [],
-    preview: () => (
-      <Tooltip content="Contenido del tooltip">
+    props: ["placement"],
+    placementOptions: PLACEMENT_TOOLTIP,
+    preview: (p) => (
+      <Tooltip {...p} content="Contenido del tooltip">
         <Button>Pasa el mouse</Button>
       </Tooltip>
     ),
   },
   popover: {
-    props: [],
-    preview: () => (
+    props: ["placement", "trigger", "interactive", "showArrow"],
+    placementOptions: PLACEMENT_TOOLTIP,
+    preview: (p) => (
       <Popover
-        trigger={<Button>Abrir popover</Button>}
-        heading="Título del popover"
+        {...p}
+        content={
+          <div className="p-1 text-sm text-neutral-600 dark:text-neutral-400">
+            Contenido del popover.
+          </div>
+        }
       >
-        <div className="p-3 text-sm text-neutral-600 dark:text-neutral-400">
-          Contenido del popover.
-        </div>
+        <Button>Abrir popover</Button>
       </Popover>
     ),
   },
   accordion: {
-    props: [],
-    preview: () => (
+    props: ["type", "collapsible"],
+    preview: (p) => (
       <div className="w-full max-w-[400px]">
-        <Accordion type="single" collapsible defaultValue="1">
+        <Accordion {...p} defaultValue="1">
           <Accordion.Item value="1">
             <Accordion.Trigger>Sección 1</Accordion.Trigger>
             <Accordion.Content>
@@ -337,7 +466,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   tabs: {
-    props: ["size", "color"],
+    props: ["size", "color", "orientation"],
     sizeOptions: SIZE_OPTIONS_FULL,
     preview: (p) => (
       <div style={{ width: 400 }}>
@@ -355,14 +484,14 @@ const COMPONENT_CONFIG = {
     ),
   },
   pagination: {
-    props: ["size", "color"],
-    sizeOptions: SIZE_OPTIONS_FULL,
+    props: ["color", "disabled"],
     preview: (p) => <Pagination {...p} count={10} defaultPage={1} />,
   },
   dropdown: {
-    props: ["color"],
+    props: ["color", "placement", "trigger", "closeOnScroll", "showArrow"],
+    placementOptions: PLACEMENT_DROPDOWN,
     preview: (p) => (
-      <Dropdown {...p} defaultOpen trigger="click">
+      <Dropdown {...p}>
         <Dropdown.Trigger>
           <Button>Abrir menú</Button>
         </Dropdown.Trigger>
@@ -376,9 +505,9 @@ const COMPONENT_CONFIG = {
     ),
   },
   modal: {
-    props: [],
-    preview: () => (
-      <Modal>
+    props: ["closeOnEscape", "outsideClick", "showCloseButton"],
+    preview: (p) => (
+      <Modal {...p}>
         <Modal.Trigger>
           <Button>Abrir modal</Button>
         </Modal.Trigger>
@@ -399,9 +528,10 @@ const COMPONENT_CONFIG = {
     ),
   },
   drawer: {
-    props: [],
-    preview: () => (
-      <Drawer>
+    props: ["placement", "showCloseButton", "closeOnEscape", "outsideClick"],
+    placementOptions: PLACEMENT_DRAWER,
+    preview: (p) => (
+      <Drawer {...p}>
         <Drawer.Trigger>
           <Button>Abrir panel</Button>
         </Drawer.Trigger>
@@ -422,17 +552,17 @@ const COMPONENT_CONFIG = {
     ),
   },
   "date-picker": {
-    props: ["size", "color"],
+    props: ["size", "color", "disabled"],
     sizeOptions: SIZE_OPTIONS_LG,
     preview: (p) => <DatePicker {...p} />,
   },
   "time-picker": {
-    props: ["size", "color"],
+    props: ["size", "color", "hourCycle", "clearButton", "disabled"],
     sizeOptions: SIZE_OPTIONS_LG,
     preview: (p) => <TimePicker {...p} />,
   },
   "data-table": {
-    props: ["color"],
+    props: ["color", "stickyHeader", "loading"],
     preview: (p) => (
       <DataTable
         {...p}
@@ -450,7 +580,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   "form-control": {
-    props: ["disabled"],
+    props: ["disabled", "invalid", "required"],
     preview: (p) => (
       <FormControl {...p}>
         <Label>Nombre</Label>
@@ -459,12 +589,12 @@ const COMPONENT_CONFIG = {
     ),
   },
   label: {
-    props: ["size"],
+    props: ["size", "optional"],
     sizeOptions: SIZE_OPTIONS_MD,
     preview: (p) => <Label {...p}>Texto de etiqueta</Label>,
   },
   container: {
-    props: ["size"],
+    props: ["size", "center"],
     sizeOptions: SIZE_OPTIONS_FULL,
     preview: (p) => (
       <Container
@@ -476,10 +606,11 @@ const COMPONENT_CONFIG = {
     ),
   },
   toaster: {
-    props: [],
-    preview: () => (
+    props: ["placement"],
+    placementOptions: PLACEMENT_TOASTER,
+    preview: (p) => (
       <div className="flex flex-col items-center gap-3">
-        <Toaster />
+        <Toaster {...p} />
         <Button onClick={() => toast("¡Hola desde el playground!")}>
           Mostrar toast
         </Button>
@@ -529,7 +660,11 @@ function PropControls({ config, currentProps, onChange, onReset }) {
                 ? config.sizeOptions
                 : propName === "variant"
                   ? config.variantOptions
-                  : undefined;
+                  : propName === "shape"
+                    ? config.shapeOptions
+                    : propName === "placement"
+                      ? config.placementOptions
+                      : undefined;
 
             if (schema.type === "boolean") {
               return (

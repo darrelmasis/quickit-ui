@@ -225,7 +225,27 @@ export function DropdownLinks() {
       type: "number",
       defaultValue: "8",
       description: "Padding contra bordes."
+    }, {
+      name: "closeOnClickOutside",
+      type: "boolean",
+      defaultValue: "true",
+      description: "Cierra el menú al hacer clic fuera."
+    }, {
+      name: "showArrow",
+      type: "boolean",
+      defaultValue: "false",
+      description: "Muestra una flecha decorativa que apunta al trigger."
+    }, {
+      name: "arrowFill",
+      type: "string",
+      defaultValue: "—",
+      description: "Color de relleno de la flecha (por defecto coincide con el fondo del panel)."
+    }, {
+      name: "arrowStroke",
+      type: "string",
+      defaultValue: "—",
+      description: "Color del borde de la flecha (por defecto coincide con el borde del panel)."
     }],
-    notes: ["Dropdown.Trigger soporta asChild.", "Dropdown.Item soporta as, href, disabled y variant=\"danger\".", "Reserva trigger=\"hover\" para navegación ligera."]
+    notes: ["Dropdown.Trigger soporta asChild.", "Dropdown.Item soporta as, href, disabled y variant=\"danger\".", "Reserva trigger=\"hover\" para navegación ligera.", "La flecha decorativa se activa con showArrow."]
   }]
 };

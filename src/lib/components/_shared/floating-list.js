@@ -294,10 +294,33 @@ export function getFloatingClosedTransform(side) {
   }
 }
 
-export function getFloatingArrowColors(theme) {
-  return theme === "dark"
-    ? { fill: "#09090b", stroke: "#27272a" }
-    : { fill: "#ffffff", stroke: "#e2e8f0" };
+export const DROPDOWN_ARROW_COLORS = {
+  light: {
+    neutral: { fill: "#ffffff", stroke: "#e5e5e5" },
+    primary: { fill: "#ffffff", stroke: "#bfdbfe" },
+    secondary: { fill: "#ffffff", stroke: "#e9d5ff" },
+    success: { fill: "#ffffff", stroke: "#bbf7d0" },
+    danger: { fill: "#ffffff", stroke: "#fecaca" },
+    warning: { fill: "#ffffff", stroke: "#fde68a" },
+    info: { fill: "#ffffff", stroke: "#a5f3fc" },
+    light: { fill: "#ffffff", stroke: "#e5e5e5" },
+    dark: { fill: "#ffffff", stroke: "#d4d4d4" },
+  },
+  dark: {
+    neutral: { fill: "#0a0a0b", stroke: "#262626" },
+    primary: { fill: "#0a0a0b", stroke: "#1e40af" },
+    secondary: { fill: "#0a0a0b", stroke: "#6b21a8" },
+    success: { fill: "#0a0a0b", stroke: "#166534" },
+    danger: { fill: "#0a0a0b", stroke: "#991b1b" },
+    warning: { fill: "#0a0a0b", stroke: "#92400e" },
+    info: { fill: "#0a0a0b", stroke: "#155e75" },
+    light: { fill: "#0a0a0b", stroke: "#404040" },
+    dark: { fill: "#0a0a0b", stroke: "#404040" },
+  },
+};
+
+export function getFloatingArrowColors(theme, color = "neutral") {
+  return DROPDOWN_ARROW_COLORS[theme]?.[color] ?? DROPDOWN_ARROW_COLORS[theme]?.neutral ?? { fill: "#ffffff", stroke: "#e5e5e5" };
 }
 
 export function useFloatingTransition(context, { duration, placement }) {

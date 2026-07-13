@@ -21,7 +21,7 @@ const TABS_LIST_PRIMITIVES = {
     "w-fit max-w-full",
   ].join(" "),
   horizontal:
-    "flex-row overflow-x-auto snap-x snap-mandatory [scroll-snap-stop:always] scrollbar-hidden",
+    "flex-row overflow-x-auto scrollbar-hidden",
   vertical: "flex-col items-stretch",
 };
 
@@ -174,6 +174,8 @@ export const TabsList = forwardRef(function TabsList({ children, className }, re
   }, []);
 
   useLayoutEffect(() => {
+    const activeTab = listRef.current?.querySelector('[role="tab"][data-state="active"]');
+    activeTab?.scrollIntoView({ behavior: "instant", block: "nearest", inline: "center" });
     measureIndicator();
   }, [measureIndicator, value]);
 
@@ -273,16 +275,6 @@ export const TabsTrigger = forwardRef(function TabsTrigger({
   const isSelected = selectedValue === value;
   const triggerRef = useRef(null);
 
-  useEffect(() => {
-    if (isSelected && triggerRef.current?.scrollIntoView) {
-      triggerRef.current.scrollIntoView({
-        behavior: "instant",
-        block: "nearest",
-        inline: "center",
-      });
-    }
-  }, [isSelected]);
-
   const handleKeyDown = (event) => {
     const container = event.currentTarget.parentElement;
 
@@ -356,7 +348,6 @@ export const TabsTrigger = forwardRef(function TabsTrigger({
           TABS_TRIGGER_PRIMITIVES.base,
         ),
         TABS_SIZE_CLASSES[size].trigger,
-        "snap-align-center",
         orientation === "vertical" && TABS_TRIGGER_PRIMITIVES.vertical,
         resolveQuickitFocusRingClasses(
           focusRingEnabled,

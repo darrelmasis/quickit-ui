@@ -170,6 +170,11 @@ export function BtnGroupDivider() {
       defaultValue: `"md"`,
       description: "Tamaño que determina el border radius del grupo."
     }, {
+      name: "color",
+      type: `"primary" | "secondary" | "neutral" | "success" | "warning" | "danger" | "info" | "light" | "dark"`,
+      defaultValue: `"neutral"`,
+      description: "Color base del grupo."
+    }, {
       name: "fullWidth",
       type: "boolean",
       defaultValue: "false",

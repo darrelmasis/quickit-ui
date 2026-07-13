@@ -10,7 +10,9 @@ import {
   useState,
 } from "react";
 import {
+  FloatingArrow,
   FloatingPortal,
+  arrow,
   autoUpdate,
   flip,
   offset,
@@ -26,6 +28,7 @@ import {
 import { useQuickitControlState } from "@/lib/theme";
 import { cn, useMergeRefs } from "@/lib/utils";
 import {
+  DROPDOWN_ARROW_COLORS,
   FLOATING_LIST_ITEM_THEME_CLASSES,
   FLOATING_LIST_SURFACE_PRIMITIVES,
   FLOATING_LIST_SURFACE_THEME_CLASSES,
@@ -82,6 +85,12 @@ function focusDropdownEdgeItem(container, edge = "first") {
 }
 
 export function Dropdown({
+  arrowFill: arrowFillProp,
+  arrowHeight = 8,
+  arrowStroke: arrowStrokeProp,
+  arrowStrokeWidth = 0.75,
+  arrowTipRadius = 2,
+  arrowWidth = 16,
   children,
   closeOnClickOutside = true,
   closeOnScroll = false,
@@ -93,9 +102,11 @@ export function Dropdown({
   open: controlledOpen,
   placement = "bottom-start",
   /** `click`: abre al pulsar (por defecto). `hover`: abre al pasar el puntero por el trigger. */
+  showArrow = false,
   trigger = "click",
   usePortal = true,
 }) {
+  const [arrowElement, setArrowElement] = useState(null);
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -128,9 +139,10 @@ export function Dropdown({
     transform: false,
     placement,
     middleware: [
-      offset({ mainAxis: 6, crossAxis: offsetX }),
+      offset({ mainAxis: showArrow ? 8 : 6, crossAxis: offsetX }),
       flip({ padding: collisionPadding }),
       shift({ padding: collisionPadding }),
+      ...(showArrow ? [arrow({ element: arrowElement })] : []),
     ],
     whileElementsMounted: autoUpdate,
   });
@@ -159,10 +171,21 @@ export function Dropdown({
   });
 
   const resolvedColor = resolveQuickitToken(QUICKIT_SEMANTIC_COLORS, color, "neutral");
+  const { theme: effectiveTheme } = useQuickitControlState("dropdown");
+  const theme = resolveFloatingListTheme(effectiveTheme);
+  const arrowColors = DROPDOWN_ARROW_COLORS[theme]?.[resolvedColor] ?? DROPDOWN_ARROW_COLORS[theme]?.neutral;
+  const resolvedArrowFill = arrowFillProp ?? arrowColors.fill;
+  const resolvedArrowStroke = arrowStrokeProp ?? arrowColors.stroke;
 
   const contextValue = useMemo(
     () => ({
+      arrowElement,
+      arrowHeight,
+      arrowStrokeWidth,
+      arrowTipRadius,
+      arrowWidth,
       close,
+      context,
       floatingStyles,
       getContentRef: () => contentRef.current,
       getFloatingProps: interactions.getFloatingProps,
@@ -172,17 +195,27 @@ export function Dropdown({
       open,
       placement,
       refs,
+      resolvedArrowFill,
+      resolvedArrowStroke,
       resolvedColor,
+      setArrowElement,
       setContentNode(node) {
         contentRef.current = node;
       },
       setOpen,
+      showArrow,
       toggle,
       transitionStyles,
       usePortal,
     }),
     [
+      arrowElement,
+      arrowHeight,
+      arrowStrokeWidth,
+      arrowTipRadius,
+      arrowWidth,
       close,
+      context,
       floatingStyles,
       interactions.getFloatingProps,
       interactions.getItemProps,
@@ -191,8 +224,11 @@ export function Dropdown({
       open,
       placement,
       refs,
+      resolvedArrowFill,
+      resolvedArrowStroke,
       resolvedColor,
       setOpen,
+      showArrow,
       toggle,
       transitionStyles,
       usePortal,
@@ -303,14 +339,24 @@ export const DropdownContent = forwardRef(function DropdownContent(
   ref,
 ) {
   const {
+    arrowElement,
+    arrowHeight,
+    arrowStrokeWidth,
+    arrowTipRadius,
+    arrowWidth,
+    context,
+    floatingStyles,
     getContentRef,
     getFloatingProps,
     isMounted,
     placement,
     refs,
-    floatingStyles,
+    resolvedArrowFill,
+    resolvedArrowStroke,
     resolvedColor,
+    setArrowElement,
     setContentNode,
+    showArrow,
     transitionStyles,
     usePortal,
   } = useDropdownContext("DropdownContent");
@@ -343,7 +389,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
         FLOATING_LIST_SURFACE_THEME_CLASSES[theme][resolvedColor],
-        "z-[9999] min-w-[8rem] overflow-hidden",
+        "z-[9999] min-w-[8rem]",
         className,
       )}
       {...floatingProps}
@@ -410,6 +456,19 @@ export const DropdownContent = forwardRef(function DropdownContent(
         }
       }}
     >
+      {showArrow ? (
+        <FloatingArrow
+          ref={setArrowElement}
+          context={context}
+          width={arrowWidth}
+          height={arrowHeight}
+          tipRadius={arrowTipRadius}
+          fill={resolvedArrowFill}
+          stroke={resolvedArrowStroke}
+          strokeWidth={arrowStrokeWidth}
+          className="pointer-events-none"
+        />
+      ) : null}
       {children}
     </div>
   );

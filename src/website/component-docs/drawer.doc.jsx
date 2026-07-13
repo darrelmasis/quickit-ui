@@ -94,6 +94,11 @@ export function DrawerPlacements() {
       defaultValue: "auto",
       description: "Clase para ancho/alto máximo."
     }, {
+      name: "color",
+      type: `"primary" | "secondary" | "neutral" | "success" | "warning" | "danger" | "info" | "light" | "dark"`,
+      defaultValue: `"neutral"`,
+      description: "Color del panel."
+    }, {
       name: "open",
       type: "boolean",
       defaultValue: "undefined",

@@ -77,6 +77,11 @@ export function ComboboxBasico() {
       defaultValue: `"md"`,
       description: "Tamaño del input."
     }, {
+      name: "color",
+      type: `"primary" | "secondary" | "neutral" | "success" | "warning" | "danger" | "info" | "light" | "dark"`,
+      defaultValue: `"neutral"`,
+      description: "Color del input."
+    }, {
       name: "value / defaultValue",
       type: "string",
       defaultValue: "undefined",

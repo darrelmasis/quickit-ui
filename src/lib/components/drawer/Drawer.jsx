@@ -390,6 +390,7 @@ const DrawerTrigger = forwardRef(function DrawerTrigger({
   return (
     <Component
       ref={ref}
+      type={Component === "button" ? "button" : undefined}
       {...props}
       className={cn("cursor-pointer", className)}
       disabled={disabled}
@@ -480,7 +481,7 @@ const DrawerContent = forwardRef(function DrawerContent({ children, className },
           )}
           style={{
             transform,
-            opacity: visible ? 1 : 0.72,
+            opacity: visible ? 1 : 0,
             transition:
               `transform 240ms ${QUICKIT_EASE_DEFAULT}, opacity 180ms ${QUICKIT_EASE_DEFAULT}`,
           }}
