@@ -41,7 +41,7 @@ const TABS_TRIGGER_CLASSES = {
     "relative z-[1] inline-flex min-w-0 max-w-full items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap",
     "border border-transparent font-medium outline-none transition-[color] duration-150",
     "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60",
   ].join(" "),
   vertical: "w-full justify-start text-left",
 };

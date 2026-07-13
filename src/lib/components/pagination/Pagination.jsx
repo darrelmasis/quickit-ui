@@ -144,7 +144,7 @@ const Pagination = forwardRef(function Pagination({
             : (
               <span
                 key={`${item}-${index}`}
-                className="px-1 text-sm opacity-70"
+                className="px-1 text-sm opacity-70 text-neutral-500 dark:text-neutral-400"
               >
                 ...
               </span>

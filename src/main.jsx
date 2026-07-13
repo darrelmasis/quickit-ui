@@ -9,7 +9,8 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QuickitThemeProvider
       defaultTheme="system"
-      pressEffect="transform"
+      pressEffect="ripple"
+      ripple={true}
       storageKey={WEBSITE_THEME_STORAGE_KEY}
     >
       <WebsiteApp />

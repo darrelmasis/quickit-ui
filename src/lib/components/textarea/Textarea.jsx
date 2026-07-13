@@ -9,9 +9,17 @@ import {
   resolveFormFieldColor,
 } from "@/lib/components/_shared/form-field";
 
+const TEXTAREA_FONT_SIZE_CLASSES = {
+  sm: "text-sm",
+  md: "text-sm",
+  lg: "text-base",
+  xl: "text-lg",
+  "2xl": "text-lg",
+};
+
 const TEXTAREA_PRIMITIVES = {
   base: [
-    "qi-form-field-autofill flex min-h-[80px] w-full border px-3.5 py-2.5 text-sm outline-none",
+    "qi-form-field-autofill flex min-h-[80px] w-full border px-3.5 py-2.5 outline-none",
     "transition-[background-color,border-color,color,box-shadow] duration-200",
     "placeholder:text-current/45",
     "focus-visible:ring-4 focus-visible:ring-offset-0",
@@ -70,6 +78,7 @@ const Textarea = forwardRef(function Textarea(
       aria-labelledby={labelledBy}
       className={cn(
         resolveQuickitFocusRingClasses(focusRingEnabled, TEXTAREA_PRIMITIVES.base),
+        TEXTAREA_FONT_SIZE_CLASSES[size] ?? TEXTAREA_FONT_SIZE_CLASSES.md,
         getControlRadius(shape === "pill" ? "lg" : size),
         resolveQuickitFocusRingClasses(
           focusRingEnabled,

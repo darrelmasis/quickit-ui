@@ -145,7 +145,7 @@ const Alert = forwardRef(function Alert(
   const resolvedColor = resolveQuickitToken(
     QUICKIT_SEMANTIC_COLORS,
     color,
-    "info",
+    "neutral",
   );
   const palette =
     ALERT_THEME_CLASSES[theme]?.[variant] ?? ALERT_THEME_CLASSES[theme].soft;

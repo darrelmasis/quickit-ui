@@ -27,7 +27,7 @@ const Progress = forwardRef(function Progress(
   const resolvedColor = resolveQuickitToken(
     QUICKIT_SEMANTIC_COLORS,
     color,
-    "primary",
+    "neutral",
   );
   const resolvedSize = PROGRESS_SIZES[size] ?? PROGRESS_SIZES.md;
   const clampedValue = Number.isFinite(value)

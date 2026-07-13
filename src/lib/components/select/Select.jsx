@@ -382,7 +382,7 @@ const Select = forwardRef(function Select(
               className={getFloatingListItemClasses({
                 focusRingEnabled,
                 theme,
-                color: "neutral",
+                color,
                 selected,
                 disabled: option.disabled,
               })}
