@@ -53,7 +53,7 @@ const SHAPE_OPTIONS_BUTTON = ["default", "square", "circle", "pill"];
 const SHAPE_OPTIONS_INPUT = ["square", "pill"];
 const SHAPE_OPTIONS_AVATAR = ["circle", "rounded", "square"];
 const VARIANT_OPTIONS_SOG = ["solid", "outline", "ghost", "soft"];
-const VARIANT_OPTIONS_SOS = ["soft", "outline", "solid"];
+const VARIANT_OPTIONS_SOSG = ["soft", "outline", "solid", "ghost"];
 const PLACEMENT_TOOLTIP = ["top", "bottom", "left", "right"];
 const PLACEMENT_DROPDOWN = ["bottom-start", "bottom-end", "top-start", "top-end"];
 const PLACEMENT_DRAWER = ["right", "left", "bottom", "top"];
@@ -101,6 +101,7 @@ const PROP_TYPES = {
   center: { label: "Centrado", type: "boolean" },
   animated: { label: "Animado", type: "boolean" },
   placement: { label: "Posición", options: PLACEMENT_TOOLTIP },
+  position: { label: "Posición", options: PLACEMENT_TOASTER },
   type: { label: "Tipo", options: ["single", "multiple"] },
   trigger: { label: "Trigger", options: ["click", "hover"] },
   outsideClick: { label: "Cerrar al exterior", type: "boolean" },
@@ -214,7 +215,7 @@ const COMPONENT_CONFIG = {
   badge: {
     props: ["size", "color", "variant"],
     sizeOptions: SIZE_OPTIONS_MD,
-    variantOptions: VARIANT_OPTIONS_SOS,
+    variantOptions: VARIANT_OPTIONS_SOSG,
     preview: (p) => <Badge {...p}>Etiqueta</Badge>,
   },
   "button-group": {
@@ -347,7 +348,7 @@ const COMPONENT_CONFIG = {
   },
   alert: {
     props: ["color", "variant", "dismissible"],
-    variantOptions: VARIANT_OPTIONS_SOS,
+    variantOptions: VARIANT_OPTIONS_SOSG,
     preview: (p) => (
       <Alert
         {...p}
@@ -606,8 +607,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   toaster: {
-    props: ["placement"],
-    placementOptions: PLACEMENT_TOASTER,
+    props: ["position"],
     preview: (p) => (
       <div className="flex flex-col items-center gap-3">
         <Toaster {...p} />
