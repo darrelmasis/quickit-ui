@@ -100,7 +100,6 @@ import WebsiteDocsSidebar from "@/website/components/WebsiteDocsSidebar";
 import WebsitePreviewTabs from "@/website/components/WebsitePreviewTabs";
 import WebsiteSection from "@/website/components/WebsiteSection";
 
-
 const DOCS_PROPS_TABLE_COLUMNS = [
   {
     key: "name",
@@ -192,7 +191,10 @@ function TokenGroupsList({ groups }) {
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <For each={group.values}>
                 {(value) => (
-                  <TokenGroupValue key={`${group.label}-${value}`} value={value} />
+                  <TokenGroupValue
+                    key={`${group.label}-${value}`}
+                    value={value}
+                  />
                 )}
               </For>
             </div>
@@ -204,14 +206,21 @@ function TokenGroupsList({ groups }) {
 }
 
 const TOKEN_COLOR_SWATCH_CLASSES = {
-  neutral: "border-neutral-200 bg-neutral-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100",
-  primary: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
-  secondary: "border-purple-200 bg-purple-100 text-purple-800 dark:border-purple-800 dark:bg-purple-950/60 dark:text-purple-100",
-  success: "border-green-200 bg-green-100 text-green-800 dark:border-green-800 dark:bg-green-950/60 dark:text-green-100",
-  danger: "border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
-  warning: "border-amber-200 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
+  neutral:
+    "border-neutral-200 bg-neutral-100 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100",
+  primary:
+    "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
+  secondary:
+    "border-purple-200 bg-purple-100 text-purple-800 dark:border-purple-800 dark:bg-purple-950/60 dark:text-purple-100",
+  success:
+    "border-green-200 bg-green-100 text-green-800 dark:border-green-800 dark:bg-green-950/60 dark:text-green-100",
+  danger:
+    "border-red-200 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
+  warning:
+    "border-amber-200 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
   info: "border-cyan-200 bg-cyan-100 text-cyan-800 dark:border-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-100",
-  light: "border-neutral-200 bg-white text-neutral-900 dark:border-neutral-700 dark:bg-neutral-100 dark:text-neutral-950",
+  light:
+    "border-neutral-200 bg-white text-neutral-900 dark:border-neutral-700 dark:bg-neutral-100 dark:text-neutral-950",
   dark: "border-neutral-800 bg-neutral-900 text-white dark:border-neutral-500 dark:bg-neutral-900 dark:text-neutral-50",
 };
 
@@ -219,19 +228,22 @@ const TOKEN_COLOR_GROUPS = [
   {
     id: "tokens-color-identidad",
     title: "Identidad y acción",
-    description: "Primary y secondary cubren la intención principal y secundaria de marca.",
+    description:
+      "Primary y secondary cubren la intención principal y secundaria de marca.",
     colors: ["primary", "secondary"],
   },
   {
     id: "tokens-color-estados",
     title: "Estados semánticos",
-    description: "Estos colores sí comunican significado de estado: éxito, error, advertencia o información.",
+    description:
+      "Estos colores sí comunican significado de estado: éxito, error, advertencia o información.",
     colors: ["success", "danger", "warning", "info"],
   },
   {
     id: "tokens-color-neutrales",
     title: "Neutrales",
-    description: "Neutrales para superficies, jerarquía visual y acciones sin intención semántica fuerte.",
+    description:
+      "Neutrales para superficies, jerarquía visual y acciones sin intención semántica fuerte.",
     colors: ["neutral", "light", "dark"],
   },
 ];
@@ -240,6 +252,28 @@ const TOKEN_COLOR_VALUES = new Set([
   ...QUICKIT_SEMANTIC_COLORS,
   ...QUICKIT_NEUTRAL_COLORS,
 ]);
+
+const PALETTE_SHADES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+const COLOR_PALETTES = [
+  { tw: "neutral", label: "Neutral", desc: "Superficies y jerarquía" },
+  { tw: "blue", label: "Blue", desc: "Primary (identidad)", token: "primary" },
+  {
+    tw: "purple",
+    label: "Purple",
+    desc: "Secondary (acento)",
+    token: "secondary",
+  },
+  { tw: "green", label: "Green", desc: "Success (éxito)", token: "success" },
+  { tw: "red", label: "Red", desc: "Danger (peligro)", token: "danger" },
+  {
+    tw: "amber",
+    label: "Amber",
+    desc: "Warning (advertencia)",
+    token: "warning",
+  },
+  { tw: "cyan", label: "Cyan", desc: "Info (información)", token: "info" },
+];
 
 function TokenGroupValue({ value }) {
   if (TOKEN_COLOR_VALUES.has(value)) {
@@ -317,7 +351,11 @@ function TokenVariantSample({ variant }) {
 
 function TokenLinkVariantSample({ variant }) {
   return (
-    <Link href="/docs/components/link" variant={variant} onClick={(event) => event.preventDefault()}>
+    <Link
+      href="/docs/components/link"
+      variant={variant}
+      onClick={(event) => event.preventDefault()}
+    >
       {variant}
     </Link>
   );
@@ -325,9 +363,91 @@ function TokenLinkVariantSample({ variant }) {
 
 function TokenUnderlineSample({ underline }) {
   return (
-    <Link href="/docs/components/link" underline={underline} onClick={(event) => event.preventDefault()}>
+    <Link
+      href="/docs/components/link"
+      underline={underline}
+      onClick={(event) => event.preventDefault()}
+    >
       {underline}
     </Link>
+  );
+}
+
+function PaletteSwatch({ tw, shade }) {
+  const [copied, setCopied] = useState(false);
+  const className = `bg-${tw}-${shade}`;
+  const swatchStyle = { backgroundColor: `var(--color-${tw}-${shade})` };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(className);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch {
+      // fallback silencioso
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="group relative flex flex-col items-center gap-1"
+      title={`Copiar ${className}`}
+      type="button"
+    >
+      <div
+        style={swatchStyle}
+        className={`h-10 w-full min-w-[2.75rem] rounded-md border border-neutral-200/40 transition-all duration-150 group-hover:scale-110 group-hover:shadow-lg group-hover:border-neutral-300 dark:border-white/10 dark:group-hover:border-white/20`}
+      />
+      <span className="text-[10px] font-medium leading-none text-neutral-500 dark:text-neutral-400">
+        {shade}
+      </span>
+      {copied && (
+        <span className="absolute -top-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded bg-neutral-900 px-2 py-0.5 text-[10px] text-white dark:bg-white dark:text-neutral-900">
+          Copiado
+        </span>
+      )}
+    </button>
+  );
+}
+
+function ColorPaletteShowcase() {
+  return (
+    <div className="flex flex-col gap-4">
+      <For each={COLOR_PALETTES}>
+        {(palette) => (
+          <div
+            key={palette.tw}
+            className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
+          >
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                {palette.label}
+              </span>
+              <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                {palette.desc}
+              </span>
+              <Show when={palette.token}>
+                <Badge color="primary" variant="ghost" size="sm">
+                  → {palette.token}
+                </Badge>
+              </Show>
+            </div>
+            <div className="flex gap-3 overflow-x-auto px-2 py-2">
+              <For each={PALETTE_SHADES}>
+                {(shade) => (
+                  <PaletteSwatch
+                    key={`${palette.tw}-${shade}`}
+                    tw={palette.tw}
+                    shade={shade}
+                  />
+                )}
+              </For>
+            </div>
+          </div>
+        )}
+      </For>
+    </div>
   );
 }
 
@@ -455,8 +575,15 @@ function HookDetailPage({ slug }) {
     return (
       <div className="py-20 text-center">
         <h2 className="text-2xl font-semibold">Hook no encontrado</h2>
-        <p className="mt-2 text-neutral-600">El hook que buscas no existe o ha sido movido.</p>
-        <Link href="/docs/hooks" className="mt-4 inline-block text-primary-600 hover:underline">Volver a Hooks</Link>
+        <p className="mt-2 text-neutral-600">
+          El hook que buscas no existe o ha sido movido.
+        </p>
+        <Link
+          href="/docs/hooks"
+          className="mt-4 inline-block text-primary-600 hover:underline"
+        >
+          Volver a Hooks
+        </Link>
       </div>
     );
   }
@@ -525,14 +652,17 @@ function GenericSectionPage({ sectionId }) {
         <WebsiteSection
           id="introduccion"
           title="Introducción"
-          description="Quickit está pensado para equipos que necesitan velocidad, consistencia visual y una API suficientemente flexible para adaptar producto real.">
+          description="Quickit está pensado para equipos que necesitan velocidad, consistencia visual y una API suficientemente flexible para adaptar producto real."
+        >
           <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-            Los primitives compuestos (Accordion, Tabs, Dropdown, Breadcrumb, Modal,
-            Drawer, FormControl, InputGroup, Avatar, EmptyState…) exponen subcomponentes
-            como <code className="font-mono text-xs">Componente.Subcomponente</code>.
-            Los nombres en PascalCase sueltos (<code className="font-mono text-xs">TabsList</code>,{" "}
-            <code className="font-mono text-xs">FormMessage</code>, etc.) siguen exportándose
-            por compatibilidad.
+            Los primitives compuestos (Accordion, Tabs, Dropdown, Breadcrumb,
+            Modal, Drawer, FormControl, InputGroup, Avatar, EmptyState…) exponen
+            subcomponentes como{" "}
+            <code className="font-mono text-xs">Componente.Subcomponente</code>.
+            Los nombres en PascalCase sueltos (
+            <code className="font-mono text-xs">TabsList</code>,{" "}
+            <code className="font-mono text-xs">FormMessage</code>, etc.) siguen
+            exportándose por compatibilidad.
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
@@ -555,8 +685,8 @@ function GenericSectionPage({ sectionId }) {
                 Tema y comportamiento
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Proveedor único para tema, focus ring, ripple y press effect, con
-                control global y por componente.
+                Proveedor único para tema, focus ring, ripple y press effect,
+                con control global y por componente.
               </p>
             </div>
             <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800 sm:col-span-2 xl:col-span-1">
@@ -584,16 +714,31 @@ function GenericSectionPage({ sectionId }) {
           <div className="flex flex-col gap-6">
             <WebsiteCodeBlock code={INSTALL_COMMAND} language="bash" />
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Si tu app no usa Tailwind, importa los estilos de Quickit una sola vez. Ese archivo contiene los estilos base de componentes, tokens de color, variables CSS y variantes dark compiladas.
+              Si tu app no usa Tailwind, importa los estilos de Quickit una sola
+              vez. Ese archivo contiene los estilos base de componentes, tokens
+              de color, variables CSS y variantes dark compiladas.
             </div>
             <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
             <WebsiteCodeBlock code={COMPONENT_IMPORT_SNIPPET} language="jsx" />
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Si tu app también usa Tailwind CSS 4, importa primero <code className="font-mono text-xs">quickit-ui/styles.css</code> y después <code className="font-mono text-xs">tailwindcss</code>. Así Tailwind y los tokens de tu app quedan al final de la cascada y pueden sobrescribir lo necesario.
+              Si tu app también usa Tailwind CSS 4, importa primero{" "}
+              <code className="font-mono text-xs">quickit-ui/styles.css</code> y
+              después <code className="font-mono text-xs">tailwindcss</code>.
+              Así Tailwind y los tokens de tu app quedan al final de la cascada
+              y pueden sobrescribir lo necesario.
             </div>
             <WebsiteCodeBlock code={TAILWIND_STYLES_SNIPPET} language="css" />
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Todos los colores de acento (<code className="font-mono text-xs">primary</code>, <code className="font-mono text-xs">secondary</code>, <code className="font-mono text-xs">success</code>, <code className="font-mono text-xs">danger</code>, <code className="font-mono text-xs">warning</code>, <code className="font-mono text-xs">info</code>) son reemplazables porque se mapean directamente a colores nativos de Tailwind. Solo sobrescribe el color Tailwind subyacente en <code className="font-mono text-xs">@theme</code>.
+              Todos los colores de acento (
+              <code className="font-mono text-xs">primary</code>,{" "}
+              <code className="font-mono text-xs">secondary</code>,{" "}
+              <code className="font-mono text-xs">success</code>,{" "}
+              <code className="font-mono text-xs">danger</code>,{" "}
+              <code className="font-mono text-xs">warning</code>,{" "}
+              <code className="font-mono text-xs">info</code>) son reemplazables
+              porque se mapean directamente a colores nativos de Tailwind. Solo
+              sobrescribe el color Tailwind subyacente en{" "}
+              <code className="font-mono text-xs">@theme</code>.
             </div>
             <WebsiteCodeBlock code={ACCENT_OVERRIDE_SNIPPET} language="css" />
           </div>
@@ -608,8 +753,15 @@ function GenericSectionPage({ sectionId }) {
         >
           <div className="flex flex-col gap-8">
             <div className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 text-sm leading-7 text-green-900 dark:border-green-900/60 dark:bg-green-950/20 dark:text-green-100">
-              Ruta cubierta en esta guía: <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.fromVersion}</code> →{" "}
-              <code className="font-mono text-xs">{QUICKIT_V1_MIGRATION.toVersion}</code>.
+              Ruta cubierta en esta guía:{" "}
+              <code className="font-mono text-xs">
+                {QUICKIT_V1_MIGRATION.fromVersion}
+              </code>{" "}
+              →{" "}
+              <code className="font-mono text-xs">
+                {QUICKIT_V1_MIGRATION.toVersion}
+              </code>
+              .
             </div>
 
             <div className="flex flex-col gap-6">
@@ -666,7 +818,10 @@ function GenericSectionPage({ sectionId }) {
               </For>
             </div>
 
-            <div id="migracion-checklist" className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div
+              id="migracion-checklist"
+              className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
+            >
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Checklist final
               </h3>
@@ -701,7 +856,10 @@ function GenericSectionPage({ sectionId }) {
               </p>
             </div>
 
-            <div id="changelog-highlight" className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div
+              id="changelog-highlight"
+              className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
+            >
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Highlights
               </h3>
@@ -712,7 +870,10 @@ function GenericSectionPage({ sectionId }) {
               </ul>
             </div>
 
-            <div id="changelog-cambios" className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div
+              id="changelog-cambios"
+              className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
+            >
               <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                 Cambios destacados
               </h3>
@@ -728,7 +889,9 @@ function GenericSectionPage({ sectionId }) {
                 Archivo completo
               </h3>
               <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                El historial completo de la release también vive en <code className="font-mono text-xs">CHANGELOG.md</code> en la raíz del repositorio.
+                El historial completo de la release también vive en{" "}
+                <code className="font-mono text-xs">CHANGELOG.md</code> en la
+                raíz del repositorio.
               </p>
             </div>
           </div>
@@ -743,8 +906,8 @@ function GenericSectionPage({ sectionId }) {
         >
           <div className="flex flex-col gap-10">
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              QuickitThemeProvider es un wrapper con estado que controla el tema y
-              luego renderiza QuickitProvider por debajo. QuickitProvider solo
+              QuickitThemeProvider es un wrapper con estado que controla el tema
+              y luego renderiza QuickitProvider por debajo. QuickitProvider solo
               aplica la política visual; no persiste ni muta el tema.
             </div>
             <div>
@@ -759,7 +922,10 @@ function GenericSectionPage({ sectionId }) {
                 con un state propio o un contexto externo).
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={QUICKIT_PROVIDER_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={QUICKIT_PROVIDER_SNIPPET}
+                  language="jsx"
+                />
               </div>
             </div>
 
@@ -775,11 +941,15 @@ function GenericSectionPage({ sectionId }) {
                 hook para leer o cambiar el tema.
               </p>
               <div className="mt-4 flex flex-col gap-6">
-                <WebsiteCodeBlock code={THEME_PROVIDER_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={THEME_PROVIDER_SNIPPET}
+                  language="jsx"
+                />
                 <WebsiteCodeBlock code={THEME_TOGGLE_SNIPPET} language="jsx" />
               </div>
               <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-                useQuickitThemeController debe usarse dentro de QuickitThemeProvider.
+                useQuickitThemeController debe usarse dentro de
+                QuickitThemeProvider.
               </p>
             </div>
 
@@ -807,18 +977,23 @@ function GenericSectionPage({ sectionId }) {
                 Evitar parpadeo (FOUC)
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                El "Flash of Unstyled Content" ocurre porque React hidrata el tema después del primer pintado. 
-                Para evitarlo, es necesario un script síncrono en el <code className="text-primary-500">&lt;head&gt;</code> que 
+                El "Flash of Unstyled Content" ocurre porque React hidrata el
+                tema después del primer pintado. Para evitarlo, es necesario un
+                script síncrono en el{" "}
+                <code className="text-primary-500">&lt;head&gt;</code> que
                 bloquee el renderizado hasta que se aplique la clase correcta.
               </p>
-              
+
               <div className="mt-6 flex flex-col gap-6">
                 <div>
                   <h4 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                     Vite / SPA (index.html)
                   </h4>
                   <div className="mt-2">
-                    <WebsiteCodeBlock code={THEME_FOUC_VITE_SNIPPET} language="html" />
+                    <WebsiteCodeBlock
+                      code={THEME_FOUC_VITE_SNIPPET}
+                      language="html"
+                    />
                   </div>
                 </div>
 
@@ -827,7 +1002,10 @@ function GenericSectionPage({ sectionId }) {
                     Next.js (Root Layout)
                   </h4>
                   <div className="mt-2">
-                    <WebsiteCodeBlock code={THEME_FOUC_NEXT_SNIPPET} language="jsx" />
+                    <WebsiteCodeBlock
+                      code={THEME_FOUC_NEXT_SNIPPET}
+                      language="jsx"
+                    />
                   </div>
                 </div>
               </div>
@@ -838,16 +1016,32 @@ function GenericSectionPage({ sectionId }) {
                 </h4>
                 <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Por qué?</strong> Porque React se ejecuta después de que el navegador pinta el HTML.
+                    <strong className="text-neutral-950 dark:text-neutral-50">
+                      ¿Por qué?
+                    </strong>{" "}
+                    Porque React se ejecuta después de que el navegador pinta el
+                    HTML.
                   </li>
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cómo?</strong> Con un script síncrono que modifique <code className="text-primary-500">documentElement</code>.
+                    <strong className="text-neutral-950 dark:text-neutral-50">
+                      ¿Cómo?
+                    </strong>{" "}
+                    Con un script síncrono que modifique{" "}
+                    <code className="text-primary-500">documentElement</code>.
                   </li>
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Cuándo?</strong> Inmediatamente, antes de que el navegador renderice el <code className="text-primary-500">&lt;body&gt;</code>.
+                    <strong className="text-neutral-950 dark:text-neutral-50">
+                      ¿Cuándo?
+                    </strong>{" "}
+                    Inmediatamente, antes de que el navegador renderice el{" "}
+                    <code className="text-primary-500">&lt;body&gt;</code>.
                   </li>
                   <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">¿Dónde?</strong> En lo más alto de tu <code className="text-primary-500">&lt;head&gt;</code>.
+                    <strong className="text-neutral-950 dark:text-neutral-50">
+                      ¿Dónde?
+                    </strong>{" "}
+                    En lo más alto de tu{" "}
+                    <code className="text-primary-500">&lt;head&gt;</code>.
                   </li>
                 </ul>
               </div>
@@ -863,16 +1057,23 @@ function GenericSectionPage({ sectionId }) {
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 Todos los componentes consumen colores semánticos que se mapean
                 directamente a colores nativos de Tailwind v4. Esto permite
-                sobrescribir cualquier tono desde <code className="text-primary-500">@theme</code> sin
-                variables CSS intermedias ni capas de indirección.
+                sobrescribir cualquier tono desde{" "}
+                <code className="text-primary-500">@theme</code> sin variables
+                CSS intermedias ni capas de indirección.
               </p>
               <div className="mt-4 overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
                 <table className="w-full text-left text-sm">
                   <thead>
                     <tr className="border-b border-neutral-200 dark:border-neutral-800">
-                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">Semántico</th>
-                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">Color Tailwind</th>
-                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">Ejemplo de uso</th>
+                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">
+                        Semántico
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">
+                        Color Tailwind
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-neutral-950 dark:text-neutral-50">
+                        Ejemplo de uso
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
@@ -887,19 +1088,31 @@ function GenericSectionPage({ sectionId }) {
                       ["light", "neutral", "color=&quot;light&quot;"],
                       ["dark", "neutral", "color=&quot;dark&quot;"],
                     ].map(([semantic, twColor, example]) => (
-                      <tr key={semantic} className="text-neutral-600 dark:text-neutral-400">
-                        <td className="px-4 py-2.5 font-mono text-xs">{semantic}</td>
-                        <td className="px-4 py-2.5 font-mono text-xs">{twColor}</td>
-                        <td className="px-4 py-2.5 font-mono text-xs">{example}</td>
+                      <tr
+                        key={semantic}
+                        className="text-neutral-600 dark:text-neutral-400"
+                      >
+                        <td className="px-4 py-2.5 font-mono text-xs">
+                          {semantic}
+                        </td>
+                        <td className="px-4 py-2.5 font-mono text-xs">
+                          {twColor}
+                        </td>
+                        <td className="px-4 py-2.5 font-mono text-xs">
+                          {example}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
               <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-                <strong className="text-neutral-950 dark:text-neutral-50">Nota:</strong>{" "}
-                <code className="text-primary-500">light</code> y <code className="text-primary-500">dark</code>{" "}
-                son neutros porque representan fondos extremos, no acentos de estado.
+                <strong className="text-neutral-950 dark:text-neutral-50">
+                  Nota:
+                </strong>{" "}
+                <code className="text-primary-500">light</code> y{" "}
+                <code className="text-primary-500">dark</code> son neutros
+                porque representan fondos extremos, no acentos de estado.
               </p>
             </div>
 
@@ -911,17 +1124,27 @@ function GenericSectionPage({ sectionId }) {
                 Personalizar colores
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Como no hay variables CSS intermedias (<code className="text-primary-500">--color-primary</code>),
-                cambiar el tono de un color semántico es tan simple como sobrescribir
-                el color Tailwind subyacente en <code className="text-primary-500">@theme</code>:
+                Como no hay variables CSS intermedias (
+                <code className="text-primary-500">--color-primary</code>),
+                cambiar el tono de un color semántico es tan simple como
+                sobrescribir el color Tailwind subyacente en{" "}
+                <code className="text-primary-500">@theme</code>:
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={THEME_CUSTOMIZE_SNIPPET} language="css" />
+                <WebsiteCodeBlock
+                  code={THEME_CUSTOMIZE_SNIPPET}
+                  language="css"
+                />
               </div>
               <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Al cambiar <code className="text-primary-500">--color-blue-600</code>, todos los componentes
-                con <code className="text-primary-500">color=&quot;primary&quot;</code> reflejan el nuevo tono
-                automáticamente. No necesitas tocar las definiciones de los componentes.
+                Al cambiar{" "}
+                <code className="text-primary-500">--color-blue-600</code>,
+                todos los componentes con{" "}
+                <code className="text-primary-500">
+                  color=&quot;primary&quot;
+                </code>{" "}
+                reflejan el nuevo tono automáticamente. No necesitas tocar las
+                definiciones de los componentes.
               </p>
             </div>
 
@@ -934,29 +1157,45 @@ function GenericSectionPage({ sectionId }) {
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 Internamente, cada componente de quickit resuelve sus clases CSS
-                desde archivos dedicados en <code className="text-primary-500">src/lib/theme/theme-classes/</code>.
-                Ningún componente JSX contiene literales como{" "}
-                <code className="text-primary-500">blue-600</code> o <code className="text-primary-500">hover:bg-red-500</code>.
+                desde archivos dedicados en{" "}
+                <code className="text-primary-500">
+                  src/lib/theme/theme-classes/
+                </code>
+                . Ningún componente JSX contiene literales como{" "}
+                <code className="text-primary-500">blue-600</code> o{" "}
+                <code className="text-primary-500">hover:bg-red-500</code>.
               </p>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Cada archivo exporta un objeto con dos variantes —<code className="text-primary-500">light</code> y{" "}
-                <code className="text-primary-500">dark</code>— y dentro de cada una, una entrada por color semántico:
+                Cada archivo exporta un objeto con dos variantes —
+                <code className="text-primary-500">light</code> y{" "}
+                <code className="text-primary-500">dark</code>— y dentro de cada
+                una, una entrada por color semántico:
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={THEME_CLASSES_PATTERN_SNIPPET} language="js" />
+                <WebsiteCodeBlock
+                  code={THEME_CLASSES_PATTERN_SNIPPET}
+                  language="js"
+                />
               </div>
               <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                El componente recibe el tema vía <code className="text-primary-500">useTheme</code> y selecciona
+                El componente recibe el tema vía{" "}
+                <code className="text-primary-500">useTheme</code> y selecciona
                 el set de clases correspondiente:
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={THEME_CLASSES_USAGE_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={THEME_CLASSES_USAGE_SNIPPET}
+                  language="jsx"
+                />
               </div>
               <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 Los archivos existentes son:
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={THEME_CLASSES_INDEX_SNIPPET} language="" />
+                <WebsiteCodeBlock
+                  code={THEME_CLASSES_INDEX_SNIPPET}
+                  language=""
+                />
               </div>
             </div>
 
@@ -968,17 +1207,24 @@ function GenericSectionPage({ sectionId }) {
                 Modo oscuro
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Quickit no usa <code className="text-primary-500">@media (prefers-color-scheme: dark)</code>{" "}
-                ni la clase <code className="text-primary-500">.dark</code> de Tailwind para cambiar colores.
-                En su lugar, cada theme-classes file define explícitamente los valores{" "}
-                <code className="text-primary-500">light</code> y <code className="text-primary-500">dark</code>.
-                El <code className="text-primary-500">ThemeController</code> persiste la preferencia y los
-                componentes leen el tema actual para seleccionar el set de clases adecuado en tiempo real.
+                Quickit no usa{" "}
+                <code className="text-primary-500">
+                  @media (prefers-color-scheme: dark)
+                </code>{" "}
+                ni la clase <code className="text-primary-500">.dark</code> de
+                Tailwind para cambiar colores. En su lugar, cada theme-classes
+                file define explícitamente los valores{" "}
+                <code className="text-primary-500">light</code> y{" "}
+                <code className="text-primary-500">dark</code>. El{" "}
+                <code className="text-primary-500">ThemeController</code>{" "}
+                persiste la preferencia y los componentes leen el tema actual
+                para seleccionar el set de clases adecuado en tiempo real.
               </p>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Esto permite cambiar entre modo claro y oscuro sin depender de selectores CSS,
-                y funciona correctamente en entornos SPA donde la clase <code className="text-primary-500">.dark</code>{" "}
-                no está disponible.
+                Esto permite cambiar entre modo claro y oscuro sin depender de
+                selectores CSS, y funciona correctamente en entornos SPA donde
+                la clase <code className="text-primary-500">.dark</code> no está
+                disponible.
               </p>
             </div>
           </div>
@@ -1010,7 +1256,10 @@ function GenericSectionPage({ sectionId }) {
                 y QuickitThemeProvider.
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={QUICKIT_PROVIDER_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={QUICKIT_PROVIDER_SNIPPET}
+                  language="jsx"
+                />
               </div>
             </div>
 
@@ -1024,11 +1273,16 @@ function GenericSectionPage({ sectionId }) {
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 Por defecto, Quickit aplica un scrollbar themado con colores del
                 tema en todos los scrollable internals. Desactívalo con{" "}
-                <code className="font-mono text-xs">customScrollbar={"{"}false{"}"}</code>{" "}
+                <code className="font-mono text-xs">
+                  customScrollbar={"{"}false{"}"}
+                </code>{" "}
                 si prefieres el scrollbar nativo del sistema.
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={CUSTOM_SCROLLBAR_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={CUSTOM_SCROLLBAR_SNIPPET}
+                  language="jsx"
+                />
               </div>
             </div>
           </div>
@@ -1043,9 +1297,11 @@ function GenericSectionPage({ sectionId }) {
         >
           <div className="flex flex-col gap-10">
             <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Quickit usa una variable CSS base (<code className="font-mono text-xs">--qi-radius</code>) de
-              la cual se derivan todos los radios de la librería. Puedes configurarla
-              con la prop <code className="font-mono text-xs">radius</code> del provider o directamente en CSS.
+              Quickit usa una variable CSS base (
+              <code className="font-mono text-xs">--qi-radius</code>) de la cual
+              se derivan todos los radios de la librería. Puedes configurarla
+              con la prop <code className="font-mono text-xs">radius</code> del
+              provider o directamente en CSS.
             </div>
 
             <div>
@@ -1056,10 +1312,14 @@ function GenericSectionPage({ sectionId }) {
                 Configuración vía Provider
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Acepta valores semánticos o CSS raw. El default es <code className="font-mono text-xs">"sm"</code> (0.75rem).
+                Acepta valores semánticos o CSS raw. El default es{" "}
+                <code className="font-mono text-xs">"sm"</code> (0.75rem).
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={RADIUS_PROVIDER_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={RADIUS_PROVIDER_SNIPPET}
+                  language="jsx"
+                />
               </div>
             </div>
 
@@ -1072,33 +1332,63 @@ function GenericSectionPage({ sectionId }) {
               </h3>
               <div className="mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800">
                 <div className="grid grid-cols-[auto_1fr_auto] gap-x-6 gap-y-2 px-5 py-4 text-sm">
-                  <span className="font-mono text-xs text-neutral-500">sharp</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Sin radio (0)</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    sharp
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Sin radio (0)
+                  </span>
                   <span className="font-mono text-xs text-neutral-400">0</span>
 
                   <span className="font-mono text-xs text-neutral-500">xs</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Muy pequeño</span>
-                  <span className="font-mono text-xs text-neutral-400">0.625rem</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Muy pequeño
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    0.625rem
+                  </span>
 
                   <span className="font-mono text-xs text-neutral-500">sm</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Pequeño (default)</span>
-                  <span className="font-mono text-xs text-neutral-400">0.75rem</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Pequeño (default)
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    0.75rem
+                  </span>
 
                   <span className="font-mono text-xs text-neutral-500">md</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Medio</span>
-                  <span className="font-mono text-xs text-neutral-400">0.875rem</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Medio
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    0.875rem
+                  </span>
 
                   <span className="font-mono text-xs text-neutral-500">lg</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Grande</span>
-                  <span className="font-mono text-xs text-neutral-400">1rem</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Grande
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    1rem
+                  </span>
 
                   <span className="font-mono text-xs text-neutral-500">xl</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Extra grande</span>
-                  <span className="font-mono text-xs text-neutral-400">1.25rem</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Extra grande
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    1.25rem
+                  </span>
 
-                  <span className="font-mono text-xs text-neutral-500">2xl</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Doble extra</span>
-                  <span className="font-mono text-xs text-neutral-400">1.5rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    2xl
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Doble extra
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    1.5rem
+                  </span>
                 </div>
               </div>
             </div>
@@ -1114,7 +1404,10 @@ function GenericSectionPage({ sectionId }) {
                 Pasa cualquier valor CSS válido directamente como string.
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={RADIUS_RAW_CSS_SNIPPET} language="jsx" />
+                <WebsiteCodeBlock
+                  code={RADIUS_RAW_CSS_SNIPPET}
+                  language="jsx"
+                />
               </div>
             </div>
 
@@ -1126,12 +1419,18 @@ function GenericSectionPage({ sectionId }) {
                 Override vía CSS
               </h3>
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Si no usas el provider, puedes overridear directamente la variable CSS. Los
-                radios derivados (<code className="font-mono text-xs">--qi-radius-xl</code>, <code className="font-mono text-xs">--qi-radius-2xl</code>, etc.)
-                se recalculan automáticamente con <code className="font-mono text-xs">calc()</code>.
+                Si no usas el provider, puedes overridear directamente la
+                variable CSS. Los radios derivados (
+                <code className="font-mono text-xs">--qi-radius-xl</code>,{" "}
+                <code className="font-mono text-xs">--qi-radius-2xl</code>,
+                etc.) se recalculan automáticamente con{" "}
+                <code className="font-mono text-xs">calc()</code>.
               </p>
               <div className="mt-4">
-                <WebsiteCodeBlock code={RADIUS_CSS_VARIABLE_SNIPPET} language="css" />
+                <WebsiteCodeBlock
+                  code={RADIUS_CSS_VARIABLE_SNIPPET}
+                  language="css"
+                />
               </div>
             </div>
 
@@ -1141,29 +1440,65 @@ function GenericSectionPage({ sectionId }) {
               </h3>
               <div className="mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800">
                 <div className="grid grid-cols-[auto_1fr_auto] gap-x-6 gap-y-2 px-5 py-4 text-sm">
-                  <span className="font-mono text-xs text-neutral-500">--qi-radius</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Base (se setea vía provider)</span>
-                  <span className="font-mono text-xs text-neutral-400">0.75rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    --qi-radius
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Base (se setea vía provider)
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    0.75rem
+                  </span>
 
-                  <span className="font-mono text-xs text-neutral-500">--qi-radius-xs</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Base × 0.833</span>
-                  <span className="font-mono text-xs text-neutral-400">0.625rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    --qi-radius-xs
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Base × 0.833
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    0.625rem
+                  </span>
 
-                  <span className="font-mono text-xs text-neutral-500">--qi-radius-lg</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.167</span>
-                  <span className="font-mono text-xs text-neutral-400">0.875rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    --qi-radius-lg
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Base × 1.167
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    0.875rem
+                  </span>
 
-                  <span className="font-mono text-xs text-neutral-500">--qi-radius-xl</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.333</span>
-                  <span className="font-mono text-xs text-neutral-400">1rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    --qi-radius-xl
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Base × 1.333
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    1rem
+                  </span>
 
-                  <span className="font-mono text-xs text-neutral-500">--qi-radius-2xl</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.5</span>
-                  <span className="font-mono text-xs text-neutral-400">1.125rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    --qi-radius-2xl
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Base × 1.5
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    1.125rem
+                  </span>
 
-                  <span className="font-mono text-xs text-neutral-500">--qi-radius-3xl</span>
-                  <span className="text-neutral-600 dark:text-neutral-400">Base × 1.667</span>
-                  <span className="font-mono text-xs text-neutral-400">1.25rem</span>
+                  <span className="font-mono text-xs text-neutral-500">
+                    --qi-radius-3xl
+                  </span>
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    Base × 1.667
+                  </span>
+                  <span className="font-mono text-xs text-neutral-400">
+                    1.25rem
+                  </span>
                 </div>
               </div>
             </div>
@@ -1178,6 +1513,22 @@ function GenericSectionPage({ sectionId }) {
           description="Referencia visual rápida de colores, tamaños, shapes y variants disponibles en Quickit."
         >
           <div className="flex flex-col gap-6">
+            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <h3
+                id="tokens-paletas"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Paletas de color
+              </h3>
+              <p className="mt-2 text-xs leading-6 text-neutral-500 dark:text-neutral-400">
+                Referencia visual de todos los shades disponibles. Haz clic en
+                un swatch para copiar la clase Tailwind.
+              </p>
+              <div className="mt-4">
+                <ColorPaletteShowcase />
+              </div>
+            </div>
+
             <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3
                 id="tokens-colores"
@@ -1205,17 +1556,37 @@ function GenericSectionPage({ sectionId }) {
               </div>
               <div
                 id="tokens-primary"
-                className="mt-5 scroll-mt-28 rounded-xl border border-primary-200 bg-primary-50/60 p-4 text-sm leading-7 text-primary-900 dark:border-primary-900/60 dark:bg-primary-950/20 dark:text-primary-100"
+                className="mt-5 scroll-mt-28 rounded-xl bg-primary-50/60 p-4 text-sm leading-7 text-primary-900 dark:border-primary-900/60 dark:bg-primary-950/20 dark:text-primary-100"
               >
                 <p>
-                  <strong>Todos los colores de acento son reemplazables.</strong> Como quickit mapea cada color semántico a un color Tailwind nativo, sobrescribes cualquier tono desde <code className="font-mono text-xs">@theme</code>. Por ejemplo, <code className="font-mono text-xs">--color-blue-600</code> cambia <code className="font-mono text-xs">primary</code> y <code className="font-mono text-xs">--color-purple-500</code> cambia <code className="font-mono text-xs">secondary</code>.
+                  <strong>
+                    Todos los colores de acento son reemplazables.
+                  </strong>{" "}
+                  Como quickit mapea cada color semántico a un color Tailwind
+                  nativo, sobrescribes cualquier tono desde{" "}
+                  <code className="font-mono text-xs">@theme</code>. Por
+                  ejemplo,{" "}
+                  <code className="font-mono text-xs">--color-blue-600</code>{" "}
+                  cambia <code className="font-mono text-xs">primary</code> y{" "}
+                  <code className="font-mono text-xs">--color-purple-500</code>{" "}
+                  cambia <code className="font-mono text-xs">secondary</code>.
                 </p>
                 <div className="mt-3">
-                  <WebsiteCodeBlock code={ACCENT_OVERRIDE_SNIPPET} language="css" />
+                  <WebsiteCodeBlock
+                    code={ACCENT_OVERRIDE_SNIPPET}
+                    language="css"
+                  />
                 </div>
               </div>
               <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-500">
-                Incluye <code className="font-mono">secondary</code> disponible desde v1.2.0. El tipo público <code className="font-mono">QuickitSemanticColor</code> agrupa todos los valores semánticos; la taxonomía visual separa identidad (primary, secondary), estados (success, danger, warning, info) y neutros (neutral, light, dark). También se usa en <code className="font-mono">QUICKIT_ACCENT_COLORS</code> para componentes que aceptan toda la gama cromática.
+                Incluye <code className="font-mono">secondary</code> disponible
+                desde v1.2.0. El tipo público{" "}
+                <code className="font-mono">QuickitSemanticColor</code> agrupa
+                todos los valores semánticos; la taxonomía visual separa
+                identidad (primary, secondary), estados (success, danger,
+                warning, info) y neutros (neutral, light, dark). También se usa
+                en <code className="font-mono">QUICKIT_ACCENT_COLORS</code> para
+                componentes que aceptan toda la gama cromática.
               </p>
             </div>
 
@@ -1273,9 +1644,7 @@ function GenericSectionPage({ sectionId }) {
                 </h3>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <For each={QUICKIT_CONTROL_SIZES}>
-                    {(size) => (
-                      <TokenSizeSample key={size} size={size} />
-                    )}
+                    {(size) => <TokenSizeSample key={size} size={size} />}
                   </For>
                 </div>
               </div>
@@ -1289,9 +1658,7 @@ function GenericSectionPage({ sectionId }) {
                 </h3>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <For each={QUICKIT_BUTTON_SHAPES}>
-                    {(shape) => (
-                      <TokenShapeSample key={shape} shape={shape} />
-                    )}
+                    {(shape) => <TokenShapeSample key={shape} shape={shape} />}
                   </For>
                 </div>
               </div>
@@ -1329,7 +1696,10 @@ function GenericSectionPage({ sectionId }) {
                 <div className="mt-4 flex flex-wrap items-center gap-4">
                   <For each={QUICKIT_LINK_UNDERLINES}>
                     {(underline) => (
-                      <TokenUnderlineSample key={underline} underline={underline} />
+                      <TokenUnderlineSample
+                        key={underline}
+                        underline={underline}
+                      />
                     )}
                   </For>
                 </div>
@@ -1346,52 +1716,93 @@ function GenericSectionPage({ sectionId }) {
           description="Quickit también exporta helpers de clases, radios, scroll, refs, tema y resolución de tokens para construir wrappers o componentes propios sin copiar lógica interna."
         >
           <div className="flex flex-col gap-10">
-            <div id="utilidades-clases" className="scroll-mt-28 flex flex-col gap-3">
+            <div
+              id="utilidades-clases"
+              className="scroll-mt-28 flex flex-col gap-3"
+            >
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Clases y radios
               </h3>
               <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                Usa <code className="font-mono text-xs">cn</code>, <code className="font-mono text-xs">getControlRadius</code> y <code className="font-mono text-xs">getAvatarRadius</code> cuando construyas wrappers que deban seguir la geometría visual de Quickit.
+                Usa <code className="font-mono text-xs">cn</code>,{" "}
+                <code className="font-mono text-xs">getControlRadius</code> y{" "}
+                <code className="font-mono text-xs">getAvatarRadius</code>{" "}
+                cuando construyas wrappers que deban seguir la geometría visual
+                de Quickit.
               </p>
               <WebsiteCodeBlock code={UTILS_CN_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-scroll" className="scroll-mt-28 flex flex-col gap-3">
+            <div
+              id="utilidades-scroll"
+              className="scroll-mt-28 flex flex-col gap-3"
+            >
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Bloqueo de scroll
               </h3>
               <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                <code className="font-mono text-xs">lockAppScroll</code> y <code className="font-mono text-xs">unlockAppScroll</code> sirven para overlays o paneles custom que no usan `Modal` o `Drawer` pero necesitan el mismo comportamiento de bloqueo del body.
+                <code className="font-mono text-xs">lockAppScroll</code> y{" "}
+                <code className="font-mono text-xs">unlockAppScroll</code>{" "}
+                sirven para overlays o paneles custom que no usan `Modal` o
+                `Drawer` pero necesitan el mismo comportamiento de bloqueo del
+                body.
               </p>
               <WebsiteCodeBlock code={UTILS_SCROLL_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-refs" className="scroll-mt-28 flex flex-col gap-3">
+            <div
+              id="utilidades-refs"
+              className="scroll-mt-28 flex flex-col gap-3"
+            >
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Merge de refs
               </h3>
               <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                <code className="font-mono text-xs">useMergeRefs</code> evita helpers ad hoc cuando un wrapper necesita combinar su ref local con la ref del consumidor.
+                <code className="font-mono text-xs">useMergeRefs</code> evita
+                helpers ad hoc cuando un wrapper necesita combinar su ref local
+                con la ref del consumidor.
               </p>
               <WebsiteCodeBlock code={UTILS_REFS_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-tokens" className="scroll-mt-28 flex flex-col gap-3">
+            <div
+              id="utilidades-tokens"
+              className="scroll-mt-28 flex flex-col gap-3"
+            >
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Resolución de tokens
               </h3>
               <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                <code className="font-mono text-xs">resolveQuickitToken</code> e <code className="font-mono text-xs">isQuickitTokenValue</code> son útiles cuando aceptas configuraciones dinámicas y quieres normalizarlas contra las listas oficiales de Quickit.
+                <code className="font-mono text-xs">resolveQuickitToken</code> e{" "}
+                <code className="font-mono text-xs">isQuickitTokenValue</code>{" "}
+                son útiles cuando aceptas configuraciones dinámicas y quieres
+                normalizarlas contra las listas oficiales de Quickit.
               </p>
               <WebsiteCodeBlock code={UTILS_TOKENS_SNIPPET} language="jsx" />
             </div>
 
-            <div id="utilidades-tema" className="scroll-mt-28 flex flex-col gap-3">
+            <div
+              id="utilidades-tema"
+              className="scroll-mt-28 flex flex-col gap-3"
+            >
               <h3 className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
                 Tema resuelto
               </h3>
               <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                <code className="font-mono text-xs">resolveQuickitThemeMode</code> normaliza valores dinámicos a <code className="font-mono text-xs">light</code> o <code className="font-mono text-xs">dark</code>. No detecta <code className="font-mono text-xs">system</code> por sí sola; para eso usa <code className="font-mono text-xs">QuickitThemeProvider</code> o <code className="font-mono text-xs">useQuickitThemeController</code>.
+                <code className="font-mono text-xs">
+                  resolveQuickitThemeMode
+                </code>{" "}
+                normaliza valores dinámicos a{" "}
+                <code className="font-mono text-xs">light</code> o{" "}
+                <code className="font-mono text-xs">dark</code>. No detecta{" "}
+                <code className="font-mono text-xs">system</code> por sí sola;
+                para eso usa{" "}
+                <code className="font-mono text-xs">QuickitThemeProvider</code>{" "}
+                o{" "}
+                <code className="font-mono text-xs">
+                  useQuickitThemeController
+                </code>
+                .
               </p>
               <WebsiteCodeBlock code={UTILS_THEME_SNIPPET} language="jsx" />
             </div>
@@ -1418,18 +1829,18 @@ function GenericSectionPage({ sectionId }) {
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <For each={group.items}>
                       {(item) => (
-                    <Link
-                        key={item.slug}
-                        href={getWebsiteComponentRoute(item.slug)}
-                        className="rounded-xl border border-neutral-200 p-4 transition-colors hover:bg-neutral-50 no-underline dark:border-neutral-800 dark:hover:bg-neutral-900"
-                      >
-                        <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
-                          {item.name}
-                        </p>
-                        <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                          {item.description}
-                        </p>
-                      </Link>
+                        <Link
+                          key={item.slug}
+                          href={getWebsiteComponentRoute(item.slug)}
+                          className="rounded-xl border border-neutral-200 p-4 transition-colors hover:bg-neutral-50 no-underline dark:border-neutral-800 dark:hover:bg-neutral-900"
+                        >
+                          <p className="text-sm font-semibold text-neutral-950 dark:text-neutral-50">
+                            {item.name}
+                          </p>
+                          <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                            {item.description}
+                          </p>
+                        </Link>
                       )}
                     </For>
                   </div>
@@ -1514,7 +1925,12 @@ function ComponentPage({ component }) {
             <div className="flex flex-col gap-10">
               <For each={doc.examples ?? []}>
                 {(example) => (
-                  <div key={example.id} className={example.id === "ejemplos-props" ? "pt-2" : undefined}>
+                  <div
+                    key={example.id}
+                    className={
+                      example.id === "ejemplos-props" ? "pt-2" : undefined
+                    }
+                  >
                     <h3
                       id={example.id}
                       className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
@@ -1546,7 +1962,9 @@ function ComponentPage({ component }) {
                       </div>
                     </Show>
                     <Show when={example.notes}>
-                      <div className="mt-6"><NotesList notes={example.notes} /></div>
+                      <div className="mt-6">
+                        <NotesList notes={example.notes} />
+                      </div>
                     </Show>
                   </div>
                 )}
@@ -1571,7 +1989,6 @@ function ComponentPage({ component }) {
           </WebsiteSection>
         </Show>
       </div>
-
     </>
   );
 }
@@ -1644,7 +2061,13 @@ export default function DocsPage({ currentPath }) {
           currentPath={currentPath}
         />
 
-        <Container as="article" size="full" padding="md" center={false} className="min-w-0 px-4 sm:px-6 lg:col-start-2 lg:pl-10 xl:pl-12 py-6 lg:py-10 lg:pr-12 xl:pr-16">
+        <Container
+          as="article"
+          size="full"
+          padding="md"
+          center={false}
+          className="min-w-0 px-4 sm:px-6 lg:col-start-2 lg:pl-10 xl:pl-12 py-6 lg:py-10 lg:pr-12 xl:pr-16"
+        >
           <div ref={contentRef}>
             <RenderSwitch value={mode}>
               <Match when="component">
