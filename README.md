@@ -173,7 +173,7 @@ export default function App() {
 ## Qué incluye
 
 - Formularios: `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `TimePicker`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
-- Overlays: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`, `CommandPalette`
+- Overlays: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`
 - Navegación: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
 - Datos y feedback: `DataTable`, `Alert`, `EmptyState`, `Skeleton`, `Progress`, `Badge`
 - Identidad y acciones: `Button`, `Link`, `Avatar`
@@ -183,7 +183,6 @@ export default function App() {
 
 ## Notas de integración
 
-- `CommandPalette`: monta una sola paleta global con `shortcutEnabled` activo por página. Si necesitas más instancias, usa `shortcutEnabled={false}` en las secundarias.
 - `Combobox`: `label` acepta `ReactNode`; cuando uses labels ricos, define `textValue` para búsqueda y texto visible del input.
 - `Range`: en modo `range`, `name` serializa el valor inicial y `endName` el valor final. Por defecto `endName` será `${name}End`.
 - `Switch`: `onCheckedChange` recibe `(checked, event)`, alineado con `Checkbox` y `Radio`; el segundo argumento puede ignorarse si no lo necesitas.
@@ -225,7 +224,7 @@ npm run pack:check
 - Changelog: [CHANGELOG.md](./CHANGELOG.md)
 - Guía de migración: [docs/migration.md](./docs/migration.md)
 
-Versión actual: `1.0.12`
+Versión actual: `1.2.0`
 
 ## Requisitos
 
@@ -236,4 +235,4 @@ Versión actual: `1.0.12`
 
 ## Licencia
 
-MIT © [Darel Masis](https://github.com/darrelmasis)
+MIT © [Darel Masis](https://github.com/darelmasis)
