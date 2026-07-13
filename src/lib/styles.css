@@ -5,6 +5,128 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ─── Paleta desaturada ────────────────────────────────────────────────────
+ *  Chroma reducido ~45% respecto a Tailwind default para una UI más moderna,
+ *  profesional y descansada visualmente. Todos los acentos semánticos
+ *  (primary=blue, secondary=purple, success=green, danger=red,
+ *   warning=amber, info=cyan) se mapean a estos valores.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ==========================================================
+   * Neutral
+   * Gris frío profesional
+   * ========================================================== */
+
+  --color-neutral-50:  oklch(0.988 0.003 260);
+  --color-neutral-100: oklch(0.972 0.004 260);
+  --color-neutral-200: oklch(0.935 0.005 260);
+  --color-neutral-300: oklch(0.885 0.006 260);
+  --color-neutral-400: oklch(0.725 0.008 260);
+  --color-neutral-500: oklch(0.570 0.010 260);
+  --color-neutral-600: oklch(0.470 0.009 260);
+  --color-neutral-700: oklch(0.375 0.008 260);
+  --color-neutral-800: oklch(0.295 0.007 260);
+  --color-neutral-900: oklch(0.215 0.006 260);
+  --color-neutral-950: oklch(0.145 0.005 260);
+
+  /* ==========================================================
+   * Blue
+   * ========================================================== */
+
+  --color-blue-50:  oklch(0.975 0.015 255);
+  --color-blue-100: oklch(0.945 0.030 255);
+  --color-blue-200: oklch(0.895 0.055 255);
+  --color-blue-300: oklch(0.830 0.090 255);
+  --color-blue-400: oklch(0.735 0.125 255);
+  --color-blue-500: oklch(0.645 0.150 255);
+  --color-blue-600: oklch(0.565 0.145 255);
+  --color-blue-700: oklch(0.475 0.120 255);
+  --color-blue-800: oklch(0.385 0.095 255);
+  --color-blue-900: oklch(0.295 0.070 255);
+  --color-blue-950: oklch(0.185 0.050 255);
+
+  /* ==========================================================
+   * Purple
+   * ========================================================== */
+
+  --color-purple-50:  oklch(0.975 0.015 300);
+  --color-purple-100: oklch(0.945 0.032 300);
+  --color-purple-200: oklch(0.895 0.058 300);
+  --color-purple-300: oklch(0.830 0.095 300);
+  --color-purple-400: oklch(0.735 0.135 300);
+  --color-purple-500: oklch(0.645 0.165 300);
+  --color-purple-600: oklch(0.565 0.160 300);
+  --color-purple-700: oklch(0.475 0.130 300);
+  --color-purple-800: oklch(0.385 0.105 300);
+  --color-purple-900: oklch(0.295 0.075 300);
+  --color-purple-950: oklch(0.185 0.050 300);
+
+  /* ==========================================================
+   * Green
+   * ========================================================== */
+
+  --color-green-50:  oklch(0.975 0.015 150);
+  --color-green-100: oklch(0.945 0.030 150);
+  --color-green-200: oklch(0.895 0.055 150);
+  --color-green-300: oklch(0.830 0.090 150);
+  --color-green-400: oklch(0.735 0.125 150);
+  --color-green-500: oklch(0.645 0.145 150);
+  --color-green-600: oklch(0.565 0.140 150);
+  --color-green-700: oklch(0.475 0.115 150);
+  --color-green-800: oklch(0.385 0.090 150);
+  --color-green-900: oklch(0.295 0.065 150);
+  --color-green-950: oklch(0.185 0.045 150);
+
+  /* ==========================================================
+   * Red
+   * ========================================================== */
+
+  --color-red-50:  oklch(0.975 0.015 22);
+  --color-red-100: oklch(0.945 0.030 22);
+  --color-red-200: oklch(0.895 0.055 22);
+  --color-red-300: oklch(0.830 0.090 22);
+  --color-red-400: oklch(0.735 0.125 22);
+  --color-red-500: oklch(0.645 0.150 22);
+  --color-red-600: oklch(0.565 0.145 22);
+  --color-red-700: oklch(0.475 0.120 22);
+  --color-red-800: oklch(0.385 0.095 22);
+  --color-red-900: oklch(0.295 0.070 22);
+  --color-red-950: oklch(0.185 0.050 22);
+
+  /* ==========================================================
+   * Amber
+   * ========================================================== */
+
+  --color-amber-50:  oklch(0.975 0.018 85);
+  --color-amber-100: oklch(0.945 0.035 85);
+  --color-amber-200: oklch(0.900 0.065 85);
+  --color-amber-300: oklch(0.835 0.100 85);
+  --color-amber-400: oklch(0.740 0.135 85);
+  --color-amber-500: oklch(0.650 0.155 85);
+  --color-amber-600: oklch(0.565 0.145 85);
+  --color-amber-700: oklch(0.475 0.120 85);
+  --color-amber-800: oklch(0.385 0.095 85);
+  --color-amber-900: oklch(0.295 0.070 85);
+  --color-amber-950: oklch(0.185 0.050 85);
+
+  /* ==========================================================
+   * Cyan
+   * ========================================================== */
+
+  --color-cyan-50:  oklch(0.975 0.015 200);
+  --color-cyan-100: oklch(0.945 0.030 200);
+  --color-cyan-200: oklch(0.895 0.055 200);
+  --color-cyan-300: oklch(0.830 0.090 200);
+  --color-cyan-400: oklch(0.735 0.125 200);
+  --color-cyan-500: oklch(0.645 0.145 200);
+  --color-cyan-600: oklch(0.565 0.140 200);
+  --color-cyan-700: oklch(0.475 0.115 200);
+  --color-cyan-800: oklch(0.385 0.090 200);
+  --color-cyan-900: oklch(0.295 0.065 200);
+  --color-cyan-950: oklch(0.185 0.045 200);
+}
+
 /* ─── Ripple ──────────────────────────────────────────────────────────────── */
 .qi-ripple-host {
   position: relative;
