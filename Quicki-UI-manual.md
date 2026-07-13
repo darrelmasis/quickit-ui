@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.1.0`
+Version documentada: `1.2.0`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.1.0` |
+| Version actual | `1.2.0` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -246,14 +246,14 @@ import { QUICKIT_SEMANTIC_COLORS } from "quickit-ui";
 Valores:
 
 ```txt
-neutral, slate, zinc, primary, brand, success, danger, warning, info, light, dark, black
+neutral, slate, zinc, primary, secondary, brand, success, danger, warning, info, light, dark, black
 ```
 
 Conceptualmente, la taxonomia actual separa:
 
 | Coleccion | Export | Valores | Uso |
 | --- | --- | --- | --- |
-| Acentos de producto | `QUICKIT_BRAND_COLORS` | `primary`, `brand` | Accion principal y marca. |
+| Acentos de producto | `QUICKIT_BRAND_COLORS` | `primary`, `secondary`, `brand` | Accion principal, secundaria y marca. |
 | Estados | `QUICKIT_STATUS_COLORS` | `success`, `danger`, `warning`, `info` | Feedback semantico. |
 | Neutrales | `QUICKIT_NEUTRAL_COLORS` | `neutral`, `slate`, `zinc`, `light`, `dark`, `black` | Superficies y jerarquia visual. |
 | Compatibilidad | `QUICKIT_SEMANTIC_COLORS` | Todos los anteriores | Props publicas `color`. |
@@ -1066,47 +1066,6 @@ Ayuda breve no interactiva.
 
 Tooltip fuerza un patron de ayuda breve. Para contenido accionable usa `Popover`.
 
-### CommandPalette
-
-Paleta de comandos basada en `Modal`.
-
-```jsx
-<CommandPalette
-  groups={[
-    {
-      heading: "General",
-      items: [
-        { id: "home", label: "Ir al inicio", onSelect: () => {} },
-        { id: "search", label: "Buscar", keywords: ["find"] },
-      ],
-    },
-  ]}
-/>
-```
-
-Props:
-
-| Prop | Uso |
-| --- | --- |
-| `open` / `onOpenChange` | Controlado. |
-| `groups` | Grupos de comandos. |
-| `title` | Titulo del modal. |
-| `placeholder` | Placeholder del input. |
-| `emptyText` | Texto sin resultados. |
-| `shortcutEnabled` | Registra Ctrl+K/Cmd+K. |
-| `shortcutLabel` | Texto visual del shortcut. |
-| `autoFocusOnOpen` | Enfoca input al abrir. |
-
-Recomendacion:
-
-| Caso | Practica |
-| --- | --- |
-| Una app normal | Monta una sola paleta global con shortcut activo. |
-| Varias instancias | Usa `shortcutEnabled={false}` en secundarias. |
-| Docs/previews | Abre con boton y desactiva shortcut local. |
-
-Quickit genera ids internos unicos por instancia para evitar colisiones de accesibilidad.
-
 ### Toaster
 
 Sistema de toasts con API imperativa.
@@ -1375,7 +1334,7 @@ Reglas de integracion:
 | Pasa labels accesibles en icon buttons | Evita controles sin nombre. |
 | Usa `FormControl` para forms complejos | Centraliza ids, mensajes y estados. |
 | Monta un solo `Toaster` | Evita duplicar stacks globales. |
-| Monta una sola `CommandPalette` global con shortcut activo | Evita atajos duplicados. |
+| `CommandPalette` eliminado | Usa un input de búsqueda personalizado en su lugar. |
 
 ## 18. Accesibilidad
 
@@ -1386,7 +1345,7 @@ Quickit incorpora varias decisiones de accesibilidad:
 | Forms | `FormControl` conecta label, descripcion y mensaje. |
 | Switch | Usa `button role="switch"` y `aria-checked`. |
 | Range dual | Cada thumb tiene label accesible configurable. |
-| CommandPalette | Usa combobox/listbox y `aria-activedescendant` con ids unicos. |
+| CommandPalette | Eliminado del paquete. |
 | DatePicker/TimePicker | Popovers con `role="dialog"` y labels. |
 | Modal/Drawer | Manejo de foco, escape, overlay y acciones. |
 | AvatarPresence | Decorativo por defecto para no anunciar ruido. |
@@ -1454,7 +1413,6 @@ import {
   Dropdown,
   Popover,
   Tooltip,
-  CommandPalette,
   Toaster,
   toast,
   dismiss,
@@ -1539,26 +1497,25 @@ import {
 
 ## 20. Migracion
 
-### De 1.0.17 a 1.1.0
+### De 1.1.0 a 1.2.0
 
 | Cambio | Detalle |
 | --- | --- |
-| Variante `soft` | Nueva variante para Button, ButtonGroup y otros action controls. Borde + fondo sutil del color seleccionado en reposo, sólido en hover. |
-| Defaults de `variant` | Todos los componentes que exponen `variant` ahora default a `"soft"` en vez de `"solid"` o `"default"`. |
-| Defaults de `color` | Todos los componentes que exponen `color` ahora default a `"neutral"` en vez de `"primary"` o `"info"`. |
+| `secondary` | Nuevo color semántico mapeado a purple. Disponible en todos los componentes con prop `color`. |
+| `CommandPalette` | Eliminado del paquete. Implementa tu propia paleta de búsqueda o usa un input search. |
 
 Comando:
 
 ```bash
-npm install quickit-ui@1.1.0
+npm install quickit-ui@1.2.0
 ```
 
-### Legacy: De 0.2.4 a 1.0.17
+### Legacy: De 0.2.4 a 1.2.0
 
 Comando:
 
 ```bash
-npm install quickit-ui@1.1.0
+npm install quickit-ui@1.2.0
 ```
 
 Cambios a revisar:
@@ -1569,7 +1526,7 @@ Cambios a revisar:
 | Brand | Reemplazar escala `brand` con `@theme` si quieres marca propia. |
 | Breadcrumb | Preferir `Breadcrumb.Item href/current`. |
 | Tabs/FormControl | Preferir API compuesta `Tabs.List`, `FormControl.Description`, etc. |
-| CommandPalette | Solo una instancia con shortcut global activo. |
+| CommandPalette | Eliminado del paquete en 1.2.0. |
 | EmptyState | Usar `EmptyState.Icon` y `EmptyState.Actions`. |
 | Range | Si usas `range` + `name`, ahora serializa ambos extremos. |
 | Combobox | Si `label` es ReactNode, usar `textValue`. |
@@ -1598,7 +1555,7 @@ Si usas este manual como contexto para un agente:
 | Tocar tokens | `brand` es accent reemplazable; estados son `success/danger/warning/info`. |
 | Tocar forms | Revisar `FormControl`, `name`, hidden inputs y `aria-describedby`. |
 | Tocar overlays | Revisar foco, Escape, outside click, roles, portal y scroll lock. |
-| Tocar CommandPalette | No romper multiples instancias ni shortcuts. |
+| CommandPalette | Eliminado en 1.2.0; migrar a input search propio. |
 | Tocar tipos | Actualizar `src/lib/quickit-ui.d.ts` y `tests/types/public-api.tsx`. |
 | Tocar defaults | `variant` ahora default a `"soft"`, `color` a `"neutral"` en todos los componentes. |
 | Tocar variante soft | Borde + fondo sutil del color seleccionado en reposo, sólido en hover. |
