@@ -60,6 +60,7 @@ export function SwitchTamanos() {
     preview: <div className="grid gap-2">
           <Switch defaultChecked color="neutral" label="Neutral" />
           <Switch defaultChecked color="primary" label="Primary" />
+          <Switch defaultChecked color="secondary" label="Secondary" />
           <Switch defaultChecked color="success" label="Success" />
         </div>,
     code: `import { Switch } from "quickit-ui";
@@ -69,6 +70,7 @@ export function SwitchColores() {
     <div className="grid gap-2">
       <Switch defaultChecked color="neutral" label="Neutral" />
       <Switch defaultChecked color="primary" label="Primary" />
+      <Switch defaultChecked color="secondary" label="Secondary" />
       <Switch defaultChecked color="success" label="Success" />
     </div>
   );

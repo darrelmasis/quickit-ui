@@ -68,6 +68,7 @@ export function CheckboxTamanos() {
     preview: <div className="grid gap-2">
           <Checkbox color="neutral" label="Neutral" defaultChecked />
           <Checkbox color="primary" label="Primary" defaultChecked />
+          <Checkbox color="secondary" label="Secondary" defaultChecked />
           <Checkbox color="success" label="Success" defaultChecked />
           <Checkbox color="danger" label="Danger" defaultChecked />
         </div>,
@@ -78,6 +79,7 @@ export function CheckboxColores() {
     <div className="grid gap-2">
       <Checkbox color="neutral" label="Neutral" defaultChecked />
       <Checkbox color="primary" label="Primary" defaultChecked />
+      <Checkbox color="secondary" label="Secondary" defaultChecked />
       <Checkbox color="success" label="Success" defaultChecked />
       <Checkbox color="danger" label="Danger" defaultChecked />
     </div>

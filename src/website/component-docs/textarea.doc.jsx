@@ -102,9 +102,9 @@ export function TextareaFormControl() {
       description: "Radio visual del campo."
     }, {
       name: "size",
-      type: `"sm" | "md" | "lg"`,
+      type: `"sm" | "md" | "lg" | "xl" | "2xl"`,
       defaultValue: `"md"`,
-      description: "Escala el radio del control."
+      description: "Controla la tipografía y el radio del campo."
     }, {
       name: "invalid",
       type: "boolean",

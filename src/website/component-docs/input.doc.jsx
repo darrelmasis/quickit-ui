@@ -55,6 +55,7 @@ export function InputTamanos() {
     preview: <div className="grid gap-3 sm:grid-cols-2">
           <Input color="neutral" defaultValue="Neutral" />
           <Input color="primary" defaultValue="Primary" />
+          <Input color="secondary" defaultValue="Secondary" />
           <Input color="success" defaultValue="Success" />
           <Input color="danger" defaultValue="Danger" />
           <Input color="warning" defaultValue="Warning" />
@@ -67,6 +68,7 @@ export function InputColores() {
     <div className="grid gap-3 sm:grid-cols-2">
       <Input color="neutral" defaultValue="Neutral" />
       <Input color="primary" defaultValue="Primary" />
+      <Input color="secondary" defaultValue="Secondary" />
       <Input color="success" defaultValue="Success" />
       <Input color="danger" defaultValue="Danger" />
       <Input color="warning" defaultValue="Warning" />

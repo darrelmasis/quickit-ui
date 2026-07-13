@@ -70,6 +70,7 @@ export function RadioTamanos() {
     preview: <div className="grid gap-2">
           <Radio color="neutral" label="Neutral" defaultChecked />
           <Radio color="primary" label="Primary" defaultChecked />
+          <Radio color="secondary" label="Secondary" defaultChecked />
           <Radio color="success" label="Success" defaultChecked />
         </div>,
     code: `import { Radio } from "quickit-ui";
@@ -79,6 +80,7 @@ export function RadioColores() {
     <div className="grid gap-2">
       <Radio color="neutral" label="Neutral" defaultChecked />
       <Radio color="primary" label="Primary" defaultChecked />
+      <Radio color="secondary" label="Secondary" defaultChecked />
       <Radio color="success" label="Success" defaultChecked />
     </div>
   );

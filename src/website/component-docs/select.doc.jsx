@@ -102,6 +102,9 @@ export function SelectTamanos() {
           <Select color="primary" placeholder="Primary">
             <option value="1">Opción</option>
           </Select>
+          <Select color="secondary" placeholder="Secondary">
+            <option value="1">Opción</option>
+          </Select>
           <Select color="danger" placeholder="Danger">
             <option value="1">Opción</option>
           </Select>
@@ -115,6 +118,9 @@ export function SelectColores() {
         <option value="1">Opción</option>
       </Select>
       <Select color="primary" placeholder="Primary">
+        <option value="1">Opción</option>
+      </Select>
+      <Select color="secondary" placeholder="Secondary">
         <option value="1">Opción</option>
       </Select>
       <Select color="danger" placeholder="Danger">

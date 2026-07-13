@@ -86,16 +86,16 @@ export function DataTableBasico() {
     title: "Colores del sistema",
     description: "Adapta la tabla al contexto visual.",
     preview: <div className="flex flex-col gap-6">
-          <DataTable color="success" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA.slice(0, 2)} rowKey={(row) => row.id} stickyHeader={false} />
-          <DataTable color="danger" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA.slice(2)} rowKey={(row) => row.id} stickyHeader={false} />
+          <DataTable color="secondary" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA.slice(0, 2)} rowKey={(row) => row.id} stickyHeader={false} />
+          <DataTable color="success" columns={MEMBERS_COLUMNS} data={MEMBERS_DATA.slice(2)} rowKey={(row) => row.id} stickyHeader={false} />
         </div>,
     code: `import { DataTable } from "quickit-ui";
 
 export function DataTableColores() {
   return (
     <div className="flex flex-col gap-6">
-      <DataTable color="success" columns={columns} data={data.slice(0, 2)} rowKey={(row) => row.id} stickyHeader={false} />
-      <DataTable color="danger" columns={columns} data={data.slice(2)} rowKey={(row) => row.id} stickyHeader={false} />
+      <DataTable color="secondary" columns={columns} data={data.slice(0, 2)} rowKey={(row) => row.id} stickyHeader={false} />
+      <DataTable color="success" columns={columns} data={data.slice(2)} rowKey={(row) => row.id} stickyHeader={false} />
     </div>
   );
 }`

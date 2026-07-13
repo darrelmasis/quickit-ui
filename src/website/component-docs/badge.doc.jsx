@@ -22,11 +22,12 @@ export const badgeDoc = {
   examples: [{
     id: "ejemplos-variantes",
     title: "Variantes",
-    description: "Variantes: soft, outline, solid.",
+    description: "Variantes: soft, outline, solid, ghost.",
     preview: <div className="flex flex-wrap gap-3">
           <Badge color="neutral" variant="soft">Soft</Badge>
           <Badge color="neutral" variant="outline">Outline</Badge>
           <Badge color="neutral" variant="solid">Solid</Badge>
+          <Badge color="neutral" variant="ghost">Ghost</Badge>
         </div>,
     code: `import { Badge } from "quickit-ui";
 
@@ -36,6 +37,7 @@ export function BadgeVariantes() {
       <Badge color="neutral" variant="soft">Soft</Badge>
       <Badge color="neutral" variant="outline">Outline</Badge>
       <Badge color="neutral" variant="solid">Solid</Badge>
+      <Badge color="neutral" variant="ghost">Ghost</Badge>
     </div>
   );
 }`
@@ -64,6 +66,7 @@ export function BadgeTamanos() {
     preview: <div className="flex flex-wrap gap-3">
           <Badge color="neutral">Neutral</Badge>
           <Badge color="primary">Primary</Badge>
+          <Badge color="secondary">Secondary</Badge>
           <Badge color="success">Success</Badge>
           <Badge color="danger">Danger</Badge>
           <Badge color="warning">Warning</Badge>
@@ -76,6 +79,7 @@ export function BadgeColores() {
     <div className="flex flex-wrap gap-3">
       <Badge color="neutral">Neutral</Badge>
       <Badge color="primary">Primary</Badge>
+      <Badge color="secondary">Secondary</Badge>
       <Badge color="success">Success</Badge>
       <Badge color="danger">Danger</Badge>
       <Badge color="warning">Warning</Badge>
@@ -98,7 +102,7 @@ export function BadgeColores() {
       description: "Controla altura y tipografía."
     }, {
       name: "variant",
-      type: `"soft" | "outline" | "solid"`,
+      type: `"soft" | "outline" | "solid" | "ghost"`,
       defaultValue: `"soft"`,
       description: "Tratamiento visual del badge."
     }],

@@ -51,6 +51,7 @@ export const alertDoc = {
           <Alert color="success" title="Operación exitosa" description="Los cambios se guardaron correctamente." />
           <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
           <Alert color="danger" title="Error" description="No se pudo completar la operación." />
+          <Alert color="secondary" title="Acento secundario" description="Este es un mensaje con secondary." />
         </div>
       ),
       code: `import { Alert } from "quickit-ui";
@@ -62,6 +63,7 @@ export function AlertColores() {
       <Alert color="success" title="Operación exitosa" description="Cambios guardados." />
       <Alert color="warning" title="Advertencia" description="Revisa los datos." />
       <Alert color="danger" title="Error" description="Operación fallida." />
+      <Alert color="secondary" title="Acento secundario" description="Mensaje con secondary." />
     </div>
   );
 }`
@@ -123,10 +125,10 @@ export function AlertAutoDismiss() {
       title: "Props",
       props: [
         {
-          name: "color", type: "QuickitSemanticColor", defaultValue: `"info"`, description: "Define la paleta visual."
+          name: "color", type: "QuickitSemanticColor", defaultValue: `"neutral"`, description: "Define la paleta visual."
         },
         {
-          name: "variant", type: `"soft" | "outline" | "solid"`, defaultValue: `"soft"`, description: "Tratamiento visual del contenedor."
+          name: "variant", type: `"soft" | "outline" | "solid" | "ghost"`, defaultValue: `"soft"`, description: "Tratamiento visual del contenedor."
         },
         {
           name: "dismissible", type: "boolean", defaultValue: "false", description: "Muestra botón para cerrar."

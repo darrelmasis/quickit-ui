@@ -96,6 +96,7 @@ export function ButtonFormas() {
     preview: <div className="flex flex-wrap gap-3">
           <Button color="neutral">Neutral</Button>
           <Button color="primary">Primary</Button>
+          <Button color="secondary">Secondary</Button>
           <Button color="success">Success</Button>
           <Button color="danger">Danger</Button>
           <Button color="warning">Warning</Button>
@@ -110,6 +111,7 @@ export function ButtonColores() {
     <div className="flex flex-wrap gap-3">
       <Button color="neutral">Neutral</Button>
       <Button color="primary">Primary</Button>
+      <Button color="secondary">Secondary</Button>
       <Button color="success">Success</Button>
       <Button color="danger">Danger</Button>
       <Button color="warning">Warning</Button>

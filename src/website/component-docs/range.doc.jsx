@@ -64,7 +64,7 @@ export function RangeBasico() {
     preview: <div className="flex flex-col gap-3">
           <Range defaultValue={10} color="neutral" />
           <Range defaultValue={20} color="primary" />
-          <Range defaultValue={30} color="primary" />
+          <Range defaultValue={25} color="secondary" />
           <Range defaultValue={40} color="success" />
           <Range defaultValue={50} color="danger" />
         </div>,
@@ -75,7 +75,7 @@ export function RangeColores() {
     <div className="flex flex-col gap-3">
       <Range defaultValue={10} color="neutral" />
       <Range defaultValue={20} color="primary" />
-      <Range defaultValue={30} color="primary" />
+      <Range defaultValue={25} color="secondary" />
       <Range defaultValue={40} color="success" />
       <Range defaultValue={50} color="danger" />
     </div>

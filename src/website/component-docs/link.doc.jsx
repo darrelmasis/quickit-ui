@@ -67,8 +67,8 @@ export function LinkUnderline() {
     description: "Paleta semántica completa.",
     preview: <div className="flex flex-wrap gap-4">
           <Link href={DOCS_LINK_HREF} color="primary" {...SAFE_LINK_PROPS}>Primary</Link>
+          <Link href={DOCS_LINK_HREF} color="secondary" {...SAFE_LINK_PROPS}>Secondary</Link>
           <Link href={DOCS_LINK_HREF} color="neutral" {...SAFE_LINK_PROPS}>Neutral</Link>
-          <Link href={DOCS_LINK_HREF} color="primary" {...SAFE_LINK_PROPS}>Primary</Link>
           <Link href={DOCS_LINK_HREF} color="success" {...SAFE_LINK_PROPS}>Success</Link>
           <Link href={DOCS_LINK_HREF} color="danger" {...SAFE_LINK_PROPS}>Danger</Link>
         </div>,
@@ -78,8 +78,8 @@ export function LinkColores() {
   return (
     <div className="flex flex-wrap gap-4">
       <Link href="/docs" color="primary">Primary</Link>
+      <Link href="/docs" color="secondary">Secondary</Link>
       <Link href="/docs" color="neutral">Neutral</Link>
-      <Link href="/docs" color="primary">Primary</Link>
       <Link href="/docs" color="success">Success</Link>
       <Link href="/docs" color="danger">Danger</Link>
     </div>

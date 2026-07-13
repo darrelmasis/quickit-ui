@@ -46,6 +46,7 @@ export function ProgressBasico() {
     preview: <div className="flex flex-col gap-3">
           <Progress value={30} color="neutral" />
           <Progress value={60} color="primary" />
+          <Progress value={45} color="secondary" />
           <Progress value={80} color="success" />
         </div>,
     code: `import { Progress } from "quickit-ui";
@@ -55,6 +56,7 @@ export function ProgressColores() {
     <div className="flex flex-col gap-3">
       <Progress value={30} color="neutral" />
       <Progress value={60} color="primary" />
+      <Progress value={45} color="secondary" />
       <Progress value={80} color="success" />
     </div>
   );
