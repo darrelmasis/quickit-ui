@@ -33,11 +33,11 @@ export const RADIO_THEME_CLASSES = {
         dot: "bg-white",
       },
       light: {
-        box: "peer-checked:border-neutral-200 peer-checked:bg-neutral-200 peer-hover:peer-checked:border-neutral-300 peer-hover:peer-checked:bg-neutral-300",
+        box: "peer-checked:border-neutral-100 peer-checked:bg-neutral-50 peer-hover:peer-checked:border-neutral-200 peer-hover:peer-checked:bg-neutral-100",
         dot: "bg-neutral-950",
       },
       dark: {
-        box: "peer-checked:border-neutral-800 peer-checked:bg-neutral-800 peer-hover:peer-checked:border-neutral-900 peer-hover:peer-checked:bg-neutral-900",
+        box: "peer-checked:border-neutral-950 peer-checked:bg-neutral-950 peer-hover:peer-checked:border-neutral-900 peer-hover:peer-checked:bg-neutral-900",
         dot: "bg-white",
       },
     },
@@ -50,8 +50,8 @@ export const RADIO_THEME_CLASSES = {
       "peer-focus-visible:outline-neutral-400 peer-focus-visible:ring-neutral-400/35 peer-focus-visible:ring-offset-[#09090b]",
     colors: {
       neutral: {
-        box: "peer-checked:border-neutral-100 peer-checked:bg-neutral-100 peer-hover:peer-checked:border-white peer-hover:peer-checked:bg-white",
-        dot: "bg-neutral-950",
+        box: "peer-checked:border-neutral-700 peer-checked:bg-neutral-700 peer-hover:peer-checked:border-neutral-900 peer-hover:peer-checked:bg-neutral-900",
+        dot: "bg-white",
       },
       primary: {
         box: "peer-checked:border-blue-300 peer-checked:bg-blue-300 peer-hover:peer-checked:border-blue-200 peer-hover:peer-checked:bg-blue-200",
@@ -78,12 +78,12 @@ export const RADIO_THEME_CLASSES = {
         dot: "bg-neutral-950",
       },
       light: {
-        box: "peer-checked:border-neutral-200 peer-checked:bg-neutral-200 peer-hover:peer-checked:border-neutral-100 peer-hover:peer-checked:bg-neutral-100",
-        dot: "bg-neutral-950",
+        box: "peer-checked:border-neutral-800 peer-checked:bg-neutral-800 peer-hover:peer-checked:border-neutral-700 peer-hover:peer-checked:bg-neutral-700",
+        dot: "bg-white",
       },
       dark: {
-        box: "peer-checked:border-neutral-300 peer-checked:bg-neutral-300 peer-hover:peer-checked:border-neutral-200 peer-hover:peer-checked:bg-neutral-200",
-        dot: "bg-neutral-950",
+        box: "peer-checked:border-neutral-950 peer-checked:bg-neutral-950 peer-hover:peer-checked:border-neutral-800 peer-hover:peer-checked:bg-neutral-800",
+        dot: "bg-white",
       },
     },
     invalid: "border-red-500/70 peer-checked:border-red-300 peer-checked:bg-red-300 peer-hover:peer-checked:border-red-200 peer-hover:peer-checked:bg-red-200",

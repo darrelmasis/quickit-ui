@@ -11,7 +11,7 @@ export const TABS_THEME_CLASSES = {
       danger: "text-red-800",
       warning: "text-amber-800",
       info: "text-cyan-800",
-      light: "text-neutral-700",
+      light: "text-neutral-600",
       dark: "text-white",
     },
     bubbleActive: {
@@ -22,8 +22,8 @@ export const TABS_THEME_CLASSES = {
       danger: "border-red-200 bg-red-50",
       warning: "border-amber-200 bg-amber-50",
       info: "border-cyan-200 bg-cyan-50",
-      light: "border-neutral-200 bg-white",
-      dark: "border-neutral-800 bg-neutral-900",
+      light: "border-neutral-100 bg-white",
+      dark: "border-neutral-900 bg-neutral-950",
     },
     content: "text-neutral-600",
   },
@@ -39,7 +39,7 @@ export const TABS_THEME_CLASSES = {
       danger: "text-red-200",
       warning: "text-amber-200",
       info: "text-cyan-200",
-      light: "text-neutral-50",
+      light: "text-neutral-200",
       dark: "text-white",
     },
     bubbleActive: {

@@ -43,14 +43,14 @@ export const CALENDAR_RANGE_CELL_CLASSES = {
   },
   light: {
     committed:
-      "bg-neutral-400/15 text-neutral-900 hover:bg-neutral-400/25 dark:bg-neutral-500/20 dark:text-neutral-100 dark:hover:bg-neutral-500/30",
+      "bg-neutral-300/15 text-neutral-700 hover:bg-neutral-300/25 dark:bg-neutral-500/20 dark:text-neutral-100 dark:hover:bg-neutral-500/30",
     hover:
-      "bg-neutral-400/25 text-neutral-900 ring-1 ring-inset ring-neutral-400/35 hover:bg-neutral-400/35 dark:bg-neutral-500/35 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-500/45",
+      "bg-neutral-300/25 text-neutral-700 ring-1 ring-inset ring-neutral-300/35 hover:bg-neutral-300/35 dark:bg-neutral-500/35 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-500/45",
   },
   dark: {
     committed:
-      "bg-neutral-600/15 text-neutral-800 hover:bg-neutral-600/25 dark:bg-neutral-600/25 dark:text-neutral-100 dark:hover:bg-neutral-600/35",
+      "bg-neutral-600/15 text-neutral-900 hover:bg-neutral-600/25 dark:bg-neutral-600/25 dark:text-neutral-100 dark:hover:bg-neutral-600/35",
     hover:
-      "bg-neutral-600/25 text-neutral-800 ring-1 ring-inset ring-neutral-500/35 hover:bg-neutral-600/35 dark:bg-neutral-600/40 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-600/45",
+      "bg-neutral-600/25 text-neutral-900 ring-1 ring-inset ring-neutral-600/35 hover:bg-neutral-600/35 dark:bg-neutral-600/40 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-600/45",
   },
 };

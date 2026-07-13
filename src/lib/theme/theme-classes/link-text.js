@@ -8,7 +8,7 @@ export const LINK_TEXT_THEME_CLASSES = {
       danger: "text-red-600 hover:text-red-700 focus-visible:ring-red-400/40",
       warning: "text-amber-600 hover:text-amber-700 focus-visible:ring-amber-400/40",
       info: "text-cyan-600 hover:text-cyan-700 focus-visible:ring-cyan-400/40",
-      light: "text-neutral-400 hover:text-neutral-200 focus-visible:ring-neutral-300/40",
+      light: "text-neutral-400 hover:text-neutral-600 focus-visible:ring-neutral-300/40",
       dark: "text-neutral-800 hover:text-neutral-950 focus-visible:ring-neutral-500/40",
     },
     decoration: {
@@ -26,7 +26,7 @@ export const LINK_TEXT_THEME_CLASSES = {
       danger: "text-red-400 hover:text-red-300 focus-visible:ring-red-500/40",
       warning: "text-amber-400 hover:text-amber-300 focus-visible:ring-amber-500/40",
       info: "text-cyan-400 hover:text-cyan-300 focus-visible:ring-cyan-500/40",
-      light: "text-neutral-200 hover:text-white focus-visible:ring-neutral-100/40",
+      light: "text-neutral-200 hover:text-neutral-50 focus-visible:ring-neutral-100/40",
       dark: "text-neutral-400 hover:text-neutral-200 focus-visible:ring-neutral-600/40",
     },
     decoration: {

@@ -29,12 +29,12 @@ export const FORM_FIELD_THEME_CLASSES = {
       hover: "hover:border-cyan-400",
     },
     light: {
-      base: "border-neutral-300 bg-neutral-50 text-neutral-900 focus-visible:border-neutral-500 focus-visible:ring-neutral-400/45",
-      hover: "hover:border-neutral-400",
+      base: "border-neutral-200 bg-neutral-50 text-neutral-700 focus-visible:border-neutral-300 focus-visible:ring-neutral-400/45",
+      hover: "hover:border-neutral-300",
     },
     dark: {
-      base: "border-neutral-800 bg-neutral-900 text-white focus-visible:border-neutral-700 focus-visible:ring-neutral-700/32",
-      hover: "hover:border-neutral-900",
+      base: "border-neutral-500 bg-neutral-200 text-neutral-950 focus-visible:border-neutral-700 focus-visible:ring-neutral-700/32",
+      hover: "hover:border-neutral-400",
     },
     invalid: "border-red-300 bg-red-50 text-red-950 focus-visible:border-red-500 focus-visible:ring-red-400/45",
   },
@@ -68,8 +68,8 @@ export const FORM_FIELD_THEME_CLASSES = {
       hover: "hover:border-cyan-400/70",
     },
     light: {
-      base: "border-neutral-300/70 bg-neutral-100 text-neutral-950 focus-visible:border-neutral-200 focus-visible:ring-neutral-300/30",
-      hover: "hover:border-neutral-200/85",
+      base: "border-neutral-500 bg-neutral-800 text-neutral-100 focus-visible:border-neutral-400 focus-visible:ring-neutral-400/32",
+      hover: "hover:border-neutral-400",
     },
     dark: {
       base: "border-neutral-700 bg-neutral-950 text-white focus-visible:border-neutral-500 focus-visible:ring-neutral-600/35",

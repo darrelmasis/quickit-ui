@@ -8,7 +8,7 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       danger: "border-red-800 bg-red-800 text-white",
       warning: "border-amber-600 bg-amber-600 text-neutral-950",
       info: "border-cyan-800 bg-cyan-800 text-white",
-      light: "border-neutral-400 bg-neutral-300 text-neutral-950",
+      light: "border-neutral-200 bg-neutral-50 text-neutral-950",
       dark: "border-black bg-black text-white",
     },
     outline: {
@@ -19,8 +19,8 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       danger: "border-red-400 bg-red-100 text-red-950",
       warning: "border-amber-500 bg-amber-200 text-amber-950",
       info: "border-cyan-400 bg-cyan-100 text-cyan-950",
-      light: "border-neutral-400 bg-neutral-200 text-neutral-950",
-      dark: "border-black bg-neutral-200 text-black",
+      light: "border-neutral-300 bg-neutral-50 text-neutral-950",
+      dark: "border-neutral-700 bg-neutral-300 text-black",
     },
     ghost: {
       neutral: "bg-neutral-200 text-neutral-950",
@@ -30,8 +30,8 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       danger: "bg-red-100 text-red-950",
       warning: "bg-amber-100 text-amber-950",
       info: "bg-cyan-100 text-cyan-950",
-      light: "bg-neutral-200 text-neutral-950",
-      dark: "bg-neutral-200 text-black",
+      light: "bg-neutral-50 text-neutral-950",
+      dark: "bg-neutral-300 text-black",
     },
   },
   dark: {
@@ -43,8 +43,8 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       danger: "border-red-300 bg-red-300 text-neutral-950",
       warning: "border-amber-200 bg-amber-200 text-neutral-950",
       info: "border-cyan-300 bg-cyan-300 text-neutral-950",
-      light: "border-white bg-white text-neutral-950",
-      dark: "border-neutral-600 bg-black text-white",
+      light: "border-neutral-700 bg-neutral-700 text-neutral-50",
+      dark: "border-black bg-black text-white",
     },
     outline: {
       neutral: "border-neutral-400 bg-neutral-800 text-white",
@@ -54,8 +54,8 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       danger: "border-red-400/60 bg-red-500/20 text-red-50",
       warning: "border-amber-400/60 bg-amber-500/20 text-amber-50",
       info: "border-cyan-400/60 bg-cyan-500/20 text-cyan-50",
-      light: "border-neutral-300/60 bg-neutral-100/20 text-white",
-      dark: "border-neutral-500 bg-black text-white",
+      light: "border-neutral-500 bg-neutral-800 text-neutral-100",
+      dark: "border-neutral-700 bg-black text-white",
     },
     ghost: {
       neutral: "bg-neutral-700 text-white",
@@ -66,7 +66,7 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       warning: "bg-amber-500/20 text-amber-50",
       info: "bg-cyan-500/20 text-cyan-50",
       light: "bg-neutral-700 text-white",
-      dark: "bg-neutral-800 text-white",
+      dark: "bg-neutral-900 text-white",
     },
   },
 };

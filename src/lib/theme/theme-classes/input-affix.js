@@ -36,14 +36,14 @@ export const INPUT_AFFIX_THEME_CLASSES = {
       "focus-visible:outline-cyan-600",
     ].join(" "),
     light: [
-      "text-neutral-600",
-      "hover:border-neutral-200 hover:bg-neutral-50 hover:text-neutral-950",
-      "focus-visible:outline-neutral-600",
+      "text-neutral-400",
+      "hover:border-neutral-100 hover:bg-neutral-50 hover:text-neutral-700",
+      "focus-visible:outline-neutral-400",
     ].join(" "),
     dark: [
-      "text-neutral-600",
-      "hover:border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950",
-      "focus-visible:outline-neutral-600",
+      "text-neutral-700",
+      "hover:border-neutral-300 hover:bg-neutral-200 hover:text-neutral-950",
+      "focus-visible:outline-neutral-700",
     ].join(" "),
   },
   dark: {
@@ -84,13 +84,13 @@ export const INPUT_AFFIX_THEME_CLASSES = {
     ].join(" "),
     light: [
       "text-neutral-200",
-      "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
+      "hover:border-neutral-700 hover:bg-neutral-800 hover:text-neutral-50",
       "focus-visible:outline-neutral-200",
     ].join(" "),
     dark: [
-      "text-neutral-200",
-      "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
-      "focus-visible:outline-neutral-200",
+      "text-neutral-300",
+      "hover:border-neutral-700 hover:bg-neutral-950 hover:text-white",
+      "focus-visible:outline-neutral-300",
     ].join(" "),
   },
 };

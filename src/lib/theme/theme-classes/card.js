@@ -36,14 +36,14 @@ export const CARD_THEME_CLASSES = {
       footer: "border-cyan-100",
     },
     light: {
-      base: "bg-white border-neutral-200 text-neutral-700",
+      base: "bg-white border-neutral-100 text-neutral-600",
       header: "border-neutral-100",
       footer: "border-neutral-100",
     },
     dark: {
-      base: "bg-neutral-100 border-neutral-300 text-neutral-900",
-      header: "border-neutral-200",
-      footer: "border-neutral-200",
+      base: "bg-neutral-200 border-neutral-400 text-neutral-900",
+      header: "border-neutral-300",
+      footer: "border-neutral-300",
     },
   },
   dark: {
@@ -83,12 +83,12 @@ export const CARD_THEME_CLASSES = {
       footer: "border-cyan-800",
     },
     light: {
-      base: "bg-neutral-900 border-neutral-700 text-neutral-300",
+      base: "bg-neutral-800 border-neutral-700 text-neutral-200",
       header: "border-neutral-700",
       footer: "border-neutral-700",
     },
     dark: {
-      base: "bg-neutral-950 border-neutral-700 text-neutral-100",
+      base: "bg-neutral-950 border-neutral-700 text-neutral-50",
       header: "border-neutral-700",
       footer: "border-neutral-700",
     },

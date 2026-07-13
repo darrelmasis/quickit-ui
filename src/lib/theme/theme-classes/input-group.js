@@ -36,13 +36,13 @@ export const INPUT_GROUP_THEME_CLASSES = {
       focus: "focus-within:ring-cyan-400/45",
     },
     light: {
-      frame: "border-neutral-300",
-      separator: "bg-neutral-300",
+      frame: "border-neutral-200",
+      separator: "bg-neutral-200",
       focus: "focus-within:ring-neutral-400/45",
     },
     dark: {
-      frame: "border-neutral-800",
-      separator: "bg-neutral-800",
+      frame: "border-neutral-500",
+      separator: "bg-neutral-500",
       focus: "focus-within:ring-neutral-700/32",
     },
   },
@@ -83,9 +83,9 @@ export const INPUT_GROUP_THEME_CLASSES = {
       focus: "focus-within:ring-cyan-400/30",
     },
     light: {
-      frame: "border-neutral-300/70",
-      separator: "bg-neutral-300/70",
-      focus: "focus-within:ring-neutral-300/30",
+      frame: "border-neutral-500",
+      separator: "bg-neutral-500",
+      focus: "focus-within:ring-neutral-400/30",
     },
     dark: {
       frame: "border-neutral-700",

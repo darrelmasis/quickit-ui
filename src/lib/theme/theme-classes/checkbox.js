@@ -20,9 +20,9 @@ export const CHECKBOX_THEME_CLASSES = {
         info:
           "peer-checked:border-cyan-600 peer-checked:bg-cyan-600 peer-checked:text-white",
         light:
-          "peer-checked:border-neutral-300 peer-checked:bg-neutral-300 peer-checked:text-neutral-950",
+          "peer-checked:border-neutral-200 peer-checked:bg-neutral-50 peer-checked:text-neutral-950",
         dark:
-          "peer-checked:border-neutral-800 peer-checked:bg-neutral-800 peer-checked:text-white",
+          "peer-checked:border-neutral-950 peer-checked:bg-neutral-950 peer-checked:text-white",
       },
     },
     label: "text-neutral-900",
@@ -34,7 +34,7 @@ export const CHECKBOX_THEME_CLASSES = {
       focus: "focus-visible:ring-neutral-500/50 focus-visible:ring-offset-neutral-950",
       colors: {
         neutral:
-          "peer-checked:border-neutral-100 peer-checked:bg-neutral-100 peer-checked:text-neutral-950",
+          "peer-checked:border-neutral-700 peer-checked:bg-neutral-700 peer-checked:text-white",
         primary:
           "peer-checked:border-blue-300 peer-checked:bg-blue-300 peer-checked:text-neutral-950",
         secondary:
@@ -48,9 +48,9 @@ export const CHECKBOX_THEME_CLASSES = {
         info:
           "peer-checked:border-cyan-300 peer-checked:bg-cyan-300 peer-checked:text-neutral-950",
         light:
-          "peer-checked:border-neutral-200 peer-checked:bg-neutral-200 peer-checked:text-neutral-950",
+          "peer-checked:border-neutral-800 peer-checked:bg-neutral-800 peer-checked:text-neutral-100",
         dark:
-          "peer-checked:border-neutral-300 peer-checked:bg-neutral-300 peer-checked:text-neutral-950",
+          "peer-checked:border-neutral-950 peer-checked:bg-neutral-950 peer-checked:text-white",
       },
     },
     label: "text-neutral-50",
