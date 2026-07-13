@@ -18,7 +18,7 @@ const RANGE_PRIMITIVES = {
   track: "relative h-2 w-full grow overflow-hidden rounded-full border",
   range: "absolute",
   thumb: [
-    "block size-5 rounded-full border bg-white ring-offset-white",
+    "block size-5 cursor-grab rounded-full border bg-white ring-offset-white",
     "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
   ].join(" "),
@@ -637,6 +637,7 @@ const Range = forwardRef(function Range(
                       RANGE_PRIMITIVES.thumb,
                     ),
                     ui.thumb,
+                    draggingThumb === "start" && "cursor-grabbing",
                     hoveredThumb === "start" && "",
                   )}
                 />
@@ -651,6 +652,7 @@ const Range = forwardRef(function Range(
                   RANGE_PRIMITIVES.thumb,
                 ),
                 ui.thumb,
+                draggingThumb === "start" && "cursor-grabbing",
                 hoveredThumb === "start" && "",
                 "absolute z-10",
                 isVertical
@@ -694,6 +696,7 @@ const Range = forwardRef(function Range(
                       RANGE_PRIMITIVES.thumb,
                     ),
                     ui.thumb,
+                    draggingThumb === "end" && "cursor-grabbing",
                     hoveredThumb === "end" && "",
                   )}
                 />
@@ -708,6 +711,7 @@ const Range = forwardRef(function Range(
                   RANGE_PRIMITIVES.thumb,
                 ),
                 ui.thumb,
+                draggingThumb === "end" && "cursor-grabbing",
                 hoveredThumb === "end" && "",
                 "absolute z-10",
                 isVertical
@@ -797,6 +801,7 @@ const Range = forwardRef(function Range(
                       RANGE_PRIMITIVES.thumb,
                     ),
                     ui.thumb,
+                    draggingThumb !== null && "cursor-grabbing",
                   )}
                 />
               </span>
@@ -810,6 +815,7 @@ const Range = forwardRef(function Range(
                   RANGE_PRIMITIVES.thumb,
                 ),
                 ui.thumb,
+                draggingThumb !== null && "cursor-grabbing",
                 "absolute z-10",
                 isVertical
                   ? "left-1/2 -translate-x-1/2"
