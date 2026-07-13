@@ -15,7 +15,7 @@ import { datePickerDoc } from "@/website/component-docs/date-picker.doc";
 import { timePickerDoc } from "@/website/component-docs/time-picker.doc";
 import { stepperDoc } from "@/website/component-docs/stepper.doc";
 import { dataTableDoc } from "@/website/component-docs/data-table.doc";
-import { commandPaletteDoc } from "@/website/component-docs/command-palette.doc";
+
 import { checkboxDoc } from "@/website/component-docs/checkbox.doc";
 import { radioDoc } from "@/website/component-docs/radio.doc";
 import { switchDoc } from "@/website/component-docs/switch.doc";
@@ -58,7 +58,7 @@ export const COMPONENT_DOCS = {
   "time-picker": timePickerDoc,
   "stepper": stepperDoc,
   "data-table": dataTableDoc,
-  "command-palette": commandPaletteDoc,
+
   "checkbox": checkboxDoc,
   "radio": radioDoc,
   "switch": switchDoc,

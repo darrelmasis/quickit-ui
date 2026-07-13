@@ -8,7 +8,7 @@ export { Breadcrumb, BreadcrumbCurrent, BreadcrumbItem, BreadcrumbLink, Breadcru
 export { default as Button } from "./button/Button";
 export { Checkbox } from "./checkbox/Checkbox";
 export { Combobox } from "./combobox/Combobox";
-export { CommandPalette } from "./command-palette/CommandPalette";
+
 export { default as Container } from "./container/Container";
 export { Card } from "./card/Card";
 export { Divider } from "./divider/Divider";

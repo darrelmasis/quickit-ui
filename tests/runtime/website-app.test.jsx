@@ -19,31 +19,6 @@ describe("WebsiteApp", () => {
     };
   });
 
-  it("navigates to component docs from the header search", async () => {
-    const user = userEvent.setup();
-
-    render(
-      <QuickitThemeProvider
-        defaultTheme="light"
-        storageKey={WEBSITE_THEME_STORAGE_KEY}
-      >
-        <WebsiteApp />
-      </QuickitThemeProvider>,
-    );
-
-    await user.click(screen.getByRole("button", { name: /buscar documentos/i }));
-
-    const searchInput = await screen.findByLabelText(
-      /buscar en la paleta de comandos/i,
-    );
-
-    await user.type(searchInput, "Accordion");
-    await user.click(await screen.findByRole("option", { name: "Accordion" }));
-
-    expect(await screen.findByRole("heading", { name: "Accordion" })).toBeTruthy();
-    expect(window.location.pathname).toBe("/docs/components/accordion");
-  }, 15000);
-
   it("normalizes legacy docs routes to english urls", async () => {
     window.history.pushState(null, "", "/docs/instalacion");
 

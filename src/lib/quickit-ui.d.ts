@@ -1556,38 +1556,6 @@ export declare function DataTable<Row = Record<string, unknown>>(
   props: DataTableProps<Row>,
 ): React.JSX.Element;
 
-export interface CommandPaletteItem {
-  id?: string;
-  keywords?: readonly string[];
-  label: React.ReactNode;
-  onSelect?: () => void;
-  textValue?: string;
-}
-
-export interface CommandPaletteGroup {
-  heading?: React.ReactNode;
-  items?: readonly CommandPaletteItem[];
-}
-
-export interface CommandPaletteProps {
-  className?: string;
-  emptyText?: string;
-  groups?: readonly CommandPaletteGroup[];
-  headerTrailing?: React.ReactNode;
-  title?: React.ReactNode;
-  onOpenChange?: (open: boolean) => void;
-  open?: boolean;
-  placeholder?: string;
-  shortcutLabel?: string;
-  /** Registra el atajo global Ctrl+K/Cmd+K. Si montas varias paletas, deja solo una con este prop en `true`. */
-  shortcutEnabled?: boolean;
-  /** Enfoca el input al abrirse (por defecto `true`). */
-  autoFocusOnOpen?: boolean;
-}
-
-export declare function CommandPalette(
-  props: CommandPaletteProps,
-): React.JSX.Element;
 
 export type QuickitContainerSize = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 export type QuickitContainerPadding = "none" | "sm" | "md" | "lg" | "xl";

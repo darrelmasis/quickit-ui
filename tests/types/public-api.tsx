@@ -9,7 +9,6 @@ import {
   Button,
   Checkbox,
   Combobox,
-  CommandPalette,
   Container,
   DataTable,
   Default,
@@ -298,12 +297,7 @@ function ConsumerPreviewInner() {
       </Modal>
       <Modal closeOnEscape outsideClick={false} showCloseButton />
       <Drawer closeOnEscape outsideClick={false} showCloseButton />
-      <Container size="lg" padding="md" center>
-        <CommandPalette
-          shortcutEnabled={false}
-          groups={[{ heading: "General", items: [{ id: "docs", label: "Docs" }] }]}
-        />
-      </Container>
+      <Container size="lg" padding="md" center />
     </QuickitProvider>
   );
 }

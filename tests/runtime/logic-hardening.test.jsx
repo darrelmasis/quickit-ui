@@ -2,7 +2,6 @@ import { act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import {
-  CommandPalette,
   DatePicker,
   Link,
   Pagination,
@@ -45,48 +44,8 @@ describe("logic hardening", () => {
     expect(combobox.getAttribute("aria-expanded")).toBe("true");
   });
 
-  it("supports uncontrolled CommandPalette and ignores Ctrl+K inside inputs", async () => {
-    const user = userEvent.setup();
-    const onSelect = vi.fn();
 
-    renderWithProvider(
-      <div>
-        <input aria-label="Campo externo" />
-        <CommandPalette
-          groups={[
-            {
-              heading: "General",
-              items: [
-                {
-                  id: "go-home",
-                  label: <strong>Inicio</strong>,
-                  textValue: "Inicio",
-                  onSelect,
-                },
-              ],
-            },
-          ]}
-        />
-      </div>,
-    );
 
-    const externalInput = screen.getByRole("textbox", { name: "Campo externo" });
-    externalInput.focus();
-    await user.keyboard("{Control>}k{/Control}");
-
-    expect(screen.queryByRole("dialog")).toBeNull();
-
-    await user.click(document.body);
-    await user.keyboard("{Control>}k{/Control}");
-
-    expect(await screen.findByRole("dialog")).toBeTruthy();
-
-    const searchInput = screen.getByLabelText(/buscar en la paleta de comandos/i);
-    await user.type(searchInput, "ini");
-    await user.click(screen.getByRole("option", { name: "Inicio" }));
-
-    expect(onSelect).toHaveBeenCalledTimes(1);
-  });
 
   it("renders no page buttons when Pagination receives zero pages", () => {
     renderWithProvider(<Pagination count={0} />);

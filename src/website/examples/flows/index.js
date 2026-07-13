@@ -5,7 +5,6 @@ import { NotificationsInboxFlow } from "./NotificationsInboxFlow";
 import { CheckoutFlow } from "./CheckoutFlow";
 import { SchedulingFlow } from "./SchedulingFlow";
 import { TeamAdminFlow } from "./TeamAdminFlow";
-import { CommandCenterFlow } from "./CommandCenterFlow";
 
 export const EXAMPLE_FLOWS = [
   {
@@ -57,11 +56,6 @@ export const EXAMPLE_FLOWS = [
     description: "Miembros, roles, acciones y panel lateral de permisos.",
     Component: TeamAdminFlow,
   },
-  {
-    id: "command-center",
-    label: "Command Center",
-    title: "Centro de comandos",
-    description: "Paleta de comandos, atajos y feedback de acciones.",
-    Component: CommandCenterFlow,
-  },
+
+
 ];

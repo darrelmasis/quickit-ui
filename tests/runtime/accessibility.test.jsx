@@ -4,7 +4,6 @@ import { describe, expect, it } from "vitest";
 import {
   Button,
   Combobox,
-  CommandPalette,
   Drawer,
   Modal,
   Popover,
@@ -85,36 +84,6 @@ describe("ARIA: Drawer", () => {
     await user.click(screen.getByText("Abrir"));
     const dialog = await screen.findByRole("dialog");
     expect(dialog.getAttribute("aria-label")).toBe("Drawer");
-  });
-});
-
-describe("ARIA: CommandPalette", () => {
-  it("no usa aria-selected en las opciones", async () => {
-    renderWithProvider(
-      <CommandPalette
-        open
-        groups={[
-          {
-            items: [
-              { id: "1", label: "Opción 1" },
-              { id: "2", label: "Opción 2" },
-            ],
-          },
-        ]}
-      />,
-    );
-    const options = await screen.findAllByRole("option");
-    for (const opt of options) {
-      expect(opt.hasAttribute("aria-selected")).toBe(false);
-    }
-  });
-
-  it("aria-controls en el input solo cuando está abierto", async () => {
-    renderWithProvider(
-      <CommandPalette groups={[]} open />,
-    );
-    const input = await screen.findByRole("combobox");
-    expect(input.getAttribute("aria-controls")).toBeTruthy();
   });
 });
 
