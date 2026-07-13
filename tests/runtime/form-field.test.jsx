@@ -55,10 +55,10 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByRole("combobox").className).toContain(
-      "border-sky-500/55",
+      "border-blue-500/55",
     );
     expect(screen.getByDisplayValue("Error").className).toContain(
-      "border-rose-500/70",
+      "border-red-500/70",
     );
   });
 
@@ -73,10 +73,10 @@ describe("form field variants", () => {
 
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
       "--qi-field-autofill-bg",
-    )).toContain("var(--color-sky-500)");
+    )).toContain("var(--color-blue-500)");
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
       "--qi-field-autofill-border",
-    )).toBe("var(--color-sky-400)");
+    )).toBe("var(--color-blue-400)");
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
       "--qi-field-autofill-text",
     )).toBe("var(--color-neutral-50)");

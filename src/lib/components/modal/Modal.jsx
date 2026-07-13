@@ -549,6 +549,7 @@ export function ModalActions({
   className,
   placement = "center",
 }) {
+  useModalContext("ModalActions");
   const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
 

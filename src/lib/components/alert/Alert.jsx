@@ -22,13 +22,13 @@ const ALERT_PRIMITIVES = {
   root:
     "relative flex w-full items-start gap-4 overflow-hidden border p-5 transition-[background-color,border-color,color]",
   icon:
-    "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl bg-current/10 ring-1 ring-current/10 [&_svg]:size-5",
+    "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-[var(--qi-radius-xl)] bg-current/10 ring-1 ring-current/10 [&_svg]:size-5",
   content: "flex min-w-0 flex-1 flex-col gap-1.5",
   title: "text-sm font-semibold leading-6 tracking-tight",
   description: "text-sm leading-6 opacity-80",
   actions: "!mt-4 flex flex-wrap items-center gap-2.5 pt-1",
   dismiss:
-    "inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-current opacity-70 transition-[background-color,opacity,transform] hover:bg-current/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-current/15 active:scale-[0.98]",
+    "inline-flex size-9 shrink-0 items-center justify-center rounded-[var(--qi-radius-xl)] text-current opacity-70 transition-[background-color,opacity,transform] hover:bg-current/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-current/15 active:scale-[0.98]",
 };
 
 function useAlertContextSlot(slot) {

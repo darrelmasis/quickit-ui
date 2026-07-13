@@ -6,18 +6,23 @@ export const FORM_FIELD_AUTOFILL_TOKENS = {
       text: "var(--color-neutral-950)",
     },
     primary: {
-      background: "var(--color-sky-100)",
-      border: "var(--color-sky-400)",
+      background: "var(--color-blue-100)",
+      border: "var(--color-blue-400)",
+      text: "var(--color-neutral-950)",
+    },
+    secondary: {
+      background: "var(--color-purple-100)",
+      border: "var(--color-purple-400)",
       text: "var(--color-neutral-950)",
     },
     success: {
-      background: "var(--color-emerald-100)",
-      border: "var(--color-emerald-400)",
+      background: "var(--color-green-100)",
+      border: "var(--color-green-400)",
       text: "var(--color-neutral-950)",
     },
     danger: {
-      background: "var(--color-rose-100)",
-      border: "var(--color-rose-400)",
+      background: "var(--color-red-100)",
+      border: "var(--color-red-400)",
       text: "var(--color-neutral-950)",
     },
     warning: {
@@ -41,9 +46,9 @@ export const FORM_FIELD_AUTOFILL_TOKENS = {
       text: "white",
     },
     invalid: {
-      background: "var(--color-rose-100)",
-      border: "var(--color-rose-400)",
-      text: "var(--color-rose-950)",
+      background: "var(--color-red-100)",
+      border: "var(--color-red-400)",
+      text: "var(--color-red-950)",
     },
   },
   dark: {
@@ -54,20 +59,26 @@ export const FORM_FIELD_AUTOFILL_TOKENS = {
     },
     primary: {
       background:
-        "color-mix(in oklab, var(--color-sky-500) 28%, var(--color-neutral-950))",
-      border: "var(--color-sky-400)",
+        "color-mix(in oklab, var(--color-blue-500) 28%, var(--color-neutral-950))",
+      border: "var(--color-blue-400)",
+      text: "var(--color-neutral-50)",
+    },
+    secondary: {
+      background:
+        "color-mix(in oklab, var(--color-purple-500) 28%, var(--color-neutral-950))",
+      border: "var(--color-purple-400)",
       text: "var(--color-neutral-50)",
     },
     success: {
       background:
-        "color-mix(in oklab, var(--color-emerald-500) 28%, var(--color-neutral-950))",
-      border: "var(--color-emerald-400)",
+        "color-mix(in oklab, var(--color-green-500) 28%, var(--color-neutral-950))",
+      border: "var(--color-green-400)",
       text: "var(--color-neutral-50)",
     },
     danger: {
       background:
-        "color-mix(in oklab, var(--color-rose-500) 28%, var(--color-neutral-950))",
-      border: "var(--color-rose-400)",
+        "color-mix(in oklab, var(--color-red-500) 28%, var(--color-neutral-950))",
+      border: "var(--color-red-400)",
       text: "var(--color-neutral-50)",
     },
     warning: {
@@ -94,8 +105,8 @@ export const FORM_FIELD_AUTOFILL_TOKENS = {
     },
     invalid: {
       background:
-        "color-mix(in oklab, var(--color-rose-500) 26%, var(--color-neutral-950))",
-      border: "var(--color-rose-400)",
+        "color-mix(in oklab, var(--color-red-500) 26%, var(--color-neutral-950))",
+      border: "var(--color-red-400)",
       text: "var(--color-neutral-50)",
     },
   },

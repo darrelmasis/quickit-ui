@@ -3,6 +3,7 @@ import { AVATAR_RADIUS_BY_SIZE, CONTROL_RADIUS_BY_SIZE } from "@/lib/utils/radiu
 export const QUICKIT_SEMANTIC_COLORS = Object.freeze([
   "neutral",
   "primary",
+  "secondary",
   "success",
   "danger",
   "warning",
@@ -14,6 +15,7 @@ export const QUICKIT_SEMANTIC_COLORS = Object.freeze([
 export const QUICKIT_ACCENT_COLORS = Object.freeze([
   "neutral",
   "primary",
+  "secondary",
   "success",
   "danger",
   "warning",

@@ -10,11 +10,11 @@ import {
   AVATAR_PRESENCE_MARKER,
   AVATAR_PRESENCE_MASK_BLEED_PX,
   AVATAR_PRESENCE_SIZE_PX,
-  AVATAR_PRESENCE_STATUS_CLASSES,
   AVATAR_PRESENCE_TRANSLATE_RATIO,
   AVATAR_RADIUS_PX,
   AVATAR_SIZE_PX,
 } from "./avatar.constants";
+import { AVATAR_PRESENCE_STATUS_CLASSES } from "@/lib/theme/theme-classes";
 
 export function resolveTheme(theme) {
   return resolveQuickitThemeMode(theme);

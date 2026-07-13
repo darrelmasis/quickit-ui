@@ -5,16 +5,20 @@ export const FORM_FIELD_THEME_CLASSES = {
       hover: "hover:border-neutral-400",
     },
     primary: {
-      base: "border-sky-300/90 bg-sky-50/85 text-neutral-950 focus-visible:border-sky-500 focus-visible:ring-sky-400/45",
-      hover: "hover:border-sky-400",
+      base: "border-blue-300/90 bg-blue-50/85 text-neutral-950 focus-visible:border-blue-500 focus-visible:ring-blue-400/45",
+      hover: "hover:border-blue-400",
+    },
+    secondary: {
+      base: "border-purple-300/90 bg-purple-50/85 text-neutral-950 focus-visible:border-purple-500 focus-visible:ring-purple-400/45",
+      hover: "hover:border-purple-400",
     },
     success: {
-      base: "border-emerald-300/90 bg-emerald-50/80 text-neutral-950 focus-visible:border-emerald-500 focus-visible:ring-emerald-400/45",
-      hover: "hover:border-emerald-400",
+      base: "border-green-300/90 bg-green-50/80 text-neutral-950 focus-visible:border-green-500 focus-visible:ring-green-400/45",
+      hover: "hover:border-green-400",
     },
     danger: {
-      base: "border-rose-300/90 bg-rose-50/80 text-neutral-950 focus-visible:border-rose-500 focus-visible:ring-rose-400/45",
-      hover: "hover:border-rose-400",
+      base: "border-red-300/90 bg-red-50/80 text-neutral-950 focus-visible:border-red-500 focus-visible:ring-red-400/45",
+      hover: "hover:border-red-400",
     },
     warning: {
       base: "border-amber-300/90 bg-amber-50/85 text-neutral-950 focus-visible:border-amber-500 focus-visible:ring-amber-400/45",
@@ -32,7 +36,7 @@ export const FORM_FIELD_THEME_CLASSES = {
       base: "border-neutral-800 bg-neutral-900 text-white focus-visible:border-neutral-700 focus-visible:ring-neutral-700/32",
       hover: "hover:border-neutral-900",
     },
-    invalid: "border-rose-300 bg-rose-50 text-rose-950 focus-visible:border-rose-500 focus-visible:ring-rose-400/45",
+    invalid: "border-red-300 bg-red-50 text-red-950 focus-visible:border-red-500 focus-visible:ring-red-400/45",
   },
   dark: {
     neutral: {
@@ -40,16 +44,20 @@ export const FORM_FIELD_THEME_CLASSES = {
       hover: "hover:border-neutral-500",
     },
     primary: {
-      base: "border-sky-500/55 bg-sky-500/18 text-neutral-50 focus-visible:border-sky-300/90 focus-visible:ring-sky-400/30",
-      hover: "hover:border-sky-400/70",
+      base: "border-blue-500/55 bg-blue-500/18 text-neutral-50 focus-visible:border-blue-300/90 focus-visible:ring-blue-400/30",
+      hover: "hover:border-blue-400/70",
+    },
+    secondary: {
+      base: "border-purple-500/55 bg-purple-500/18 text-neutral-50 focus-visible:border-purple-300/90 focus-visible:ring-purple-400/30",
+      hover: "hover:border-purple-400/70",
     },
     success: {
-      base: "border-emerald-500/55 bg-emerald-500/18 text-neutral-50 focus-visible:border-emerald-300/90 focus-visible:ring-emerald-400/30",
-      hover: "hover:border-emerald-400/70",
+      base: "border-green-500/55 bg-green-500/18 text-neutral-50 focus-visible:border-green-300/90 focus-visible:ring-green-400/30",
+      hover: "hover:border-green-400/70",
     },
     danger: {
-      base: "border-rose-500/55 bg-rose-500/18 text-neutral-50 focus-visible:border-rose-300/90 focus-visible:ring-rose-400/30",
-      hover: "hover:border-rose-400/70",
+      base: "border-red-500/55 bg-red-500/18 text-neutral-50 focus-visible:border-red-300/90 focus-visible:ring-red-400/30",
+      hover: "hover:border-red-400/70",
     },
     warning: {
       base: "border-amber-500/55 bg-amber-500/18 text-neutral-50 focus-visible:border-amber-300/90 focus-visible:ring-amber-400/30",
@@ -67,6 +75,6 @@ export const FORM_FIELD_THEME_CLASSES = {
       base: "border-neutral-700 bg-neutral-950 text-white focus-visible:border-neutral-500 focus-visible:ring-neutral-600/35",
       hover: "hover:border-neutral-600",
     },
-    invalid: "border-rose-500/70 bg-rose-500/16 text-neutral-50 focus-visible:border-rose-400/90 focus-visible:ring-rose-500/25",
+    invalid: "border-red-500/70 bg-red-500/16 text-neutral-50 focus-visible:border-red-400/90 focus-visible:ring-red-500/25",
   },
 };

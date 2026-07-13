@@ -6,9 +6,10 @@ export const PROGRESS_THEME_CLASSES = {
   fill: {
     light: {
       neutral: "bg-neutral-900",
-      primary: "bg-sky-600",
-      success: "bg-emerald-600",
-      danger: "bg-rose-600",
+      primary: "bg-blue-600",
+      secondary: "bg-purple-600",
+      success: "bg-green-600",
+      danger: "bg-red-600",
       warning: "bg-amber-500",
       info: "bg-cyan-600",
       light: "bg-neutral-300",
@@ -16,9 +17,10 @@ export const PROGRESS_THEME_CLASSES = {
     },
     dark: {
       neutral: "bg-neutral-500",
-      primary: "bg-sky-300",
-      success: "bg-emerald-300",
-      danger: "bg-rose-300",
+      primary: "bg-blue-300",
+      secondary: "bg-purple-300",
+      success: "bg-green-300",
+      danger: "bg-red-300",
       warning: "bg-amber-300",
       info: "bg-cyan-300",
       light: "bg-neutral-200",

@@ -28,7 +28,7 @@ describe("DataTable", () => {
       />,
     );
 
-    expect(container.firstChild?.className).toContain("border-sky-200");
+    expect(container.firstChild?.className).toContain("border-blue-200");
     expect(screen.getByRole("columnheader", { name: "Resumen" }).className).toContain(
       "normal-case",
     );

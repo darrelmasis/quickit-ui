@@ -57,7 +57,7 @@ const Label = forwardRef(function Label(
     >
       {children}
       {showRequiredIndicator ? (
-        <span aria-hidden="true" className="ml-1 text-rose-600 dark:text-rose-400">
+        <span aria-hidden="true" className="ml-1 text-red-600 dark:text-red-400">
           {requiredIndicator}
         </span>
       ) : null}

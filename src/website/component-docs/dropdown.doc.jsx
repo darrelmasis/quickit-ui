@@ -181,6 +181,11 @@ export function DropdownLinks() {
     id: "ejemplos-props",
     title: "Props",
     props: [{
+      name: "color",
+      type: "QuickitSemanticColor",
+      defaultValue: `"neutral"`,
+      description: "Define la paleta visual del menú flotante y sus items."
+    }, {
       name: "defaultOpen",
       type: "boolean",
       defaultValue: "false",

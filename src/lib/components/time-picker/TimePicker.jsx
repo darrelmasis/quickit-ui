@@ -332,7 +332,7 @@ export const TimePicker = forwardRef(function TimePicker(
                   className={cn(
                     "h-8 min-w-[2.55rem] rounded-full px-2 text-sm shadow-none",
                     active
-                      ? "text-sky-600 dark:text-sky-300"
+                      ? "text-blue-600 dark:text-blue-300"
                       : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
                   )}
                   onClick={() =>

@@ -1,7 +1,6 @@
 import { forwardRef } from "react";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-
 import { EMPTY_STATE_THEME_CLASSES } from "@/lib/theme/theme-classes";
 
 const EMPTY_STATE_PRIMITIVES = {

@@ -349,7 +349,7 @@ const Select = forwardRef(function Select(
       role="listbox"
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
-        FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
+        FLOATING_LIST_SURFACE_THEME_CLASSES[theme].neutral,
         SELECT_PRIMITIVES.content,
         contentClassName,
       )}
@@ -382,6 +382,7 @@ const Select = forwardRef(function Select(
               className={getFloatingListItemClasses({
                 focusRingEnabled,
                 theme,
+                color: "neutral",
                 selected,
                 disabled: option.disabled,
               })}

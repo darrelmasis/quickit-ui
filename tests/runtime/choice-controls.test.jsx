@@ -107,6 +107,6 @@ describe("choice controls", () => {
     expect(checkboxVisual.className).toContain("peer-checked:border-neutral-300");
     expect(radioVisual.className).toContain("peer-checked:border-neutral-200");
     expect(switchControl.className).toContain("border-neutral-200");
-    expect(invalidSwitch.className).toContain("border-rose-500/70");
+    expect(invalidSwitch.className).toContain("border-red-500/70");
   });
 });

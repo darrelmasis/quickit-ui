@@ -77,6 +77,11 @@ export function StepperVertical() {
     id: "ejemplos-props",
     title: "Props",
     props: [{
+      name: "color",
+      type: "QuickitSemanticColor",
+      defaultValue: `"neutral"`,
+      description: "Define la paleta visual de los pasos."
+    }, {
       name: "steps",
       type: "{ title, description?, clickable? }[]",
       defaultValue: "[]",

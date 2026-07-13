@@ -10,6 +10,7 @@ import {
 import { useInputGroup } from "@/lib/components/input/input-group.context";
 import { ChevronDownIcon, ChevronRightIcon } from "@/lib/assets/icons";
 import { resolveFormFieldColor } from "@/lib/components/_shared/form-field";
+import { CALENDAR_RANGE_CELL_CLASSES } from "@/lib/theme/theme-classes";
 import { cn } from "@/lib/utils";
 import {
   clampDate,
@@ -33,58 +34,6 @@ const MONTH_LABELS = Array.from({ length: 12 }, (_, monthIndex) =>
     .toLocaleDateString(undefined, { month: "short" })
     .replace(".", ""),
 );
-
-/** Relleno de celdas entre extremos (rango confirmado / preview al hover), por color semántico. */
-const CALENDAR_RANGE_CELL_CLASSES = {
-  neutral: {
-    committed:
-      "bg-neutral-400/15 text-neutral-800 hover:bg-neutral-400/25 dark:bg-neutral-500/20 dark:text-neutral-100 dark:hover:bg-neutral-500/30",
-    hover:
-      "bg-neutral-400/25 text-neutral-800 ring-1 ring-inset ring-neutral-400/35 hover:bg-neutral-400/35 dark:bg-neutral-500/35 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-500/45",
-  },
-  primary: {
-    committed:
-      "bg-sky-500/15 text-neutral-800 hover:bg-sky-500/25 dark:bg-sky-500/20 dark:text-neutral-100 dark:hover:bg-sky-500/30",
-    hover:
-      "bg-sky-500/25 text-neutral-800 ring-1 ring-inset ring-sky-500/35 hover:bg-sky-500/35 dark:bg-sky-500/35 dark:text-neutral-50 dark:ring-sky-400/40 dark:hover:bg-sky-500/45",
-  },
-  success: {
-    committed:
-      "bg-emerald-500/15 text-neutral-800 hover:bg-emerald-500/25 dark:bg-emerald-500/20 dark:text-neutral-100 dark:hover:bg-emerald-500/30",
-    hover:
-      "bg-emerald-500/25 text-neutral-800 ring-1 ring-inset ring-emerald-500/35 hover:bg-emerald-500/35 dark:bg-emerald-500/35 dark:text-neutral-50 dark:ring-emerald-400/40 dark:hover:bg-emerald-500/45",
-  },
-  danger: {
-    committed:
-      "bg-rose-500/15 text-neutral-800 hover:bg-rose-500/25 dark:bg-rose-500/20 dark:text-neutral-100 dark:hover:bg-rose-500/30",
-    hover:
-      "bg-rose-500/25 text-neutral-800 ring-1 ring-inset ring-rose-500/35 hover:bg-rose-500/35 dark:bg-rose-500/35 dark:text-neutral-50 dark:ring-rose-400/40 dark:hover:bg-rose-500/45",
-  },
-  warning: {
-    committed:
-      "bg-amber-500/15 text-neutral-800 hover:bg-amber-500/25 dark:bg-amber-500/20 dark:text-neutral-100 dark:hover:bg-amber-500/30",
-    hover:
-      "bg-amber-500/25 text-neutral-800 ring-1 ring-inset ring-amber-500/35 hover:bg-amber-500/35 dark:bg-amber-500/35 dark:text-neutral-50 dark:ring-amber-400/40 dark:hover:bg-amber-500/45",
-  },
-  info: {
-    committed:
-      "bg-cyan-500/15 text-neutral-800 hover:bg-cyan-500/25 dark:bg-cyan-500/20 dark:text-neutral-100 dark:hover:bg-cyan-500/30",
-    hover:
-      "bg-cyan-500/25 text-neutral-800 ring-1 ring-inset ring-cyan-500/35 hover:bg-cyan-500/35 dark:bg-cyan-500/35 dark:text-neutral-50 dark:ring-cyan-400/40 dark:hover:bg-cyan-500/45",
-  },
-  light: {
-    committed:
-      "bg-neutral-400/15 text-neutral-900 hover:bg-neutral-400/25 dark:bg-neutral-500/20 dark:text-neutral-100 dark:hover:bg-neutral-500/30",
-    hover:
-      "bg-neutral-400/25 text-neutral-900 ring-1 ring-inset ring-neutral-400/35 hover:bg-neutral-400/35 dark:bg-neutral-500/35 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-500/45",
-  },
-  dark: {
-    committed:
-      "bg-neutral-600/15 text-neutral-800 hover:bg-neutral-600/25 dark:bg-neutral-600/25 dark:text-neutral-100 dark:hover:bg-neutral-600/35",
-    hover:
-      "bg-neutral-600/25 text-neutral-800 ring-1 ring-inset ring-neutral-500/35 hover:bg-neutral-600/35 dark:bg-neutral-600/40 dark:text-neutral-50 dark:ring-neutral-400/40 dark:hover:bg-neutral-600/45",
-  },
-};
 
 function getCalendarRangeSurfaceClasses(semanticColor) {
   const key = resolveFormFieldColor(semanticColor);

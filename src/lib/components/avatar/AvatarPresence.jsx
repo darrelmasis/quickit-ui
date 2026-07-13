@@ -4,9 +4,9 @@ import { AvatarContext } from "./avatar.context";
 import {
   AVATAR_PRESENCE_MARKER,
   AVATAR_PRESENCE_SIZE_CLASSES,
-  AVATAR_PRESENCE_STATUS_CLASSES,
   AVATAR_PRESENCE_TRANSLATE_RATIO,
 } from "./avatar.constants";
+import { AVATAR_PRESENCE_STATUS_CLASSES } from "@/lib/theme/theme-classes";
 import { resolveAvatarSize, resolvePresenceStatus } from "./avatar.utils";
 
 const AvatarPresence = forwardRef(function AvatarPresence(

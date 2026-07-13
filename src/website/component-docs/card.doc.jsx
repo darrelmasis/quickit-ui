@@ -97,6 +97,12 @@ export function CardSoloBody() {
           description: "Sección superior con borde inferior. Ideal para título y acciones.",
         },
         {
+          name: "color",
+          type: "QuickitSemanticColor",
+          defaultValue: `"neutral"`,
+          description: "Define la paleta visual del contenedor.",
+        },
+        {
           name: "Card.Body",
           type: "Subcomponente",
           defaultValue: "-",

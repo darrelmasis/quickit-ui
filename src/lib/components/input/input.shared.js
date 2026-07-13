@@ -11,6 +11,10 @@ import {
   resolveFormFieldColor,
   resolveFormFieldTheme,
 } from "@/lib/components/_shared/form-field";
+import {
+  INPUT_GROUP_THEME_CLASSES,
+  INPUT_AFFIX_THEME_CLASSES,
+} from "@/lib/theme/theme-classes";
 
 export const INPUT_PRIMITIVES = {
   base: [
@@ -77,93 +81,6 @@ export const INPUT_ACTION_BUTTON_SIZE_CLASSES = {
 export const INPUT_ACTION_BUTTON_THEME_CLASSES = {
   light: "border-transparent bg-transparent",
   dark: "border-transparent bg-transparent",
-};
-
-const INPUT_ACTION_BUTTON_COLOR_CLASSES = {
-  light: {
-    neutral: [
-      "text-neutral-500",
-      "hover:border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950",
-      "focus-visible:outline-neutral-500",
-    ].join(" "),
-    primary: [
-      "text-sky-600",
-      "hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800",
-      "focus-visible:outline-sky-600",
-    ].join(" "),
-    success: [
-      "text-emerald-600",
-      "hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-800",
-      "focus-visible:outline-emerald-600",
-    ].join(" "),
-    danger: [
-      "text-rose-600",
-      "hover:border-rose-200 hover:bg-rose-50 hover:text-rose-800",
-      "focus-visible:outline-rose-600",
-    ].join(" "),
-    warning: [
-      "text-amber-700",
-      "hover:border-amber-200 hover:bg-amber-50 hover:text-amber-900",
-      "focus-visible:outline-amber-700",
-    ].join(" "),
-    info: [
-      "text-cyan-600",
-      "hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800",
-      "focus-visible:outline-cyan-600",
-    ].join(" "),
-    light: [
-      "text-neutral-600",
-      "hover:border-neutral-200 hover:bg-neutral-50 hover:text-neutral-950",
-      "focus-visible:outline-neutral-600",
-    ].join(" "),
-    dark: [
-      "text-neutral-600",
-      "hover:border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950",
-      "focus-visible:outline-neutral-600",
-    ].join(" "),
-  },
-  dark: {
-    neutral: [
-      "text-neutral-400",
-      "hover:border-neutral-800 hover:bg-neutral-900 hover:text-neutral-50",
-      "focus-visible:outline-neutral-400",
-    ].join(" "),
-    primary: [
-      "text-sky-300",
-      "hover:border-sky-800/60 hover:bg-sky-950/40 hover:text-sky-200",
-      "focus-visible:outline-sky-300",
-    ].join(" "),
-    success: [
-      "text-emerald-300",
-      "hover:border-emerald-800/60 hover:bg-emerald-950/35 hover:text-emerald-200",
-      "focus-visible:outline-emerald-300",
-    ].join(" "),
-    danger: [
-      "text-rose-300",
-      "hover:border-rose-800/60 hover:bg-rose-950/35 hover:text-rose-200",
-      "focus-visible:outline-rose-300",
-    ].join(" "),
-    warning: [
-      "text-amber-300",
-      "hover:border-amber-800/60 hover:bg-amber-950/35 hover:text-amber-200",
-      "focus-visible:outline-amber-300",
-    ].join(" "),
-    info: [
-      "text-cyan-300",
-      "hover:border-cyan-800/60 hover:bg-cyan-950/35 hover:text-cyan-200",
-      "focus-visible:outline-cyan-300",
-    ].join(" "),
-    light: [
-      "text-neutral-200",
-      "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
-      "focus-visible:outline-neutral-200",
-    ].join(" "),
-    dark: [
-      "text-neutral-200",
-      "hover:border-neutral-700 hover:bg-neutral-900 hover:text-neutral-50",
-      "focus-visible:outline-neutral-200",
-    ].join(" "),
-  },
 };
 
 export const INPUT_ACTION_ICON_SIZE_CLASSES = {
@@ -246,93 +163,6 @@ export const INPUT_GROUP_ALIGNMENT_CLASSES = {
   end: "justify-end text-right",
   "inline-start": "justify-start text-left",
   "inline-end": "justify-end text-right",
-};
-
-export const INPUT_GROUP_THEME_CLASSES = {
-  light: {
-    neutral: {
-      frame: "border-neutral-300",
-      separator: "bg-neutral-300",
-      focus: "focus-within:ring-neutral-400/50",
-    },
-    primary: {
-      frame: "border-sky-300/90",
-      separator: "bg-sky-300/90",
-      focus: "focus-within:ring-sky-400/45",
-    },
-    success: {
-      frame: "border-emerald-300/90",
-      separator: "bg-emerald-300/90",
-      focus: "focus-within:ring-emerald-400/45",
-    },
-    danger: {
-      frame: "border-rose-300/90",
-      separator: "bg-rose-300/90",
-      focus: "focus-within:ring-rose-400/45",
-    },
-    warning: {
-      frame: "border-amber-300/90",
-      separator: "bg-amber-300/90",
-      focus: "focus-within:ring-amber-400/45",
-    },
-    info: {
-      frame: "border-cyan-300/90",
-      separator: "bg-cyan-300/90",
-      focus: "focus-within:ring-cyan-400/45",
-    },
-    light: {
-      frame: "border-neutral-300",
-      separator: "bg-neutral-300",
-      focus: "focus-within:ring-neutral-400/45",
-    },
-    dark: {
-      frame: "border-neutral-800",
-      separator: "bg-neutral-800",
-      focus: "focus-within:ring-neutral-700/32",
-    },
-  },
-  dark: {
-    neutral: {
-      frame: "border-neutral-700",
-      separator: "bg-neutral-700",
-      focus: "focus-within:ring-neutral-500/32",
-    },
-    primary: {
-      frame: "border-sky-500/55",
-      separator: "bg-sky-500/55",
-      focus: "focus-within:ring-sky-400/30",
-    },
-    success: {
-      frame: "border-emerald-500/55",
-      separator: "bg-emerald-500/55",
-      focus: "focus-within:ring-emerald-400/30",
-    },
-    danger: {
-      frame: "border-rose-500/55",
-      separator: "bg-rose-500/55",
-      focus: "focus-within:ring-rose-400/30",
-    },
-    warning: {
-      frame: "border-amber-500/55",
-      separator: "bg-amber-500/55",
-      focus: "focus-within:ring-amber-400/30",
-    },
-    info: {
-      frame: "border-cyan-500/55",
-      separator: "bg-cyan-500/55",
-      focus: "focus-within:ring-cyan-400/30",
-    },
-    light: {
-      frame: "border-neutral-300/70",
-      separator: "bg-neutral-300/70",
-      focus: "focus-within:ring-neutral-300/30",
-    },
-    dark: {
-      frame: "border-neutral-700",
-      separator: "bg-neutral-700",
-      focus: "focus-within:ring-neutral-600/35",
-    },
-  },
 };
 
 export function resolveInputShape(shape) {
@@ -563,8 +393,8 @@ export function getInputActionButtonClassName({
   const resolvedTheme = theme === "dark" ? "dark" : "light";
   const resolvedColor = invalid ? "danger" : color;
   const colorClasses =
-    INPUT_ACTION_BUTTON_COLOR_CLASSES[resolvedTheme]?.[resolvedColor] ??
-    INPUT_ACTION_BUTTON_COLOR_CLASSES[resolvedTheme].neutral;
+    INPUT_AFFIX_THEME_CLASSES[resolvedTheme]?.[resolvedColor] ??
+    INPUT_AFFIX_THEME_CLASSES[resolvedTheme].neutral;
 
   return cn(
     resolveQuickitFocusRingClasses(

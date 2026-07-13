@@ -77,13 +77,6 @@ export const AVATAR_PRESENCE_TRANSLATE_RATIO = 0.1;
 export const AVATAR_PRESENCE_MASK_BLEED_PX = 0.5;
 export const AVATAR_PRESENCE_MARKER = "__quickitAvatarPresence";
 
-export const AVATAR_PRESENCE_STATUS_CLASSES = {
-  online: "bg-emerald-500",
-  away: "bg-amber-400",
-  busy: "bg-red-500",
-  offline: "bg-neutral-400",
-};
-
 export const AVATAR_PRESENCE_STATUS_LABELS = {
   online: "Online",
   away: "Away",

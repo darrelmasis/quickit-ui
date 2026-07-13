@@ -9,15 +9,19 @@ export const RADIO_THEME_CLASSES = {
         dot: "bg-white",
       },
       primary: {
-        box: "peer-checked:border-sky-600 peer-checked:bg-sky-600 peer-hover:peer-checked:border-sky-700 peer-hover:peer-checked:bg-sky-700",
+        box: "peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-hover:peer-checked:border-blue-700 peer-hover:peer-checked:bg-blue-700",
+        dot: "bg-white",
+      },
+      secondary: {
+        box: "peer-checked:border-purple-600 peer-checked:bg-purple-600 peer-hover:peer-checked:border-purple-700 peer-hover:peer-checked:bg-purple-700",
         dot: "bg-white",
       },
       success: {
-        box: "peer-checked:border-emerald-600 peer-checked:bg-emerald-600 peer-hover:peer-checked:border-emerald-700 peer-hover:peer-checked:bg-emerald-700",
+        box: "peer-checked:border-green-600 peer-checked:bg-green-600 peer-hover:peer-checked:border-green-700 peer-hover:peer-checked:bg-green-700",
         dot: "bg-white",
       },
       danger: {
-        box: "peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
+        box: "peer-checked:border-red-600 peer-checked:bg-red-600 peer-hover:peer-checked:border-red-700 peer-hover:peer-checked:bg-red-700",
         dot: "bg-white",
       },
       warning: {
@@ -37,7 +41,7 @@ export const RADIO_THEME_CLASSES = {
         dot: "bg-white",
       },
     },
-    invalid: "border-rose-300 peer-checked:border-rose-600 peer-checked:bg-rose-600 peer-hover:peer-checked:border-rose-700 peer-hover:peer-checked:bg-rose-700",
+    invalid: "border-red-300 peer-checked:border-red-600 peer-checked:bg-red-600 peer-hover:peer-checked:border-red-700 peer-hover:peer-checked:bg-red-700",
     invalidDot: "bg-white",
   },
   dark: {
@@ -50,15 +54,19 @@ export const RADIO_THEME_CLASSES = {
         dot: "bg-neutral-950",
       },
       primary: {
-        box: "peer-checked:border-sky-300 peer-checked:bg-sky-300 peer-hover:peer-checked:border-sky-200 peer-hover:peer-checked:bg-sky-200",
+        box: "peer-checked:border-blue-300 peer-checked:bg-blue-300 peer-hover:peer-checked:border-blue-200 peer-hover:peer-checked:bg-blue-200",
+        dot: "bg-neutral-950",
+      },
+      secondary: {
+        box: "peer-checked:border-purple-300 peer-checked:bg-purple-300 peer-hover:peer-checked:border-purple-200 peer-hover:peer-checked:bg-purple-200",
         dot: "bg-neutral-950",
       },
       success: {
-        box: "peer-checked:border-emerald-300 peer-checked:bg-emerald-300 peer-hover:peer-checked:border-emerald-200 peer-hover:peer-checked:bg-emerald-200",
+        box: "peer-checked:border-green-300 peer-checked:bg-green-300 peer-hover:peer-checked:border-green-200 peer-hover:peer-checked:bg-green-200",
         dot: "bg-neutral-950",
       },
       danger: {
-        box: "peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
+        box: "peer-checked:border-red-300 peer-checked:bg-red-300 peer-hover:peer-checked:border-red-200 peer-hover:peer-checked:bg-red-200",
         dot: "bg-neutral-950",
       },
       warning: {
@@ -78,7 +86,7 @@ export const RADIO_THEME_CLASSES = {
         dot: "bg-neutral-950",
       },
     },
-    invalid: "border-rose-500/70 peer-checked:border-rose-300 peer-checked:bg-rose-300 peer-hover:peer-checked:border-rose-200 peer-hover:peer-checked:bg-rose-200",
+    invalid: "border-red-500/70 peer-checked:border-red-300 peer-checked:bg-red-300 peer-hover:peer-checked:border-red-200 peer-hover:peer-checked:bg-red-200",
     invalidDot: "bg-neutral-950",
   },
 };

@@ -397,7 +397,7 @@ const Combobox = forwardRef(function Combobox(
       ref={floatingRef}
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
-        FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
+        FLOATING_LIST_SURFACE_THEME_CLASSES[theme].neutral,
         COMBOBOX_PRIMITIVES.content,
       )}
       style={{
@@ -433,6 +433,7 @@ const Combobox = forwardRef(function Combobox(
                 className={getFloatingListItemClasses({
                   focusRingEnabled,
                   theme,
+                  color: "neutral",
                   selected,
                   disabled: option.disabled,
                 })}

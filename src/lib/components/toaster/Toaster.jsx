@@ -9,6 +9,7 @@ import {
 import Button from "@/lib/components/button/Button";
 import { useQuickitControlState } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+import { TOAST_ICON_CLASSES } from "@/lib/theme/theme-classes";
 import { TXT } from "@/lib/texts";
 import {
   dismissToast,
@@ -41,17 +42,23 @@ const SCALE_STEP = 0.052;
 const OPACITY_STEP = 0;
 const TOAST_BASE_MIN_H = 76;
 
-const BUILTIN_KIND_ICONS = {
-  loading: (
-    <SpinnerIcon className="size-5 shrink-0 animate-spin text-sky-600 dark:text-sky-400" />
-  ),
-  success: (
-    <CheckStrokeIcon className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
-  ),
-  error: (
-    <ClearIcon className="size-5 shrink-0 text-rose-600 dark:text-rose-400" />
-  ),
-};
+function getBuiltinKindIcon(kind, theme) {
+  const iconClasses = TOAST_ICON_CLASSES[theme]?.[kind];
+  if (!iconClasses) return null;
+
+  const className = cn("size-5 shrink-0", kind === "loading" && "animate-spin", iconClasses);
+
+  switch (kind) {
+    case "loading":
+      return <SpinnerIcon className={className} />;
+    case "success":
+      return <CheckStrokeIcon className={className} />;
+    case "error":
+      return <ClearIcon className={className} />;
+    default:
+      return null;
+  }
+}
 
 function stackAnimClasses(position, dismissing) {
   const top = position.startsWith("top");
@@ -96,7 +103,7 @@ function resolveGap(gapProp, expanded) {
   return expanded ? expandedGap : collapsed;
 }
 
-function resolveToastIcon(item, { defaultIcon, icons }) {
+function resolveToastIcon(item, { defaultIcon, icons, theme }) {
   if (item.icon != null) {
     return item.icon;
   }
@@ -111,8 +118,8 @@ function resolveToastIcon(item, { defaultIcon, icons }) {
     return defaultIcon;
   }
 
-  if (item.kind && item.kind !== "default" && BUILTIN_KIND_ICONS[item.kind]) {
-    return BUILTIN_KIND_ICONS[item.kind];
+  if (item.kind && item.kind !== "default") {
+    return getBuiltinKindIcon(item.kind, theme);
   }
 
   return null;
@@ -160,7 +167,7 @@ const Toaster = forwardRef(function Toaster(
   const visibleCount = clampVisibleToasts(
     visibleToastsProp ?? MAX_VISIBLE_TOASTS,
   );
-  const iconOptions = { defaultIcon, icons: iconsProp };
+  const iconOptions = { defaultIcon, icons: iconsProp, theme };
   const [positions, setPositions] = useState([]);
 
   useLayoutEffect(() => {
@@ -332,7 +339,7 @@ const Toaster = forwardRef(function Toaster(
                 <div
                   {...getToastAnnouncementProps(item)}
                   className={cn(
-                    "qk-toast-surface pointer-events-auto w-full min-w-0 max-w-full rounded-2xl border px-4 py-3",
+                    "qk-toast-surface pointer-events-auto w-full min-w-0 max-w-full rounded-[var(--qi-radius-2xl)] border px-4 py-3",
                     stackAnimClasses(position, Boolean(item.dismissing)),
                     TOAST_THEME[theme],
                     toastClassName,

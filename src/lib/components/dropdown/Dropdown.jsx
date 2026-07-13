@@ -33,6 +33,10 @@ import {
   resolveFloatingListTheme,
   useFloatingTransition,
 } from "@/lib/components/_shared/floating-list";
+import {
+  QUICKIT_SEMANTIC_COLORS,
+  resolveQuickitToken,
+} from "@/lib/tokens";
 import { DropdownContext, useDropdownContext } from "./dropdown-context";
 
 const DROPDOWN_ITEM_SELECTOR = '[data-qi-dropdown-item="true"]';
@@ -82,6 +86,7 @@ export function Dropdown({
   closeOnClickOutside = true,
   closeOnScroll = false,
   collisionPadding = 8,
+  color,
   defaultOpen = false,
   offsetX = 0,
   onOpenChange,
@@ -153,6 +158,8 @@ export function Dropdown({
     placement,
   });
 
+  const resolvedColor = resolveQuickitToken(QUICKIT_SEMANTIC_COLORS, color, "neutral");
+
   const contextValue = useMemo(
     () => ({
       close,
@@ -165,6 +172,7 @@ export function Dropdown({
       open,
       placement,
       refs,
+      resolvedColor,
       setContentNode(node) {
         contentRef.current = node;
       },
@@ -183,6 +191,7 @@ export function Dropdown({
       open,
       placement,
       refs,
+      resolvedColor,
       setOpen,
       toggle,
       transitionStyles,
@@ -300,6 +309,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
     placement,
     refs,
     floatingStyles,
+    resolvedColor,
     setContentNode,
     transitionStyles,
     usePortal,
@@ -332,7 +342,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
       style={{ ...floatingStyles, ...transitionStyles, ...style }}
       className={cn(
         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
-        FLOATING_LIST_SURFACE_THEME_CLASSES[theme],
+        FLOATING_LIST_SURFACE_THEME_CLASSES[theme][resolvedColor],
         "z-[9999] min-w-[8rem] overflow-hidden",
         className,
       )}
@@ -428,6 +438,7 @@ export const DropdownItem = forwardRef(function DropdownItem(
     getContentRef,
     getItemProps,
     refs,
+    resolvedColor,
     setOpen,
   } = useDropdownContext("DropdownItem");
   const { theme: effectiveTheme, focusRing: focusRingEnabled } =
@@ -483,6 +494,7 @@ export const DropdownItem = forwardRef(function DropdownItem(
         getFloatingListItemClasses({
           focusRingEnabled,
           theme,
+          color: resolvedColor,
           variant,
           disabled,
         }),
@@ -566,6 +578,7 @@ export const DropdownSeparator = forwardRef(function DropdownSeparator(
 ) {
   const { theme: effectiveTheme } = useQuickitControlState("dropdown");
   const theme = resolveFloatingListTheme(effectiveTheme);
+  const { resolvedColor } = useDropdownContext("DropdownSeparator");
 
   return (
     <div
@@ -574,7 +587,7 @@ export const DropdownSeparator = forwardRef(function DropdownSeparator(
       aria-orientation="horizontal"
       className={cn(
         "my-1 border-t",
-        FLOATING_LIST_ITEM_THEME_CLASSES[theme].separator,
+        FLOATING_LIST_ITEM_THEME_CLASSES[theme][resolvedColor].separator,
         className,
       )}
       {...props}

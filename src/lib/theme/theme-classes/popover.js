@@ -11,17 +11,22 @@ export const POPOVER_THEME_CLASSES = {
       arrowStroke: "#cbd5e1",
     },
     primary: {
-      panel: "border-sky-200 bg-sky-50 text-sky-800",
+      panel: "border-blue-200 bg-blue-50 text-blue-800",
       arrowFill: "#f0f9ff",
       arrowStroke: "#bae6fd",
     },
+    secondary: {
+      panel: "border-purple-200 bg-purple-50 text-purple-800",
+      arrowFill: "#faf5ff",
+      arrowStroke: "#e9d5ff",
+    },
     success: {
-      panel: "border-emerald-200 bg-emerald-50 text-emerald-800",
+      panel: "border-green-200 bg-green-50 text-green-800",
       arrowFill: "#ecfdf5",
       arrowStroke: "#a7f3d0",
     },
     danger: {
-      panel: "border-rose-200 bg-rose-50 text-rose-800",
+      panel: "border-red-200 bg-red-50 text-red-800",
       arrowFill: "#fff1f2",
       arrowStroke: "#fecdd3",
     },
@@ -58,17 +63,22 @@ export const POPOVER_THEME_CLASSES = {
       arrowStroke: "#3f3f46",
     },
     primary: {
-      panel: "border-sky-800 bg-sky-950 text-sky-100",
+      panel: "border-blue-800 bg-blue-950 text-blue-100",
       arrowFill: "#082f49",
       arrowStroke: "#075985",
     },
+    secondary: {
+      panel: "border-purple-800 bg-purple-950 text-purple-100",
+      arrowFill: "#2e1065",
+      arrowStroke: "#581c87",
+    },
     success: {
-      panel: "border-emerald-800 bg-emerald-950 text-emerald-100",
+      panel: "border-green-800 bg-green-950 text-green-100",
       arrowFill: "#022c22",
       arrowStroke: "#065f46",
     },
     danger: {
-      panel: "border-rose-800 bg-rose-950 text-rose-100",
+      panel: "border-red-800 bg-red-950 text-red-100",
       arrowFill: "#4c0519",
       arrowStroke: "#9f1239",
     },
