@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0] — 2026-07-13
+
+### Added
+- Variante `ghost` para `Badge` y `Alert` (light + dark, 9 colores)
+
+### Changed
+- Unificados todos los fallback colors a `"neutral"` en Alert, Progress y Button (action-control)
+- `Textarea` ahora escala la tipografía según `size`: `lg` usa `text-base`, `xl`/`2xl` usan `text-lg`
+- `Select` dropdown ahora respeta el `color` prop para los items del menú
+- `Tabs.Trigger` deshabilitado: `opacity-50` → `opacity-60` (consistente con otros componentes)
+- Corregido dark mode del color `"light"` en action-control soft (usaba `bg-neutral-100`, ahora usa `bg-neutral-900`)
+- `Pagination` ellipsis ahora tiene clases dark mode
+
+### Fixed
+- Fallback de `resolveActionActivePseudoClasses` cambiado de `"primary"` a `"neutral"`
+
 ## [1.2.0] — 2026-07-12
 
 ### Added

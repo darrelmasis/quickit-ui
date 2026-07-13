@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.2.0`
+Version documentada: `1.3.0`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.2.0` |
+| Version actual | `1.3.0` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -299,7 +299,7 @@ Exports:
 | `QUICKIT_AVATAR_SIZES` | `sm`, `md`, `lg`, `xl`, `2xl` |
 | `QUICKIT_LINK_TEXT_VARIANTS` | `default`, `muted`, `subtle` |
 | `QUICKIT_LINK_UNDERLINES` | `always`, `hover`, `none` |
-| `QUICKIT_TAB_SIZES` | `xs`, `sm`, `md`, `lg` |
+| `QUICKIT_TAB_SIZES` | `xs`, `sm`, `md`, `lg`, `xl`, `2xl` |
 | `QUICKIT_BREAKPOINTS` | `sm:640`, `md:768`, `lg:1024`, `xl:1280`, `2xl:1536` |
 
 ### Helpers De Tokens
@@ -612,7 +612,7 @@ Props:
 | Prop | Uso |
 | --- | --- |
 | `color` | Paleta del campo. |
-| `size` | Escala visual/radio. |
+| `size` | `sm`, `md`, `lg`, `xl`, `2xl`. Controla tipografía y radio. |
 | `shape` | Radio. |
 | `minRows` | Filas iniciales cuando no pasas `rows`; no hace autosize. |
 | `rows` | Atributo nativo. |
@@ -913,7 +913,7 @@ Props:
 | `onValueChange(value)` | Callback. |
 | `orientation` | `horizontal` o `vertical`. |
 | `activationMode` | `automatic` o `manual`. |
-| `size` | `xs`, `sm`, `md`, `lg`. |
+| `size` | `xs`, `sm`, `md`, `lg`, `xl`, `2xl`. |
 | `color` | Color del tab activo. |
 
 ### Stepper
@@ -1163,7 +1163,7 @@ Props:
 | Prop | Uso |
 | --- | --- |
 | `color` | Paleta. |
-| `variant` | Tratamiento visual. |
+| `variant` | `soft`, `outline`, `solid`, `ghost`. |
 | `title`, `description` | Contenido. |
 | `dismissible` | Cierre manual. |
 | `autoDismiss` | Tiempo en ms. |
@@ -1184,7 +1184,7 @@ Props:
 | Prop | Uso |
 | --- | --- |
 | `color` | `QuickitAccentColor`. |
-| `variant` | `solid`, `soft`, `outline`, etc. |
+| `variant` | `solid`, `soft`, `outline`, `ghost`. |
 | `size` | Tamanno compacto. |
 
 ### EmptyState
@@ -1491,6 +1491,22 @@ import {
 ```
 
 ## 20. Migracion
+
+### De 1.2.0 a 1.3.0
+
+| Cambio | Detalle |
+| --- | --- |
+| `ghost` variant | Nueva variante `ghost` disponible en `Badge` y `Alert`. Muestra solo texto sin fondo ni borde, con fondo sutil en hover. |
+| Textarea font-size | `Textarea` ahora escala la tipografía según `size`: `lg` usa `text-base`, `xl`/`2xl` usan `text-lg`. |
+| Select color prop | El menú desplegable de `Select` ahora respeta el `color` prop para los items, en vez de usar siempre `neutral`. |
+| Fallback colors | Todos los componentes ahora usan `"neutral"` como color de fallback cuando se pasa un valor inválido (antes algunos usaban `"info"` o `"primary"`). |
+| Disabled opacity | `Tabs.Trigger` deshabilitado usa `opacity-60` (consistente con el resto de componentes, antes usaba `opacity-50`). |
+
+Comando:
+
+```bash
+npm install quickit-ui@1.3.0
+```
 
 ### De 1.1.0 a 1.2.0
 
