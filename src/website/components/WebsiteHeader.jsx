@@ -109,7 +109,7 @@ export default function WebsiteHeader({ activePath }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-200/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-neutral-800/40 dark:bg-neutral-950/95 dark:supports-[backdrop-filter]:bg-neutral-950/60">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200/30 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 dark:border-neutral-800/30 dark:bg-neutral-950/90 dark:supports-[backdrop-filter]:bg-neutral-950/60" style={{ borderImage: "linear-gradient(to right, rgb(59 130 246 / 0.08), rgb(168 85 247 / 0.05), transparent) 1" }}>
       <div className="flex h-14 items-center gap-4 px-4 sm:px-6 lg:px-8">
         <a
           href={WEBSITE_ROUTES.landing}
