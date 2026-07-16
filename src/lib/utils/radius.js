@@ -1,9 +1,10 @@
 export const CHECKBOX_RADIUS_BY_SIZE = {
-  sm: "rounded",
-  md: "rounded-md",
+  sm: "rounded-[calc(var(--qi-radius)*0.333)]",
+  md: "rounded-[calc(var(--qi-radius)*0.5)]",
 };
 
 export const CONTROL_RADIUS_BY_SIZE = {
+  xs: "rounded-[var(--qi-radius-xs)]",
   sm: "rounded-[var(--qi-radius-xs)]",
   md: "rounded-[var(--qi-radius)]",
   lg: "rounded-[var(--qi-radius-lg)]",
