@@ -5,7 +5,7 @@ export default function WebsiteSection({
   description,
 }) {
   return (
-    <section id={id} className="scroll-mt-20 first:mt-0 mt-10 border-b border-neutral-100 pb-2 first:border-b-0 dark:border-neutral-800">
+    <section id={id} className="scroll-mt-20 first:mt-0 mt-10 border-b border-neutral-200 pb-2 first:border-b-0 dark:border-neutral-700">
       <div className="max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50">
           {title}

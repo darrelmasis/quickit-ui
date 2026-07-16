@@ -34,7 +34,6 @@ function cornerClasses(index, total, orientation) {
 
 const AUTO_DIVIDER_COLORS = {
   solid: "bg-white/25 dark:bg-black/25",
-  ghost: "bg-neutral-200 dark:bg-neutral-700",
 };
 
 const ButtonGroup = forwardRef(function ButtonGroup(

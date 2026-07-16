@@ -358,7 +358,7 @@ export const DatePicker = forwardRef(function DatePicker(
       <div className="mb-2 flex items-center justify-between gap-2 px-1">
         <Button
           type="button"
-          variant="ghost"
+          variant="soft"
           color="neutral"
           size="sm"
           shape="square"
@@ -387,7 +387,7 @@ export const DatePicker = forwardRef(function DatePicker(
         {canStepUpView ? (
           <Button
             type="button"
-            variant="ghost"
+            variant="soft"
             color="neutral"
             size="sm"
             className="min-w-0 px-2 text-center text-sm font-semibold text-neutral-800 dark:text-neutral-100"
@@ -406,7 +406,7 @@ export const DatePicker = forwardRef(function DatePicker(
         )}
         <Button
           type="button"
-          variant="ghost"
+          variant="soft"
           color="neutral"
           size="sm"
           shape="square"
@@ -458,7 +458,7 @@ export const DatePicker = forwardRef(function DatePicker(
                   <Button
                     key={cell.key}
                     type="button"
-                    variant={isSelected ? "solid" : "ghost"}
+                    variant={isSelected ? "solid" : "soft"}
                     color={isSelected ? calendarAccent : "neutral"}
                     size="sm"
                     shape="square"
@@ -511,7 +511,7 @@ export const DatePicker = forwardRef(function DatePicker(
                 <Button
                   key={cell.key}
                   type="button"
-                  variant={rangeEndpointSolid ? "solid" : "ghost"}
+                  variant={rangeEndpointSolid ? "solid" : "soft"}
                   color={rangeEndpointSolid ? calendarAccent : "neutral"}
                   size="sm"
                   shape="square"
@@ -561,7 +561,7 @@ export const DatePicker = forwardRef(function DatePicker(
             <Button
               key={cell.key}
               type="button"
-              variant={cell.selected ? "solid" : "ghost"}
+              variant={cell.selected ? "solid" : "soft"}
               color={cell.selected ? calendarAccent : "neutral"}
               size="sm"
               disabled={cell.disabled || resolvedDisabled}
@@ -587,7 +587,7 @@ export const DatePicker = forwardRef(function DatePicker(
             <Button
               key={cell.key}
               type="button"
-              variant={cell.selected ? "solid" : "ghost"}
+              variant={cell.selected ? "solid" : "soft"}
               color={cell.selected ? calendarAccent : "neutral"}
               size="sm"
               disabled={cell.disabled || resolvedDisabled}

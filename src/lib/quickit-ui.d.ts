@@ -36,6 +36,7 @@ export declare const QUICKIT_NEUTRAL_COLORS: readonly [
   "dark",
 ];
 export declare const QUICKIT_CONTROL_SIZES: readonly [
+  "xs",
   "sm",
   "md",
   "lg",
@@ -46,8 +47,8 @@ export declare const QUICKIT_COMPACT_CONTROL_SIZES: readonly ["sm", "md"];
 export declare const QUICKIT_BUTTON_VARIANTS: readonly [
   "solid",
   "outline",
-  "ghost",
   "soft",
+  "ghost",
 ];
 export declare const QUICKIT_BUTTON_SHAPES: readonly [
   "default",
@@ -99,6 +100,7 @@ export declare const QUICKIT_RIPPLE_COMPONENTS: readonly [
   "link",
 ];
 export declare const QUICKIT_PRESS_EFFECTS: readonly [
+  "none",
   "transform",
   "ripple",
 ];
@@ -515,7 +517,7 @@ export type AlertDismissReason = "manual" | "auto";
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   actions?: React.ReactNode;
   autoDismiss?: number;
-  color?: QuickitSemanticColor;
+  color?: "neutral" | "info" | "success" | "danger" | "warning";
   defaultOpen?: boolean;
   description?: React.ReactNode;
   dismissible?: boolean;
@@ -526,7 +528,7 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean;
   pauseOnHover?: boolean;
   title?: React.ReactNode;
-  variant?: "soft" | "outline" | "solid";
+  variant?: "soft" | "outline";
 }
 export interface AlertTitleProps
   extends React.HTMLAttributes<HTMLHeadingElement> {}

@@ -1163,7 +1163,7 @@ Props:
 | Prop | Uso |
 | --- | --- |
 | `color` | Paleta. |
-| `variant` | `soft`, `outline`, `solid`, `ghost`. |
+| `variant` | `soft`, `outline`. |
 | `title`, `description` | Contenido. |
 | `dismissible` | Cierre manual. |
 | `autoDismiss` | Tiempo en ms. |

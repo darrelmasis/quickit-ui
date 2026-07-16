@@ -29,7 +29,7 @@ export function useQuickitControlState(component, props = {}) {
   const providerCustomScrollbar = useQuickitCustomScrollbar();
 
   const resolvedPressEffect = useMemo(() => {
-    if (pressEffect === "ripple" || pressEffect === "transform") {
+    if (pressEffect === "none" || pressEffect === "ripple" || pressEffect === "transform") {
       return pressEffect;
     }
     return providerPressEffect;

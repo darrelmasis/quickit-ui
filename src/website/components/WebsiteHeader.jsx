@@ -109,7 +109,7 @@ export default function WebsiteHeader({ activePath }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-200/30 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 dark:border-neutral-800/30 dark:bg-neutral-950/90 dark:supports-[backdrop-filter]:bg-neutral-950/60" style={{ borderImage: "linear-gradient(to right, rgb(59 130 246 / 0.08), rgb(168 85 247 / 0.05), transparent) 1" }}>
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
       <div className="flex h-14 items-center gap-4 px-4 sm:px-6 lg:px-8">
         <a
           href={WEBSITE_ROUTES.landing}
@@ -120,16 +120,15 @@ export default function WebsiteHeader({ activePath }) {
         </a>
 
         <nav className="hidden items-center gap-1 md:flex">
-          <For each={WEBSITE_NAV.filter((item) => item.href !== WEBSITE_ROUTES.examples)}>
+          <For each={WEBSITE_NAV}>
             {(item) => (
               <a
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-                  activePath === item.href
-                    ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
-                    : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
+                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",                    activePath === item.href
+                      ? "bg-neutral-200 text-neutral-900 dark:bg-neutral-700 dark:text-neutral-50"
+                      : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100",
                 )}
               >
                 {item.label}
@@ -160,7 +159,7 @@ export default function WebsiteHeader({ activePath }) {
             {isOpen && query.trim() && filteredResults.length > 0 && (
               <div
                 ref={dropdownRef}
-                className="absolute left-0 top-full mt-1 w-full max-h-72 overflow-y-auto rounded-md border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-neutral-900"
+                className="absolute left-0 top-full mt-1 w-full max-h-72 overflow-y-auto rounded-md border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-800"
               >
                 {groupedResults.map(([group, items]) => (
                   <div key={group}>
@@ -171,7 +170,7 @@ export default function WebsiteHeader({ activePath }) {
                       <a
                         key={item.id}
                         href={item.href}
-                        className="block rounded-md px-2 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                        className="block rounded-md px-2 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
                         onClick={() => setIsOpen(false)}
                       >
                         {item.label}
@@ -190,7 +189,7 @@ export default function WebsiteHeader({ activePath }) {
             size="sm"
             shape="circle"
             color="neutral"
-            variant="ghost"
+            variant="soft"
             activeMotion={false}
             aria-label="Abrir repositorio de Quickit UI en GitHub"
             title="GitHub"
@@ -202,7 +201,7 @@ export default function WebsiteHeader({ activePath }) {
             size="sm"
             shape="circle"
             color="neutral"
-            variant="ghost"
+            variant="soft"
             activeMotion={false}
             aria-label={isDark ? "Activar tema claro" : "Activar tema oscuro"}
             onClick={toggleTheme}

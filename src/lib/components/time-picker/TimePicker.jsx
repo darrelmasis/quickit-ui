@@ -327,7 +327,7 @@ export const TimePicker = forwardRef(function TimePicker(
                   type="button"
                   size="sm"
                   color={active ? applyButtonColor : "neutral"}
-                  variant="ghost"
+                  variant="soft"
                   disabled={disabledOption}
                   className={cn(
                     "h-8 min-w-[2.55rem] rounded-full px-2 text-sm shadow-none",
@@ -361,7 +361,7 @@ export const TimePicker = forwardRef(function TimePicker(
       <div className="mt-2 flex items-center justify-between gap-2 border-t border-neutral-200/80 px-2 pt-3 dark:border-neutral-800">
         <Button
           type="button"
-          variant="ghost"
+          variant="soft"
           color="neutral"
           size="sm"
           className="px-2 text-[0.95rem]"
@@ -470,7 +470,7 @@ export const TimePicker = forwardRef(function TimePicker(
         {clearButton && hasValue ? (
           <Button
             type="button"
-            variant="ghost"
+            variant="soft"
             color="neutral"
             shape="circle"
             size="sm"
@@ -494,7 +494,7 @@ export const TimePicker = forwardRef(function TimePicker(
 
         <Button
           type="button"
-          variant="ghost"
+          variant="soft"
           color="neutral"
           shape="square"
           size="sm"

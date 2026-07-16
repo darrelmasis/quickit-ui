@@ -47,7 +47,7 @@ describe("ripple configuration", () => {
     const button = screen.getByRole("button", { name: "Guardar" });
 
     expect(screen.getByText("button ripple: true")).toBeTruthy();
-    expect(screen.getByText("link ripple: false")).toBeTruthy();
+    expect(screen.getByText("link ripple: true")).toBeTruthy();
 
     await user.click(button);
     await waitFor(() => {

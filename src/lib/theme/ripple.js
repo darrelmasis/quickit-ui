@@ -4,6 +4,7 @@ import { QuickitThemeContext } from "./quickit-theme-context";
 
 export const QUICKIT_RIPPLE_COMPONENTS = Object.freeze([
   "button",
+  "link",
 ]);
 
 const DEFAULT_RIPPLE_CONFIG = Object.freeze({

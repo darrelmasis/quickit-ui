@@ -36,6 +36,7 @@ export const QUICKIT_NEUTRAL_COLORS = Object.freeze([
 ]);
 
 export const QUICKIT_CONTROL_SIZES = Object.freeze([
+  "xs",
   "sm",
   "md",
   "lg",
@@ -48,8 +49,8 @@ export const QUICKIT_COMPACT_CONTROL_SIZES = Object.freeze(["sm", "md"]);
 export const QUICKIT_BUTTON_VARIANTS = Object.freeze([
   "solid",
   "outline",
-  "ghost",
   "soft",
+  "ghost",
 ]);
 
 export const QUICKIT_BUTTON_SHAPES = Object.freeze([

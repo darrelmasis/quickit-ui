@@ -213,7 +213,7 @@ export function resolveActionRippleStyles(theme, variant, color) {
       : { color: shades.dark, opacity: 0.16 };
   }
 
-  // Los colores neutros (light/neutral/dark) en soft/ghost tienen fondos claros
+  // Los colores neutros (light/neutral/dark) en soft tienen fondos claros
   // (white/neutral-100/neutral-200 en light mode) donde el ripple oscuro al 12%
   // es imperceptible. Se necesita mayor opacidad para que sea visible,
   // especialmente porque el hover oscurece el fondo (hover:bg-neutral-300/500).
@@ -223,7 +223,7 @@ export function resolveActionRippleStyles(theme, variant, color) {
       : { color: shades.dark, opacity: 0.28 };
   }
 
-  // soft / ghost
+  // soft
   return !isLightMode
     ? { color: shades.light, opacity: 0.14 }
     : { color: shades.dark, opacity: 0.12 };

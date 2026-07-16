@@ -1,5 +1,16 @@
 export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
   light: {
+    ghost: {
+      neutral: "border-transparent bg-neutral-200 text-neutral-900",
+      primary: "border-transparent bg-blue-100 text-blue-900",
+      secondary: "border-transparent bg-purple-100 text-purple-950",
+      success: "border-transparent bg-green-100 text-green-950",
+      danger: "border-transparent bg-red-100 text-red-950",
+      warning: "border-transparent bg-amber-200 text-amber-950",
+      info: "border-transparent bg-cyan-100 text-cyan-950",
+      light: "border-transparent bg-neutral-100 text-neutral-950",
+      dark: "border-transparent bg-neutral-300 text-black",
+    },
     solid: {
       neutral: "border-neutral-900 bg-neutral-900 text-white",
       primary: "border-blue-800 bg-blue-800 text-white",
@@ -22,19 +33,19 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       light: "border-neutral-300 bg-neutral-50 text-neutral-950",
       dark: "border-neutral-700 bg-neutral-300 text-black",
     },
-    ghost: {
-      neutral: "bg-neutral-200 text-neutral-950",
-      primary: "bg-blue-100 text-blue-900",
-      secondary: "bg-purple-100 text-purple-950",
-      success: "bg-green-100 text-green-950",
-      danger: "bg-red-100 text-red-950",
-      warning: "bg-amber-100 text-amber-950",
-      info: "bg-cyan-100 text-cyan-950",
-      light: "bg-neutral-50 text-neutral-950",
-      dark: "bg-neutral-300 text-black",
-    },
   },
   dark: {
+    ghost: {
+      neutral: "border-transparent bg-neutral-700 text-white",
+      primary: "border-transparent bg-blue-800 text-blue-50",
+      secondary: "border-transparent bg-purple-800 text-purple-50",
+      success: "border-transparent bg-green-800 text-green-50",
+      danger: "border-transparent bg-red-800 text-red-50",
+      warning: "border-transparent bg-amber-800 text-amber-50",
+      info: "border-transparent bg-cyan-800 text-cyan-50",
+      light: "border-transparent bg-neutral-700 text-neutral-50",
+      dark: "border-transparent bg-neutral-950 text-white",
+    },
     solid: {
       neutral: "border-neutral-900 bg-neutral-900 text-white",
       primary: "border-blue-300 bg-blue-300 text-neutral-950",
@@ -56,17 +67,6 @@ export const ACTION_CONTROL_ACTIVE_THEME_CLASSES = {
       info: "border-cyan-400/60 bg-cyan-500/20 text-cyan-50",
       light: "border-neutral-500 bg-neutral-800 text-neutral-100",
       dark: "border-neutral-700 bg-black text-white",
-    },
-    ghost: {
-      neutral: "bg-neutral-700 text-white",
-      primary: "bg-blue-500/20 text-blue-50",
-      secondary: "bg-purple-500/20 text-purple-50",
-      success: "bg-green-500/20 text-green-50",
-      danger: "bg-red-500/20 text-red-50",
-      warning: "bg-amber-500/20 text-amber-50",
-      info: "bg-cyan-500/20 text-cyan-50",
-      light: "bg-neutral-700 text-white",
-      dark: "bg-neutral-900 text-white",
     },
   },
 };

@@ -53,13 +53,13 @@ export const POPOVER_THEME_CLASSES = {
   },
   dark: {
     default: {
-      panel: "border-neutral-800 bg-neutral-950 text-neutral-200",
-      arrowFill: "#0a0a0b",
-      arrowStroke: "#262626",
+      panel: "border-neutral-700 bg-neutral-900 text-neutral-200",
+      arrowFill: "#171717",
+      arrowStroke: "#404040",
     },
     neutral: {
-      panel: "border-neutral-700 bg-neutral-950 text-neutral-100",
-      arrowFill: "#0a0a0b",
+      panel: "border-neutral-700 bg-neutral-900 text-neutral-100",
+      arrowFill: "#171717",
       arrowStroke: "#404040",
     },
     primary: {
@@ -98,9 +98,9 @@ export const POPOVER_THEME_CLASSES = {
       arrowStroke: "#404040",
     },
     dark: {
-      panel: "border-neutral-800 bg-neutral-950 text-white",
-      arrowFill: "#0a0a0b",
-      arrowStroke: "#262626",
+      panel: "border-neutral-700 bg-neutral-900 text-white",
+      arrowFill: "#171717",
+      arrowStroke: "#404040",
     },
   },
 };

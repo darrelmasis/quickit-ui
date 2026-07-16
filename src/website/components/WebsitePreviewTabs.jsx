@@ -4,7 +4,7 @@ import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 export default function WebsitePreviewTabs({ code, children }) {
   const theme = useQuickitTheme();
   const isDark = theme === "dark";
-  const previewBg = isDark ? "bg-white/[0.02]" : "bg-white";
+  const previewBg = isDark ? "bg-neutral-900" : "bg-white";
 
   return (
     <div className="overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800">

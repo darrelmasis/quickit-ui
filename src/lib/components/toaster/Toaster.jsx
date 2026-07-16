@@ -366,7 +366,7 @@ const Toaster = forwardRef(function Toaster(
                     {showCloseButton ? (
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="soft"
                         shape="square"
                         size="sm"
                         color="neutral"

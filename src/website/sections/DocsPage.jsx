@@ -1,11 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import WebsitePageToc from "@/website/components/WebsitePageToc";
+import WebsiteLayout from "@/website/components/WebsiteLayout";
 import {
   Badge,
   Button,
   Checkbox,
   Combobox,
-  Container,
   DataTable,
   DatePicker,
   Drawer,
@@ -428,7 +427,7 @@ function ColorPaletteShowcase() {
                 {palette.desc}
               </span>
               <Show when={palette.token}>
-                <Badge color="primary" variant="ghost" size="sm">
+                <Badge color="primary" variant="soft" size="sm">
                   → {palette.token}
                 </Badge>
               </Show>
@@ -599,7 +598,7 @@ function HookDetailPage({ slug }) {
         </p>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-8">
         <Show when={hook.parameters}>
           <div id="parametros" className="scroll-mt-28">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
@@ -652,19 +651,59 @@ function GenericSectionPage({ sectionId }) {
         <WebsiteSection
           id="introduccion"
           title="Introducción"
-          description="Quickit está pensado para equipos que necesitan velocidad, consistencia visual y una API suficientemente flexible para adaptar producto real."
+          description="Componentes de UI para React, copy-pasteados en tu proyecto."
         >
-          <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-            Los primitives compuestos (Accordion, Tabs, Dropdown, Breadcrumb,
-            Modal, Drawer, FormControl, InputGroup, Avatar, EmptyState…) exponen
-            subcomponentes como{" "}
-            <code className="font-mono text-xs">Componente.Subcomponente</code>.
-            Los nombres en PascalCase sueltos (
-            <code className="font-mono text-xs">TabsList</code>,{" "}
-            <code className="font-mono text-xs">FormMessage</code>, etc.) siguen
-            exportándose por compatibilidad.
+          <div className="flex flex-col gap-6 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+            <p>
+              <strong className="font-semibold text-neutral-950 dark:text-neutral-50">
+                Esto no es una librería de componentes.
+              </strong>{" "}
+              Es la forma de construir tu propia librería. Copias el código, lo
+              tienes completo y lo modificas como necesites.
+            </p>
+            <ul className="flex flex-col gap-4">
+              <li>
+                <strong className="font-semibold text-neutral-950 dark:text-neutral-50">
+                  Código abierto.
+                </strong>{" "}
+                Tienes el código completo de cada componente. Modifícalo,
+                extiéndelo, úsalo como base para tu propio design system.
+              </li>
+              <li>
+                <strong className="font-semibold text-neutral-950 dark:text-neutral-50">
+                  Composición.
+                </strong>{" "}
+                Cada componente usa una interfaz común y composable. Si un
+                componente no existe, lo traemos, lo hacemos composable y ajustamos
+                su estilo para que funcione con el resto del sistema.
+              </li>
+              <li>
+                <strong className="font-semibold text-neutral-950 dark:text-neutral-50">
+                  Defaults hermosos.
+                </strong>{" "}
+                Estilos por defecto cuidadosamente elegidos para que tu UI se vea
+                bien desde el primer día, sin trabajo extra.
+              </li>
+              <li>
+                <strong className="font-semibold text-neutral-950 dark:text-neutral-50">
+                  Tema persistente.
+                </strong>{" "}
+                Proveedor único para tema, focus ring, ripple y radius. Control
+                global con posibilidad de sobrescribir por componente.
+              </li>
+            </ul>
+            <p className="text-neutral-500 dark:text-neutral-500">
+              Los primitives compuestos (Accordion, Tabs, Dropdown, Breadcrumb,
+              Modal, Drawer, FormControl, InputGroup, Avatar, EmptyState…) exponen
+              subcomponentes como{" "}
+              <code className="font-mono text-xs">Componente.Subcomponente</code>.
+              Los nombres en PascalCase sueltos (
+              <code className="font-mono text-xs">TabsList</code>,{" "}
+              <code className="font-mono text-xs">FormMessage</code>, etc.) siguen
+              exportándose por compatibilidad.
+            </p>
           </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
               <h3
                 id="introduccion-componentes"
@@ -672,7 +711,7 @@ function GenericSectionPage({ sectionId }) {
               >
                 Componentes de producto
               </h3>
-              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <p className="mt-2 text-sm leading-7 text-neutral-500 dark:text-neutral-400">
                 Botones, formularios, overlays, navegación, identidad y estados
                 vacíos listos para integrarse en apps reales.
               </p>
@@ -684,7 +723,7 @@ function GenericSectionPage({ sectionId }) {
               >
                 Tema y comportamiento
               </h3>
-              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <p className="mt-2 text-sm leading-7 text-neutral-500 dark:text-neutral-400">
                 Proveedor único para tema, focus ring, ripple y press effect,
                 con control global y por componente.
               </p>
@@ -696,9 +735,11 @@ function GenericSectionPage({ sectionId }) {
               >
                 Utilidades lógicas
               </h3>
-              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                `Show`, `RenderSwitch` y `For` están disponibles para construir
-                pantallas más declarativas desde la propia librería.
+              <p className="mt-2 text-sm leading-7 text-neutral-500 dark:text-neutral-400">
+                <code className="font-mono text-xs">Show</code>,{" "}
+                <code className="font-mono text-xs">RenderSwitch</code> y{" "}
+                <code className="font-mono text-xs">For</code> disponibles para
+                construir pantallas más declarativas desde la propia librería.
               </p>
             </div>
           </div>
@@ -711,36 +752,101 @@ function GenericSectionPage({ sectionId }) {
           title="Instalación"
           description="La integración mínima requiere instalar el paquete, importar estilos y decidir si quieres un provider estático o un controlador de tema persistente."
         >
-          <div className="flex flex-col gap-6">
-            <WebsiteCodeBlock code={INSTALL_COMMAND} language="bash" />
-            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Si tu app no usa Tailwind, importa los estilos de Quickit una sola
-              vez. Ese archivo contiene los estilos base de componentes, tokens
-              de color, variables CSS y variantes dark compiladas.
+          <div className="flex flex-col gap-8">
+            <div>
+              <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Instala el paquete con tu gestor de dependencias favorito.
+              </p>
+              <div className="mt-3">
+                <WebsiteCodeBlock code={INSTALL_COMMAND} language="bash" />
+              </div>
             </div>
-            <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
-            <WebsiteCodeBlock code={COMPONENT_IMPORT_SNIPPET} language="jsx" />
-            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Si tu app también usa Tailwind CSS 4, importa primero{" "}
-              <code className="font-mono text-xs">quickit-ui/styles.css</code> y
-              después <code className="font-mono text-xs">tailwindcss</code>.
-              Así Tailwind y los tokens de tu app quedan al final de la cascada
-              y pueden sobrescribir lo necesario.
+
+            <div>
+              <h3
+                id="instalacion-estilos"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Importar estilos
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Si tu app no usa Tailwind, importa los estilos de Quickit una
+                sola vez. Ese archivo contiene los estilos base de componentes,
+                tokens de color, variables CSS y variantes dark compiladas.
+              </p>
+              <div className="mt-3">
+                <WebsiteCodeBlock code={STYLES_SNIPPET} language="css" />
+              </div>
             </div>
-            <WebsiteCodeBlock code={TAILWIND_STYLES_SNIPPET} language="css" />
-            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Todos los colores de acento (
-              <code className="font-mono text-xs">primary</code>,{" "}
-              <code className="font-mono text-xs">secondary</code>,{" "}
-              <code className="font-mono text-xs">success</code>,{" "}
-              <code className="font-mono text-xs">danger</code>,{" "}
-              <code className="font-mono text-xs">warning</code>,{" "}
-              <code className="font-mono text-xs">info</code>) son reemplazables
-              porque se mapean directamente a colores nativos de Tailwind. Solo
-              sobrescribe el color Tailwind subyacente en{" "}
-              <code className="font-mono text-xs">@theme</code>.
+
+            <div>
+              <h3
+                id="instalacion-imports"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Importar componentes
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Importa directamente desde{" "}
+                <code className="font-mono text-xs">quickit-ui</code>. Cada
+                componente incluye sus estilos.
+              </p>
+              <div className="mt-3">
+                <WebsiteCodeBlock
+                  code={COMPONENT_IMPORT_SNIPPET}
+                  language="jsx"
+                />
+              </div>
             </div>
-            <WebsiteCodeBlock code={ACCENT_OVERRIDE_SNIPPET} language="css" />
+
+            <div>
+              <h3
+                id="instalacion-tailwind"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Orden de imports con Tailwind CSS 4
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Si tu app también usa Tailwind CSS 4, importa primero{" "}
+                <code className="font-mono text-xs">quickit-ui/styles.css</code>{" "}
+                y después <code className="font-mono text-xs">tailwindcss</code>.
+                Así Tailwind y los tokens de tu app quedan al final de la cascada
+                y pueden sobrescribir lo necesario.
+              </p>
+              <div className="mt-3">
+                <WebsiteCodeBlock
+                  code={TAILWIND_STYLES_SNIPPET}
+                  language="css"
+                />
+              </div>
+            </div>
+
+            <div>
+              <h3
+                id="instalacion-colores"
+                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
+                Sobrescribir colores de acento
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                Todos los colores de acento (
+                <code className="font-mono text-xs">primary</code>,{" "}
+                <code className="font-mono text-xs">secondary</code>,{" "}
+                <code className="font-mono text-xs">success</code>,{" "}
+                <code className="font-mono text-xs">danger</code>,{" "}
+                <code className="font-mono text-xs">warning</code>,{" "}
+                <code className="font-mono text-xs">info</code>) son
+                reemplazables porque se mapean directamente a colores nativos de
+                Tailwind. Solo sobrescribe el color Tailwind subyacente en{" "}
+                <code className="font-mono text-xs">@theme</code>.
+              </p>
+              <div className="mt-3">
+                <WebsiteCodeBlock
+                  code={ACCENT_OVERRIDE_SNIPPET}
+                  language="css"
+                />
+              </div>
+            </div>
           </div>
         </WebsiteSection>
       </Show>
@@ -752,7 +858,7 @@ function GenericSectionPage({ sectionId }) {
           description={QUICKIT_V1_MIGRATION.summary}
         >
           <div className="flex flex-col gap-8">
-            <div className="rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 text-sm leading-7 text-green-900 dark:border-green-900/60 dark:bg-green-950/20 dark:text-green-100">
+            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
               Ruta cubierta en esta guía:{" "}
               <code className="font-mono text-xs">
                 {QUICKIT_V1_MIGRATION.fromVersion}
@@ -762,28 +868,28 @@ function GenericSectionPage({ sectionId }) {
                 {QUICKIT_V1_MIGRATION.toVersion}
               </code>
               .
-            </div>
+            </p>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-10">
               <For each={QUICKIT_V1_MIGRATION.steps}>
                 {(step, index) => (
                   <div
                     key={step.title}
                     id={`migracion-paso-${index + 1}`}
-                    className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
+                    className="scroll-mt-28"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="inline-flex size-8 items-center justify-center rounded-full border border-neutral-300 text-xs font-semibold text-neutral-700 dark:border-neutral-700 dark:text-neutral-200">
+                      <span className="inline-flex size-7 items-center justify-center rounded-full bg-neutral-900 text-xs font-semibold text-white dark:bg-neutral-100 dark:text-neutral-900">
                         {index + 1}
                       </span>
                       <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
                         {step.title}
                       </h3>
                     </div>
-                    <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                    <p className="mt-2 ml-10 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                       {step.description}
                     </p>
-                    <div className="mt-4">
+                    <div className="mt-4 ml-10">
                       <Tabs
                         defaultValue={`antes-${index + 1}`}
                         size="sm"
@@ -818,16 +924,21 @@ function GenericSectionPage({ sectionId }) {
               </For>
             </div>
 
-            <div
-              id="migracion-checklist"
-              className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
-            >
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+            <div id="migracion-checklist" className="scroll-mt-28">
+              <h3
+                id="migracion-checklist-title"
+                className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Checklist final
               </h3>
-              <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <ul className="mt-3 flex flex-col gap-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 <For each={QUICKIT_V1_MIGRATION.checks}>
-                  {(item) => <li key={item}>• {item}</li>}
+                  {(item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                      {item}
+                    </li>
+                  )}
                 </For>
               </ul>
             </div>
@@ -842,53 +953,64 @@ function GenericSectionPage({ sectionId }) {
           description={`Resumen de la release ${QUICKIT_V1_RELEASE.version} del ${QUICKIT_V1_RELEASE.date}.`}
         >
           <div className="flex flex-col gap-8">
-            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="inline-flex rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700 dark:border-primary-900/60 dark:bg-primary-950/30 dark:text-primary-200">
-                  v{QUICKIT_V1_RELEASE.version}
-                </span>
-                <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  {QUICKIT_V1_RELEASE.date}
-                </span>
-              </div>
-              <p className="mt-4 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                {QUICKIT_V1_RELEASE.summary}
-              </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex rounded-full bg-primary-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700 dark:bg-primary-900/30 dark:text-primary-200">
+                v{QUICKIT_V1_RELEASE.version}
+              </span>
+              <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                {QUICKIT_V1_RELEASE.date}
+              </span>
             </div>
+            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              {QUICKIT_V1_RELEASE.summary}
+            </p>
 
-            <div
-              id="changelog-highlight"
-              className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
-            >
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+            <div id="changelog-highlight" className="scroll-mt-28">
+              <h3
+                id="changelog-highlight-title"
+                className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Highlights
               </h3>
-              <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <ul className="mt-3 flex flex-col gap-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 <For each={QUICKIT_V1_RELEASE.highlights}>
-                  {(item) => <li key={item}>• {item}</li>}
+                  {(item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                      {item}
+                    </li>
+                  )}
                 </For>
               </ul>
             </div>
 
-            <div
-              id="changelog-cambios"
-              className="scroll-mt-28 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800"
-            >
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+            <div id="changelog-cambios" className="scroll-mt-28">
+              <h3
+                id="changelog-cambios-title"
+                className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Cambios destacados
               </h3>
-              <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <ul className="mt-3 flex flex-col gap-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 <For each={QUICKIT_V1_RELEASE.notableChanges}>
-                  {(item) => <li key={item}>• {item}</li>}
+                  {(item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                      {item}
+                    </li>
+                  )}
                 </For>
               </ul>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+            <div>
+              <h3
+                id="changelog-archivo"
+                className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Archivo completo
               </h3>
-              <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 El historial completo de la release también vive en{" "}
                 <code className="font-mono text-xs">CHANGELOG.md</code> en la
                 raíz del repositorio.
@@ -904,12 +1026,12 @@ function GenericSectionPage({ sectionId }) {
           title="Tema"
           description="Usa QuickitProvider cuando tu app ya resuelve el tema por su cuenta. Usa QuickitThemeProvider cuando quieres persistencia, soporte system y helpers de lectura. radius controla el border-radius global."
         >
-          <div className="flex flex-col gap-10">
-            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+          <div className="flex flex-col gap-8">
+            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
               QuickitThemeProvider es un wrapper con estado que controla el tema
               y luego renderiza QuickitProvider por debajo. QuickitProvider solo
               aplica la política visual; no persiste ni muta el tema.
-            </div>
+            </p>
             <div>
               <h3
                 id="tema-proveedor"
@@ -1010,38 +1132,53 @@ function GenericSectionPage({ sectionId }) {
                 </div>
               </div>
 
-              <div className="mt-8 rounded-xl border border-neutral-200 bg-neutral-50/50 p-5 dark:border-neutral-800 dark:bg-neutral-900/50">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-950 dark:text-neutral-50">
+              <div className="mt-8">
+                <h4
+                  id="tema-fouc-resumen"
+                  className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                >
                   Resumen de implementación
                 </h4>
-                <ul className="mt-4 flex flex-col gap-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-                  <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">
-                      ¿Por qué?
-                    </strong>{" "}
-                    Porque React se ejecuta después de que el navegador pinta el
-                    HTML.
+                <ul className="mt-3 flex flex-col gap-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                    <span>
+                      <strong className="text-neutral-950 dark:text-neutral-50">
+                        ¿Por qué?
+                      </strong>{" "}
+                      Porque React se ejecuta después de que el navegador pinta
+                      el HTML.
+                    </span>
                   </li>
-                  <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">
-                      ¿Cómo?
-                    </strong>{" "}
-                    Con un script síncrono que modifique{" "}
-                    <code className="text-primary-500">documentElement</code>.
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                    <span>
+                      <strong className="text-neutral-950 dark:text-neutral-50">
+                        ¿Cómo?
+                      </strong>{" "}
+                      Con un script síncrono que modifique{" "}
+                      <code className="font-mono text-xs">documentElement</code>.
+                    </span>
                   </li>
-                  <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">
-                      ¿Cuándo?
-                    </strong>{" "}
-                    Inmediatamente, antes de que el navegador renderice el{" "}
-                    <code className="text-primary-500">&lt;body&gt;</code>.
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                    <span>
+                      <strong className="text-neutral-950 dark:text-neutral-50">
+                        ¿Cuándo?
+                      </strong>{" "}
+                      Inmediatamente, antes de que el navegador renderice el{" "}
+                      <code className="font-mono text-xs">&lt;body&gt;</code>.
+                    </span>
                   </li>
-                  <li>
-                    <strong className="text-neutral-950 dark:text-neutral-50">
-                      ¿Dónde?
-                    </strong>{" "}
-                    En lo más alto de tu{" "}
-                    <code className="text-primary-500">&lt;head&gt;</code>.
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-500" />
+                    <span>
+                      <strong className="text-neutral-950 dark:text-neutral-50">
+                        ¿Dónde?
+                      </strong>{" "}
+                      En lo más alto de tu{" "}
+                      <code className="font-mono text-xs">&lt;head&gt;</code>.
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -1132,8 +1269,52 @@ function GenericSectionPage({ sectionId }) {
               </p>
               <div className="mt-4">
                 <WebsiteCodeBlock
-                  code={THEME_CUSTOMIZE_SNIPPET}
-                  language="css"
+                  code={QUICKIT_PROVIDER_SNIPPET}
+                  language="jsx"
+                />
+              </div>
+
+              <div className="mt-6">
+                <PropsTable
+                  caption="Props de QuickitProvider"
+                  props={[
+                    {
+                      name: "theme",
+                      type: '"light" | "dark"',
+                      defaultValue: '"light"',
+                      description: "Modo de tema forzado.",
+                    },
+                    {
+                      name: "radius",
+                      type: '"sharp" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | string',
+                      defaultValue: '"sm"',
+                      description: "Radio base del que se derivan todos los border-radius de la librería. Acepta también un valor CSS directo (ej: \"1rem\").",
+                    },
+                    {
+                      name: "focusRing",
+                      type: "boolean | { enabled: boolean; disabledComponents: string[] }",
+                      defaultValue: "true",
+                      description: "Activa/desactiva el anillo de foco global, o por listado de componentes.",
+                    },
+                    {
+                      name: "ripple",
+                      type: "boolean | { enabled: boolean; disabledComponents: string[] }",
+                      defaultValue: "true",
+                      description: "Activa/desactiva el efecto ripple global. Solo aplica cuando pressEffect=\"ripple\".",
+                    },
+                    {
+                      name: "pressEffect",
+                      type: '"none" | "transform" | "ripple"',
+                      defaultValue: '"transform"',
+                      description: "Efecto visual al presionar: \"none\" desactiva todo, \"transform\" aplica escala, \"ripple\" activa ondas.",
+                    },
+                    {
+                      name: "customScrollbar",
+                      type: "boolean",
+                      defaultValue: "true",
+                      description: "Aplica un scrollbar personalizado con los colores del tema.",
+                    },
+                  ]}
                 />
               </div>
               <p className="mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
@@ -1237,12 +1418,16 @@ function GenericSectionPage({ sectionId }) {
           title="Comportamiento"
           description="Define políticas globales de focus ring, ripple, press effect y scrollbar desde el provider, con posibilidad de sobrescribirlas por componente."
         >
-          <div className="flex flex-col gap-10">
-            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Ajusta focusRing, ripple, pressEffect, customScrollbar y radius
-              para toda la app. Luego, cada componente puede sobrescribir con
-              sus props específicas si lo necesitas.
-            </div>
+          <div className="flex flex-col gap-8">
+            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+              Ajusta <code className="font-mono text-xs">focusRing</code>,{" "}
+              <code className="font-mono text-xs">ripple</code>,{" "}
+              <code className="font-mono text-xs">pressEffect</code>,{" "}
+              <code className="font-mono text-xs">customScrollbar</code> y{" "}
+              <code className="font-mono text-xs">radius</code> para toda la
+              app. Luego, cada componente puede sobrescribir con sus props
+              específicas si lo necesitas.
+            </p>
 
             <div>
               <h3
@@ -1295,14 +1480,14 @@ function GenericSectionPage({ sectionId }) {
           title="Radio (border-radius)"
           description="Configura el border-radius global de todos los componentes desde QuickitProvider o CSS variables."
         >
-          <div className="flex flex-col gap-10">
-            <div className="rounded-xl border border-neutral-200 px-4 py-3 text-sm leading-7 text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+          <div className="flex flex-col gap-8">
+            <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
               Quickit usa una variable CSS base (
               <code className="font-mono text-xs">--qi-radius</code>) de la cual
               se derivan todos los radios de la librería. Puedes configurarla
               con la prop <code className="font-mono text-xs">radius</code> del
               provider o directamente en CSS.
-            </div>
+            </p>
 
             <div>
               <h3
@@ -1434,8 +1619,11 @@ function GenericSectionPage({ sectionId }) {
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
-              <h3 className="text-base font-semibold text-neutral-950 dark:text-neutral-50">
+            <div>
+              <h3
+                id="radio-variables-derivadas"
+                className="scroll-mt-28 text-base font-semibold text-neutral-950 dark:text-neutral-50"
+              >
                 Variables CSS derivadas
               </h3>
               <div className="mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800">
@@ -1512,11 +1700,11 @@ function GenericSectionPage({ sectionId }) {
           title="Tokens"
           description="Referencia visual rápida de colores, tamaños, shapes y variants disponibles en Quickit."
         >
-          <div className="flex flex-col gap-6">
-            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+          <div className="flex flex-col gap-8">
+            <div id="tokens-paletas" className="scroll-mt-28">
               <h3
-                id="tokens-paletas"
-                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                id="tokens-paletas-title"
+                className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
               >
                 Paletas de color
               </h3>
@@ -1529,10 +1717,10 @@ function GenericSectionPage({ sectionId }) {
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+            <div id="tokens-colores" className="scroll-mt-28">
               <h3
-                id="tokens-colores"
-                className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                id="tokens-colores-title"
+                className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
               >
                 Colores de componentes
               </h3>
@@ -1556,7 +1744,7 @@ function GenericSectionPage({ sectionId }) {
               </div>
               <div
                 id="tokens-primary"
-                className="mt-5 scroll-mt-28 rounded-xl bg-primary-50/60 p-4 text-sm leading-7 text-primary-900 dark:border-primary-900/60 dark:bg-primary-950/20 dark:text-primary-100"
+                className="mt-5 scroll-mt-28 rounded-xl bg-primary-50/60 p-4 text-sm leading-7 text-primary-900 dark:bg-primary-950/20 dark:text-primary-100"
               >
                 <p>
                   <strong>
@@ -1591,10 +1779,10 @@ function GenericSectionPage({ sectionId }) {
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div id="tokens-accent" className="scroll-mt-28">
                 <h3
-                  id="tokens-accent"
-                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                  id="tokens-accent-title"
+                  className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
                 >
                   Colecciones exportadas
                 </h3>
@@ -1635,10 +1823,10 @@ function GenericSectionPage({ sectionId }) {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div id="tokens-tamaños" className="scroll-mt-28">
                 <h3
-                  id="tokens-tamaños"
-                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                  id="tokens-tamaños-title"
+                  className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
                 >
                   Tamaños
                 </h3>
@@ -1649,10 +1837,10 @@ function GenericSectionPage({ sectionId }) {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div id="tokens-shapes" className="scroll-mt-28">
                 <h3
-                  id="tokens-shapes"
-                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                  id="tokens-shapes-title"
+                  className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
                 >
                   Shapes
                 </h3>
@@ -1663,10 +1851,10 @@ function GenericSectionPage({ sectionId }) {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+              <div id="tokens-variants" className="scroll-mt-28">
                 <h3
-                  id="tokens-variants"
-                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                  id="tokens-variants-title"
+                  className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
                 >
                   Button variants
                 </h3>
@@ -1679,10 +1867,13 @@ function GenericSectionPage({ sectionId }) {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800 lg:col-span-2">
+              <div
+                id="tokens-link"
+                className="scroll-mt-28 lg:col-span-2"
+              >
                 <h3
-                  id="tokens-link"
-                  className="scroll-mt-28 text-sm font-semibold text-neutral-950 dark:text-neutral-50"
+                  id="tokens-link-title"
+                  className="text-sm font-semibold text-neutral-950 dark:text-neutral-50"
                 >
                   Link
                 </h3>
@@ -1715,7 +1906,7 @@ function GenericSectionPage({ sectionId }) {
           title="Utilidades"
           description="Quickit también exporta helpers de clases, radios, scroll, refs, tema y resolución de tokens para construir wrappers o componentes propios sin copiar lógica interna."
         >
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-8">
             <div
               id="utilidades-clases"
               className="scroll-mt-28 flex flex-col gap-3"
@@ -1816,7 +2007,7 @@ function GenericSectionPage({ sectionId }) {
           title="Componentes"
           description="Empieza por los primitives base y después entra a cada página para ver instalación, uso, preview y API."
         >
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-8">
             <For each={WEBSITE_COMPONENT_GROUPS}>
               {(group) => (
                 <div
@@ -1922,7 +2113,7 @@ function ComponentPage({ component }) {
           </Show>
 
           <WebsiteSection id="ejemplos" title="Ejemplos">
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-8">
               <For each={doc.examples ?? []}>
                 {(example) => (
                   <div
@@ -2051,47 +2242,37 @@ export default function DocsPage({ currentPath }) {
   }, [mode, componentSlug, sectionId, hookSlug]);
 
   return (
-    <main className="pb-16">
-      <Toaster />
-      <div className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_14rem] min-w-0">
+    <WebsiteLayout
+      sidebar={
         <WebsiteDocsSidebar
           currentComponentSlug={currentComponent?.slug}
           sections={WEBSITE_DOC_OVERVIEW_SECTIONS}
           componentGroups={WEBSITE_COMPONENT_GROUPS}
           currentPath={currentPath}
         />
-
-        <Container
-          as="article"
-          size="full"
-          padding="md"
-          center={false}
-          className="min-w-0 px-4 sm:px-6 lg:col-start-2 lg:pl-10 xl:pl-12 py-6 lg:py-10 lg:pr-12 xl:pr-16"
-        >
-          <div ref={contentRef}>
-            <RenderSwitch value={mode}>
-              <Match when="component">
-                {currentComponent ? (
-                  <ComponentPage component={currentComponent} />
-                ) : (
-                  <ComponentNotFoundPage componentSlug={componentSlug} />
-                )}
-              </Match>
-              <Match when="hook">
-                <HookDetailPage slug={hookSlug} />
-              </Match>
-              <Match when="hooks-index">
-                <HooksIndexPage />
-              </Match>
-              <Default>
-                <GenericSectionPage sectionId={sectionId} />
-              </Default>
-            </RenderSwitch>
-          </div>
-        </Container>
-
-        <WebsitePageToc sections={tocSections} />
+      }
+      tocSections={tocSections}
+    >
+      <div ref={contentRef}>
+        <RenderSwitch value={mode}>
+          <Match when="component">
+            {currentComponent ? (
+              <ComponentPage component={currentComponent} />
+            ) : (
+              <ComponentNotFoundPage componentSlug={componentSlug} />
+            )}
+          </Match>
+          <Match when="hook">
+            <HookDetailPage slug={hookSlug} />
+          </Match>
+          <Match when="hooks-index">
+            <HooksIndexPage />
+          </Match>
+          <Default>
+            <GenericSectionPage sectionId={sectionId} />
+          </Default>
+        </RenderSwitch>
       </div>
-    </main>
+    </WebsiteLayout>
   );
 }

@@ -29,8 +29,8 @@ export const CHECKBOX_THEME_CLASSES = {
   },
   dark: {
     box: {
-      idle: "border-neutral-700 bg-neutral-950 hover:border-neutral-600",
-      invalid: "border-red-500 bg-neutral-950",
+      idle: "border-neutral-700 bg-neutral-900 hover:border-neutral-600",
+      invalid: "border-red-500 bg-neutral-900",
       focus: "focus-visible:ring-neutral-500/50 focus-visible:ring-offset-neutral-950",
       colors: {
         neutral:

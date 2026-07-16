@@ -15,7 +15,7 @@ export function CardPreview() {
         </p>
       </Card.Body>
       <Card.Footer>
-        <Button size="sm" variant="ghost">Cancelar</Button>
+        <Button size="sm" variant="soft">Cancelar</Button>
         <Button size="sm">Guardar</Button>
       </Card.Footer>
     </Card>
@@ -34,7 +34,7 @@ function CardPreviewCanvas() {
         </p>
       </Card.Body>
       <Card.Footer>
-        <Button size="sm" variant="ghost">Cancelar</Button>
+        <Button size="sm" variant="soft">Cancelar</Button>
         <Button size="sm">Guardar</Button>
       </Card.Footer>
     </Card>

@@ -69,8 +69,13 @@ const LinkTextAppearance = forwardRef(function LinkTextAppearance(
     className,
     color = "neutral",
     disabled = false,
+    onKeyDown,
+    onPointerDown,
+    pressEffect,
     rel,
+    ripple,
     size = "md",
+    style,
     target,
     title,
     underline = "hover",
@@ -79,7 +84,13 @@ const LinkTextAppearance = forwardRef(function LinkTextAppearance(
   },
   ref,
 ) {
-  const { theme, focusRing: focusRingEnabled } = useQuickitControlState("link", {
+  const {
+    theme,
+    focusRing: focusRingEnabled,
+    ripple: resolvedRipple,
+  } = useQuickitControlState("link", {
+    pressEffect,
+    ripple,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     children,
@@ -98,6 +109,18 @@ const LinkTextAppearance = forwardRef(function LinkTextAppearance(
     ? variant
     : "default";
 
+  const rippleUi = resolveActionRippleStyles(theme, "soft", resolvedColor);
+  const rippleEffect = useRippleEffect({
+    duration: 700,
+    enabled: resolvedRipple && !disabled,
+    opacity: rippleUi.opacity,
+  });
+  const rippleHandlers = useRippleHandlers(
+    rippleUi,
+    { handlePointerDown: rippleEffect.handlePointerDown, handleKeyDown: rippleEffect.handleKeyDown },
+    { onPointerDown, onKeyDown },
+  );
+
   return (
     <a
       ref={ref}
@@ -107,8 +130,10 @@ const LinkTextAppearance = forwardRef(function LinkTextAppearance(
       target={target}
       rel={resolveExternalLinkRel(target, rel)}
       title={title}
+      data-qi-ripple-hue={resolvedColor}
       className={cn(
         resolveQuickitFocusRingClasses(focusRingEnabled, LINK_BASE),
+        resolvedRipple && "qi-ripple-host isolate overflow-hidden",
         LINK_SIZE_CLASSES[size] ?? LINK_SIZE_CLASSES.md,
         LINK_TEXT_VARIANT_CLASSES[resolvedTextVariant],
         resolveQuickitFocusRingClasses(focusRingEnabled, ui.color[resolvedColor]),
@@ -116,9 +141,17 @@ const LinkTextAppearance = forwardRef(function LinkTextAppearance(
         disabled && "pointer-events-none opacity-50",
         className,
       )}
+      style={{
+        "--qi-ripple-color": rippleUi.color,
+        "--qi-ripple-opacity": rippleUi.opacity,
+        ...style,
+      }}
+      onPointerDown={rippleHandlers.onPointerDown}
+      onKeyDown={rippleHandlers.onKeyDown}
       {...(disabled ? { "aria-disabled": true, tabIndex: -1 } : {})}
     >
-      {children}
+      {resolvedRipple ? rippleEffect.rippleLayer : null}
+      <span className="relative z-[1]">{children}</span>
     </a>
   );
 });

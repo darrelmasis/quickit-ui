@@ -27,8 +27,8 @@ export const buttonDoc = {
     preview: <div className="flex flex-wrap gap-3">
           <Button color="neutral">Soft</Button>
           <Button color="neutral" variant="solid">Solid</Button>
-          <Button color="neutral" variant="outline">Outline</Button>
-          <Button color="neutral" variant="ghost">Ghost</Button>
+           <Button color="neutral" variant="outline">Outline</Button>
+           <Button color="neutral" variant="ghost">Ghost</Button>
         </div>,
     code: `import { Button } from "quickit-ui";
 
@@ -47,6 +47,7 @@ export function ButtonVariantes() {
     title: "Tamaños",
     description: `Tamaños disponibles: ${QUICKIT_CONTROL_SIZES.join(", ")}.`,
     preview: <div className="flex flex-wrap items-end gap-3">
+          <Button color="neutral" size="xs">XS</Button>
           <Button color="neutral" size="sm">Small</Button>
           <Button color="neutral" size="md">Medium</Button>
           <Button color="neutral" size="lg">Large</Button>
@@ -58,6 +59,7 @@ export function ButtonVariantes() {
 export function ButtonTamanos() {
   return (
     <div className="flex flex-wrap items-end gap-3">
+      <Button color="neutral" size="xs">XS</Button>
       <Button color="neutral" size="sm">Small</Button>
       <Button color="neutral" size="md">Medium</Button>
       <Button color="neutral" size="lg">Large</Button>
@@ -148,8 +150,9 @@ export function ButtonEstados() {
   }, {
     id: "ejemplos-press-effect",
     title: "Press effect",
-    description: "pressEffect controla el feedback en presión. ripple fuerza el efecto por instancia.",
+    description: "pressEffect controla el feedback en presión. \"none\" desactiva todo (sin scale, sin ripple).",
     preview: <div className="flex flex-wrap gap-3">
+          <Button color="neutral" pressEffect="none">None</Button>
           <Button color="neutral" pressEffect="transform">Transform</Button>
           <Button color="neutral" pressEffect="ripple" ripple>Ripple</Button>
         </div>,
@@ -158,12 +161,13 @@ export function ButtonEstados() {
 export function ButtonPressEffect() {
   return (
     <div className="flex flex-wrap gap-3">
+      <Button color="neutral" pressEffect="none">None</Button>
       <Button color="neutral" pressEffect="transform">Transform</Button>
       <Button color="neutral" pressEffect="ripple" ripple>Ripple</Button>
     </div>
   );
 }`,
-    note: "pressEffect=\"ripple\" requiere ripple habilitado en QuickitProvider o activado por instancia con ripple."
+    note: "pressEffect=\"none\" elimina cualquier feedback visual al presionar. pressEffect=\"ripple\" requiere ripple habilitado en QuickitProvider o activado por instancia con ripple."
   }, {
     id: "ejemplos-props",
     title: "Props",

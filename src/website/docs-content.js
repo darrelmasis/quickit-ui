@@ -755,8 +755,8 @@ export const WEBSITE_HOOKS = [
   },
   {
     name: "useQuickitPressEffect",
-    description: "Consulta el efecto visual preferido (transform o ripple) para interacciones táctiles o click.",
-    returns: "El valor 'transform' o 'ripple' configurado globalmente."
+    description: "Consulta el efecto visual preferido (none, transform o ripple) para interacciones táctiles o click.",
+    returns: "El valor 'none', 'transform' o 'ripple' configurado globalmente."
   },
   {
     name: "useQuickitRadius",
@@ -885,6 +885,11 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "skeleton",
         name: "Skeleton",
         description: "Marcador de carga para line, rect y circle.",
+      },
+      {
+        slug: "user-chip",
+        name: "UserChip",
+        description: "Chip de usuario con avatar, nombre y presencia.",
       },
       {
         slug: "divider",
@@ -1329,7 +1334,7 @@ export function ButtonPreview() {
     },
     {
       label: "Tamaños",
-      values: ["sm", "md", "lg", "xl", "2xl"],
+      values: ["xs", "sm", "md", "lg", "xl", "2xl"],
     },
     {
       label: "Shapes",
@@ -1358,7 +1363,7 @@ export function ButtonPreview() {
     },
     {
       name: "variant",
-      type: `"solid" | "outline" | "ghost" | "soft"`,
+      type: `"solid" | "outline" | "soft"`,
       defaultValue: `"soft"`,
       description: "Define el tratamiento visual principal del botón.",
     },
@@ -1436,9 +1441,9 @@ export function ButtonPreview() {
     },
     {
       name: "pressEffect",
-      type: `"transform" | "ripple"`,
+      type: `"none" | "transform" | "ripple"`,
       defaultValue: "provider",
-      description: "Permite sobrescribir el efecto de presión por instancia.",
+      description: "Permite sobrescribir el efecto de presión por instancia. Con \"none\" se desactiva todo feedback de presión (ni scale, ni ripple).",
     },
     {
       name: "ripple",

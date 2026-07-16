@@ -19,16 +19,13 @@ import { TXT } from "@/lib/texts";
 const AlertContext = createContext(null);
 
 const ALERT_PRIMITIVES = {
-  root:
-    "relative flex w-full items-start gap-4 overflow-hidden border p-5 transition-[background-color,border-color,color]",
-  icon:
-    "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-[var(--qi-radius-xl)] bg-current/10 ring-1 ring-current/10 [&_svg]:size-5",
+  root: "relative flex w-full items-start gap-4 overflow-hidden border p-3 transition-[background-color,border-color,color]",
+  icon: "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-[var(--qi-radius-xl)] bg-current/10 ring-1 ring-current/10 [&_svg]:size-5",
   content: "flex min-w-0 flex-1 flex-col gap-1.5",
-  title: "text-sm font-semibold leading-6 tracking-tight",
+  title: "text-md font-semibold leading-6 tracking-tight",
   description: "text-sm leading-6 opacity-80",
   actions: "!mt-4 flex flex-wrap items-center gap-2.5 pt-1",
-  dismiss:
-    "inline-flex size-9 shrink-0 items-center justify-center rounded-[var(--qi-radius-xl)] text-current opacity-70 transition-[background-color,opacity,transform] hover:bg-current/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-current/15 active:scale-[0.98]",
+  dismiss: "-me-1 -mt-1",
 };
 
 function useAlertContextSlot(slot) {
@@ -150,7 +147,9 @@ const Alert = forwardRef(function Alert(
   const palette =
     ALERT_THEME_CLASSES[theme]?.[variant] ?? ALERT_THEME_CLASSES[theme].soft;
   const autoDismissMs =
-    Number.isFinite(autoDismiss) && autoDismiss > 0 ? Math.floor(autoDismiss) : 0;
+    Number.isFinite(autoDismiss) && autoDismiss > 0
+      ? Math.floor(autoDismiss)
+      : 0;
   const hasCustomChildren = children != null;
   const resolvedTitle = hasCustomChildren ? null : title;
   const resolvedDescription = hasCustomChildren ? null : description;
@@ -158,7 +157,8 @@ const Alert = forwardRef(function Alert(
   const hasTitle = Boolean(resolvedTitle) || titleCount > 0;
   const hasDescription = Boolean(resolvedDescription) || descriptionCount > 0;
   const resolvedRole =
-    roleProp ?? (resolvedColor === "danger" || resolvedColor === "warning"
+    roleProp ??
+    (resolvedColor === "danger" || resolvedColor === "warning"
       ? "alert"
       : "status");
   const resolvedAriaLive =
@@ -261,16 +261,17 @@ const Alert = forwardRef(function Alert(
           if (pauseOnHover && autoDismissMs > 0) {
             const nextTarget = event.relatedTarget;
 
-            if (!(nextTarget instanceof Node) || !event.currentTarget.contains(nextTarget)) {
+            if (
+              !(nextTarget instanceof Node) ||
+              !event.currentTarget.contains(nextTarget)
+            ) {
               setPaused(false);
             }
           }
         }}
         {...props}
       >
-        {icon ? (
-          <div className={ALERT_PRIMITIVES.icon}>{icon}</div>
-        ) : null}
+        {icon ? <div className={ALERT_PRIMITIVES.icon}>{icon}</div> : null}
 
         <div className={ALERT_PRIMITIVES.content}>
           {hasCustomChildren ? (
@@ -281,7 +282,9 @@ const Alert = forwardRef(function Alert(
               {resolvedDescription ? (
                 <AlertDescription>{resolvedDescription}</AlertDescription>
               ) : null}
-              {resolvedActions ? <AlertActions>{resolvedActions}</AlertActions> : null}
+              {resolvedActions ? (
+                <AlertActions>{resolvedActions}</AlertActions>
+              ) : null}
             </>
           )}
         </div>
@@ -290,10 +293,13 @@ const Alert = forwardRef(function Alert(
           <Button
             type="button"
             variant="ghost"
-            color="neutral"
+            color={resolvedColor}
             shape="square"
-            size="sm"
-            className={cn(ALERT_PRIMITIVES.dismiss, dismissButtonProps?.className)}
+            size="xs"
+            className={cn(
+              ALERT_PRIMITIVES.dismiss,
+              dismissButtonProps?.className,
+            )}
             aria-label={dismissLabel}
             onClick={() => requestClose("manual")}
             {...dismissButtonProps}

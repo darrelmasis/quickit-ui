@@ -6,7 +6,7 @@ import { renderWithProvider } from "./test-utils";
 describe("Link", () => {
   it("renders as a text link by default", () => {
     renderWithProvider(<Link href="#">Inicio</Link>);
-    const link = screen.getByText("Inicio");
+    const link = screen.getByRole("link", { name: "Inicio" });
     expect(link).toBeTruthy();
     expect(link.tagName).toBe("A");
   });
@@ -18,13 +18,13 @@ describe("Link", () => {
 
   it("applies disabled state", () => {
     renderWithProvider(<Link disabled href="#">Disabled</Link>);
-    const link = screen.getByText("Disabled");
+    const link = screen.getByRole("link", { name: "Disabled" });
     expect(link.getAttribute("aria-disabled")).toBe("true");
   });
 
   it("adds rel for external links", () => {
     renderWithProvider(<Link href="https://example.com" target="_blank">Externo</Link>);
-    const link = screen.getByText("Externo");
+    const link = screen.getByRole("link", { name: "Externo" });
     expect(link.getAttribute("rel")).toContain("noopener");
   });
 });

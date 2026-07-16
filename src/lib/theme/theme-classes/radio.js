@@ -45,7 +45,7 @@ export const RADIO_THEME_CLASSES = {
     invalidDot: "bg-white",
   },
   dark: {
-    box: "border-neutral-700 bg-neutral-950 peer-hover:border-neutral-600 peer-hover:bg-neutral-900",
+    box: "border-neutral-700 bg-neutral-900 peer-hover:border-neutral-600 peer-hover:bg-neutral-800",
     focus:
       "peer-focus-visible:outline-neutral-400 peer-focus-visible:ring-neutral-400/35 peer-focus-visible:ring-offset-[#09090b]",
     colors: {

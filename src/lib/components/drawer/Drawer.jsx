@@ -518,7 +518,7 @@ export function DrawerHeader({ children, className }) {
       {showCloseButton ? (
         <Button
           type="button"
-          variant="ghost"
+          variant="soft"
           shape="square"
           size="sm"
           color="neutral"

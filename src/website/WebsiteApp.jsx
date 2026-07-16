@@ -98,7 +98,7 @@ export default function WebsiteApp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-100">
+    <div className="min-h-screen bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
       <WebsiteHeader activePath={getWebsiteSection(activePath)} />
       <RenderSwitch value={getWebsiteSection(activePath)}>
         <Match when={WEBSITE_ROUTES.landing}>

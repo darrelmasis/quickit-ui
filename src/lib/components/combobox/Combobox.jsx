@@ -279,10 +279,13 @@ const Combobox = forwardRef(function Combobox(
   });
   const interactions = useInteractions([dismiss, role, listNavigation]);
 
-  const { isMounted, styles: transitionStyles } = useFloatingTransition(context, {
-    duration: { open: 140, close: 100 },
-    placement: COMBOBOX_PLACEMENT,
-  });
+  const { isMounted, styles: transitionStyles } = useFloatingTransition(
+    context,
+    {
+      duration: { open: 140, close: 100 },
+      placement: COMBOBOX_PLACEMENT,
+    },
+  );
 
   const floatingRef = useCallback(
     (node) => {

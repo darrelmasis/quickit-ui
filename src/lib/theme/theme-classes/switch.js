@@ -20,7 +20,7 @@ export const SWITCH_THEME_CLASSES = {
     },
   },
   dark: {
-    idle: "border-neutral-700 bg-neutral-900/95 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-neutral-500",
+    idle: "border-neutral-700 bg-neutral-900 hover:border-neutral-600 hover:bg-neutral-800 focus-visible:outline-neutral-500",
     checked: {
       neutral: "border-neutral-700 bg-neutral-700",
       primary: "border-blue-300 bg-blue-300 text-neutral-950",

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { QuickitThemeContext } from "./quickit-theme-context";
 
 export const QUICKIT_PRESS_EFFECTS = Object.freeze([
+  "none",
   "transform",
   "ripple",
 ]);

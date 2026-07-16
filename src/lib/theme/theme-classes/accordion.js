@@ -11,11 +11,11 @@ export const ACCORDION_THEME_CLASSES = {
   },
   dark: {
     item:
-      "border-neutral-800 bg-neutral-950 text-neutral-50",
+      "border-neutral-700 bg-neutral-900 text-neutral-50",
     trigger:
-      "text-neutral-50 hover:bg-neutral-900/80 hover:text-neutral-200 focus-visible:outline-neutral-700",
-    triggerOpen: "bg-neutral-900/90 text-neutral-50",
-    contentShell: "border-neutral-800/80",
+      "text-neutral-50 hover:bg-neutral-800 hover:text-neutral-200 focus-visible:outline-neutral-700",
+    triggerOpen: "bg-neutral-800 text-neutral-50",
+    contentShell: "border-neutral-700/80",
     content: "text-neutral-300",
     icon: "text-neutral-400",
   },

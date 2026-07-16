@@ -489,7 +489,7 @@ export function ModalHeader({ children, className }) {
       {showCloseButton ? (
         <Button
           type="button"
-          variant="ghost"
+          variant="soft"
           shape="square"
           size="md"
           color="neutral"

@@ -70,8 +70,8 @@ export default function WebsitePageToc({ sections }) {
   };
 
   return (
-    <aside className="hidden xl:sticky xl:top-20 xl:block xl:self-start xl:h-[calc(100vh-5rem)] xl:overflow-y-auto">
-      <div className="w-56 max-w-full">
+    <aside className="hidden border-l border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 xl:sticky xl:top-14 xl:block xl:self-start xl:h-[calc(100vh-3.5rem)] xl:overflow-y-auto scrollbar-hidden">
+      <div className="p-3 pb-8 pt-8 w-56 max-w-full">
         <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
           En esta página
         </p>

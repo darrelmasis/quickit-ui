@@ -15,6 +15,10 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [isLibraryBuild ? null : react(), tailwindcss()].filter(Boolean),
+    optimizeDeps: {
+      exclude: ["@tailwindcss/vite"],
+      force: true,
+    },
     define: isLibraryBuild
       ? {
           "process.env.NODE_ENV": JSON.stringify("production"),

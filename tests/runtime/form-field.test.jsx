@@ -55,10 +55,10 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByRole("combobox").className).toContain(
-      "border-blue-500/55",
+      "border-blue-500/60",
     );
     expect(screen.getByDisplayValue("Error").className).toContain(
-      "border-red-500/70",
+      "border-red-500/60",
     );
   });
 

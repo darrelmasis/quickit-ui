@@ -21,7 +21,7 @@ export default function WebsiteCodeBlock({
             title={copied ? "Copiado" : "Copiar"}
             shape="circle"
             size="sm"
-            variant="ghost"
+            variant="soft"
             color="neutral"
             onClick={() => copy(code)}
           >
