@@ -430,11 +430,16 @@ export function SelectFormControl() {
       type: "boolean",
       defaultValue: "true",
       description: "Renderiza el panel en portal."
-    }, {
-      name: "onChange",
-      type: "(event) => void",
-      defaultValue: "undefined",
-      description: "Evento sintético con `{ target: { id, name, value } }` para integraciones tipo formulario."
+     }, {
+       name: "maxHeight",
+       type: "string",
+       defaultValue: "undefined",
+       description: "Altura máxima del dropdown (valor CSS, ej. `\"200px\"`, `\"30rem\"`). Si no se pasa, usa `max-h-72 sm:max-h-96`."
+     }, {
+       name: "onChange",
+       type: "(event) => void",
+       defaultValue: "undefined",
+       description: "Evento sintético con `{ target: { id, name, value } }` para integraciones tipo formulario."
     }, {
       name: "onValueChange",
       type: "(value: string) => void",

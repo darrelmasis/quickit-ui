@@ -1166,7 +1166,7 @@ export const WEBSITE_COMPONENT_REVIEW_NOTES = {
   select: [
     {
       tag: "Uso",
-      text: "Las opciones se declaran con hijos `<option>` (API similar al select nativo). El panel usa Floating UI: revisa `collisionPadding` y scroll en listas largas.",
+      text: "Las opciones se declaran con hijos `<option>` (API similar al select nativo). El panel usa Floating UI con scroll vertical y altura máxima configurable via `maxHeight`.",
     },
     {
       tag: "Accesibilidad",
