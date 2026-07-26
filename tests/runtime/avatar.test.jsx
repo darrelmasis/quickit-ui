@@ -40,4 +40,31 @@ describe("Avatar", () => {
     expect(screen.getByText("?")).toBeTruthy();
     expect(screen.getByText("Ada")).toBeTruthy();
   });
+
+  it("renderiza UserChip con details enriquecidos", () => {
+    renderWithProvider(
+      <UserChip
+        name="Elena Ruiz"
+        initials="ER"
+        details={{ role: "Design Lead", email: "elena@ejemplo.com", username: "elena" }}
+      />,
+    );
+
+    expect(screen.getByText("Elena Ruiz")).toBeTruthy();
+    expect(screen.getByText("Design Lead")).toBeTruthy();
+    expect(screen.getByText("elena@ejemplo.com")).toBeTruthy();
+    expect(screen.getByText("@elena")).toBeTruthy();
+  });
+
+  it("muestra description cuando no hay details", () => {
+    renderWithProvider(
+      <UserChip
+        name="Elena Ruiz"
+        initials="ER"
+        description="Descripción simple"
+      />,
+    );
+
+    expect(screen.getByText("Descripción simple")).toBeTruthy();
+  });
 });

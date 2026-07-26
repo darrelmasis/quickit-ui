@@ -8,7 +8,7 @@ const SAFE_LINK_PROPS = { onClick: (event) => event.preventDefault() };
 const LINK_PREVIEW_CODE = `import { Link } from "quickit-ui";
 
 export function LinkPreview() {
-  return <Link href="/docs">Visitar documentación</Link>;
+  return <Link href="#">Visitar documentación</Link>;
 }`;
 function LinkPreviewCanvas() {
   return <div className="flex items-center justify-center">
@@ -35,9 +35,9 @@ export const linkDoc = {
 export function LinkVariantes() {
   return (
     <div className="flex flex-wrap gap-4">
-      <Link href="/docs">Default</Link>
-      <Link href="/docs" variant="muted">Muted</Link>
-      <Link href="/docs" variant="subtle">Subtle</Link>
+      <Link href="#">Default</Link>
+      <Link href="#" variant="muted">Muted</Link>
+      <Link href="#" variant="subtle">Subtle</Link>
     </div>
   );
 }`
@@ -55,9 +55,9 @@ export function LinkVariantes() {
 export function LinkUnderline() {
   return (
     <div className="flex flex-wrap gap-4">
-      <Link href="/docs" underline="always">Siempre</Link>
-      <Link href="/docs" underline="hover">Hover</Link>
-      <Link href="/docs" underline="none">Nunca</Link>
+      <Link href="#" underline="always">Siempre</Link>
+      <Link href="#" underline="hover">Hover</Link>
+      <Link href="#" underline="none">Nunca</Link>
     </div>
   );
 }`
@@ -77,11 +77,11 @@ export function LinkUnderline() {
 export function LinkColores() {
   return (
     <div className="flex flex-wrap gap-4">
-      <Link href="/docs" color="primary">Primary</Link>
-      <Link href="/docs" color="secondary">Secondary</Link>
-      <Link href="/docs" color="neutral">Neutral</Link>
-      <Link href="/docs" color="success">Success</Link>
-      <Link href="/docs" color="danger">Danger</Link>
+      <Link href="#" color="primary">Primary</Link>
+      <Link href="#" color="secondary">Secondary</Link>
+      <Link href="#" color="neutral">Neutral</Link>
+      <Link href="#" color="success">Success</Link>
+      <Link href="#" color="danger">Danger</Link>
     </div>
   );
 }`

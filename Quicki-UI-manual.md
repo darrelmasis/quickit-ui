@@ -641,44 +641,6 @@ Props:
 | `color`, `size`, `invalid`, `required`, `disabled` | Visual y estado. |
 | `usePortal` | Renderiza lista en portal. |
 
-### Combobox
-
-Campo de texto con lista filtrable y seleccion.
-
-```jsx
-<Combobox
-  options={[
-    { value: "es", label: "Espanol" },
-    {
-      value: "docs",
-      textValue: "Documentacion",
-      label: <strong>Docs Quickit</strong>,
-    },
-  ]}
-  onInputChange={(query) => console.log(query)}
-  onValueChange={(value) => console.log(value)}
-  placeholder="Buscar..."
-/>
-```
-
-Contrato de options:
-
-| Campo | Tipo | Uso |
-| --- | --- | --- |
-| `value` | `string | number` | Valor serializado. |
-| `label` | `ReactNode` | Contenido visual de la opcion. |
-| `textValue` | `string` | Texto para busqueda/input cuando `label` no es texto plano. |
-| `disabled` | `boolean` | Deshabilita opcion. |
-
-Notas:
-
-| Tema | Detalle |
-| --- | --- |
-| `onInputChange` | Refleja texto escrito. |
-| `onValueChange` | Refleja opcion seleccionada. |
-| `onChange` | Evento estilo DOM para integraciones. |
-| `name` | Serializa valor seleccionado con hidden input. |
-
 ### DatePicker
 
 Selector de fecha con calendario en popover.
@@ -1377,7 +1339,6 @@ import {
   InputGroupAction,
   Textarea,
   Select,
-  Combobox,
   DatePicker,
   TimePicker,
   Checkbox,
@@ -1540,7 +1501,6 @@ Cambios a revisar:
 | CommandPalette | Eliminado del paquete en 1.2.0. |
 | EmptyState | Usar `EmptyState.Icon` y `EmptyState.Actions`. |
 | Range | Si usas `range` + `name`, ahora serializa ambos extremos. |
-| Combobox | Si `label` es ReactNode, usar `textValue`. |
 | Switch | `onCheckedChange` recibe `(checked, event)`. |
 
 Checklist:

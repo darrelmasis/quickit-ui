@@ -24,6 +24,96 @@ export const textareaDoc = {
   preview: <TextareaPreviewCanvas />,
   installCode: `import { Textarea } from "quickit-ui";`,
   examples: [{
+    id: "ejemplos-formulario-mensaje",
+    title: "Formulario de mensaje",
+    description: "Ejemplo realista de formulario de contacto con textarea.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="contacto-asunto">Asunto</Label>
+          <input type="text" id="contacto-asunto" placeholder="Escribe el asunto..." className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="contacto-mensaje">Mensaje</Label>
+          <Textarea id="contacto-mensaje" minRows={4} placeholder="Escribe tu mensaje aquí..." />
+        </div>
+      </div>,
+    code: `import { Label, Textarea } from "quickit-ui";
+
+export function TextareaFormularioMensaje() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="contacto-asunto">Asunto</Label>
+        <input type="text" id="contacto-asunto" placeholder="Escribe el asunto..." className="rounded-lg border px-3 py-2 text-sm" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="contacto-mensaje">Mensaje</Label>
+        <Textarea id="contacto-mensaje" minRows={4} placeholder="Escribe tu mensaje aquí..." />
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-descripcion-producto",
+    title: "Descripción de producto",
+    description: "Ejemplo realista de textarea para descripciones largas.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="producto-nombre">Nombre del producto</Label>
+          <input type="text" id="producto-nombre" placeholder="Ej: Camiseta básica" className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="producto-descripcion">Descripción</Label>
+          <Textarea id="producto-descripcion" minRows={6} placeholder="Describe las características del producto, materiales, tallas disponibles, etc." />
+        </div>
+      </div>,
+    code: `import { Label, Textarea } from "quickit-ui";
+
+export function TextareaDescripcionProducto() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="producto-nombre">Nombre del producto</Label>
+        <input type="text" id="producto-nombre" placeholder="Ej: Camiseta básica" className="rounded-lg border px-3 py-2 text-sm" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="producto-descripcion">Descripción</Label>
+        <Textarea id="producto-descripcion" minRows={6} placeholder="Describe las características del producto, materiales, tallas disponibles, etc." />
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-comentarios",
+    title: "Sección de comentarios",
+    description: "Ejemplo realista de textarea para comentarios o reviews.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="comentario-texto">Tu comentario</Label>
+          <Textarea id="comentario-texto" minRows={3} placeholder="Comparte tu opinión sobre este producto..." />
+        </div>
+        <div className="flex items-center justify-end gap-3">
+          <span className="text-xs text-neutral-500 dark:text-neutral-400">Máximo 500 caracteres</span>
+          <button type="button" className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900">Publicar</button>
+        </div>
+      </div>,
+    code: `import { Label, Textarea } from "quickit-ui";
+
+export function TextareaComentarios() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="comentario-texto">Tu comentario</Label>
+        <Textarea id="comentario-texto" minRows={3} placeholder="Comparte tu opinión sobre este producto..." />
+      </div>
+      <div className="flex items-center justify-end gap-3">
+        <span className="text-xs text-neutral-500 dark:text-neutral-400">Máximo 500 caracteres</span>
+        <button type="button" className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900">Publicar</button>
+      </div>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-basico",
     title: "Básico",
     description: "Textarea simple con placeholder.",

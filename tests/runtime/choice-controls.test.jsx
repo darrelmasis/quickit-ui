@@ -105,8 +105,8 @@ describe("choice controls", () => {
     const invalidSwitch = screen.getByRole("switch", { name: "Switch invalid" });
 
     expect(checkboxVisual.className).toContain("peer-checked:border-neutral-950");
-    expect(radioVisual.className).toContain("peer-checked:border-neutral-800");
-    expect(switchControl.className).toContain("border-neutral-800");
+    expect(radioVisual.className).toContain("peer-checked:border-neutral-100");
+    expect(switchControl.className).toContain("border-neutral-100");
     expect(invalidSwitch.className).toContain("border-red-500/70");
   });
 });

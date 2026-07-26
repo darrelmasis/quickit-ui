@@ -171,8 +171,8 @@ export function DropdownLinks() {
     <Dropdown>
       <Dropdown.Trigger>Ir a</Dropdown.Trigger>
       <Dropdown.Content>
-        <Dropdown.Item href="/profile">Perfil</Dropdown.Item>
-        <Dropdown.Item href="/settings">Configuración</Dropdown.Item>
+        <Dropdown.Item href="#">Perfil</Dropdown.Item>
+        <Dropdown.Item href="#">Configuración</Dropdown.Item>
       </Dropdown.Content>
     </Dropdown>
   );

@@ -257,7 +257,7 @@ describe("enhanced input actions", () => {
       </InputGroup>,
     );
 
-    const trigger = screen.getByRole("combobox", { name: "" });
+    const trigger = screen.getByRole("combobox", { name: "Todos" });
 
     expect(screen.getByTestId("attached-select-group").getAttribute("data-attached")).toBe("");
     expect(trigger.className).toContain("rounded-none");

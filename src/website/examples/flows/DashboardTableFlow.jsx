@@ -1,4 +1,4 @@
-import { Badge, Button, Combobox, DataTable, Input, InputGroup, Pagination, Select, Skeleton } from "@/lib";
+import { Badge, Button, DataTable, Input, InputGroup, Pagination, Select, Skeleton } from "@/lib";
 import { useMemo, useState } from "react";
 
 export function DashboardTableFlow() {
@@ -38,16 +38,11 @@ export function DashboardTableFlow() {
             <InputGroup.Addon align="inline-start">Buscar</InputGroup.Addon>
             <Input placeholder="onboarding, billing, support..." />
           </InputGroup>
-          <Combobox
-            value={owner}
-            onValueChange={setOwner}
-            placeholder="Responsable"
-            options={[
-              { value: "all", label: "Todos" },
-              { value: "ada", label: "Ada" },
-              { value: "grace", label: "Grace" },
-            ]}
-          />
+          <Select value={owner} onValueChange={setOwner} placeholder="Responsable">
+            <option value="all">Todos</option>
+            <option value="ada">Ada</option>
+            <option value="grace">Grace</option>
+          </Select>
           <Select defaultValue="all">
             <option value="all">Todos</option>
             <option value="active">Activos</option>

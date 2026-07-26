@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import { useState } from "react";
 import { Alert, Button } from "@/lib";
 import { CheckFillIcon, CloseIcon } from "@/lib/assets/icons";
 
@@ -34,6 +35,27 @@ function AlertPreviewCanvas() {
   );
 }
 
+function AlertAutoDismissCanvas() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Button onClick={() => setOpen(true)}>
+        Copiar enlace
+      </Button>
+      <Alert
+        color="info"
+        autoDismiss={4000}
+        dismissible
+        open={open}
+        onOpenChange={setOpen}
+        title="Enlace copiado"
+        description="Puedes compartirlo con el equipo."
+      />
+    </div>
+  );
+}
+
 export const alertDoc = {
   name: "Alert",
   description: "Mensaje persistente en línea para confirmaciones, advertencias o estados.",
@@ -42,88 +64,67 @@ export const alertDoc = {
   installCode: `import { Alert, Button } from "quickit-ui";`,
   examples: [
     {
-      id: "ejemplos-colores",
-      title: "Colores",
-      description: "Colores disponibles: neutral, info, success, danger, warning.",
+      id: "ejemplos-notificacion",
+      title: "Notificación de éxito",
+      description: "Alert success con cierre manual.",
       preview: (
-        <div className="flex flex-col gap-3">
-          <Alert color="neutral" title="Neutral" description="Mensaje neutro por defecto." />
-          <Alert color="info" title="Información" description="Este es un mensaje informativo." />
-          <Alert color="success" title="Éxito" description="Operación completada correctamente." />
-          <Alert color="danger" title="Error" description="No se pudo completar la operación." />
-          <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
-        </div>
+        <Alert color="success" dismissible>
+          <Alert.Title>¡Cambios guardados!</Alert.Title>
+          <Alert.Description>
+            Tu perfil se actualizó correctamente. Los cambios ya están visibles para otros usuarios.
+          </Alert.Description>
+        </Alert>
       ),
       code: `import { Alert } from "quickit-ui";
 
-export function AlertColores() {
+export function AlertNotificacion() {
   return (
-    <div className="flex flex-col gap-3">
-      <Alert color="neutral" title="Neutral" description="Mensaje neutro por defecto." />
-      <Alert color="info" title="Información" description="Este es un mensaje informativo." />
-      <Alert color="success" title="Éxito" description="Operación completada correctamente." />
-      <Alert color="danger" title="Error" description="No se pudo completar la operación." />
-      <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
-    </div>
+    <Alert color="success" dismissible>
+      <Alert.Title>¡Cambios guardados!</Alert.Title>
+      <Alert.Description>
+        Tu perfil se actualizó correctamente. Los cambios ya están visibles para otros usuarios.
+      </Alert.Description>
+    </Alert>
   );
 }`
     },
     {
-      id: "ejemplos-shorthand",
-      title: "Shorthand",
-      description: "Usa title, description y actions sin escribir los subcomponentes.",
+      id: "ejemplos-error",
+      title: "Error de conexión",
+      description: "Alert danger con acciones.",
       preview: (
-        <Alert
-          color="success"
-          title="La sincronización terminó correctamente"
-          description="Los cambios del equipo ya están disponibles en tu dashboard."
-          actions={<Button size="sm" color="success">Ver actividad</Button>}
-        />
+        <Alert color="danger">
+          <Alert.Title>Error de conexión</Alert.Title>
+          <Alert.Description>
+            No se pudo conectar con el servidor. Verifica tu conexión a internet e intenta nuevamente.
+          </Alert.Description>
+          <Alert.Actions>
+            <Button size="sm" color="danger" variant="outline">Cerrar</Button>
+            <Button size="sm" color="danger">Reintentar</Button>
+          </Alert.Actions>
+        </Alert>
       ),
       code: `import { Alert, Button } from "quickit-ui";
 
-export function AlertShorthand() {
+export function AlertError() {
   return (
-    <Alert
-      color="success"
-      title="Sincronización completada"
-      description="Los cambios están disponibles."
-      actions={<Button size="sm" color="success">Ver actividad</Button>}
-    />
-  );
-}`
-    },
-    {
-      id: "ejemplos-auto-dismiss",
-      title: "Auto dismiss",
-      description: "Se cierra automáticamente después del tiempo indicado.",
-      preview: (
-        <Alert
-          color="info"
-          autoDismiss={5000}
-          dismissible
-          title="Enlace copiado"
-          description="Puedes compartirlo con el equipo."
-        />
-      ),
-      code: `import { Alert } from "quickit-ui";
-
-export function AlertAutoDismiss() {
-  return (
-    <Alert
-      color="info"
-      autoDismiss={5000}
-      dismissible
-      title="Enlace copiado"
-      description="Puedes compartirlo con el equipo."
-    />
+    <Alert color="danger">
+      <Alert.Title>Error de conexión</Alert.Title>
+      <Alert.Description>
+        No se pudo conectar con el servidor. Verifica tu conexión a internet e intenta nuevamente.
+      </Alert.Description>
+      <Alert.Actions>
+        <Button size="sm" color="danger" variant="outline">Cerrar</Button>
+        <Button size="sm" color="danger">Reintentar</Button>
+      </Alert.Actions>
+    </Alert>
   );
 }`
     },
     {
       id: "ejemplos-icon",
-      title: "Icono",
-      description: "Muestra un icono decorativo al inicio del alert.",
+      title: "Icono personalizado",
+      description: "Alert con icono decorativo al inicio.",
       preview: (
         <div className="flex flex-col gap-3">
           <Alert
@@ -163,35 +164,58 @@ export function AlertIcono() {
 }`
     },
     {
-      id: "ejemplos-compuesto",
-      title: "Compuesto",
-      description: "Usa los subcomponentes para un control total del layout.",
-      preview: (
-        <Alert color="warning" dismissible>
-          <Alert.Title>Tu método de pago vence pronto</Alert.Title>
-          <Alert.Description>
-            Actualiza la tarjeta antes del 24 de abril para evitar interrupciones en tu plan.
-          </Alert.Description>
-          <Alert.Actions>
-            <Button size="sm" color="warning" variant="outline">Después</Button>
-            <Button size="sm" color="warning">Actualizar tarjeta</Button>
-          </Alert.Actions>
-        </Alert>
-      ),
-      code: `import { Alert, Button } from "quickit-ui";
+      id: "ejemplos-auto-dismiss",
+      title: "Auto dismiss",
+      description: "Presiona el botón para mostrar el alert. Se cierra solo a los 4 segundos.",
+      preview: <AlertAutoDismissCanvas />,
+      code: `import { useState } from "react";
+import { Alert, Button } from "quickit-ui";
 
-export function AlertCompuesto() {
+export function AlertAutoDismiss() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Alert color="warning" dismissible>
-      <Alert.Title>Tu método de pago vence pronto</Alert.Title>
-      <Alert.Description>
-        Actualiza la tarjeta antes del 24 de abril para evitar interrupciones en tu plan.
-      </Alert.Description>
-      <Alert.Actions>
-        <Button size="sm" color="warning" variant="outline">Después</Button>
-        <Button size="sm" color="warning">Actualizar tarjeta</Button>
-      </Alert.Actions>
-    </Alert>
+    <div className="flex flex-col items-center gap-4">
+      <Button onClick={() => setOpen(true)}>
+        Copiar enlace
+      </Button>
+      <Alert
+        color="info"
+        autoDismiss={4000}
+        dismissible
+        open={open}
+        onOpenChange={setOpen}
+        title="Enlace copiado"
+        description="Puedes compartirlo con el equipo."
+      />
+    </div>
+  );
+}`
+    },
+    {
+      id: "ejemplos-colores",
+      title: "Colores",
+      description: "Variantes: neutral, info, success, danger, warning.",
+      preview: (
+        <div className="flex flex-col gap-3">
+          <Alert color="neutral" title="Neutral" description="Mensaje neutro por defecto." />
+          <Alert color="info" title="Información" description="Este es un mensaje informativo." />
+          <Alert color="success" title="Éxito" description="Operación completada correctamente." />
+          <Alert color="danger" title="Error" description="No se pudo completar la operación." />
+          <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
+        </div>
+      ),
+      code: `import { Alert } from "quickit-ui";
+
+export function AlertColores() {
+  return (
+    <div className="flex flex-col gap-3">
+      <Alert color="neutral" title="Neutral" description="Mensaje neutro por defecto." />
+      <Alert color="info" title="Información" description="Este es un mensaje informativo." />
+      <Alert color="success" title="Éxito" description="Operación completada correctamente." />
+      <Alert color="danger" title="Error" description="No se pudo completar la operación." />
+      <Alert color="warning" title="Advertencia" description="Revisa los datos antes de continuar." />
+    </div>
   );
 }`
     },

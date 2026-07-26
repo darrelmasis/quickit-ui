@@ -13,7 +13,7 @@ export default function WebsiteCodeBlock({
   const { copied, copy } = useCopyToClipboard();
 
   return (
-    <div className={`group relative overflow-hidden rounded-lg border ${isDark ? "border-neutral-800 bg-neutral-950" : "border-neutral-200 bg-neutral-50"}`}>
+    <div className={`group relative overflow-hidden rounded-lg ${isDark ? "bg-neutral-950" : "bg-neutral-50"}`}>
       <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
         <Tooltip content={copied ? "Código copiado" : "Copiar código"} placement="top" showArrow={false}>
           <Button

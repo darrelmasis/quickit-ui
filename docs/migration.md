@@ -29,7 +29,7 @@ Esta guía cubre la migración principal desde `0.2.4` hasta `1.2.0`. El salto s
   La documentación y el contrato se alinean en torno a `controlId`.
   Si estabas usando `id` como base semántica del control hijo, revisa tus wrappers personalizados.
 
-- `Select`, `Combobox`, `DatePicker`, `TimePicker`, `Range`
+- `Select`, `DatePicker`, `TimePicker`, `Range`
   La documentación y los ejemplos ahora reflejan mejor los contratos de serialización, accesibilidad y callbacks.
   Si tienes integraciones de formularios HTML o adapters de eventos, revisa los ejemplos actualizados.
 
@@ -40,10 +40,6 @@ Esta guía cubre la migración principal desde `0.2.4` hasta `1.2.0`. El salto s
 - `Range`
   En modo doble, si pasas `name`, Quickit ahora serializa dos hidden inputs: `name` para el valor inicial y `endName` para el valor final.
   Si dependías de que `Range range` no enviara valores en formularios HTML, omite `name` o controla la serialización manualmente.
-
-- `Combobox`
-  `label` puede ser un nodo React sin convertirse a `"[object Object]"`.
-  Si el label no es texto plano, define `textValue` para búsqueda y para el texto visible del input.
 
 - `Switch`
   `onCheckedChange` recibe un segundo argumento `event` compatible con el evento sintético de `onChange`.

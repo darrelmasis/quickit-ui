@@ -21,6 +21,112 @@ export const buttonDoc = {
   preview: <ButtonPreviewCanvas />,
   installCode: WEBSITE_BUTTON_DOC.installCode,
   examples: [{
+    id: "ejemplos-formulario",
+    title: "Formulario de acción",
+    description: "Ejemplo realista de botones en un formulario con acciones primaria y secundaria.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Nombre</label>
+          <input type="text" placeholder="Tu nombre" className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Email</label>
+          <input type="email" placeholder="tu@email.com" className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100" />
+        </div>
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <Button color="neutral" variant="ghost">Cancelar</Button>
+          <Button color="primary" variant="solid">Guardar cambios</Button>
+        </div>
+      </div>,
+    code: `import { Button } from "quickit-ui";
+
+export function ButtonFormulario() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium">Nombre</label>
+        <input type="text" placeholder="Tu nombre" className="rounded-lg border px-3 py-2 text-sm" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium">Email</label>
+        <input type="email" placeholder="tu@email.com" className="rounded-lg border px-3 py-2 text-sm" />
+      </div>
+      <div className="flex items-center justify-end gap-3 pt-2">
+        <Button color="neutral" variant="ghost">Cancelar</Button>
+        <Button color="primary" variant="solid">Guardar cambios</Button>
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-toolbar",
+    title: "Toolbar de acciones",
+    description: "Ejemplo de toolbar con botones de acción e iconos.",
+    preview: <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-2 dark:border-neutral-800">
+        <Button color="neutral" size="sm" shape="square" aria-label="Nuevo">+</Button>
+        <Button color="neutral" size="sm" shape="square" aria-label="Editar">✎</Button>
+        <Button color="neutral" size="sm" shape="square" aria-label="Eliminar">🗑</Button>
+        <div className="w-px h-6 bg-neutral-200 dark:bg-neutral-700" />
+        <Button color="primary" size="sm" variant="solid">Exportar</Button>
+        <Button color="neutral" size="sm" variant="outline">Configurar</Button>
+      </div>,
+    code: `import { Button } from "quickit-ui";
+
+export function ButtonToolbar() {
+  return (
+    <div className="flex items-center gap-2 rounded-lg border p-2">
+      <Button color="neutral" size="sm" shape="square" aria-label="Nuevo">+</Button>
+      <Button color="neutral" size="sm" shape="square" aria-label="Editar">✎</Button>
+      <Button color="neutral" size="sm" shape="square" aria-label="Eliminar">🗑</Button>
+      <div className="w-px h-6 bg-neutral-200 dark:bg-neutral-700" />
+      <Button color="primary" size="sm" variant="solid">Exportar</Button>
+      <Button color="neutral" size="sm" variant="outline">Configurar</Button>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-navegacion",
+    title: "Navegación",
+    description: "Ejemplo de botones de navegación con diferentes variantes.",
+    preview: <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
+          <div>
+            <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Configuración</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Ajusta tus preferencias</p>
+          </div>
+          <Button color="primary" size="sm" variant="solid">Ir</Button>
+        </div>
+        <div className="flex items-center justify-between rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
+          <div>
+            <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Perfil</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Edita tu información</p>
+          </div>
+          <Button color="neutral" size="sm" variant="outline">Editar</Button>
+        </div>
+      </div>,
+    code: `import { Button } from "quickit-ui";
+
+export function ButtonNavegacion() {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between rounded-lg border p-4">
+        <div>
+          <p className="text-sm font-semibold">Configuración</p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">Ajusta tus preferencias</p>
+        </div>
+        <Button color="primary" size="sm" variant="solid">Ir</Button>
+      </div>
+      <div className="flex items-center justify-between rounded-lg border p-4">
+        <div>
+          <p className="text-sm font-semibold">Perfil</p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">Edita tu información</p>
+        </div>
+        <Button color="neutral" size="sm" variant="outline">Editar</Button>
+      </div>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-variantes",
     title: "Variantes",
     description: `Variantes disponibles: ${QUICKIT_BUTTON_VARIANTS.join(", ")}.`,

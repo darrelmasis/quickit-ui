@@ -199,7 +199,6 @@ export const THEME_CLASSES_INDEX_SNIPPET = `src/lib/theme/theme-classes/
 ├── breadcrumb.js
 ├── card.js
 ├── checkbox.js
-├── combobox.js
 ├── data-table.js
 ├── date-picker.js
 ├── drawer.js
@@ -840,11 +839,6 @@ export const WEBSITE_COMPONENT_GROUPS = [
         slug: "select",
         name: "Select",
         description: "Selector composable con trigger y panel flotante.",
-      },
-      {
-        slug: "combobox",
-        name: "Combobox",
-        description: "Lista filtrable con campo de búsqueda integrado.",
       },
       {
         slug: "checkbox",

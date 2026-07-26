@@ -10,7 +10,6 @@ import {
   ButtonGroup,
   Card,
   Checkbox,
-  Combobox,
   Container,
   DataTable,
   DatePicker,
@@ -40,6 +39,7 @@ import {
   Toaster,
   Tooltip,
   UserChip,
+  useQuickitTheme,
 } from "@/lib";
 import { normalizeQuickitRadius } from "@/lib/theme/radius";
 import { toast } from "@/lib/components/toaster/toast-store";
@@ -328,21 +328,6 @@ const COMPONENT_CONFIG = {
       </Select>
     ),
   },
-  combobox: {
-    props: ["size", "color", "clearButton", "disabled"],
-    sizeOptions: SIZE_OPTIONS_LG,
-    preview: (p) => (
-      <Combobox
-        {...p}
-        placeholder="Buscar..."
-        options={[
-          { value: "apple", label: "Manzana" },
-          { value: "banana", label: "Plátano" },
-          { value: "cherry", label: "Cereza" },
-        ]}
-      />
-    ),
-  },
   checkbox: {
     props: ["size", "color", "indeterminate", "disabled"],
     sizeOptions: SIZE_OPTIONS_MD,
@@ -382,27 +367,38 @@ const COMPONENT_CONFIG = {
       <div className="flex flex-col items-center gap-6">
         <div className="flex items-center gap-4">
           <Avatar {...p}>
-            <Avatar.Fallback>UI</Avatar.Fallback>
+            <Avatar.Image src="https://i.pravatar.cc/48?img=11" alt="Elena Ruiz" />
+            <Avatar.Fallback>ER</Avatar.Fallback>
             {presence !== "off" && <Avatar.Presence status={presence} />}
           </Avatar>
           <UserChip
             {...p}
             name="Elena Ruiz"
             description="elenaruiz@email.com"
+            avatar={
+              <Avatar size="sm">
+                <Avatar.Image src="https://i.pravatar.cc/24?img=11" alt="Elena Ruiz" />
+                <Avatar.Fallback>ER</Avatar.Fallback>
+              </Avatar>
+            }
             presence={presence !== "off" ? presence : undefined}
           />
         </div>
         <AvatarGroup>
           <Avatar size="sm" shape="circle">
+            <Avatar.Image src="https://i.pravatar.cc/24?img=45" alt="Ana Rivera" />
             <Avatar.Fallback>AN</Avatar.Fallback>
           </Avatar>
           <Avatar size="sm" shape="circle">
+            <Avatar.Image src="https://i.pravatar.cc/24?img=47" alt="Bruno Rivas" />
             <Avatar.Fallback>BR</Avatar.Fallback>
           </Avatar>
           <Avatar size="sm" shape="circle">
+            <Avatar.Image src="https://i.pravatar.cc/24?img=51" alt="Clara López" />
             <Avatar.Fallback>CL</Avatar.Fallback>
           </Avatar>
           <Avatar size="sm" shape="circle">
+            <Avatar.Image src="https://i.pravatar.cc/24?img=70" alt="Diego Mora" />
             <Avatar.Fallback>DM</Avatar.Fallback>
           </Avatar>
         </AvatarGroup>
@@ -559,10 +555,16 @@ const COMPONENT_CONFIG = {
             <Tabs.Trigger value="tab1">Pestaña 1</Tabs.Trigger>
             <Tabs.Trigger value="tab2">Pestaña 2</Tabs.Trigger>
             <Tabs.Trigger value="tab3">Pestaña 3</Tabs.Trigger>
+            <Tabs.Trigger value="tab4">Pestaña 4</Tabs.Trigger>
+            <Tabs.Trigger value="tab5">Pestaña 5</Tabs.Trigger>
+            <Tabs.Trigger value="tab6">Pestaña 6</Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="tab1">Contenido de pestaña 1</Tabs.Content>
           <Tabs.Content value="tab2">Contenido de pestaña 2</Tabs.Content>
           <Tabs.Content value="tab3">Contenido de pestaña 3</Tabs.Content>
+          <Tabs.Content value="tab4">Contenido de pestaña 4</Tabs.Content>
+          <Tabs.Content value="tab5">Contenido de pestaña 5</Tabs.Content>
+          <Tabs.Content value="tab6">Contenido de pestaña 6</Tabs.Content>
         </Tabs>
       </div>
     ),
@@ -718,8 +720,22 @@ const COMPONENT_CONFIG = {
     sizeOptions: SIZE_OPTIONS_MD,
     preview: (p) => (
       <div className="flex flex-col items-center gap-4">
-        <UserChip {...p} name="Elena Ruiz" description="elenaruiz@email.com" />
-        <UserChip {...p} name="Carlos López" description="carlos@email.com" presence="online" />
+        <UserChip
+          {...p}
+          name="Elena Ruiz"
+          src="https://i.pravatar.cc/120?img=11"
+          initials="ER"
+          details={{ role: "Design Lead", email: "elena@ejemplo.com", username: "elena" }}
+          presence="online"
+        />
+        <UserChip
+          {...p}
+          name="Carlos López"
+          src="https://i.pravatar.cc/120?img=22"
+          initials="CL"
+          details={{ role: "Desarrollador", email: "carlos@ejemplo.com" }}
+          presence="online"
+        />
       </div>
     ),
   },
@@ -890,6 +906,7 @@ function PropControls({ config, currentProps, onChange, onReset, globalRadius, o
 }
 
 export default function PlaygroundPage() {
+  const systemTheme = useQuickitTheme();
   const [selected, setSelected] = useState(() => {
     if (typeof window === "undefined") return "button";
     const hash = window.location.hash.slice(1);
@@ -898,6 +915,9 @@ export default function PlaygroundPage() {
   const [props, setProps] = useState({});
   const [globalRadius, setGlobalRadius] = useState("sm");
   const [previewTheme, setPreviewTheme] = useState("system");
+
+  const isDarkPreview =
+    previewTheme === "dark" || (previewTheme === "system" && systemTheme === "dark");
 
   const selectComponent = (slug) => {
     setSelected(slug);
@@ -1061,14 +1081,25 @@ export default function PlaygroundPage() {
                 <div className="relative">
                   <div
                     className={cn(
-                      "flex min-h-[200px] items-center justify-center overflow-auto rounded-xl border-2 border-dashed p-8",
-                      previewTheme === "dark"
-                        ? "border-neutral-800 bg-neutral-950"
-                        : "border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950",
+                      "relative flex min-h-[200px] items-center justify-center overflow-hidden rounded-xl border-2 border-dashed p-8",
+                      isDarkPreview
+                        ? "border-neutral-700 bg-neutral-800"
+                        : "border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800",
                     )}
                     style={{ "--qi-radius": normalizeQuickitRadius(globalRadius) }}
                   >
-                    <div className={cn(previewTheme === "dark" && "dark")}>
+                    {/* Fondo decorativo con patrón de puntos */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        backgroundImage:
+                          "radial-gradient(circle, rgb(120 120 120) 1px, transparent 1px)",
+                        backgroundSize: "16px 16px",
+                        opacity: isDarkPreview ? 0.3 : 0.5,
+                      }}
+                    />
+                    <div className={cn("relative z-10", isDarkPreview && "dark")}>
                       {config.preview(currentProps)}
                     </div>
                   </div>

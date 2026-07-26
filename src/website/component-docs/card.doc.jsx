@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Card, Button } from "@/lib";
+import { Badge, Button, Card } from "@/lib";
 
 const CARD_PREVIEW_CODE = `import { Card, Button } from "quickit-ui";
 
@@ -48,6 +48,129 @@ export const cardDoc = {
   preview: <CardPreviewCanvas />,
   installCode: `import { Card } from "quickit-ui";`,
   examples: [
+    {
+      id: "ejemplos-producto",
+      title: "Tarjeta de producto",
+      description: "Ejemplo realista de tarjeta para mostrar un producto.",
+      preview: (
+        <Card>
+          <Card.Body>
+            <div className="aspect-square w-full rounded-lg bg-neutral-100 dark:bg-neutral-800 mb-4" />
+            <h3 className="font-semibold text-neutral-900 dark:text-neutral-50">Camiseta básica</h3>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">Algodón 100%, disponible en varios colores</p>
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-neutral-900 dark:text-neutral-50">$29.99</span>
+              <Badge color="success" variant="soft">En stock</Badge>
+            </div>
+          </Card.Body>
+          <Card.Footer>
+            <Button size="sm" variant="outline" className="flex-1">Ver detalles</Button>
+            <Button size="sm" className="flex-1">Añadir</Button>
+          </Card.Footer>
+        </Card>
+      ),
+      code: `import { Badge, Button, Card } from "quickit-ui";
+
+export function CardProducto() {
+  return (
+    <Card>
+      <Card.Body>
+        <div className="aspect-square w-full rounded-lg bg-neutral-100 dark:bg-neutral-800 mb-4" />
+        <h3 className="font-semibold">Camiseta básica</h3>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">Algodón 100%, disponible en varios colores</p>
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-bold">$29.99</span>
+          <Badge color="success" variant="soft">En stock</Badge>
+        </div>
+      </Card.Body>
+      <Card.Footer>
+        <Button size="sm" variant="outline" className="flex-1">Ver detalles</Button>
+        <Button size="sm" className="flex-1">Añadir</Button>
+      </Card.Footer>
+    </Card>
+  );
+}`
+    },
+    {
+      id: "ejemplos-articulo",
+      title: "Tarjeta de artículo",
+      description: "Ejemplo realista de tarjeta para blog o artículo.",
+      preview: (
+        <Card>
+          <Card.Header>
+            <div className="flex items-center gap-2 mb-2">
+              <Badge color="primary" size="sm">Tecnología</Badge>
+              <span className="text-xs text-neutral-500 dark:text-neutral-400">15 Ene 2024</span>
+            </div>
+            <h3 className="text-lg font-semibold">Cómo optimizar tu aplicación React</h3>
+          </Card.Header>
+          <Card.Body>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Aprende las mejores prácticas para mejorar el rendimiento de tus aplicaciones React con técnicas de memoización, lazy loading y más.
+            </p>
+          </Card.Body>
+          <Card.Footer>
+            <Button size="sm" variant="outline" href="#">Leer artículo</Button>
+          </Card.Footer>
+        </Card>
+      ),
+      code: `import { Badge, Button, Card } from "quickit-ui";
+
+export function CardArticulo() {
+  return (
+    <Card>
+      <Card.Header>
+        <div className="flex items-center gap-2 mb-2">
+          <Badge color="primary" size="sm">Tecnología</Badge>
+          <span className="text-xs text-neutral-500 dark:text-neutral-400">15 Ene 2024</span>
+        </div>
+        <h3 className="text-lg font-semibold">Cómo optimizar tu aplicación React</h3>
+      </Card.Header>
+      <Card.Body>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          Aprende las mejores prácticas para mejorar el rendimiento de tus aplicaciones React con técnicas de memoización, lazy loading y más.
+        </p>
+      </Card.Body>
+      <Card.Footer>
+        <Button size="sm" variant="outline" href="#">Leer artículo</Button>
+      </Card.Footer>
+    </Card>
+  );
+}`
+    },
+    {
+      id: "ejemplos-estadisticas",
+      title: "Tarjeta de estadísticas",
+      description: "Ejemplo realista de tarjeta para mostrar métricas.",
+      preview: (
+        <Card>
+          <Card.Body>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Visitas totales</span>
+              <Badge color="success" variant="soft">+12.5%</Badge>
+            </div>
+            <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-50 mb-2">24,532</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Últimos 30 días</p>
+          </Card.Body>
+        </Card>
+      ),
+      code: `import { Badge, Card } from "quickit-ui";
+
+export function CardEstadisticas() {
+  return (
+    <Card>
+      <Card.Body>
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Visitas totales</span>
+          <Badge color="success" variant="soft">+12.5%</Badge>
+        </div>
+        <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-50 mb-2">24,532</p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">Últimos 30 días</p>
+      </Card.Body>
+    </Card>
+  );
+}`
+    },
     {
       id: "ejemplos-basico",
       title: "Básico",

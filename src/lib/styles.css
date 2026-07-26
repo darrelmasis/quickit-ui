@@ -120,11 +120,11 @@
 }
 
 /* ─── Ripple ──────────────────────────────────────────────────────────────── */
-.qi-ripple-host {
+.qk-ripple-host {
   position: relative;
 }
 
-.qi-ripple-layer {
+.qk-ripple-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -133,49 +133,49 @@
   z-index: 0;
 }
 
-.qi-ripple {
+  .qk-ripple {
   position: absolute;
   border-radius: 9999px;
-  background-color: var(--qi-ripple-color, currentColor);
+  background-color: var(--qk-ripple-color, currentColor);
   pointer-events: none;
   transform: scale(0);
   transform-origin: center;
-  opacity: var(--qi-ripple-opacity, 0.18);
+  opacity: var(--qk-ripple-opacity, 0.18);
   transition:
-    transform var(--qi-ripple-duration, 0.72s) cubic-bezier(0.2, 0, 0, 1),
-    opacity calc(var(--qi-ripple-duration, 0.72s) * 0.72) linear
-      calc(var(--qi-ripple-duration, 0.72s) * 0.16);
+    transform var(--qk-ripple-duration, 0.72s) cubic-bezier(0.2, 0, 0, 1),
+    opacity calc(var(--qk-ripple-duration, 0.72s) * 0.72) linear
+      calc(var(--qk-ripple-duration, 0.72s) * 0.16);
   will-change: transform, opacity;
 }
 
-.qi-ripple[data-state="enter"] {
+.qk-ripple[data-state="enter"] {
   transform: scale(1);
   opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .qi-ripple {
+.qk-ripple {
     transition-duration: 0.6ms;
     transition-delay: 0ms;
   }
 }
 
 /* ─── Form Field Autofill ─────────────────────────────────────────────────── */
-.qi-form-field-autofill:-webkit-autofill,
-.qi-form-field-autofill:-webkit-autofill:hover,
-.qi-form-field-autofill:-webkit-autofill:focus,
-.qi-form-field-autofill:autofill,
-.qi-form-field-autofill:autofill:hover,
-.qi-form-field-autofill:autofill:focus {
+.qk-form-field-autofill:-webkit-autofill,
+.qk-form-field-autofill:-webkit-autofill:hover,
+.qk-form-field-autofill:-webkit-autofill:focus,
+.qk-form-field-autofill:autofill,
+.qk-form-field-autofill:autofill:hover,
+.qk-form-field-autofill:autofill:focus {
   -webkit-text-fill-color: var(
-    --qi-field-autofill-text,
+    --qk-field-autofill-text,
     currentColor
   ) !important;
-  caret-color: var(--qi-field-autofill-caret, currentColor);
-  border-color: var(--qi-field-autofill-border, currentColor) !important;
-  -webkit-box-shadow: 0 0 0 100rem var(--qi-field-autofill-bg, transparent)
+  caret-color: var(--qk-field-autofill-caret, currentColor);
+  border-color: var(--qk-field-autofill-border, currentColor) !important;
+  -webkit-box-shadow: 0 0 0 100rem var(--qk-field-autofill-bg, transparent)
     inset !important;
-  box-shadow: 0 0 0 100rem var(--qi-field-autofill-bg, transparent) inset !important;
+  box-shadow: 0 0 0 100rem var(--qk-field-autofill-bg, transparent) inset !important;
   transition:
     background-color 999999s ease-out 0s,
     color 999999s ease-out 0s,
@@ -297,29 +297,54 @@
   }
 }
 
+/* ─── Overlay & Floating surfaces ────────────────────────────────────────── */
+/* Modal, Drawer, Popover, Tooltip and Dropdown use inline transition styles
+ * (Floating UI + transform/opacity). Disable them under reduced motion. */
+
+.qk-floating-surface {
+  z-index: 9999;
+}
+
+.qk-floating-arrow path {
+  fill: var(--qk-arrow-fill);
+  stroke: var(--qk-arrow-stroke);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qk-overlay-surface,
+  .qk-floating-surface {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .qk-overlay-surface {
+    transform: none !important;
+  }
+}
+
 /* ─── Scrollbar Themed ──────────────────────────────────────────────────── */
 :root {
-  --qi-radius: 0.75rem;
-  --qi-radius-xs: calc(var(--qi-radius) * 0.833);
-  --qi-radius-lg: calc(var(--qi-radius) * 1.167);
-  --qi-radius-xl: calc(var(--qi-radius) * 1.333);
-  --qi-radius-2xl: calc(var(--qi-radius) * 1.5);
-  --qi-radius-3xl: calc(var(--qi-radius) * 1.667);
+  --qk-radius: 0.75rem;
+  --qk-radius-xs: calc(var(--qk-radius) * 0.833);
+  --qk-radius-lg: calc(var(--qk-radius) * 1.167);
+  --qk-radius-xl: calc(var(--qk-radius) * 1.333);
+  --qk-radius-2xl: calc(var(--qk-radius) * 1.5);
+  --qk-radius-3xl: calc(var(--qk-radius) * 1.667);
 
-  --qi-scroll-thumb: #a3a3a3;
-  --qi-scroll-thumb-hover: #737373;
-  --qi-scroll-track: transparent;
+  --qk-scroll-thumb: #a3a3a3;
+  --qk-scroll-thumb-hover: #737373;
+  --qk-scroll-track: transparent;
 }
 
 .dark {
-  --qi-scroll-thumb: #525252;
-  --qi-scroll-thumb-hover: #737373;
-  --qi-scroll-track: transparent;
+  --qk-scroll-thumb: #525252;
+  --qk-scroll-thumb-hover: #737373;
+  --qk-scroll-track: transparent;
 }
 
 @utility scrollbar-themed {
   scrollbar-width: thin;
-  scrollbar-color: var(--qi-scroll-thumb) var(--qi-scroll-track);
+  scrollbar-color: var(--qk-scroll-thumb) var(--qk-scroll-track);
   scrollbar-gutter: stable;
 
   &::-webkit-scrollbar {
@@ -334,51 +359,51 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--qi-scroll-track);
+    background: var(--qk-scroll-track);
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: 9999px;
     border: 2px solid transparent;
     background-clip: content-box;
-    background-color: var(--qi-scroll-thumb);
+    background-color: var(--qk-scroll-thumb);
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--qi-scroll-thumb-hover);
+    background-color: var(--qk-scroll-thumb-hover);
   }
 }
 
 /* ─── Scrollbar Global Themed ────────────────────────────────────────────── */
-[data-qi-custom-scrollbar] * {
+[data-qk-custom-scrollbar] * {
   scrollbar-width: thin;
-  scrollbar-color: var(--qi-scroll-thumb) var(--qi-scroll-track);
+  scrollbar-color: var(--qk-scroll-thumb) var(--qk-scroll-track);
 }
 
-[data-qi-custom-scrollbar] *::-webkit-scrollbar {
+[data-qk-custom-scrollbar] *::-webkit-scrollbar {
   width: 0.5rem;
   height: 0.5rem;
 }
 
-[data-qi-custom-scrollbar] *::-webkit-scrollbar-button {
+[data-qk-custom-scrollbar] *::-webkit-scrollbar-button {
   display: none;
   height: 0;
   width: 0;
 }
 
-[data-qi-custom-scrollbar] *::-webkit-scrollbar-track {
-  background: var(--qi-scroll-track);
+[data-qk-custom-scrollbar] *::-webkit-scrollbar-track {
+  background: var(--qk-scroll-track);
 }
 
-[data-qi-custom-scrollbar] *::-webkit-scrollbar-thumb {
+[data-qk-custom-scrollbar] *::-webkit-scrollbar-thumb {
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: content-box;
-  background-color: var(--qi-scroll-thumb);
+  background-color: var(--qk-scroll-thumb);
 }
 
-[data-qi-custom-scrollbar] *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--qi-scroll-thumb-hover);
+[data-qk-custom-scrollbar] *::-webkit-scrollbar-thumb:hover {
+  background-color: var(--qk-scroll-thumb-hover);
 }
 
 @utility scrollbar-hidden {

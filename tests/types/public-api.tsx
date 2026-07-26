@@ -8,7 +8,6 @@ import {
   Badge,
   Button,
   Checkbox,
-  Combobox,
   Container,
   DataTable,
   Default,
@@ -139,16 +138,6 @@ function ConsumerPreviewInner() {
         dismissible
         autoDismiss={2500}
         title="Espacio casi lleno"
-      />
-      <Combobox
-        defaultValue="es"
-        clearButtonLabel="Limpiar idioma"
-        onClear={() => {}}
-        options={[
-          { value: "es", label: "Español" },
-          { value: "docs", textValue: "Documentación", label: <strong>Docs</strong> },
-        ]}
-        placeholder="Idioma"
       />
       <DataTable<DataTablePreviewRow>
         color="primary"

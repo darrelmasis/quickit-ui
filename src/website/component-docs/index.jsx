@@ -10,7 +10,6 @@ import { inputGroupDoc } from "@/website/component-docs/input-group.doc";
 import { rangeDoc } from "@/website/component-docs/range.doc";
 import { textareaDoc } from "@/website/component-docs/textarea.doc";
 import { selectDoc } from "@/website/component-docs/select.doc";
-import { comboboxDoc } from "@/website/component-docs/combobox.doc";
 import { datePickerDoc } from "@/website/component-docs/date-picker.doc";
 import { timePickerDoc } from "@/website/component-docs/time-picker.doc";
 import { stepperDoc } from "@/website/component-docs/stepper.doc";
@@ -29,6 +28,7 @@ import { popoverDoc } from "@/website/component-docs/popover.doc";
 import { tooltipDoc } from "@/website/component-docs/tooltip.doc";
 import { modalDoc } from "@/website/component-docs/modal.doc";
 import { avatarDoc } from "@/website/component-docs/avatar.doc";
+import { userChipDoc } from "@/website/component-docs/user-chip.doc";
 import { progressDoc } from "@/website/component-docs/progress.doc";
 import { toasterDoc } from "@/website/component-docs/toaster.doc";
 import { emptyStateDoc } from "@/website/component-docs/empty-state.doc";
@@ -53,7 +53,6 @@ export const COMPONENT_DOCS = {
   "range": rangeDoc,
   "textarea": textareaDoc,
   "select": selectDoc,
-  "combobox": comboboxDoc,
   "date-picker": datePickerDoc,
   "time-picker": timePickerDoc,
   "stepper": stepperDoc,
@@ -72,6 +71,7 @@ export const COMPONENT_DOCS = {
   "tooltip": tooltipDoc,
   "modal": modalDoc,
   "avatar": avatarDoc,
+  "user-chip": userChipDoc,
   "progress": progressDoc,
   "toaster": toasterDoc,
   "empty-state": emptyStateDoc,

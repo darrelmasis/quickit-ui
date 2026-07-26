@@ -91,11 +91,11 @@ describe("Tabs", () => {
     expect(root.getAttribute("data-orientation")).toBe("horizontal");
     expect(root.className).toContain("custom-root");
     expect(list.getAttribute("data-testid")).toBe("tabs-list");
-    expect(listClasses).toContain("inline-flex");
+    expect(listClasses).toContain("flex");
     expect(listClasses).toContain("flex-nowrap");
-    expect(listClasses).toContain("overflow-hidden");
-    expect(listClasses).not.toContain("w-full");
-    expect(listClasses).not.toContain("overflow-x-auto");
+    expect(listClasses).toContain("overflow-x-auto");
+    expect(listClasses).toContain("scrollbar-hidden");
+    expect(listClasses).toContain("w-full");
     expect(overviewTab.getAttribute("title")).toBe("Open overview");
     expect(overviewPanel.getAttribute("tabindex")).toBe("-1");
   });
@@ -122,11 +122,12 @@ describe("Tabs", () => {
       .className.split(/\s+/);
 
     expect(listClasses).toContain("flex-nowrap");
-    expect(listClasses).not.toContain("overflow-x-auto");
-    expect(listClasses).not.toContain("scrollbar-hidden");
+    expect(listClasses).toContain("overflow-x-auto");
+    expect(listClasses).toContain("scrollbar-hidden");
     expect(overviewClasses).toContain("max-w-full");
+    expect(overviewClasses).toContain("flex-1");
+    expect(overviewClasses).toContain("shrink-0");
     expect(overviewClasses).toContain("min-w-0");
-    expect(overviewClasses).toContain("w-[9.5rem]");
   });
 
   it("supports controlled value changes without duplicate callbacks", async () => {

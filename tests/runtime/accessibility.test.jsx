@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import {
   Button,
-  Combobox,
   Drawer,
   Modal,
   Popover,
@@ -102,28 +101,5 @@ describe("ARIA: Select", () => {
     await user.click(trigger);
     const listbox = await screen.findByRole("listbox");
     expect(trigger.getAttribute("aria-controls")).toBe(listbox.id);
-  });
-});
-
-describe("ARIA: Combobox", () => {
-  const options = [
-    { value: "1", label: "Uno" },
-    { value: "2", label: "Dos" },
-  ];
-
-  it("tiene aria-haspopup en el input", () => {
-    renderWithProvider(<Combobox options={options} />);
-    const input = screen.getByRole("combobox");
-    expect(input.getAttribute("aria-haspopup")).toBe("listbox");
-  });
-
-  it("aria-controls en input solo cuando está abierto", async () => {
-    const user = userEvent.setup();
-    renderWithProvider(<Combobox options={options} />);
-    const input = screen.getByRole("combobox");
-    expect(input.getAttribute("aria-controls")).toBeFalsy();
-    await user.click(input);
-    const listbox = await screen.findByRole("listbox");
-    expect(input.getAttribute("aria-controls")).toBe(listbox.id);
   });
 });

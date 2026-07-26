@@ -10,7 +10,8 @@ createRoot(document.getElementById("root")).render(
     <QuickitThemeProvider
       defaultTheme="system"
       pressEffect="transform"
-      radius={0}
+      // focusRing={{ enabled: false }}
+      lang="en"
       storageKey={WEBSITE_THEME_STORAGE_KEY}
     >
       <WebsiteApp />

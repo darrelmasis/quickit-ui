@@ -43,6 +43,234 @@ export const drawerDoc = {
   preview: <DrawerPreviewCanvas />,
   installCode: `import { Drawer } from "quickit-ui";`,
   examples: [{
+    id: "ejemplos-configuracion",
+    title: "Panel de configuración",
+    description: "Ejemplo realista de panel de configuración lateral.",
+    preview: <Drawer placement="right" size="w-96">
+          <Drawer.Trigger asChild>
+            <Button color="neutral">Configuración</Button>
+          </Drawer.Trigger>
+          <Drawer.Content>
+            <Drawer.Header>
+              <Drawer.Title>Configuración</Drawer.Title>
+            </Drawer.Header>
+            <Drawer.Body>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Modo oscuro</span>
+                  <div className="w-10 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Notificaciones</span>
+                  <div className="w-10 h-6 rounded-full bg-neutral-900 dark:bg-white" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Sonido</span>
+                  <div className="w-10 h-6 rounded-full bg-neutral-900 dark:bg-white" />
+                </div>
+              </div>
+            </Drawer.Body>
+            <Drawer.Actions>
+              <Drawer.Action variant="outline">Cancelar</Drawer.Action>
+              <Drawer.Action color="primary">Guardar</Drawer.Action>
+            </Drawer.Actions>
+          </Drawer.Content>
+        </Drawer>,
+    code: `import { Button, Drawer } from "quickit-ui";
+
+export function DrawerConfiguracion() {
+  return (
+    <Drawer placement="right" size="w-96">
+      <Drawer.Trigger asChild>
+        <Button color="neutral">Configuración</Button>
+      </Drawer.Trigger>
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Configuración</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Modo oscuro</span>
+              <div className="w-10 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700" />
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Notificaciones</span>
+              <div className="w-10 h-6 rounded-full bg-neutral-900 dark:bg-white" />
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Sonido</span>
+              <div className="w-10 h-6 rounded-full bg-neutral-900 dark:bg-white" />
+            </div>
+          </div>
+        </Drawer.Body>
+        <Drawer.Actions>
+          <Drawer.Action variant="outline">Cancelar</Drawer.Action>
+          <Drawer.Action color="primary">Guardar</Drawer.Action>
+        </Drawer.Actions>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`
+  }, {
+    id: "ejemplos-filtros",
+    title: "Panel de filtros móvil",
+    description: "Ejemplo realista de panel de filtros inferior para móvil.",
+    preview: <Drawer placement="bottom" size="h-[80vh]">
+          <Drawer.Trigger asChild>
+            <Button color="neutral">Filtros</Button>
+          </Drawer.Trigger>
+          <Drawer.Content>
+            <Drawer.Header>
+              <Drawer.Title>Filtrar productos</Drawer.Title>
+            </Drawer.Header>
+            <Drawer.Body>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium">Categoría</label>
+                  <select className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100">
+                    <option>Todas</option>
+                    <option>Electrónicos</option>
+                    <option>Ropa</option>
+                    <option>Hogar</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium">Precio máximo</label>
+                  <input type="range" className="w-full" />
+                  <div className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                    <span>$0</span>
+                    <span>$500</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium">Calificación</label>
+                  <div className="flex gap-2">
+                    <span className="text-sm">⭐⭐⭐⭐⭐</span>
+                    <span className="text-sm">⭐⭐⭐⭐</span>
+                    <span className="text-sm">⭐⭐⭐</span>
+                  </div>
+                </div>
+              </div>
+            </Drawer.Body>
+            <Drawer.Actions>
+              <Drawer.Action variant="outline">Limpiar</Drawer.Action>
+              <Drawer.Action color="primary">Aplicar (12)</Drawer.Action>
+            </Drawer.Actions>
+          </Drawer.Content>
+        </Drawer>,
+    code: `import { Button, Drawer } from "quickit-ui";
+
+export function DrawerFiltros() {
+  return (
+    <Drawer placement="bottom" size="h-[80vh]">
+      <Drawer.Trigger asChild>
+        <Button color="neutral">Filtros</Button>
+      </Drawer.Trigger>
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Filtrar productos</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Categoría</label>
+              <select className="rounded-lg border px-3 py-2 text-sm">
+                <option>Todas</option>
+                <option>Electrónicos</option>
+                <option>Ropa</option>
+                <option>Hogar</option>
+              </select>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Precio máximo</label>
+              <input type="range" className="w-full" />
+              <div className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                <span>$0</span>
+                <span>$500</span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Calificación</label>
+              <div className="flex gap-2">
+                <span className="text-sm">⭐⭐⭐⭐⭐</span>
+                <span className="text-sm">⭐⭐⭐⭐</span>
+                <span className="text-sm">⭐⭐⭐</span>
+              </div>
+            </div>
+          </div>
+        </Drawer.Body>
+        <Drawer.Actions>
+          <Drawer.Action variant="outline">Limpiar</Drawer.Action>
+          <Drawer.Action color="primary">Aplicar (12)</Drawer.Action>
+        </Drawer.Actions>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`
+  }, {
+    id: "ejemplos-navegacion",
+    title: "Navegación lateral",
+    description: "Ejemplo realista de navegación lateral para dashboard.",
+    preview: <Drawer placement="left" size="w-72">
+          <Drawer.Trigger asChild>
+            <Button color="neutral">Menú</Button>
+          </Drawer.Trigger>
+          <Drawer.Content>
+            <Drawer.Header>
+              <Drawer.Title>Navegación</Drawer.Title>
+            </Drawer.Header>
+            <Drawer.Body>
+              <nav className="flex flex-col gap-1">
+                <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-50 bg-neutral-100 dark:bg-neutral-800">
+                  <span>🏠</span> Dashboard
+                </a>
+                <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900">
+                  <span>📊</span> Analíticas
+                </a>
+                <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900">
+                  <span>👥</span> Usuarios
+                </a>
+                <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900">
+                  <span>⚙️</span> Configuración
+                </a>
+              </nav>
+            </Drawer.Body>
+          </Drawer.Content>
+        </Drawer>,
+    code: `import { Button, Drawer } from "quickit-ui";
+
+export function DrawerNavegacion() {
+  return (
+    <Drawer placement="left" size="w-72">
+      <Drawer.Trigger asChild>
+        <Button color="neutral">Menú</Button>
+      </Drawer.Trigger>
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Navegación</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <nav className="flex flex-col gap-1">
+            <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium bg-neutral-100 dark:bg-neutral-800">
+              <span>🏠</span> Dashboard
+            </a>
+            <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900">
+              <span>📊</span> Analíticas
+            </a>
+            <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900">
+              <span>👥</span> Usuarios
+            </a>
+            <a href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900">
+              <span>⚙️</span> Configuración
+            </a>
+          </nav>
+        </Drawer.Body>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`
+  }, {
     id: "ejemplos-placements",
     title: "Placements",
     description: "Right, left, bottom y top.",

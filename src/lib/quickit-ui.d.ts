@@ -9,6 +9,7 @@ import type {
 export declare const QUICKIT_SEMANTIC_COLORS: readonly [
   "neutral",
   "primary",
+  "secondary",
   "success",
   "danger",
   "warning",
@@ -19,6 +20,7 @@ export declare const QUICKIT_SEMANTIC_COLORS: readonly [
 export declare const QUICKIT_ACCENT_COLORS: readonly [
   "neutral",
   "primary",
+  "secondary",
   "success",
   "danger",
   "warning",
@@ -114,6 +116,7 @@ export declare const QUICKIT_AVATAR_RADIUS_TOKENS: Record<
   string,
   Record<string, string>
 >;
+export declare const QUICKIT_EASE_DEFAULT: "cubic-bezier(0.22, 1, 0.36, 1)";
 
 export type QuickitThemeMode = "light" | "dark";
 export type QuickitThemeOption = (typeof QUICKIT_THEME_OPTIONS)[number];
@@ -147,6 +150,12 @@ export type QuickitRippleComponent =
 export type QuickitPressEffect =
   (typeof QUICKIT_PRESS_EFFECTS)[number];
 
+export type QuickitLang = "es" | "en";
+export declare function useTXT(): Record<string, string | ((...args: unknown[]) => string)>;
+export declare function useQuickitLang(): QuickitLang;
+export declare const TXT_ES: Record<string, string | ((...args: unknown[]) => string)>;
+export declare const TXT_EN: Record<string, string | ((...args: unknown[]) => string)>;
+
 export declare const ACTION_CONTROL_THEME_CLASSES: Readonly<
   Record<
     QuickitThemeMode,
@@ -169,7 +178,6 @@ export declare const RADIO_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unkn
 export declare const SWITCH_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const ACCORDION_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const BREADCRUMB_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
-export declare const COMBOBOX_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const DRAWER_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const EMPTY_STATE_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const FORM_CONTROL_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
@@ -177,6 +185,13 @@ export declare const MODAL_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unkn
 export declare const POPOVER_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const RANGE_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const SELECT_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const CARD_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const INPUT_GROUP_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const INPUT_AFFIX_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
+export declare const CALENDAR_RANGE_CELL_CLASSES: Readonly<Record<string, unknown>>;
+export declare const AVATAR_PRESENCE_STATUS_CLASSES: Readonly<Record<string, string>>;
+export declare const TOAST_ICON_CLASSES: Readonly<Record<string, string>>;
+export declare const STEPPER_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 
 export interface QuickitBreakpoints {
   sm: number;
@@ -185,6 +200,16 @@ export interface QuickitBreakpoints {
   xl: number;
   "2xl": number;
 }
+export interface QuickitThemeConfig {
+  focusRing: { disabledComponents: string[]; enabled: boolean };
+  ripple: { disabledComponents: string[]; enabled: boolean };
+  pressEffect: string;
+  customScrollbar: boolean;
+  radius: string;
+  theme: string;
+}
+export declare function resolveQuickitThemeMode(theme: string): string;
+
 export interface QuickitFocusRingConfig {
   disabledComponents?: QuickitFocusRingComponent[];
   enabled?: boolean;
@@ -221,8 +246,11 @@ export declare function getAvatarRadius(
 export interface QuickitProviderProps {
   children?: React.ReactNode;
   focusRing?: boolean | QuickitFocusRingConfig;
+  lang?: QuickitLang;
   pressEffect?: QuickitPressEffect;
   ripple?: boolean | QuickitRippleConfig;
+  customScrollbar?: boolean;
+  radius?: string;
   theme?: QuickitThemeMode;
 }
 export declare function QuickitProvider(
@@ -231,9 +259,12 @@ export declare function QuickitProvider(
 export declare const QUICKIT_THEME_STORAGE_KEY: "quickit-ui-theme";
 export interface QuickitThemeProviderProps {
   children?: React.ReactNode;
+  customScrollbar?: boolean;
   defaultTheme?: QuickitThemeOption;
   focusRing?: boolean | QuickitFocusRingConfig;
+  lang?: QuickitLang;
   pressEffect?: QuickitPressEffect;
+  radius?: string;
   ripple?: boolean | QuickitRippleConfig;
   storageKey?: string;
 }
@@ -258,6 +289,22 @@ export declare function useQuickitRippleConfig(): {
   enabled: boolean;
 };
 export declare function useQuickitPressEffect(): QuickitPressEffect;
+export declare function useQuickitCustomScrollbar(): boolean;
+export declare function useQuickitRadius(): string;
+export declare function resolveQuickitFocusRingClasses(
+  enabled: boolean,
+  value: string | string[],
+): string | string[];
+export declare function useQuickitControlState(
+  component: string,
+  props?: Record<string, unknown>,
+): {
+  theme: string;
+  focusRing: boolean;
+  ripple: boolean;
+  pressEffect: string;
+  customScrollbar: boolean;
+};
 export interface UseBreakpointOptions {
   breakpoints?: Partial<QuickitBreakpoints>;
 }
@@ -429,8 +476,20 @@ export interface AvatarPresenceProps
   size?: QuickitAvatarSize;
   status?: QuickitPresenceStatus;
 }
+export interface UserChipDetails {
+  /** Cargo o rol del usuario */
+  role?: React.ReactNode;
+  /** Correo electrónico */
+  email?: React.ReactNode;
+  /** Nombre de usuario (se muestra con @) */
+  username?: React.ReactNode;
+}
+
 export interface UserChipProps extends React.HTMLAttributes<HTMLElement> {
+  /** Descripción simple (usada cuando no se provee `details`) */
   description?: React.ReactNode;
+  /** Detalles enriquecidos: role, email, username */
+  details?: UserChipDetails;
   href?: string;
   initials?: string;
   name: React.ReactNode;
@@ -786,6 +845,7 @@ export interface SelectProps
   onValueChange?: (value: string) => void;
   placeholder?: React.ReactNode;
   required?: boolean;
+  shape?: QuickitButtonShape;
   size?: "sm" | "md" | "lg";
   usePortal?: boolean;
   value?: string | number;
@@ -1021,6 +1081,7 @@ export interface PopoverProps {
   className?: string;
   color?: QuickitFloatingColor;
   content: React.ReactNode;
+  disableFlip?: boolean;
   hoverDelayPreset?: "fast" | "normal" | "slow";
   interactive?: boolean;
   offset?:
@@ -1369,45 +1430,6 @@ export declare function useFloatingLayer(
   options?: UseFloatingLayerOptions &
     Omit<UseFloatingOptions, "middleware" | "placement">,
 ): UseFloatingReturn;
-
-export interface ComboboxOption {
-  disabled?: boolean;
-  label?: React.ReactNode;
-  textValue?: string;
-  value: string | number;
-}
-
-export type QuickitComboboxChangeEvent = QuickitSelectChangeEvent;
-
-export interface ComboboxProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    "size" | "onChange" | "value" | "defaultValue"
-  > {
-  clearButton?: boolean;
-  clearButtonLabel?: string;
-  clearIcon?: React.ReactNode;
-  defaultValue?: string | number;
-  emptyText?: string;
-  loading?: boolean;
-  name?: string;
-    onChange?: (event: QuickitComboboxChangeEvent) => void;
-    onClear?: () => void;
-    onInputChange?: (
-      query: string,
-      event: React.ChangeEvent<HTMLInputElement>,
-    ) => void;
-    onValueChange?: (value: string) => void;
-  options?: readonly ComboboxOption[];
-  placeholder?: string;
-  size?: "sm" | "md" | "lg";
-  usePortal?: boolean;
-  value?: string | number;
-}
-
-export declare const Combobox: React.ForwardRefExoticComponent<
-  ComboboxProps & React.RefAttributes<HTMLInputElement>
->;
 
 export interface StepperStep {
   clickable?: boolean;

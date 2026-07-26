@@ -159,7 +159,7 @@ export default function App() {
 
 ## Qué incluye
 
-- Formularios: `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `TimePicker`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
+- Formularios: `Input`, `Textarea`, `Select`, `DatePicker`, `TimePicker`, `Checkbox`, `Radio`, `Switch`, `Range`, `FormControl`
 - Overlays: `Modal`, `Drawer`, `Popover`, `Tooltip`, `Dropdown`, `Toaster`
 - Navegación: `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
 - Datos y feedback: `DataTable`, `Alert`, `EmptyState`, `Skeleton`, `Progress`, `Badge`
@@ -170,7 +170,6 @@ export default function App() {
 
 ## Notas de integración
 
-- `Combobox`: `label` acepta `ReactNode`; cuando uses labels ricos, define `textValue` para búsqueda y texto visible del input.
 - `Range`: en modo `range`, `name` serializa el valor inicial y `endName` el valor final. Por defecto `endName` será `${name}End`.
 - `Switch`: `onCheckedChange` recibe `(checked, event)`, alineado con `Checkbox` y `Radio`; el segundo argumento puede ignorarse si no lo necesitas.
 

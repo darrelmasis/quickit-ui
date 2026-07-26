@@ -26,6 +26,74 @@ export function TimePickerPreview() {
   preview: <TimePickerPreviewCanvas />,
   installCode: `import { TimePicker } from "quickit-ui";`,
   examples: [{
+    id: "ejemplos-cita",
+    title: "Agendar cita",
+    description: "Ejemplo realista de selección de hora para cita médica.",
+    preview: <div className="w-full max-w-xl">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Hora de la cita</label>
+          <TimePicker 
+            hourCycle="12h" 
+            minuteStep={15} 
+            minTime="09:00" 
+            maxTime="17:00" 
+            defaultValue="10:30" 
+            placeholder="Selecciona hora disponible"
+          />
+        </div>
+      </div>,
+    code: `import { TimePicker } from "quickit-ui";
+
+export function TimePickerCita() {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-sm font-medium">Hora de la cita</label>
+      <TimePicker 
+        hourCycle="12h" 
+        minuteStep={15} 
+        minTime="09:00" 
+        maxTime="17:00" 
+        defaultValue="10:30" 
+        placeholder="Selecciona hora disponible"
+      />
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-reunion",
+    title: "Programar reunión",
+    description: "Ejemplo realista de selección de hora para reunión de trabajo.",
+    preview: <div className="w-full max-w-xl">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Hora de la reunión</label>
+          <TimePicker 
+            hourCycle="24h" 
+            minuteStep={30} 
+            minTime="08:00" 
+            maxTime="18:00" 
+            defaultValue="14:00" 
+            placeholder="Selecciona hora"
+          />
+        </div>
+      </div>,
+    code: `import { TimePicker } from "quickit-ui";
+
+export function TimePickerReunion() {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-sm font-medium">Hora de la reunión</label>
+      <TimePicker 
+        hourCycle="24h" 
+        minuteStep={30} 
+        minTime="08:00" 
+        maxTime="18:00" 
+        defaultValue="14:00" 
+        placeholder="Selecciona hora"
+      />
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-formato",
     title: "12h y 24h",
     description: "Usa hourCycle para AM/PM o cuadrícula de 24 horas.",

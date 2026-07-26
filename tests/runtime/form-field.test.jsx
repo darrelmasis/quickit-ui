@@ -14,13 +14,13 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
-      "border-neutral-500",
+      "border-neutral-700",
     );
     expect(screen.getByPlaceholderText("Buscar").className).toContain(
       "focus-visible:ring-neutral-700/32",
     );
     expect(screen.getByPlaceholderText("Consola").className).toContain(
-      "bg-neutral-200",
+      "bg-neutral-600",
     );
     expect(screen.getByPlaceholderText("Consola").className).toContain(
       "focus-visible:ring-neutral-700/32",
@@ -72,16 +72,16 @@ describe("form field variants", () => {
     );
 
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
-      "--qi-field-autofill-bg",
+      "--qk-field-autofill-bg",
     )).toContain("var(--color-blue-500)");
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
-      "--qi-field-autofill-border",
+      "--qk-field-autofill-border",
     )).toBe("var(--color-blue-400)");
     expect(screen.getByPlaceholderText("Correo").style.getPropertyValue(
-      "--qi-field-autofill-text",
+      "--qk-field-autofill-text",
     )).toBe("var(--color-neutral-50)");
     expect(screen.getByPlaceholderText("Notas").style.getPropertyValue(
-      "--qi-field-autofill-bg",
+      "--qk-field-autofill-bg",
     )).toBe("var(--color-neutral-900)");
   });
 });

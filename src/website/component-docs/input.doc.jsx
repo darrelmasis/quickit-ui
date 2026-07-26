@@ -29,6 +29,104 @@ export const inputDoc = {
   preview: <InputBasicoCanvas />,
   installCode: `import { Input } from "quickit-ui";`,
   examples: [{
+    id: "ejemplos-formulario-contacto",
+    title: "Formulario de contacto",
+    description: "Ejemplo realista de formulario de contacto con diferentes tipos de inputs.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="contacto-nombre">Nombre completo</Label>
+          <Input id="contacto-nombre" placeholder="Juan Pérez" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="contacto-email">Email</Label>
+          <Input id="contacto-email" type="email" placeholder="juan@ejemplo.com" leftElement={<span>✉</span>} />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="contacto-telefono">Teléfono</Label>
+          <Input id="contacto-telefono" type="tel" placeholder="+52 55 1234 5678" leftElement={<span>📞</span>} />
+        </div>
+      </div>,
+    code: `import { Input, Label } from "quickit-ui";
+
+export function InputFormularioContacto() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="contacto-nombre">Nombre completo</Label>
+        <Input id="contacto-nombre" placeholder="Juan Pérez" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="contacto-email">Email</Label>
+        <Input id="contacto-email" type="email" placeholder="juan@ejemplo.com" leftElement={<span>✉</span>} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="contacto-telefono">Teléfono</Label>
+        <Input id="contacto-telefono" type="tel" placeholder="+52 55 1234 5678" leftElement={<span>📞</span>} />
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-login",
+    title: "Formulario de login",
+    description: "Ejemplo realista de formulario de login con password y validación.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="login-email">Email</Label>
+          <Input id="login-email" type="email" placeholder="tu@email.com" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="login-password">Contraseña</Label>
+          <Input id="login-password" type="password" placeholder="••••••••" passwordToggle />
+        </div>
+      </div>,
+    code: `import { Input, Label } from "quickit-ui";
+
+export function InputLogin() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="login-email">Email</Label>
+        <Input id="login-email" type="email" placeholder="tu@email.com" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="login-password">Contraseña</Label>
+        <Input id="login-password" type="password" placeholder="••••••••" passwordToggle />
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-busqueda",
+    title: "Búsqueda con filtros",
+    description: "Ejemplo realista de búsqueda con botón de limpiar y validación.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="busqueda-termino">Buscar</Label>
+          <Input id="busqueda-termino" type="search" placeholder="Buscar productos..." clearButton />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="busqueda-categoria">Categoría</Label>
+          <Input id="busqueda-categoria" placeholder="Todas las categorías" rightElement={<span className="text-xs">▼</span>} />
+        </div>
+      </div>,
+    code: `import { Input, Label } from "quickit-ui";
+
+export function InputBusqueda() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="busqueda-termino">Buscar</Label>
+        <Input id="busqueda-termino" type="search" placeholder="Buscar productos..." clearButton />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="busqueda-categoria">Categoría</Label>
+        <Input id="busqueda-categoria" placeholder="Todas las categorías" rightElement={<span className="text-xs">▼</span>} />
+      </div>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-tamanos",
     title: "Tamaños",
     description: `Sizes disponibles: ${QUICKIT_CONTROL_SIZES.join(", ")}.`,

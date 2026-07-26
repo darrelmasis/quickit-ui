@@ -10,14 +10,14 @@ export function BreadcrumbPreview() {
     <div className="flex flex-col gap-4">
       <Breadcrumb>
         <Breadcrumb.List>
-          <Breadcrumb.Item href="/docs">Inicio</Breadcrumb.Item>
+          <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
           <Breadcrumb.Item current>Proyectos</Breadcrumb.Item>
         </Breadcrumb.List>
       </Breadcrumb>
       <Breadcrumb>
         <Breadcrumb.List separator="•">
-          <Breadcrumb.Item href="/docs">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="/sales">Ventas</Breadcrumb.Item>
+          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+          <Breadcrumb.Item href="#">Ventas</Breadcrumb.Item>
           <Breadcrumb.Item current>Detalle</Breadcrumb.Item>
         </Breadcrumb.List>
       </Breadcrumb>
@@ -63,7 +63,7 @@ export function BreadcrumbBasico() {
   return (
     <Breadcrumb>
       <Breadcrumb.List>
-        <Breadcrumb.Item href="/docs">Inicio</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
         <Breadcrumb.Item current>Proyectos</Breadcrumb.Item>
       </Breadcrumb.List>
     </Breadcrumb>
@@ -86,8 +86,8 @@ export function BreadcrumbSeparador() {
   return (
     <Breadcrumb>
       <Breadcrumb.List separator="•">
-        <Breadcrumb.Item href="/docs">Inicio</Breadcrumb.Item>
-        <Breadcrumb.Item href="/sales">Ventas</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Inicio</Breadcrumb.Item>
+        <Breadcrumb.Item href="#">Ventas</Breadcrumb.Item>
         <Breadcrumb.Item current>Detalle</Breadcrumb.Item>
       </Breadcrumb.List>
     </Breadcrumb>

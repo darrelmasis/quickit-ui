@@ -38,6 +38,180 @@ export const selectDoc = {
   preview: <SelectPreviewCanvas />,
   installCode: `import { Select } from "quickit-ui";`,
   examples: [{
+    id: "ejemplos-registro",
+    title: "Formulario de registro",
+    description: "Ejemplo realista de formulario de registro con selección de país.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="registro-pais">País</Label>
+          <Select id="registro-pais" placeholder="Selecciona tu país">
+            <option value="mx">México</option>
+            <option value="es">España</option>
+            <option value="ar">Argentina</option>
+            <option value="co">Colombia</option>
+            <option value="pe">Perú</option>
+            <option value="cl">Chile</option>
+            <option value="other">Otro</option>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="registro-idioma">Idioma preferido</Label>
+          <Select id="registro-idioma" placeholder="Selecciona idioma">
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+            <option value="pt">Portugués</option>
+          </Select>
+        </div>
+      </div>,
+    code: `import { Label, Select } from "quickit-ui";
+
+export function SelectRegistro() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="registro-pais">País</Label>
+        <Select id="registro-pais" placeholder="Selecciona tu país">
+          <option value="mx">México</option>
+          <option value="es">España</option>
+          <option value="ar">Argentina</option>
+          <option value="co">Colombia</option>
+          <option value="pe">Perú</option>
+          <option value="cl">Chile</option>
+          <option value="other">Otro</option>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="registro-idioma">Idioma preferido</Label>
+        <Select id="registro-idioma" placeholder="Selecciona idioma">
+          <option value="es">Español</option>
+          <option value="en">Inglés</option>
+          <option value="pt">Portugués</option>
+        </Select>
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-configuracion",
+    title: "Configuración de usuario",
+    description: "Ejemplo realista de configuración con selección de rol y categoría.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="config-rol">Rol del usuario</Label>
+          <Select id="config-rol" placeholder="Selecciona rol">
+            <option value="admin">Administrador</option>
+            <option value="editor">Editor</option>
+            <option value="viewer">Visualizador</option>
+            <option value="guest">Invitado</option>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="config-categoria">Categoría</Label>
+          <Select id="config-categoria" placeholder="Selecciona categoría">
+            <option value="tech">Tecnología</option>
+            <option value="design">Diseño</option>
+            <option value="marketing">Marketing</option>
+            <option value="sales">Ventas</option>
+          </Select>
+        </div>
+      </div>,
+    code: `import { Label, Select } from "quickit-ui";
+
+export function SelectConfiguracion() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="config-rol">Rol del usuario</Label>
+        <Select id="config-rol" placeholder="Selecciona rol">
+          <option value="admin">Administrador</option>
+          <option value="editor">Editor</option>
+          <option value="viewer">Visualizador</option>
+          <option value="guest">Invitado</option>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="config-categoria">Categoría</Label>
+        <Select id="config-categoria" placeholder="Selecciona categoría">
+          <option value="tech">Tecnología</option>
+          <option value="design">Diseño</option>
+          <option value="marketing">Marketing</option>
+          <option value="sales">Ventas</option>
+        </Select>
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-filtros",
+    title: "Filtros de búsqueda",
+    description: "Ejemplo realista de filtros de búsqueda con múltiples selects.",
+    preview: <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="filtro-categoria">Categoría</Label>
+          <Select id="filtro-categoria" placeholder="Todas las categorías">
+            <option value="all">Todas</option>
+            <option value="electronics">Electrónicos</option>
+            <option value="clothing">Ropa</option>
+            <option value="home">Hogar</option>
+            <option value="sports">Deportes</option>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="filtro-precio">Rango de precio</Label>
+          <Select id="filtro-precio" placeholder="Cualquier precio">
+            <option value="0-50">$0 - $50</option>
+            <option value="50-100">$50 - $100</option>
+            <option value="100-200">$100 - $200</option>
+            <option value="200+">$200+</option>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="filtro-orden">Ordenar por</Label>
+          <Select id="filtro-orden" placeholder="Relevancia">
+            <option value="relevance">Relevancia</option>
+            <option value="price-asc">Precio: Menor a Mayor</option>
+            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="newest">Más recientes</option>
+          </Select>
+        </div>
+      </div>,
+    code: `import { Label, Select } from "quickit-ui";
+
+export function SelectFiltros() {
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="filtro-categoria">Categoría</Label>
+        <Select id="filtro-categoria" placeholder="Todas las categorías">
+          <option value="all">Todas</option>
+          <option value="electronics">Electrónicos</option>
+          <option value="clothing">Ropa</option>
+          <option value="home">Hogar</option>
+          <option value="sports">Deportes</option>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="filtro-precio">Rango de precio</Label>
+        <Select id="filtro-precio" placeholder="Cualquier precio">
+          <option value="0-50">$0 - $50</option>
+          <option value="50-100">$50 - $100</option>
+          <option value="100-200">$100 - $200</option>
+          <option value="200+">$200+</option>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="filtro-orden">Ordenar por</Label>
+        <Select id="filtro-orden" placeholder="Relevancia">
+          <option value="relevance">Relevancia</option>
+          <option value="price-asc">Precio: Menor a Mayor</option>
+          <option value="price-desc">Precio: Mayor a Menor</option>
+          <option value="newest">Más recientes</option>
+        </Select>
+      </div>
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-basico",
     title: "Básico",
     description: "Select simple con placeholder.",

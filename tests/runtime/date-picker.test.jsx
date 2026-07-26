@@ -23,7 +23,7 @@ describe("DatePicker", () => {
 
     await user.click(screen.getByRole("combobox"));
     expect(screen.getByRole("dialog", { name: "Selector de fecha" })).toBeTruthy();
-    await user.click(getHeaderButton("abril de 2026"));
+    await user.click(getHeaderButton("Abril 2026"));
 
     expect(
       getPlainCalendarButtons().filter((button) => button.textContent !== "2026"),
@@ -44,6 +44,6 @@ describe("DatePicker", () => {
     await user.click(monthButtons[4]);
 
     expect(screen.getByText("Lu")).toBeTruthy();
-    expect(getHeaderButton("mayo de 2027")).toBeTruthy();
+    expect(getHeaderButton("Mayo 2027")).toBeTruthy();
   }, 10000);
 });

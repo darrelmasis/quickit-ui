@@ -42,8 +42,8 @@ export default defineConfig(({ command, mode }) => {
           lib: {
             entry: libEntry,
             name: "QuickitUI",
-            formats: ["es"],
-            fileName: "quickit-ui",
+            formats: ["es", "cjs"],
+            fileName: (format) => (format === "cjs" ? "quickit-ui.cjs" : "quickit-ui.js"),
             cssFileName: "quickit-ui",
           },
           rollupOptions: {

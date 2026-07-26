@@ -18,6 +18,94 @@ export function DatePickerPreview() {
     </div>,
   installCode: `import { DatePicker } from "quickit-ui";`,
   examples: [{
+    id: "ejemplos-reserva",
+    title: "Reserva de hotel",
+    description: "Ejemplo realista de selección de fechas para reserva.",
+    preview: <div className="w-full max-w-xl">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Fecha de check-in</label>
+            <DatePicker defaultValue="2025-07-20" placeholder="Selecciona fecha de llegada" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Fecha de check-out</label>
+            <DatePicker defaultValue="2025-07-25" placeholder="Selecciona fecha de salida" />
+          </div>
+        </div>
+      </div>,
+    code: `import { DatePicker } from "quickit-ui";
+
+export function DatePickerReserva() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium">Fecha de check-in</label>
+        <DatePicker defaultValue="2025-07-20" placeholder="Selecciona fecha de llegada" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium">Fecha de check-out</label>
+        <DatePicker defaultValue="2025-07-25" placeholder="Selecciona fecha de salida" />
+      </div>
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-rango-evento",
+    title: "Rango de fechas para evento",
+    description: "Ejemplo realista de selección de rango para eventos.",
+    preview: <div className="w-full max-w-xl">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Fechas del evento</label>
+          <DatePicker 
+            selectionMode="between" 
+            defaultValue={{ from: "2025-08-15", to: "2025-08-20" }} 
+            placeholder="Selecciona el rango de fechas"
+          />
+        </div>
+      </div>,
+    code: `import { DatePicker } from "quickit-ui";
+
+export function DatePickerRangoEvento() {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-sm font-medium">Fechas del evento</label>
+      <DatePicker 
+        selectionMode="between" 
+        defaultValue={{ from: "2025-08-15", to: "2025-08-20" }} 
+        placeholder="Selecciona el rango de fechas"
+      />
+    </div>
+  );
+}`
+  }, {
+    id: "ejemplos-cita",
+    title: "Agendar cita",
+    description: "Ejemplo realista de selección de fecha para cita médica.",
+    preview: <div className="w-full max-w-xl">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Fecha de la cita</label>
+          <DatePicker 
+            minDate="2025-07-18" 
+            defaultValue="2025-07-22" 
+            placeholder="Selecciona una fecha disponible"
+          />
+        </div>
+      </div>,
+    code: `import { DatePicker } from "quickit-ui";
+
+export function DatePickerCita() {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-sm font-medium">Fecha de la cita</label>
+      <DatePicker 
+        minDate="2025-07-18" 
+        defaultValue="2025-07-22" 
+        placeholder="Selecciona una fecha disponible"
+      />
+    </div>
+  );
+}`
+  }, {
     id: "ejemplos-basico",
     title: "Básico",
     description: "DatePicker simple con fecha por defecto.",
