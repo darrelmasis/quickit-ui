@@ -7,6 +7,11 @@ import {
   getWebsiteHookRoute,
 } from "@/website/docs-navigation";
 import { getWebsiteComponentRoute } from "@/website/site-config";
+import WebsiteSidebar from "@/website/components/WebsiteSidebar";
+import {
+  SIDEBAR_LINK_CLASSES,
+  SIDEBAR_GROUP_CLASSES,
+} from "@/website/components/sidebar-constants";
 
 function getSectionState(section, currentPath) {
   const baseHref = getWebsiteDocsSectionRoute(section.id);
@@ -108,9 +113,8 @@ export default function WebsiteDocsSidebar({
   );
 
   return (
-    <aside className="hidden border-r border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 lg:fixed lg:top-14 lg:block lg:h-[calc(100vh-3.5rem)] lg:w-60 lg:overflow-y-auto scrollbar-hidden">
-      <div className="p-3 pb-8 pt-8">
-        <div className="flex flex-col gap-6">
+    <WebsiteSidebar>
+      <div className="flex flex-col gap-6">
           <div>
             <Button
               color="light"
@@ -144,7 +148,7 @@ export default function WebsiteDocsSidebar({
                           return (
                             <div
                               key={`group-${index}`}
-                              className="px-3 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500"
+                              className={SIDEBAR_GROUP_CLASSES}
                             >
                               {entry.label}
                             </div>
@@ -233,7 +237,8 @@ export default function WebsiteDocsSidebar({
                                           href={child.href}
                                           underline="none"
                                           className={cn(
-                                            "relative flex h-7 items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
+                                            SIDEBAR_LINK_CLASSES,
+                                            "h-7",
                                             isCurrentChild
                                               ? "bg-neutral-200 font-medium text-neutral-900 dark:bg-neutral-700 dark:text-neutral-50"
                                               : "text-neutral-500 hover:bg-neutral-200 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-100",
@@ -305,7 +310,7 @@ export default function WebsiteDocsSidebar({
                         href={getWebsiteComponentRoute(item.slug)}
                         underline="none"
                         className={cn(
-                          "relative flex h-8 items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
+                          SIDEBAR_LINK_CLASSES,
                           currentComponentSlug === item.slug
                       ? "bg-neutral-200 font-medium text-neutral-900 dark:bg-neutral-700 dark:text-neutral-50"
                       : "text-neutral-500 hover:bg-neutral-200 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-100",
@@ -322,10 +327,9 @@ export default function WebsiteDocsSidebar({
                   </For>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
-    </aside>
+    </WebsiteSidebar>
   );
 }

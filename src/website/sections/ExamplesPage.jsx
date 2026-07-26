@@ -1,31 +1,58 @@
-import { For, Link } from "@/lib";
+import { useMemo, useState } from "react";
+import { For, Link, Input, Show } from "@/lib";
 import WebsiteLayout from "@/website/components/WebsiteLayout";
+import WebsiteSidebar from "@/website/components/WebsiteSidebar";
+import {
+  sidebarLinkCn,
+  SIDEBAR_GROUP_CLASSES,
+} from "@/website/components/sidebar-constants";
 import FlowErrorBoundary from "@/website/examples/components/FlowErrorBoundary";
 import FlowSection from "@/website/examples/components/FlowSection";
 import { EXAMPLE_FLOWS } from "@/website/examples/flows";
 
 function ExamplesSidebar() {
+  const [filter, setFilter] = useState("");
+  const filteredFlows = useMemo(
+    () =>
+      filter
+        ? EXAMPLE_FLOWS.filter((flow) =>
+            flow.label.toLowerCase().includes(filter.toLowerCase()),
+          )
+        : EXAMPLE_FLOWS,
+    [filter],
+  );
+
   return (
-    <aside className="hidden border-r border-neutral-200 dark:border-neutral-800 lg:fixed lg:top-14 lg:block lg:h-[calc(100vh-3.5rem)] lg:w-60 lg:overflow-y-auto scrollbar-hidden [mask-image:linear-gradient(transparent_0px,#000_32px,#000_calc(100%-32px),transparent)]">
-      <div className="p-3 pb-8 pt-8">
-        <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-          Flujos reales
-        </p>
-        <div className="mt-3 flex flex-col">
-          <For each={EXAMPLE_FLOWS}>
-            {(flow) => (
-              <Link
-                key={flow.id}
-                href={`#${flow.id}`}
-                className="block py-1 text-[0.8125rem] text-neutral-500 transition-colors hover:text-neutral-900 no-underline dark:text-neutral-400 dark:hover:text-neutral-100"
-              >
-                {flow.label}
-              </Link>
-            )}
-          </For>
-        </div>
+    <WebsiteSidebar>
+      <div className="mb-4">
+        <Input
+          type="search"
+          placeholder="Filtrar flujos..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          clearButton
+        />
       </div>
-    </aside>
+      <p className={SIDEBAR_GROUP_CLASSES}>Flujos reales</p>
+      <div className="mt-3 flex flex-col gap-0.5" role="tablist">
+        <Show when={filteredFlows.length === 0}>
+          <p className="px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">
+            Sin resultados
+          </p>
+        </Show>
+        <For each={filteredFlows}>
+          {(flow) => (
+            <Link
+              key={flow.id}
+              href={`#${flow.id}`}
+              className={sidebarLinkCn(false)}
+            >
+              {flow.label}
+            </Link>
+          )}
+        </For>
+      </div>
+    </WebsiteSidebar>
   );
 }
 

@@ -46,6 +46,11 @@ import { toast } from "@/lib/components/toaster/toast-store";
 import { PlusIcon } from "@/lib/assets/icons";
 import { cn } from "@/lib/utils";
 import WebsiteLayout from "@/website/components/WebsiteLayout";
+import WebsiteSidebar from "@/website/components/WebsiteSidebar";
+import {
+  sidebarLinkCn,
+  SIDEBAR_GROUP_CLASSES,
+} from "@/website/components/sidebar-constants";
 import { WEBSITE_COMPONENT_GROUPS } from "@/website/docs-content";
 import WebsiteCodeBlock from "@/website/components/WebsiteCodeBlock";
 
@@ -154,6 +159,7 @@ const PROP_TYPES = {
   closeOnEscape: { label: "Cerrar con Escape", type: "boolean" },
   selectionMode: { label: "Modo selección", options: ["single", "between"] },
   optional: { label: "Opcional", type: "boolean" },
+  count: { label: "Páginas", type: "number", min: 1, max: 100 },
 };
 
 const DEFAULTS = {
@@ -175,7 +181,7 @@ const DEFAULTS = {
   closeOnScroll: false,
   showCloseButton: true,
   interactive: false,
-  showArrow: true,
+  showArrow: false,
   collapsible: true,
   type: "single",
   hourCycle: "12h",
@@ -189,6 +195,7 @@ const DEFAULTS = {
   closeOnEscape: true,
   selectionMode: "single",
   optional: false,
+  count: 10,
 };
 
 const CHILDREN_EXAMPLES = {
@@ -356,7 +363,7 @@ const COMPONENT_CONFIG = {
     preview: (p) => <Switch {...p} label="Interruptor" />,
   },
   range: {
-    props: ["color", "disabled", "orientation"],
+    props: ["color", "disabled", "orientation", "showValueTooltip"],
     preview: (p) => <Range {...p} />,
   },
   avatar: {
@@ -570,8 +577,8 @@ const COMPONENT_CONFIG = {
     ),
   },
   pagination: {
-    props: ["color", "disabled"],
-    preview: (p) => <Pagination {...p} count={10} defaultPage={1} />,
+    props: ["count", "color", "disabled"],
+    preview: (p) => <Pagination {...p} count={p.count ?? 10} defaultPage={1} />,
   },
   dropdown: {
     props: ["color", "placement", "trigger", "closeOnScroll", "showArrow"],
@@ -638,7 +645,7 @@ const COMPONENT_CONFIG = {
     ),
   },
   "date-picker": {
-    props: ["size", "color", "disabled"],
+    props: ["size", "color", "selectionMode", "disabled"],
     sizeOptions: SIZE_OPTIONS_LG,
     preview: (p) => <DatePicker {...p} />,
   },
@@ -716,8 +723,9 @@ const COMPONENT_CONFIG = {
     ),
   },
   "user-chip": {
-    props: ["size", "color"],
+    props: ["size", "shape"],
     sizeOptions: SIZE_OPTIONS_MD,
+    shapeOptions: SHAPE_OPTIONS_AVATAR,
     preview: (p) => (
       <div className="flex flex-col items-center gap-4">
         <UserChip
@@ -826,6 +834,15 @@ function PropControls({ config, currentProps, onChange, onReset, globalRadius, o
                                   </Tooltip>
                                 ))}
                               </div>
+                            ) : schema.type === "number" ? (
+                              <input
+                                type="number"
+                                min={schema.min}
+                                max={schema.max}
+                                value={value}
+                                onChange={(e) => onChange(propName, Number(e.target.value))}
+                                className="w-20 rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
+                              />
                             ) : (
                               <Select
                                 value={value}
@@ -925,7 +942,11 @@ export default function PlaygroundPage() {
     if (slug) window.location.hash = slug;
   };
 
-  const resetProps = () => setProps({});
+  const resetProps = () => {
+    setProps({});
+    setGlobalRadius("sm");
+    setPreviewTheme("system");
+  };
 
   const config = COMPONENT_CONFIG[selected];
   const componentInfo = WEBSITE_COMPONENT_GROUPS.flatMap((g) => g.items).find(
@@ -998,58 +1019,53 @@ export default function PlaygroundPage() {
   return (
     <WebsiteLayout
       sidebar={
-        <aside className="hidden border-r border-neutral-200 dark:border-neutral-800 lg:fixed lg:top-14 lg:block lg:h-[calc(100vh-3.5rem)] lg:w-60 lg:overflow-y-auto scrollbar-hidden [mask-image:linear-gradient(transparent_0px,#000_32px,#000_calc(100%-32px),transparent)]">
-          <div className="p-3 pb-8 pt-8">
-            <div className="mb-4">
-              <Input
-                type="search"
-                placeholder="Filtrar componentes..."
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                clearButton
-              />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <Show when={!!filter && filteredGroups.length === 0}>
-                <p className="px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">
-                  Sin resultados
-                </p>
-              </Show>
-              <For each={filteredGroups}>
-                {(group, gIdx) => (
-                  <div key={gIdx} className="flex flex-col gap-0.5">
-                    <p className="px-3 py-2 text-[0.6875rem] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-                      {group.title}
-                    </p>
-                    <For each={group.items}>
-                      {(item, iIdx) => (
-                        <Link
-                          key={`${item.slug}-${iIdx}`}
-                          href={`#${item.slug}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            selectComponent(item.slug);
-                          }}
-                          className={cn(
-                            "relative flex h-8 items-center rounded-md px-3 text-[0.8125rem] transition-colors no-underline",
-                            selected === item.slug
-                              ? "bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50"
-                              : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100",
-                            !item.hasPreview && "cursor-not-allowed opacity-40",
-                          )}
-                        >
-                          <span className="flex items-center gap-2">
-                            {item.name}
-                          </span>
-                        </Link>
-                      )}
-                    </For>
-                  </div>
-                )}
-              </For>
-            </div>
+        <WebsiteSidebar>
+          <div className="mb-4">
+            <Input
+              type="search"
+              placeholder="Filtrar componentes..."
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              clearButton
+            />
           </div>
-        </aside>
+          <div className="flex flex-col gap-0.5">
+            <Show when={!!filter && filteredGroups.length === 0}>
+              <p className="px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">
+                Sin resultados
+              </p>
+            </Show>
+            <For each={filteredGroups}>
+              {(group, gIdx) => (
+                <div key={gIdx} className="flex flex-col gap-0.5">
+                  <p className={SIDEBAR_GROUP_CLASSES}>
+                    {group.title}
+                  </p>
+                  <For each={group.items}>
+                    {(item, iIdx) => (
+                      <Link
+                        key={`${item.slug}-${iIdx}`}
+                        href={`#${item.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          selectComponent(item.slug);
+                        }}
+                        className={cn(
+                          sidebarLinkCn(selected === item.slug),
+                          !item.hasPreview && "cursor-not-allowed opacity-40",
+                        )}
+                      >
+                        <span className="flex items-center gap-2">
+                          {item.name}
+                        </span>
+                      </Link>
+                    )}
+                  </For>
+                </div>
+              )}
+            </For>
+          </div>
+        </WebsiteSidebar>
       }
     >
       <div className="mx-auto max-w-5xl flex flex-col gap-8">
@@ -1086,7 +1102,7 @@ export default function PlaygroundPage() {
                         ? "border-neutral-700 bg-neutral-800"
                         : "border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800",
                     )}
-                    style={{ "--qi-radius": normalizeQuickitRadius(globalRadius) }}
+                    style={{ "--qk-radius": normalizeQuickitRadius(globalRadius) }}
                   >
                     {/* Fondo decorativo con patrón de puntos */}
                     <div
@@ -1107,11 +1123,11 @@ export default function PlaygroundPage() {
                     type="button"
                     onClick={() =>
                       setPreviewTheme((t) =>
-                        t === "dark" ? "system" : "dark",
+                        t === "light" ? "dark" : t === "dark" ? "system" : "light",
                       )
                     }
                     className="absolute right-3 top-3 z-10 flex size-7 items-center justify-center rounded-md border border-neutral-200 bg-white/80 text-neutral-500 backdrop-blur transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800/80 dark:text-neutral-400 dark:hover:bg-neutral-700"
-                    title={previewTheme === "dark" ? "Tema: oscuro" : "Tema: del sistema"}
+                    title={isDarkPreview ? "Tema: oscuro" : "Tema: claro"}
                   >
                     {previewTheme === "dark" ? (
                       <svg aria-hidden="true" viewBox="0 0 384 512" className="size-3.5">
