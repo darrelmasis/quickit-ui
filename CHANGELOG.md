@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] — 2026-07-26
+
+### Added
+- `Select.maxHeight` prop: permite personalizar la altura máxima del dropdown (`string` CSS, ej. `"200px"`, `"30rem"`). Por defecto `max-h-72 sm:max-h-96`.
+- `Dropdown`: se agregó `max-h-72 overflow-y-auto` a la superficie flotante para limitar altura y habilitar scroll con muchas opciones.
+- `maxHeight` documentado en `select.doc.jsx`, `docs-content.js` y el manual.
+
 ## [1.5.0] — 2026-07-26
 
 ### Added

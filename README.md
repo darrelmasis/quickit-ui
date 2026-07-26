@@ -213,7 +213,7 @@ npm run pack:check
 - Changelog: [CHANGELOG.md](./CHANGELOG.md)
 - Guía de migración: [docs/migration.md](./docs/migration.md)
 
-Versión actual: `1.5.0`
+Versión actual: `1.6.0`
 
 ## Requisitos
 

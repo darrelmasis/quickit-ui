@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.5.0`
+Version documentada: `1.6.0`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.5.0` |
+| Version actual | `1.6.0` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -1468,12 +1468,24 @@ import {
 
 ## 20. Migracion
 
+### De 1.5.0 a 1.6.0
+
+| Cambio | Detalle |
+| --- | --- |
+| `Select.maxHeight` | Nuevo prop `maxHeight` (string CSS) permite personalizar la altura máxima del dropdown. Por defecto `max-h-72 sm:max-h-96`. |
+| `Dropdown` | Añadido `max-h-72 overflow-y-auto` en la superficie flotante para limitar altura con muchas opciones. |
+
+Comando:
+
+```bash
+npm install quickit-ui@1.6.0
+```
+
 ### De 1.4.0 a 1.5.0
 
 | Cambio | Detalle |
 | --- | --- |
 | Dropdown | Añadido `max-h-72 overflow-y-auto` en la superficie flotante para limitar altura y habilitar scroll con muchas opciones. |
-| Select | Nuevo prop `maxHeight` permite personalizar la altura máxima del dropdown (valor CSS string como `"200px"`). Por defecto `max-h-72 sm:max-h-96`. |
 
 Comando:
 
