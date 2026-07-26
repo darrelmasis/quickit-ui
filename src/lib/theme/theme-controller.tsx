@@ -9,6 +9,7 @@ import {
 } from "react";
 import { QuickitProvider } from "./QuickitProvider";
 import { resolveQuickitThemeMode } from "./quickit-theme-context";
+import type { QuickitLang } from "@/lib/i18n/lang-context";
 
 export const QUICKIT_THEME_STORAGE_KEY = "quickit-ui-theme";
 export const QUICKIT_THEME_OPTIONS = Object.freeze([
@@ -80,7 +81,7 @@ export function QuickitThemeProvider({
   children?: React.ReactNode;
   defaultTheme?: string;
   focusRing?: boolean | { disabledComponents?: string[]; enabled?: boolean };
-  lang?: "es" | "en";
+  lang?: QuickitLang;
   pressEffect?: string;
   customScrollbar?: boolean;
   ripple?: boolean | { disabledComponents?: string[]; enabled?: boolean };

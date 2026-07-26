@@ -15,7 +15,7 @@ Se creó `src/lib/components/_shared/form-field-base.ts` con constantes comparti
 - **Textarea**: Corregido bug `qi-form-field-autofill` → `qk-form-field-autofill`. Importa base compartida. Usa `getFormFieldRadius` (antes usaba `getControlRadius(shape==="pill"? "lg": size)` que era inconsistente).
 - **Tests**: Corregido `--qi-field-autofill-*` → `--qk-field-autofill-*` en form-field.test.jsx.
 
-### Bugs preexistentes detectados (no corregidos)
-- Tests de button/ripple/skeleton/tabs usan prefijo `qi-` (incorrecto) en lugar de `qk-` (correcto).
-- TextareaProps en `.d.ts` no declara props `size` ni `shape` (existen en implementación).
-- Textarea no soporta InputGroup.
+### Bugs preexistentes detectados (corregidos)
+- ~~Tests de button/ripple/skeleton/tabs usan prefijo `qi-` (incorrecto) en lugar de `qk-` (correcto).~~ ✅ Corregido: todos los tests y fuentes usan `qk-`.
+- ~~TextareaProps en `.d.ts` no declara props `size` ni `shape` (existen en implementación).~~ ✅ Corregido: se agregaron `size` y `shape` a TextareaProps.
+- ~~Textarea no soporta InputGroup.~~ ✅ Corregido: Textarea ahora importa `useInputGroup` y resuelve color/shape/size desde el contexto del grupo.
