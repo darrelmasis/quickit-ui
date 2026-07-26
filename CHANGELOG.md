@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.4.0] — 2026-07-26
+## [1.5.0] — 2026-07-26
 
 ### Added
 - i18n: sistema de internacionalización con `lang`, `TXT_ES` y `TXT_EN`

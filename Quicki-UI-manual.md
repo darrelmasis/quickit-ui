@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.4.0`
+Version documentada: `1.5.0`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.4.0` |
+| Version actual | `1.5.0` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -1466,6 +1466,18 @@ import {
 ```
 
 ## 20. Migracion
+
+### De 1.4.0 a 1.5.0
+
+| Cambio | Detalle |
+| --- | --- |
+| Dropdown | Añadido `max-h-72 overflow-y-auto` en la superficie flotante para limitar altura y habilitar scroll con muchas opciones. |
+
+Comando:
+
+```bash
+npm install quickit-ui@1.5.0
+```
 
 ### De 1.3.0 a 1.4.0
 
