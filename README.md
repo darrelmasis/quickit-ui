@@ -70,6 +70,7 @@ export function AppProviders({ children }) {
   return (
     <QuickitProvider
       theme="light"
+      lang="es"
       focusRing
       ripple
       pressEffect="transform"
@@ -87,12 +88,14 @@ import { QuickitThemeProvider } from "quickit-ui";
 
 export function AppProviders({ children }) {
   return (
-    <QuickitThemeProvider defaultTheme="system">
+    <QuickitThemeProvider defaultTheme="system" lang="es">
       {children}
     </QuickitThemeProvider>
   );
 }
 ```
+
+> **i18n**: Ambos providers aceptan `lang="es"` | `"en"`. Los textos internos (ARIA labels, placeholders, mensajes de error) se traducen automáticamente. Puedes importar los objetos completos con `import { TXT_ES, TXT_EN } from "quickit-ui"`.
 
 ### Ripple global
 
@@ -210,7 +213,7 @@ npm run pack:check
 - Changelog: [CHANGELOG.md](./CHANGELOG.md)
 - Guía de migración: [docs/migration.md](./docs/migration.md)
 
-Versión actual: `1.2.0`
+Versión actual: `1.4.0`
 
 ## Requisitos
 

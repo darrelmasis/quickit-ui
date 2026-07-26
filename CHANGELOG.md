@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.4.0] — 2026-07-26
+
+### Added
+- i18n: sistema de internacionalización con `lang`, `TXT_ES` y `TXT_EN`
+- `QuickitProvider` y `QuickitThemeProvider` ahora aceptan prop `lang` (`"es"` | `"en"`)
+- `EmptyStateIcon` exportado desde la API pública
+- WebsiteSidebar: componente shell compartido para los 3 sidebars del sitio
+- Sidebar de Ejemplos ahora incluye buscador de flujos
+
+### Fixed
+- `dismissToast()` y `getCheckboxRadius()` declarados en tipos públicos
+- `TOAST_ICON_CLASSES` tipado correctamente como `Record<QuickitThemeMode, unknown>`
+- `InputProps`: agregadas 6 props faltantes en `.d.ts`
+- `TextareaProps`: agregados `size` y `shape` en `.d.ts`
+- `Modal.trapFocusWithin` pasa `nativeEvent` a `contains()`
+- `Textarea` ahora integra con `InputGroup` (hereda color/shape/size del contexto)
+- Tests corregidos: prefijo `qi-` → `qk-` en atributos de datos
+- Documentación de Modal, Drawer, Card y Button corregida
+
+### Changed
+- Sidebars del website unificados visualmente (misma máscara fade, colores active/hover, tokens compartidos)
+- Playground: toggle de tema ahora cicla 3 estados (light/dark/system)
+- Playground: botón Reestablecer también limpia `globalRadius` y `previewTheme`
+- Playground: `showArrow` default corregido de `true` a `false`
+
 ## [1.3.0] — 2026-07-13
 
 ### Added

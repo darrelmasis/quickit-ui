@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.3.0`
+Version documentada: `1.4.0`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.3.0` |
+| Version actual | `1.4.0` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -127,9 +127,12 @@ Props principales:
 | Prop | Tipo | Uso |
 | --- | --- | --- |
 | `theme` | `"light" | "dark"` | Tema efectivo para la UI. |
+| `lang` | `"es" | "en"` | Idioma para textos internos (ARIA, placeholders, mensajes). |
 | `focusRing` | `boolean | object` | Activa o desactiva anillos de enfoque globales. |
 | `ripple` | `boolean | object` | Activa o desactiva ripple para componentes soportados. |
 | `pressEffect` | `"transform" | "ripple"` | Define el efecto de presion global. |
+
+> Los textos internos se resuelven desde `QuickitLangContext`. Puedes importar los objetos completos: `import { TXT_ES, TXT_EN } from "quickit-ui"`.
 
 ### QuickitThemeProvider
 
@@ -140,7 +143,7 @@ import { QuickitThemeProvider } from "quickit-ui";
 
 export function Providers({ children }) {
   return (
-    <QuickitThemeProvider defaultTheme="system" storageKey="quickit-ui-theme">
+    <QuickitThemeProvider defaultTheme="system" storageKey="quickit-ui-theme" lang="es">
       {children}
     </QuickitThemeProvider>
   );
@@ -155,6 +158,7 @@ Este provider:
 | `system` | Lee `prefers-color-scheme`. |
 | Clase `.dark` | Aplica o quita `.dark` en `document.documentElement`. |
 | Hooks | Alimenta `useQuickitTheme` y `useQuickitThemeController`. |
+| i18n | Propaga `lang` via `QuickitLangContext` para textos internos. |
 
 ### Evitar FOUC En Tema Oscuro
 
@@ -363,6 +367,8 @@ export function CardButton({ active }) {
 | --- | --- |
 | `useQuickitTheme()` | Lee el tema efectivo `light` o `dark`. |
 | `useQuickitThemeController()` | Lee/cambia `theme`, `resolvedTheme`, `systemTheme`, `setTheme`, `toggleTheme`. |
+| `useQuickitLang()` | Lee el idioma actual (`"es"` \| `"en"`). |
+| `useTXT()` | Devuelve el objeto de textos traducidos según el `lang` actual. |
 
 ```jsx
 import { Button, useQuickitThemeController } from "quickit-ui";
@@ -617,6 +623,7 @@ Props:
 | `minRows` | Filas iniciales cuando no pasas `rows`; no hace autosize. |
 | `rows` | Atributo nativo. |
 | `invalid`, `required`, `disabled` | Estados de formulario. |
+| `InputGroup` | Si se usa dentro de `InputGroup`, hereda `color`, `shape` y `size` del contexto. |
 
 ### Select
 
@@ -1326,6 +1333,8 @@ Buenas practicas:
 import { Button, Link } from "quickit-ui";
 ```
 
+También exporta componentes compuestos como `ButtonGroup`, `DropdownItem`, `DropdownContent`, `TabsList`, `TabsTrigger`, `TabsContent`, `ModalContent`, `EmptyStateIcon`, `AccordionItem`, etc.
+
 ### Formularios
 
 ```js
@@ -1426,6 +1435,8 @@ import {
   useTabs,
   useDropdown,
   useModal,
+  useQuickitLang,
+  useTXT,
 } from "quickit-ui";
 ```
 
@@ -1443,15 +1454,33 @@ import {
   cn,
   getControlRadius,
   getAvatarRadius,
+  getCheckboxRadius,
   lockAppScroll,
   unlockAppScroll,
   useMergeRefs,
   resolveQuickitToken,
   isQuickitTokenValue,
+  TXT_ES,
+  TXT_EN,
 } from "quickit-ui";
 ```
 
 ## 20. Migracion
+
+### De 1.3.0 a 1.4.0
+
+| Cambio | Detalle |
+| --- | --- |
+| i18n | Nuevo sistema de internacionalización. `QuickitProvider` y `QuickitThemeProvider` aceptan `lang="es"` \| `"en"`. Los textos internos se traducen automáticamente. |
+| Tipos públicos | `EmptyStateIcon`, `dismissToast()`, `getCheckboxRadius()`, props faltantes de `Input` y `Textarea` ahora están declarados. |
+| Textarea + InputGroup | `Textarea` dentro de `InputGroup` hereda `color`, `shape` y `size` del contexto. |
+| Website | Los 3 sidebars del sitio ahora comparten diseño unificado. |
+
+Comando:
+
+```bash
+npm install quickit-ui@1.4.0
+```
 
 ### De 1.2.0 a 1.3.0
 
