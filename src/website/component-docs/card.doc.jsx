@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Badge, Button, Card } from "@/lib";
+import { Badge, Button, Card, Link } from "@/lib";
 
-const CARD_PREVIEW_CODE = `import { Card, Button } from "quickit-ui";
+const CARD_PREVIEW_CODE = `import { Card, Link } from "quickit-ui";
 
 export function CardPreview() {
   return (
@@ -110,11 +110,11 @@ export function CardProducto() {
             </p>
           </Card.Body>
           <Card.Footer>
-            <Button size="sm" variant="outline" href="#">Leer artículo</Button>
+            <Link appearance="button" size="sm" variant="outline" href="#">Leer artículo</Link>
           </Card.Footer>
         </Card>
       ),
-      code: `import { Badge, Button, Card } from "quickit-ui";
+      code: `import { Badge, Button, Card, Link } from "quickit-ui";
 
 export function CardArticulo() {
   return (
@@ -132,7 +132,7 @@ export function CardArticulo() {
         </p>
       </Card.Body>
       <Card.Footer>
-        <Button size="sm" variant="outline" href="#">Leer artículo</Button>
+        <Link appearance="button" size="sm" variant="outline" href="#">Leer artículo</Link>
       </Card.Footer>
     </Card>
   );
@@ -239,7 +239,7 @@ export function CardSoloBody() {
         },
       ],
       notes: [
-        "Usa el radio definido por el sistema de border-radius global (--qi-radius-xl).",
+        "Usa el radio definido por el sistema de border-radius global (--qk-radius-xl).",
         "Body no tiene theme classes propias — hereda el fondo del Card raíz.",
         "Los subcomponentes Header y Footer agregan bordes internos consistentes.",
       ],

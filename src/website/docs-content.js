@@ -278,7 +278,7 @@ export function AppRoot() {
 
 export const RADIUS_CSS_VARIABLE_SNIPPET = `/* Override directo en CSS */
 :root {
-  --qi-radius: 1rem;
+  --qk-radius: 1rem;
 }`;
 
 export const RADIUS_HOOK_SNIPPET = `import { useQuickitRadius } from "quickit-ui";
@@ -759,7 +759,7 @@ export const WEBSITE_HOOKS = [
   },
   {
     name: "useQuickitRadius",
-    description: "Devuelve el valor CSS del radio base (--qi-radius) configurado en QuickitProvider.",
+    description: "Devuelve el valor CSS del radio base (--qk-radius) configurado en QuickitProvider.",
     returns: "String con el valor CSS del radio (ej: '0.75rem', '1rem')."
   },
   {
@@ -1357,7 +1357,7 @@ export function ButtonPreview() {
     },
     {
       name: "variant",
-      type: `"solid" | "outline" | "soft"`,
+      type: `"solid" | "outline" | "soft" | "ghost"`,
       defaultValue: `"soft"`,
       description: "Define el tratamiento visual principal del botón.",
     },
@@ -1369,7 +1369,7 @@ export function ButtonPreview() {
     },
     {
       name: "size",
-      type: `"sm" | "md" | "lg" | "xl" | "2xl"`,
+      type: `"xs" | "sm" | "md" | "lg" | "xl" | "2xl"`,
       defaultValue: `"md"`,
       description: "Controla altura, padding y tipografía del botón.",
     },
