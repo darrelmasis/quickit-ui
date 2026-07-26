@@ -391,12 +391,12 @@ export const DropdownContent = forwardRef(function DropdownContent(
         "--qk-arrow-fill": resolvedArrowFill,
         "--qk-arrow-stroke": resolvedArrowStroke,
       } as React.CSSProperties}
-      className={cn(
-        FLOATING_LIST_SURFACE_PRIMITIVES.layout,
-        FLOATING_LIST_SURFACE_THEME_CLASSES[theme][resolvedColor],
-        "z-[9999] min-w-[8rem] sm:min-w-[10rem] max-w-[calc(100vw-2rem)] sm:max-w-xs",
-        className,
-      )}
+       className={cn(
+         FLOATING_LIST_SURFACE_PRIMITIVES.layout,
+         FLOATING_LIST_SURFACE_THEME_CLASSES[theme][resolvedColor],
+         "z-[9999] min-w-[8rem] sm:min-w-[10rem] max-w-[calc(100vw-2rem)] sm:max-w-xs max-h-72 overflow-y-auto",
+         className,
+       )}
       {...floatingProps}
       onKeyDownCapture={(event) => {
         floatingProps.onKeyDownCapture?.(event);
