@@ -127,7 +127,7 @@ const Button = forwardRef(function Button(
   const resolvedActiveMotion =
     activeMotion ??
     (resolvedPressEffect === "transform" ? motionAllowedByShape : false);
-  const isSmall = size === "sm";
+  const isSmall = resolvedSize === "sm" || resolvedSize === "xs";
   const showLoadingText =
     !isSmall && resolvedShape !== "square" && resolvedShape !== "circle";
   const baseContent = children ?? loadingText;

@@ -74,6 +74,7 @@ const Input = forwardRef(function Input(
   },
   ref,
 ) {
+
   const TXT = useTXT();
   const resolvedClearButtonLabel = clearButtonLabel ?? TXT.CLEAR_SEARCH;
   const resolvedDecrementLabel = decrementLabel ?? TXT.DECREMENT;

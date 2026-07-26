@@ -2,7 +2,10 @@ import { Children, cloneElement, forwardRef, isValidElement } from "react";
 import { cn } from "@/lib/utils";
 import Button from "@/lib/components/button/Button";
 
-function ButtonGroupDivider({ orientation = "horizontal", className }) {
+function ButtonGroupDivider({ orientation = "horizontal", className }: {
+  orientation?: "horizontal" | "vertical";
+  className?: string;
+}) {
   return (
     <div
       aria-hidden="true"

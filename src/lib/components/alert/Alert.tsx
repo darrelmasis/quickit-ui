@@ -130,8 +130,9 @@ const Alert = forwardRef(function Alert(
   },
   ref,
 ) {
-  const TXT = useTXT();
+
   const { theme } = useQuickitControlState("alert");
+  const TXT = useTXT();
   const resolvedDismissLabel = dismissLabel ?? TXT.CLOSE_ALERT;
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const [paused, setPaused] = useState(false);

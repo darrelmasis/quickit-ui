@@ -52,8 +52,9 @@ const Pagination = forwardRef(function Pagination({
   renderButton,
   siblingCount = 1,
 }, ref) {
-  const TXT = useTXT();
+
   const { isMobile } = useBreakpoint();
+  const TXT = useTXT();
   const isControlled = controlledPage !== undefined;
   const [internalPage, setInternalPage] = useState(defaultPage);
   const page = isControlled ? controlledPage : internalPage;

@@ -165,6 +165,7 @@ const Toaster = forwardRef(function Toaster(
   },
   ref,
 ) {
+
   const TXT = useTXT();
   const resolvedCloseButtonLabel = closeButtonLabel ?? TXT.CLOSE_TOAST;
   const { theme } = useQuickitControlState("toaster");

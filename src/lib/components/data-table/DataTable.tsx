@@ -54,6 +54,7 @@ const DataTable = forwardRef(function DataTable({
   sort: controlledSort,
   stickyHeader = true,
 }, ref) {
+
   const TXT = useTXT();
   const resolvedEmptyText = emptyText ?? TXT.EMPTY;
   const { theme } = useQuickitControlState("data-table");

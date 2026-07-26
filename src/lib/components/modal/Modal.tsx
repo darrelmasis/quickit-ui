@@ -381,12 +381,13 @@ const ModalContent = forwardRef(function ModalContent({ children, className }: {
     effectiveTitleId: titleId,
     visible,
   } = useModalContext("ModalContent");
-  const TXT = useTXT();
+
   const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
   const dialogRef = useRef(null);
   const modalMergedRef = useMergeRefs(dialogRef, ref);
   const dialogTransform = getModalTransform(visible);
+  const TXT = useTXT();
 
   useEffect(() => {
     if (typeof window === "undefined" || !rendered) {
@@ -455,7 +456,7 @@ const ModalContent = forwardRef(function ModalContent({ children, className }: {
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => {
             if (event.key === "Tab" && isTopmost()) {
-              trapFocusWithin(dialogRef.current, event);
+              trapFocusWithin(dialogRef.current, event.nativeEvent);
             }
           }}
         >
@@ -470,9 +471,10 @@ export { ModalContent };
 
 export function ModalHeader({ children, className }: { children: ReactNode; className?: string }) {
   const { close, showCloseButton } = useModalContext("ModalHeader");
-  const TXT = useTXT();
+
   const { theme } = useQuickitControlState("modal");
   const ui = MODAL_THEME_CLASSES[theme];
+  const TXT = useTXT();
 
   return (
     <div className={cn(MODAL_PRIMITIVES.header, ui.header, className)}>

@@ -61,6 +61,7 @@ export const TimePicker = forwardRef(function TimePicker(
   },
   ref,
 ) {
+
   const TXT = useTXT();
   const resolvedClearButtonLabel = clearButtonLabel ?? TXT.CLEAR_TIME;
   const resolvedPlaceholder = placeholder ?? TXT.SELECT_TIME;

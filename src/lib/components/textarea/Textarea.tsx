@@ -13,6 +13,7 @@ import {
   FORM_FIELD_BASE_CLASSES,
   getFormFieldRadius,
 } from "@/lib/components/_shared/form-field-base";
+import { useInputGroup } from "@/lib/components/input/input-group.context";
 
 const TEXTAREA_FONT_SIZE_CLASSES = {
   sm: "text-sm",
@@ -33,20 +34,24 @@ const TEXTAREA_PRIMITIVES = {
 const Textarea = forwardRef(function Textarea(
   {
     className,
-    color = "neutral",
+    color: colorProp,
     disabled = false,
     id,
     invalid = false,
     minRows,
     required = false,
-    shape = "square",
-    size = "md",
+    shape: shapeProp,
+    size: sizeProp,
     style,
     ...props
   },
   ref,
 ) {
   const { theme, focusRing: focusRingEnabled } = useQuickitControlState("textarea");
+  const group = useInputGroup();
+  const color = colorProp ?? group?.color ?? "neutral";
+  const shape = shapeProp ?? group?.shape ?? "square";
+  const size = sizeProp ?? group?.size ?? "md";
   const ui = FORM_FIELD_THEME_CLASSES[theme];
   const resolvedColor = resolveFormFieldColor(color);
   const colorUi = FORM_FIELD_THEME_CLASSES[theme][resolvedColor];

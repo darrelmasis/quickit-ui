@@ -23,7 +23,7 @@ import {
 } from "@/lib/components/_shared/use-ripple-effect";
 
 const LINK_BASE =
-  "qi-link inline-flex items-center gap-1.5 font-medium transition-all duration-200 outline-none focus-visible:ring-4 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+  "qk-link inline-flex items-center gap-1.5 font-medium transition-all duration-200 outline-none focus-visible:ring-4 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 const LINK_TEXT_VARIANT_CLASSES = {
   default: "",

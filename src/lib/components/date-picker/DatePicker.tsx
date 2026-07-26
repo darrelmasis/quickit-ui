@@ -67,7 +67,7 @@ export const DatePicker = forwardRef(function DatePicker(
   },
   ref,
 ) {
-  const TXT = useTXT();
+
   const group = useInputGroup();
   const genId = useId();
   const size = sizeProp ?? group?.size ?? "md";
@@ -84,6 +84,7 @@ export const DatePicker = forwardRef(function DatePicker(
   const [rangeHoverDate, setRangeHoverDate] = useState(null);
   const isRange = selectionMode === "between";
 
+  const TXT = useTXT();
   const resolvedPlaceholder =
     placeholder ?? (isRange ? TXT.DATE_RANGE_PLACEHOLDER : TXT.SELECT_DATE);
 

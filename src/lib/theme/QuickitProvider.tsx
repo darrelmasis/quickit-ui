@@ -8,6 +8,7 @@ import { QuickitThemeContext } from "./quickit-theme-context";
 import { QuickitLangContext } from "@/lib/i18n/lang-context";
 import type { QuickitLang } from "@/lib/i18n/lang-context";
 
+
 export function QuickitProvider({
   children,
   focusRing = true,
@@ -27,8 +28,6 @@ export function QuickitProvider({
   radius?: string;
   theme?: string;
 }) {
-  // QuickitProvider no persiste estado; solo normaliza la política visual
-  // compartida para tema, focus ring, efectos de presión e idioma.
   const normalizedRadius = useMemo(() => normalizeQuickitRadius(radius), [radius]);
 
   const value = useMemo(

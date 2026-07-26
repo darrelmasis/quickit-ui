@@ -1482,7 +1482,7 @@ function GenericSectionPage({ sectionId }) {
           <div className="flex flex-col gap-8">
             <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
               Quickit usa una variable CSS base (
-              <code className="font-mono text-xs">--qi-radius</code>) de la cual
+              <code className="font-mono text-xs">--qk-radius</code>) de la cual
               se derivan todos los radios de la librería. Puedes configurarla
               con la prop <code className="font-mono text-xs">radius</code> del
               provider o directamente en CSS.
@@ -1605,8 +1605,8 @@ function GenericSectionPage({ sectionId }) {
               <p className="mt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
                 Si no usas el provider, puedes overridear directamente la
                 variable CSS. Los radios derivados (
-                <code className="font-mono text-xs">--qi-radius-xl</code>,{" "}
-                <code className="font-mono text-xs">--qi-radius-2xl</code>,
+                <code className="font-mono text-xs">--qk-radius-xl</code>,{" "}
+                <code className="font-mono text-xs">--qk-radius-2xl</code>,
                 etc.) se recalculan automáticamente con{" "}
                 <code className="font-mono text-xs">calc()</code>.
               </p>
@@ -1628,7 +1628,7 @@ function GenericSectionPage({ sectionId }) {
               <div className="mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800">
                 <div className="grid grid-cols-[auto_1fr_auto] gap-x-6 gap-y-2 px-5 py-4 text-sm">
                   <span className="font-mono text-xs text-neutral-500">
-                    --qi-radius
+                    --qk-radius
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400">
                     Base (se setea vía provider)
@@ -1638,7 +1638,7 @@ function GenericSectionPage({ sectionId }) {
                   </span>
 
                   <span className="font-mono text-xs text-neutral-500">
-                    --qi-radius-xs
+                    --qk-radius-xs
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400">
                     Base × 0.833
@@ -1648,7 +1648,7 @@ function GenericSectionPage({ sectionId }) {
                   </span>
 
                   <span className="font-mono text-xs text-neutral-500">
-                    --qi-radius-lg
+                    --qk-radius-lg
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400">
                     Base × 1.167
@@ -1658,7 +1658,7 @@ function GenericSectionPage({ sectionId }) {
                   </span>
 
                   <span className="font-mono text-xs text-neutral-500">
-                    --qi-radius-xl
+                    --qk-radius-xl
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400">
                     Base × 1.333
@@ -1668,7 +1668,7 @@ function GenericSectionPage({ sectionId }) {
                   </span>
 
                   <span className="font-mono text-xs text-neutral-500">
-                    --qi-radius-2xl
+                    --qk-radius-2xl
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400">
                     Base × 1.5
@@ -1678,7 +1678,7 @@ function GenericSectionPage({ sectionId }) {
                   </span>
 
                   <span className="font-mono text-xs text-neutral-500">
-                    --qi-radius-3xl
+                    --qk-radius-3xl
                   </span>
                   <span className="text-neutral-600 dark:text-neutral-400">
                     Base × 1.667

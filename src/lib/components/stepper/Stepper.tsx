@@ -18,12 +18,13 @@ const Stepper = forwardRef(function Stepper({
   onStepChange,
   orientation = "horizontal",
 }, ref) {
-  const TXT = useTXT();
+
   const { theme } = useQuickitControlState("stepper");
   const resolvedColor = resolveQuickitToken(QUICKIT_SEMANTIC_COLORS, color, "neutral");
   const ui = STEPPER_THEME_CLASSES[theme]?.[resolvedColor] ?? STEPPER_THEME_CLASSES.light.neutral;
   const isVertical = orientation === "vertical";
   const uid = useId();
+  const TXT = useTXT();
 
   return (
     <nav

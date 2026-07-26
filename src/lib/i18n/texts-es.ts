@@ -1,4 +1,4 @@
-export const TXT = {
+export const TXT_ES = {
   EMPTY: "Sin resultados",
   LOADING: "Cargando…",
   SEARCH: "Buscar…",
@@ -56,3 +56,5 @@ export const TXT = {
   ],
   WEEKDAYS_SHORT: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
 };
+
+export type TXTType = typeof TXT_ES;

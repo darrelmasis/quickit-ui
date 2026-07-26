@@ -207,6 +207,7 @@ const Select = forwardRef(function Select(
   },
   ref,
 ) {
+
   const TXT = useTXT();
   const resolvedEmptyText = emptyText ?? TXT.EMPTY_OPTIONS;
   const group = useInputGroup();

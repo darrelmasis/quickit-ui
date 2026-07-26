@@ -421,7 +421,7 @@ const DrawerContent = forwardRef<HTMLElement, { children: ReactNode; className?:
     effectiveTitleId: titleId,
     visible,
   } = useDrawerContext("DrawerContent");
-  const TXT = useTXT();
+
   const { theme } = useQuickitControlState("drawer");
   const ui = DRAWER_THEME_CLASSES[theme as keyof typeof DRAWER_THEME_CLASSES];
   const resolvedPlacement = PLACEMENTS[placement as keyof typeof PLACEMENTS] ?? PLACEMENTS.right;
@@ -429,6 +429,7 @@ const DrawerContent = forwardRef<HTMLElement, { children: ReactNode; className?:
   const transform = getDrawerTransform(placement, visible);
   const panelRef = useRef<HTMLElement | null>(null);
   const drawerMergedRef = useMergeRefs(panelRef, ref);
+  const TXT = useTXT();
 
   useEffect(() => {
     if (typeof window === "undefined" || !rendered) {
@@ -509,9 +510,10 @@ export { DrawerContent };
 
 export function DrawerHeader({ children, className }: { children: ReactNode; className?: string }) {
   const { close, showCloseButton } = useDrawerContext("DrawerHeader");
-  const TXT = useTXT();
+
   const { theme } = useQuickitControlState("drawer");
   const ui = DRAWER_THEME_CLASSES[theme as keyof typeof DRAWER_THEME_CLASSES];
+  const TXT = useTXT();
 
   return (
     <div className={cn(DRAWER_PRIMITIVES.header, ui.header, className)}>
