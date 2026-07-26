@@ -29,7 +29,7 @@ describe("ripple configuration", () => {
 
     await user.click(button);
 
-    expect(button.querySelector(".qi-ripple")).toBeNull();
+    expect(button.querySelector(".qk-ripple")).toBeNull();
   });
 
   it("enables ripple from QuickitProvider when pressEffect is ripple", async () => {
@@ -51,7 +51,7 @@ describe("ripple configuration", () => {
 
     await user.click(button);
     await waitFor(() => {
-      expect(button.querySelector(".qi-ripple")).not.toBeNull();
+      expect(button.querySelector(".qk-ripple")).not.toBeNull();
     });
   });
 
@@ -83,11 +83,11 @@ describe("ripple configuration", () => {
 
     await user.click(button);
     await waitFor(() => {
-      expect(button.querySelector(".qi-ripple")).not.toBeNull();
+      expect(button.querySelector(".qk-ripple")).not.toBeNull();
     });
 
     await user.click(disabledButton);
 
-    expect(disabledButton.querySelector(".qi-ripple")).toBeNull();
+    expect(disabledButton.querySelector(".qk-ripple")).toBeNull();
   });
 });

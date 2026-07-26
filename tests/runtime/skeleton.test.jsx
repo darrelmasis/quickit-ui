@@ -21,7 +21,7 @@ describe("Skeleton", () => {
 
   it("renders rect shape", () => {
     const { container } = renderWithProvider(<Skeleton shape="rect" />);
-    expect(container.firstChild.className).toContain("rounded-[var(--qi-radius-xl)]");
+    expect(container.firstChild.className).toContain("rounded-[var(--qk-radius-xl)]");
   });
 
   it("renders circle shape", () => {

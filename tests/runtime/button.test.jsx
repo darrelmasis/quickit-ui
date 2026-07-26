@@ -84,6 +84,6 @@ describe("action controls", () => {
     const button = screen.getByRole("button", { name: "Guardar" });
 
     expect(button.className).not.toContain("active:translate-y-px");
-    expect(button.className).toContain("qi-ripple-host");
+    expect(button.className).toContain("qk-ripple-host");
   });
 });
