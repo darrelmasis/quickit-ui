@@ -190,7 +190,7 @@ export declare const INPUT_GROUP_THEME_CLASSES: Readonly<Record<QuickitThemeMode
 export declare const INPUT_AFFIX_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const CALENDAR_RANGE_CELL_CLASSES: Readonly<Record<string, unknown>>;
 export declare const AVATAR_PRESENCE_STATUS_CLASSES: Readonly<Record<string, string>>;
-export declare const TOAST_ICON_CLASSES: Readonly<Record<string, string>>;
+export declare const TOAST_ICON_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 export declare const STEPPER_THEME_CLASSES: Readonly<Record<QuickitThemeMode, unknown>>;
 
 export interface QuickitBreakpoints {
@@ -238,6 +238,7 @@ export declare function resolveQuickitToken<T extends string>(
 
 export declare function cn(...inputs: unknown[]): string;
 export declare function getControlRadius(size?: QuickitControlSize): string;
+export declare function getCheckboxRadius(size?: QuickitControlSize): string;
 export declare function getAvatarRadius(
   shape?: QuickitAvatarShape,
   size?: QuickitAvatarSize,
@@ -639,12 +640,18 @@ export interface InputProps extends InputBaseProps {
   clearButton?: boolean;
   clearButtonLabel?: string;
   clearIcon?: React.ReactNode;
+  decrementLabel?: string;
   defaultPasswordVisible?: boolean;
   hidePasswordIcon?: React.ReactNode;
   hidePasswordLabel?: string;
   invalid?: boolean;
+  incrementLabel?: string;
   leftElement?: React.ReactNode;
+  numberButtons?: boolean;
+  numberLayout?: "horizontal" | "vertical";
   onClear?: () => void;
+  onDecrement?: () => void;
+  onIncrement?: () => void;
   onPasswordVisibilityChange?: (visible: boolean) => void;
   passwordToggle?: boolean;
   required?: boolean;
@@ -709,6 +716,8 @@ export interface TextareaProps extends TextareaBaseProps {
   invalid?: boolean;
   minRows?: number;
   required?: boolean;
+  shape?: "square" | "pill";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl";
 }
 export declare const Textarea: React.ForwardRefExoticComponent<
   TextareaProps & React.RefAttributes<HTMLTextAreaElement>
@@ -1375,6 +1384,7 @@ export interface ToastFn {
 export declare function Toaster(props: ToasterProps): React.JSX.Element;
 export declare const toast: ToastFn;
 export declare function dismiss(id?: string): void;
+export declare function dismissToast(id?: string): void;
 /** Máximo en colapsado sin hover; el resto espera en cola. */
 export declare const MAX_VISIBLE_TOASTS: number;
 /** Tope de toasts en memoria (los más antiguos se descartan sin animación). */

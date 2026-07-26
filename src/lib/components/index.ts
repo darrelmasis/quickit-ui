@@ -19,7 +19,7 @@ export * from "./dropdown/Dropdown";
 export * from "./dropdown/useDropdown";
 export { default as Drawer } from "./drawer/Drawer";
 export * from "./drawer/Drawer";
-export { EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateTitle } from "./empty-state/EmptyState";
+export { EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateIcon, EmptyStateTitle } from "./empty-state/EmptyState";
 export { FormControl, FormDescription, FormMessage } from "./form-control/FormControl";
 export { useFormControl } from "./form-control/useFormControl";
 export { Input } from "./input/Input";
