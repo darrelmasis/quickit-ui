@@ -187,6 +187,7 @@ const Select = forwardRef(function Select(
     className,
     contentClassName,
     color: colorProp,
+    maxHeight,
     shape = "square",
     size: controlSizeProp,
     defaultValue,
@@ -392,6 +393,7 @@ const Select = forwardRef(function Select(
       style={{
         ...floatingStyles,
         ...transitionStyles,
+        ...(maxHeight ? { maxHeight } : {}),
       }}
       {...interactions.getFloatingProps({
         "aria-labelledby": resolvedId,

@@ -645,6 +645,7 @@ Props:
 | `onChange(event)` | Evento sintetico estilo DOM con `target.value`. |
 | `name` | Hidden input para formularios. |
 | `placeholder` | Contenido cuando no hay valor. |
+| `maxHeight` | Altura máxima del dropdown (CSS string, ej. `"200px"`, `"30rem"`). Si no se pasa, aplica `max-h-72 sm:max-h-96`. |
 | `color`, `size`, `invalid`, `required`, `disabled` | Visual y estado. |
 | `usePortal` | Renderiza lista en portal. |
 
@@ -1472,6 +1473,7 @@ import {
 | Cambio | Detalle |
 | --- | --- |
 | Dropdown | Añadido `max-h-72 overflow-y-auto` en la superficie flotante para limitar altura y habilitar scroll con muchas opciones. |
+| Select | Nuevo prop `maxHeight` permite personalizar la altura máxima del dropdown (valor CSS string como `"200px"`). Por defecto `max-h-72 sm:max-h-96`. |
 
 Comando:
 

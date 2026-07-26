@@ -849,6 +849,7 @@ export interface SelectProps
   id?: string;
   invalid?: boolean;
   loading?: boolean;
+  maxHeight?: string;
   name?: string;
   onChange?: (event: QuickitSelectChangeEvent) => void;
   onValueChange?: (value: string) => void;
