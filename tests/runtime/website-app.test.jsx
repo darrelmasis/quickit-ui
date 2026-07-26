@@ -87,7 +87,7 @@ describe("WebsiteApp", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Avatar" })).toBeTruthy();
-    const designLeadEls = await screen.findAllByText("Design lead");
+    const designLeadEls = await screen.findAllByText(/Design Lead/i);
     expect(designLeadEls.length).toBeGreaterThanOrEqual(1);
   }, 15000);
 

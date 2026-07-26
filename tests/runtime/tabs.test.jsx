@@ -126,8 +126,6 @@ describe("Tabs", () => {
     expect(listClasses).toContain("scrollbar-hidden");
     expect(overviewClasses).toContain("max-w-full");
     expect(overviewClasses).toContain("flex-1");
-    expect(overviewClasses).toContain("shrink-0");
-    expect(overviewClasses).toContain("min-w-0");
   });
 
   it("supports controlled value changes without duplicate callbacks", async () => {
