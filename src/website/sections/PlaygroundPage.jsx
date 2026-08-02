@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Accordion,
   Alert,
@@ -932,6 +932,16 @@ export default function PlaygroundPage() {
   const [props, setProps] = useState({});
   const [globalRadius, setGlobalRadius] = useState("sm");
   const [previewTheme, setPreviewTheme] = useState("system");
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    const root = document.documentElement;
+    const previous = root.style.getPropertyValue("--qk-radius");
+    root.style.setProperty("--qk-radius", normalizeQuickitRadius(globalRadius));
+    return () => {
+      root.style.setProperty("--qk-radius", previous);
+    };
+  }, [globalRadius]);
 
   const isDarkPreview =
     previewTheme === "dark" || (previewTheme === "system" && systemTheme === "dark");
