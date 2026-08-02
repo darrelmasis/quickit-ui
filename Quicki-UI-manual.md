@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.7.0`
+Version documentada: `1.7.1`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.7.0` |
+| Version actual | `1.7.1` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
@@ -1467,6 +1467,18 @@ import {
 ```
 
 ## 20. Migracion
+
+### De 1.7.0 a 1.7.1
+
+| Cambio | Detalle |
+| --- | --- |
+| `Dropdown`/`Popover` | Corregida la flecha (`FloatingArrow`) duplicada: los estilos CSS se aplicaban a los dos `<path>`. Ahora el relleno va al path principal y el `stroke` solo al path con `clip-path`. |
+
+Comando:
+
+```bash
+npm install quickit-ui@1.7.1
+```
 
 ### De 1.6.0 a 1.7.0
 

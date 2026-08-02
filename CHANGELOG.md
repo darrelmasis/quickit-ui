@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.1] — 2026-08-02
+
+### Fixed
+- `Dropdown`/`Popover`: corregida la flecha (`FloatingArrow`) que se renderizaba duplicada porque los estilos CSS (`fill` y `stroke` vía `--qk-arrow-*`) se aplicaban a los dos `<path>` del arrow. Ahora el relleno va al path principal y el `stroke` solo al path con `clip-path`.
+
 ## [1.7.0] — 2026-08-02
 
 ### Fixed
