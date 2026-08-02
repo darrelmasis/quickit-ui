@@ -15,6 +15,10 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [isLibraryBuild ? null : react(), tailwindcss()].filter(Boolean),
+    server: {
+      port: Number(process.env.PORT) || 5173,
+      strictPort: false,
+    },
     optimizeDeps: {
       exclude: ["@tailwindcss/vite"],
       force: true,
@@ -37,24 +41,25 @@ export default defineConfig(({ command, mode }) => {
             emptyOutDir: true,
           }
         : {
-          emptyOutDir: true,
-          sourcemap: true,
-          lib: {
-            entry: libEntry,
-            name: "QuickitUI",
-            formats: ["es", "cjs"],
-            fileName: (format) => (format === "cjs" ? "quickit-ui.cjs" : "quickit-ui.js"),
-            cssFileName: "quickit-ui",
-          },
-          rollupOptions: {
-            external: ["react", "react-dom"],
-            output: {
-              globals: {
-                react: "React",
-                "react-dom": "ReactDOM",
+            emptyOutDir: true,
+            sourcemap: true,
+            lib: {
+              entry: libEntry,
+              name: "QuickitUI",
+              formats: ["es", "cjs"],
+              fileName: (format) =>
+                format === "cjs" ? "quickit-ui.cjs" : "quickit-ui.js",
+              cssFileName: "quickit-ui",
+            },
+            rollupOptions: {
+              external: ["react", "react-dom"],
+              output: {
+                globals: {
+                  react: "React",
+                  "react-dom": "ReactDOM",
+                },
               },
             },
           },
-        },
   };
 });
