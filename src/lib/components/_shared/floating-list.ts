@@ -1,4 +1,3 @@
-import { useLayoutEffect } from "react";
 import { useTransitionStyles, type FloatingContext, type MiddlewareState, type Placement } from "@floating-ui/react";
 import { resolveQuickitThemeMode } from "@/lib/theme/quickit-theme-context";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
@@ -394,36 +393,21 @@ export function getFloatingListItemClasses({
 }
 
 export function useFloatingSurfaceArrowColors({
-  enabled,
-  elementRef,
   fill,
   stroke,
   fallbackFill,
   fallbackStroke,
 }: {
-  enabled: boolean;
-  elementRef: React.RefObject<HTMLElement | null>;
   fill?: string;
   stroke?: string;
   fallbackFill: string;
   fallbackStroke: string;
 }) {
+  // Estrategia determinista: el color de la flecha se deriva de la paleta del
+  // panel (tema + color), no de getComputedStyle runtime. Así la flecha
+  // coincide siempre pixel-perfect con el fondo y borde del elemento flotante.
   const resolvedArrowFill = fill ?? fallbackFill;
   const resolvedArrowStroke = stroke ?? fallbackStroke;
-
-  useLayoutEffect(() => {
-    if (!enabled || !elementRef.current) {
-      return;
-    }
-
-    const el = elementRef.current;
-    const style = window.getComputedStyle(el);
-    el.style.setProperty("--qk-arrow-fill", style.backgroundColor || resolvedArrowFill);
-    el.style.setProperty(
-      "--qk-arrow-stroke",
-      style.borderTopColor || style.borderColor || resolvedArrowStroke,
-    );
-  }, [enabled, elementRef, resolvedArrowFill, resolvedArrowStroke]);
 
   return { resolvedArrowFill, resolvedArrowStroke };
 }

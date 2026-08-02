@@ -410,6 +410,7 @@ export const TimePicker = forwardRef(function TimePicker(
         asChild
         trigger="click"
         placement="bottom-start"
+        showArrow={false}
         open={open}
         onOpenChange={handleOpenChange}
         content={content}

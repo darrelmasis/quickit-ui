@@ -179,8 +179,6 @@ export function Dropdown({
   const arrowColors = DROPDOWN_ARROW_COLORS[theme]?.[resolvedColor] ?? DROPDOWN_ARROW_COLORS[theme]?.neutral;
   const surfaceRef = useRef<HTMLElement | null>(null);
   const { resolvedArrowFill, resolvedArrowStroke } = useFloatingSurfaceArrowColors({
-    enabled: open,
-    elementRef: surfaceRef,
     fill: arrowFillProp,
     stroke: arrowStrokeProp,
     fallbackFill: arrowColors.fill,

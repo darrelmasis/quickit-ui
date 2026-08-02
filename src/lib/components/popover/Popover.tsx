@@ -96,8 +96,6 @@ const Popover = forwardRef(function Popover({
   const resolvedColor = POPOVER_THEME_CLASSES[effectiveTheme][color] ? color : "default";
   const palette = POPOVER_THEME_CLASSES[effectiveTheme][resolvedColor];
   const { resolvedArrowFill, resolvedArrowStroke } = useFloatingSurfaceArrowColors({
-    enabled: open,
-    elementRef: panelRef,
     fill: arrowFill,
     stroke: arrowStroke,
     fallbackFill: palette.arrowFill,

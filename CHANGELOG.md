@@ -6,7 +6,8 @@
 - `Dropdown`, `Popover` y `Tooltip`: nueva prop `arrowPosition` (`"left" | "center" | "right"`) para controlar la posición horizontal de la flecha.
 
 ### Fixed
-- `Dropdown`/`Popover`: el color y el borde de la flecha (`FloatingArrow`) ahora se derivan en runtime del panel que la contiene (backgroundColor → `--qk-arrow-fill`, borderTopColor → `--qk-arrow-stroke`). Así coinciden exactamente con el elemento flotante en cualquier tema/color.
+- El color de la flecha (`fill` y `stroke`) en `Dropdown`, `Popover`, `Tooltip` y `TimePicker` ya no se deriva de `getComputedStyle` en runtime (que causaba desajustes cuando el panel no estaba montado aún o tenía fondos translúcidos). Ahora se resuelve de forma determinista desde la paleta del tema/color del panel, por lo que siempre coincide con el fondo y borde del elemento flotante.
+- `TimePicker`: la flecha del popover queda deshabilitada (`showArrow={false}`); es un popover de formulario y la flecha se veía desalineada apuntando al input.
 - Playground: el radio global que define el usuario ahora también se aplica a los componentes flotantes (portal), propagando `--qk-radius` a `document.documentElement`.
 
 ## [1.7.1] — 2026-08-02
