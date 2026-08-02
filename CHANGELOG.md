@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.0] — 2026-08-02
+
+### Fixed
+- `Dropdown`: corregida la flecha (`FloatingArrow`) que era recortada por el `overflow-y-auto` de la superficie flotante. El scroll ahora vive en un contenedor interno, por lo que la flecha se renderiza correctamente.
+
 ## [1.6.0] — 2026-07-26
 
 ### Added

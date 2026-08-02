@@ -1,7 +1,7 @@
 {
   "name": "quickit-ui",
   "private": false,
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Reusable React UI component library with light and dark mode support.",
   "license": "MIT",
   "repository": {
