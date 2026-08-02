@@ -307,6 +307,10 @@
 
 .qk-floating-arrow path {
   fill: var(--qk-arrow-fill);
+}
+
+.qk-floating-arrow path[clip-path] {
+  fill: none;
   stroke: var(--qk-arrow-stroke);
 }
 
