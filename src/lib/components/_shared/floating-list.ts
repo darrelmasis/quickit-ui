@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { useTransitionStyles, type FloatingContext, type MiddlewareState, type Placement } from "@floating-ui/react";
 import { resolveQuickitThemeMode } from "@/lib/theme/quickit-theme-context";
 import { resolveQuickitFocusRingClasses } from "@/lib/theme/focus-ring";
@@ -323,6 +324,12 @@ export function getFloatingArrowColors(theme: string, color: string = "neutral")
   return DROPDOWN_ARROW_COLORS[theme]?.[color] ?? DROPDOWN_ARROW_COLORS[theme]?.neutral ?? { fill: "#ffffff", stroke: "#e5e5e5" };
 }
 
+export function resolveFloatingArrowPosition(position: string | undefined) {
+  if (position === "left") return "0%";
+  if (position === "right") return "100%";
+  return undefined;
+}
+
 export function useFloatingTransition(context: FloatingContext, { duration, placement }: { duration: number | { open?: number; close?: number }; placement: Placement }) {
   return useTransitionStyles(context, {
     duration,
@@ -384,4 +391,39 @@ export function getFloatingListItemClasses({
     selected && colorClasses.selected,
     disabled && (FLOATING_LIST_ITEM_THEME_CLASSES[theme].disabled as string),
   );
+}
+
+export function useFloatingSurfaceArrowColors({
+  enabled,
+  elementRef,
+  fill,
+  stroke,
+  fallbackFill,
+  fallbackStroke,
+}: {
+  enabled: boolean;
+  elementRef: React.RefObject<HTMLElement | null>;
+  fill?: string;
+  stroke?: string;
+  fallbackFill: string;
+  fallbackStroke: string;
+}) {
+  const resolvedArrowFill = fill ?? fallbackFill;
+  const resolvedArrowStroke = stroke ?? fallbackStroke;
+
+  useLayoutEffect(() => {
+    if (!enabled || !elementRef.current) {
+      return;
+    }
+
+    const el = elementRef.current;
+    const style = window.getComputedStyle(el);
+    el.style.setProperty("--qk-arrow-fill", style.backgroundColor || resolvedArrowFill);
+    el.style.setProperty(
+      "--qk-arrow-stroke",
+      style.borderTopColor || style.borderColor || resolvedArrowStroke,
+    );
+  }, [enabled, elementRef, resolvedArrowFill, resolvedArrowStroke]);
+
+  return { resolvedArrowFill, resolvedArrowStroke };
 }

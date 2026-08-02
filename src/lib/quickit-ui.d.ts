@@ -1004,7 +1004,15 @@ export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
 export declare function Pagination(props: PaginationProps): React.JSX.Element;
 
 export interface DropdownProps {
+  arrowFill?: string;
+  arrowHeight?: number;
+  arrowPosition?: "left" | "center" | "right";
+  arrowStroke?: string;
+  arrowStrokeWidth?: number;
+  arrowTipRadius?: number;
+  arrowWidth?: number;
   children?: React.ReactNode;
+  color?: string;
   closeOnClickOutside?: boolean;
   closeOnScroll?: boolean;
   collisionPadding?: number;
@@ -1013,6 +1021,7 @@ export interface DropdownProps {
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   placement?: string;
+  showArrow?: boolean;
   /** `click`: al pulsar el trigger (por defecto). `hover`: al pasar el puntero por el trigger. */
   trigger?: "click" | "hover";
   usePortal?: boolean;
@@ -1082,6 +1091,7 @@ export interface PopoverProps {
   asChild?: boolean;
   arrowHeight?: number;
   arrowFill?: string;
+  arrowPosition?: "left" | "center" | "right";
   arrowStroke?: string;
   arrowStrokeWidth?: number;
   arrowTipRadius?: number;

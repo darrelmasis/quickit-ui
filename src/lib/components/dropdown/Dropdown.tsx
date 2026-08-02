@@ -34,6 +34,8 @@ import {
   FLOATING_LIST_SURFACE_THEME_CLASSES,
   getFloatingListItemClasses,
   resolveFloatingListTheme,
+  resolveFloatingArrowPosition,
+  useFloatingSurfaceArrowColors,
   useFloatingTransition,
 } from "@/lib/components/_shared/floating-list";
 import {
@@ -87,6 +89,7 @@ function focusDropdownEdgeItem(container, edge = "first") {
 export function Dropdown({
   arrowFill: arrowFillProp,
   arrowHeight = 8,
+  arrowPosition = "center",
   arrowStroke: arrowStrokeProp,
   arrowStrokeWidth = 0.75,
   arrowTipRadius = 2,
@@ -174,13 +177,21 @@ export function Dropdown({
   const { theme: effectiveTheme } = useQuickitControlState("dropdown");
   const theme = resolveFloatingListTheme(effectiveTheme);
   const arrowColors = DROPDOWN_ARROW_COLORS[theme]?.[resolvedColor] ?? DROPDOWN_ARROW_COLORS[theme]?.neutral;
-  const resolvedArrowFill = arrowFillProp ?? arrowColors.fill;
-  const resolvedArrowStroke = arrowStrokeProp ?? arrowColors.stroke;
+  const surfaceRef = useRef<HTMLElement | null>(null);
+  const { resolvedArrowFill, resolvedArrowStroke } = useFloatingSurfaceArrowColors({
+    enabled: open,
+    elementRef: surfaceRef,
+    fill: arrowFillProp,
+    stroke: arrowStrokeProp,
+    fallbackFill: arrowColors.fill,
+    fallbackStroke: arrowColors.stroke,
+  });
 
   const contextValue = useMemo(
     () => ({
       arrowElement,
       arrowHeight,
+      arrowPosition,
       arrowStrokeWidth,
       arrowTipRadius,
       arrowWidth,
@@ -202,6 +213,11 @@ export function Dropdown({
       setContentNode(node) {
         contentRef.current = node;
       },
+      setContentRef(node) {
+        if (node) {
+          surfaceRef.current = node;
+        }
+      },
       setOpen,
       showArrow,
       toggle,
@@ -211,6 +227,7 @@ export function Dropdown({
     [
       arrowElement,
       arrowHeight,
+      arrowPosition,
       arrowStrokeWidth,
       arrowTipRadius,
       arrowWidth,
@@ -340,6 +357,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
 ) {
   const {
     arrowHeight,
+    arrowPosition,
     arrowStrokeWidth,
     arrowTipRadius,
     arrowWidth,
@@ -355,13 +373,14 @@ export const DropdownContent = forwardRef(function DropdownContent(
     resolvedColor,
     setArrowElement,
     setContentNode,
+    setContentRef,
     showArrow,
     transitionStyles,
     usePortal,
   } = useDropdownContext("DropdownContent");
   const { theme: effectiveTheme } = useQuickitControlState("dropdown");
   const theme = resolveFloatingListTheme(effectiveTheme);
-  const floatingRef = useMergeRefs(ref, refs.setFloating);
+  const floatingRef = useMergeRefs(ref, refs.setFloating, setContentRef);
   const typeaheadRef = useRef({ buffer: "", timeoutId: null });
 
   useEffect(() => () => {
@@ -467,6 +486,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
           context={context}
           width={arrowWidth}
           height={arrowHeight}
+          staticOffset={resolveFloatingArrowPosition(arrowPosition)}
           tipRadius={arrowTipRadius}
           strokeWidth={arrowStrokeWidth}
           className="qk-floating-arrow pointer-events-none"

@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import Popover from "@/lib/components/popover/Popover";
 
 const Tooltip = forwardRef(function Tooltip({
+  arrowPosition = "center",
   children,
   className = "",
   color = "default",
@@ -15,6 +16,7 @@ const Tooltip = forwardRef(function Tooltip({
       variant="tooltip"
       content={content}
       color={color}
+      arrowPosition={arrowPosition}
       placement={placement}
       arrowWidth={12}
       arrowHeight={6}

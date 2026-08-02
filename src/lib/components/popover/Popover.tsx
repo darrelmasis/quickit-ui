@@ -20,6 +20,7 @@ import { useQuickitControlState } from "@/lib/theme";
 import { cn, useMergeRefs } from "@/lib/utils";
 import { trapFocusWithin } from "@/lib/components/_shared/overlay-focus";
 import { useFloatingTransition } from "@/lib/components/_shared/floating-list";
+import { resolveFloatingArrowPosition, useFloatingSurfaceArrowColors } from "@/lib/components/_shared/floating-list";
 
 const POPOVER_PRIMITIVES = {
   wrapper: "inline-flex",
@@ -66,6 +67,7 @@ const Popover = forwardRef(function Popover({
   open: controlledOpen,
   onOpenChange,
   placement = "top",
+  arrowPosition = "center",
   showArrow = true,
   trigger = "hover",
   usePortal = true,
@@ -86,13 +88,21 @@ const Popover = forwardRef(function Popover({
     }
     onOpenChange?.(nextOpen);
   }, [isOpenControlled, onOpenChange]);
-  const panelRef = useRef(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const [arrowElement, setArrowElement] = useState(null);
   const panelId = useId();
   const tooltipTriggerProps = isTooltip ? { "aria-describedby": panelId } : {};
   const { theme: effectiveTheme } = useQuickitControlState("popover");
   const resolvedColor = POPOVER_THEME_CLASSES[effectiveTheme][color] ? color : "default";
   const palette = POPOVER_THEME_CLASSES[effectiveTheme][resolvedColor];
+  const { resolvedArrowFill, resolvedArrowStroke } = useFloatingSurfaceArrowColors({
+    enabled: open,
+    elementRef: panelRef,
+    fill: arrowFill,
+    stroke: arrowStroke,
+    fallbackFill: palette.arrowFill,
+    fallbackStroke: palette.arrowStroke,
+  });
   const isHoverTrigger = effectiveTrigger === "hover";
   const hoverDelay =
     HOVER_DELAY_PRESETS[hoverDelayPreset] ?? HOVER_DELAY_PRESETS.normal;
@@ -230,10 +240,6 @@ const Popover = forwardRef(function Popover({
     return triggerElement;
   }
 
-  const resolvedArrowFill =
-    arrowFill ?? palette.arrowFill;
-  const resolvedArrowStroke =
-    arrowStroke ?? palette.arrowStroke;
   const floatingNode = (
     <div
       ref={(node) => {
@@ -278,6 +284,7 @@ const Popover = forwardRef(function Popover({
           context={context}
           width={arrowWidth}
           height={arrowHeight}
+          staticOffset={resolveFloatingArrowPosition(arrowPosition)}
           tipRadius={arrowTipRadius}
           strokeWidth={arrowStrokeWidth}
           className="qk-floating-arrow pointer-events-none"
