@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.8.0] — 2026-08-02
+## [1.8.1] — 2026-08-02
 
 ### Added
 - `Dropdown`, `Popover` y `Tooltip`: nueva prop `arrowPosition` (`"left" | "center" | "right"`) para controlar la posición horizontal de la flecha.

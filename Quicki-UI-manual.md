@@ -1,6 +1,6 @@
 # Quickit UI Manual Completo
 
-Version documentada: `1.8.0`
+Version documentada: `1.8.1`
 
 Este manual resume la libreria instalable `quickit-ui` y su sistema de documentacion. Esta pensado para que una persona o un agente pueda entender Quickit UI sin leer todo el repositorio.
 
@@ -20,7 +20,7 @@ La libreria publica:
 | Contrato | Valor |
 | --- | --- |
 | Paquete | `quickit-ui` |
-| Version actual | `1.8.0` |
+| Version actual | `1.8.1` |
 | Modulo | ESM |
 | React peer dependency | `^18.2.0 || ^19.0.0` |
 | React DOM peer dependency | `^18.2.0 || ^19.0.0` |
