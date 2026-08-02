@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.0] — 2026-08-02
+
+### Added
+- `Dropdown`, `Popover` y `Tooltip`: nueva prop `arrowPosition` (`"left" | "center" | "right"`) para controlar la posición horizontal de la flecha.
+
+### Fixed
+- `Dropdown`/`Popover`: el color y el borde de la flecha (`FloatingArrow`) ahora se derivan en runtime del panel que la contiene (backgroundColor → `--qk-arrow-fill`, borderTopColor → `--qk-arrow-stroke`). Así coinciden exactamente con el elemento flotante en cualquier tema/color.
+- Playground: el radio global que define el usuario ahora también se aplica a los componentes flotantes (portal), propagando `--qk-radius` a `document.documentElement`.
+
 ## [1.7.1] — 2026-08-02
 
 ### Fixed
