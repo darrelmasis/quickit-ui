@@ -14,6 +14,7 @@ import {
 } from "@/website/site-config";
 import { buildWebsiteSearchIndex } from "@/website/docs-search";
 import WebsiteLogo from "@/website/components/WebsiteLogo";
+import { version } from "../../../package.json";
 
 function SunIcon() {
   return (
@@ -117,6 +118,9 @@ export default function WebsiteHeader({ activePath }) {
           aria-label="Ir al inicio de Quickit UI"
         >
           <WebsiteLogo className="h-5 w-auto text-neutral-950 dark:text-neutral-50" />
+          <span className="rounded-full border border-neutral-200 bg-neutral-100 px-2 py-0.5 text-[0.6875rem] font-semibold leading-none text-neutral-600 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+            v{version}
+          </span>
         </a>
 
         <nav className="hidden items-center gap-1 md:flex">
