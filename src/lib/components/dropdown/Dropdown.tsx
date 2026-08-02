@@ -361,7 +361,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
   } = useDropdownContext("DropdownContent");
   const { theme: effectiveTheme } = useQuickitControlState("dropdown");
   const theme = resolveFloatingListTheme(effectiveTheme);
-  const mergedRef = useMergeRefs(ref, refs.setFloating, setContentNode);
+  const floatingRef = useMergeRefs(ref, refs.setFloating);
   const typeaheadRef = useRef({ buffer: "", timeoutId: null });
 
   useEffect(() => () => {
@@ -380,7 +380,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
 
   const contentNode = (
     <div
-      ref={mergedRef}
+      ref={floatingRef}
       role="menu"
       aria-orientation="vertical"
       data-placement={placement}
@@ -394,7 +394,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
        className={cn(
          FLOATING_LIST_SURFACE_PRIMITIVES.layout,
          FLOATING_LIST_SURFACE_THEME_CLASSES[theme][resolvedColor],
-         "z-[9999] min-w-[8rem] sm:min-w-[10rem] max-w-[calc(100vw-2rem)] sm:max-w-xs max-h-72 overflow-y-auto",
+         "z-[9999] min-w-[8rem] sm:min-w-[10rem] max-w-[calc(100vw-2rem)] sm:max-w-xs",
          className,
        )}
       {...floatingProps}
@@ -472,7 +472,7 @@ export const DropdownContent = forwardRef(function DropdownContent(
           className="qk-floating-arrow pointer-events-none"
         />
       ) : null}
-      {children}
+      <div ref={setContentNode} className="max-h-72 overflow-y-auto">{children}</div>
     </div>
   );
 
